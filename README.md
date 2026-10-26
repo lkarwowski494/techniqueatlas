@@ -7,8 +7,10 @@ Specyfikacja: [docs/54-strona-biblioteki.md](docs/54-strona-biblioteki.md) (z se
 ## Szybki start
 
 ```
-npm run dane            # pobiera publiczne repo aplikacji w commicie z PIN.json → .cache/ (eksport + silnik figur); wymaga sieci i git
-npm test                # strażnicy + generator (Node ≥ 22; bez zależności; wymaga wcześniejszego npm run dane)
+npm ci                  # tylko devDependencies testów dostępności (patrz niżej)
+npm run dane            # pobiera publiczne repo aplikacji w commicie z PIN.json → .cache/ (eksport 35 języków + silnik figur); wymaga sieci i git
+npm test                # strażnicy + generator + dostępność (Node ≥ 22; wymaga npm run dane i zainstalowanego Chrome/Chromium)
+npm run slugi           # zamrożenie adresów ćwiczeń (slugs.lock.json) przy pierwszej publikacji
 npm run build           # dist/ — wszystkie ćwiczenia w językach z config.json (dziś pl, en: ok. 1500 stron, ok. 5 s)
 ```
 
@@ -52,9 +54,13 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 - `straznik-dane` — w repo i w `dist/` brak danych z aplikacji (D5 A), PIN bez danych, workflowy pobierają dane przed testami.
 - `build` — przypięcie do commitu, noindex/robots/mapy witryny (D1, D3), hreflang wzajemny i canonical, struktura stron, figura, budżety (HTML ≤ 20 KB, moduł figury ≤ 30 KB gz, indeks ≤ 25 KB gz), linki wewnętrzne, JSON-LD, CSP, baner App Store.
 
+## Zależności deweloperskie (tylko testy; strona nie ma zależności uruchomieniowych)
+
+- `axe-core` 4.13.0 (skaner reguł WCAG 2.2 AA; MPL-2.0, nie jest publikowany ani dołączany do strony) i `playwright-core` 1.56.1 (sterowanie przeglądarką, Apache-2.0; bez pobierania przeglądarek — test używa zainstalowanego Chromium/Chrome, na runnerze GitHub jest Google Chrome; własna ścieżka: `ATLAS_CHROME`). Uzasadnienie: skaner S8 (docs/54 pkt 12) wymaga prawdziwej przeglądarki; własny skaner kontrastu i ARIA byłby gorszy i dłuższy w utrzymaniu. Koszt w CI: `npm ci` ok. 12 MB i kilka sekund; sam test S8 trwa kilka minut.
+
 ## Workflowy
 
-- `tests.yml` — na każdy push: `npm run dane` (pobranie aplikacji), `npm test`, `npm run build`. Bez publikacji, bez sekretów.
+- `tests.yml` — na każdy push: `npm ci`, `npm run dane` (pobranie aplikacji), `npm test`, `npm run build`. Bez publikacji, bez sekretów.
 - `pages.yml` — budowanie i wdrożenie na Pages, **tylko ręcznie** do startu z 1.1. Pierwszy przebieg po włączeniu Pages to przebieg dowodowy (lekcja L-001 aplikacji): sprawdzić na wdrożonej stronie noindex, `robots.txt`, figurę bez błędów w konsoli, adres.
 
 ## Otwarte

@@ -24,21 +24,25 @@ Rozstrzygnięcia pytań z sekcji 16 (wszystkie zgodnie z rekomendacją analityka
 
 Dodatkowo (koordynator, 26.10.2026): `indeksowanie = false` w `config.json` do startu z wersją 1.1 (noindex,nofollow na wszystkich stronach, `robots.txt` Disallow, brak map witryny); workflow Pages tylko ręcznie do tego czasu.
 
-## Stan wdrożenia szkieletu (spike, 26.10.2026)
+## Stan wdrożenia szkieletu (26.10.2026, po drugiej turze)
 
-Zrobione: eksport z aplikacji (repo aplikacji, `scripts/strona/`), silnik figur v2 w przeglądarce, strona wyboru języka, strona główna języka, lista A–Z z filtrami, strony filtrów (partia, sprzęt, rodzina), strona ćwiczenia, 404, hreflang, canonical, mapy witryny per język, noindex (D1, D3, globalny), JSON-LD (BreadcrumbList, WebSite), CSP, meta generator, wyszukiwarka, strażnicy anonimowości, sekretów i analityki.
+Zrobione w pierwszej turze: eksport z aplikacji (repo aplikacji, `scripts/strona/`), silnik figur v2 w przeglądarce, strona wyboru języka, strona główna języka, lista A–Z z filtrami, strony filtrów, strona ćwiczenia, 404, hreflang, canonical, mapy witryny per język, noindex (D1, D3, globalny), JSON-LD, CSP, wyszukiwarka, strażnicy anonimowości, sekretów i analityki.
 
-Odstępstwa i otwarte (do decyzji lub dalszej pracy):
-- **Technika animacji:** w pkt 10 analityk oznaczył jako (a) prerender klatek SVG, (b) silnik w przeglądarce. Pomiar (pomiary/wyniki.md) wypadł odwrotnie: prerender to 360–2200 KB gz na figurę i 56 MB gz dla 87 figur (270 MB surowo), silnik w przeglądarce to 0,6–2 KB danych + 9,6 KB silnika; wybrany jest **silnik w przeglądarce** (rekomendacja programisty), obraz statyczny głównego widoku jest renderowany przy budowaniu.
-- **Budżet HTML ≤ 20 KB:** spełniony (maks. ok. 20,3 KB przy ćwiczeniach z figurą — obraz statyczny tylko głównego widoku; drugi widok rysuje JS). Moduł danych figury ≤ 30 KB gz (test).
-- **Języki:** zbudowane pl i en. Pozostałe 33 wymagają `src/ui/<język>.json` (słownik przez tłumacza) i przeglądu; do tego czasu nie są budowane (brak tekstu zastępczego, S10).
-- **Warunek startu S6 (709/709 figur):** dziś 87 figur; `raport-brakow.json` w `.cache/` pokazuje liczby. Szkielet buduje strony także bez figury (do indeksu wchodzą tylko ze własną treścią — D1).
-- **Sylwetka mięśni (pkt 3.5.5):** na razie tylko lista „główne / pomocnicze” i dopisek „Dobór mięśni: przybliżony”.
-- **Stałe teksty „Zamienniki”, „Potrzebny sprzęt”, filtry itd.:** pl i en napisane przez agenta (`src/ui/`), do przeglądu tłumacza.
-- **Pozycje statyczne (start i koniec) przy „Ogranicz ruch”:** obraz statyczny to pozycja skrajna; pełny wariant z dwiema pozycjami i podpisami — do zrobienia.
-- **Strażniki S3 (znaki towarowe nazw), S4 (wersja w App Store), S6, S8 (skaner WCAG), S10 w pełnym zakresie:** niezrobione; zrobione S1 (anonimowość), S5 (liczby), S7 (hreflang, canonical, mapy, linki), S9 (prywatność, budżety).
-- **hreflang `es-419` i `sr`:** otwarte (pkt 5); `src/taksonomia.mjs` oznacza je jako otwarte.
-- **Slugi:** reguła z pkt 4 bez `slugs.lock.json` (zamrożenie przy pierwszej publikacji) i bez `slug-overrides.json`.
+Zrobione w drugiej turze:
+- **Sylwetka mięśni przód/tył** (pkt 3.5.5): eksport aplikacji dostarcza `sylwetka.json` (arkusz SVG z `lib/musclemap.ts` + stopnie 0–4 dwunastu partii per ćwiczenie, ten sam wzór co mapa w aplikacji). Strona zapisuje `assets/sylwetka.svg` i wstawia `<use>`; stopnie to klasy CSS (CSP bez inline style), kolory w `assets/site.css` (jasny i ciemny). Sylwetka jest dekoracyjna (`aria-hidden`), informację niosą listy mięśni. Szablon pokazuje zdania o roli mięśnia (`ex.roles`: `{id regionu, text}`), gdy eksport je zawiera (gałąź `role-miesni` aplikacji — dane jeszcze nie scalone); bez nich sekcja ma tylko listy.
+- **Pozycje statyczne przy „Ogranicz ruch” i bez JS**: dwie pozycje głównego widoku z podpisami „Pozycja wyjściowa” i „Pozycja końcowa” (teksty z aplikacji), figura statyczna — jedna pozycja bez podpisu (jak `staticPositions` aplikacji). Geometria leży w `assets/poz/<slug>.svg` (jeden plik na ćwiczenie, wspólny dla języków, `<use>` dziedziczy zmienne `--f-*`), więc HTML strony ćwiczenia ma ok. 6 KB (budżet ≤ 20 KB spełniony z zapasem, a opublikowana strona nie powiela geometrii w 35 językach). Animowane widoki (wszystkie widoki rodziny) odsłania dopiero skrypt, gdy ruch jest dozwolony, albo „Wznów animację” / wybór błędu przy ograniczeniu ruchu. Zmiana względem pierwszej tury: w HTML nie ma już obrazu skrajnego w animowanym widoku.
+- **S3 znaki towarowe** (`trademark-check.json`), **S4 wersja** (`config.json` → `wersjaWydania` równe `manifest.app.version`, a `PIN.json` → `ref` to tag `v<wersja>…`; bez zapytań sieciowych — porównanie z App Store po ID zostaje krokiem wydania), **S6 warunek startu** (każde ćwiczenie ma figurę albo wyjątek z powodem w `start-wyjatki.json`): przy `indeksowanie=true` przerywają build, przy `false` dają ostrzeżenia w logu (`src/straznicy.mjs`, `tests/straznicy-startu.test.mjs`).
+- **S8 dostępność**: axe-core w przeglądarce bezgłowej (`tests/dostepnosc.test.mjs`): 35 języków × (strona główna, lista, filtr, 5 ćwiczeń) × motyw × „Ogranicz ruch”; pełna macierz 2×2 dla pl i en, dla reszty dwie przekątne; chooser i 404 osobno. Zależności tylko deweloperskie, zob. README.
+- **Slugi**: `slugs.lock.json` (zamrożenie przy pierwszej publikacji: `npm run slugi`) i `slug-overrides.json` (nadpisania: zachowanie starego adresu; przekierowania: stary adres → nowy lub lista). Zmiana adresu bez wpisu przerywa build; przy `indeksowanie=true` pusty lub niepełny lock też. Przekierowanie to strona z meta refresh 0 s i canonical na nowy adres w każdym budowanym języku (`tests/slugi.test.mjs`).
+- **hreflang `es-419` i `sr`** (pkt 5): decyzja programisty, do potwierdzenia przez badacza. `es-419` Google nie obsługuje, więc ta sama strona jest zgłaszana pod kodami es-XX dla 21 regionów (lista `ES_419_REGIONS` aplikacji bez „419”, BR i JP: tam nie ma społeczności hiszpańskojęzycznej, a pt-BR ma własną wersję; Hiszpania i reszta świata zostają przy `es`); test pilnuje zgodności z listą aplikacji. `sr` → `sr-Cyrl` (aplikacja pisze cyrylicą), także w `lang`. Otwarte: czy Google dopasuje `sr-Cyrl` do użytkowników z `sr`/`sr-RS`; tani wariant zapasowy to dopisanie drugiego kodu `sr` na ten sam adres.
+
+Odstępstwa i otwarte:
+- **Technika animacji:** silnik w przeglądarce zamiast prerenderu klatek (pomiary/wyniki.md).
+- **Języki:** wszystkie 35 mają stałe teksty (`src/ui/`, pisane przez agenta, do przeglądu tłumacza i recenzenta); do indeksu idą języki z `indeksujJezyki` (dziś pl, en).
+- **Warunek startu S6:** dziś 87 figur z 709 (S6 ostrzega).
+- **Drugi widok na pozycjach statycznych:** pokazany tylko główny widok (aplikacja pokazuje wszystkie widoki).
+- **Przekierowania:** czy wyszukiwarka traktuje meta refresh 0 s z canonical jak przekierowanie — do potwierdzenia przez badacza.
+- **S1 w 33 językach, S10 w pełnym zakresie:** bez zmian, otwarte.
 
 ## 1. Cel
 Pełna, publiczna biblioteka ćwiczeń aplikacji Trening w 35 językach. Prowadzi ruch z wyszukiwarki do App Store. Każda strona ma realną wartość: animacja ruchu, wskazówki, mięśnie, zamienniki, częsty błąd. Nie robimy masowych stron pod wyszukiwarkę.

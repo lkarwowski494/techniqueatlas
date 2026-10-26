@@ -1,0 +1,4 @@
+{
+ "_opis": "S3 znaki towarowe (R-016): status per nazwa ćwiczenia widoczna na stronie (nazwa dokładnie jak w eksporcie). Wpis: \"Nazwa\": { \"status\": \"sprawdzone\" | \"ryzyko\" | \"do-sprawdzenia\", \"data\": \"RRRR-MM-DD\" }. Przy config.indeksowanie=true brak wpisu ze statusem „sprawdzone” i datą przerywa build; przy false tylko ostrzeżenie.",
+ "nazwy": {}
+}

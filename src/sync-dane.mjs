@@ -1,5 +1,5 @@
 // Pobranie danych z publicznego repo aplikacji (D5 A): checkout przypiętego commitu (PIN.json) → eksport (.cache/dane) + silnik figur (.cache/silnik). Nic z tego nie trafia do gita.
-// Użycie: npm run dane [-- --app <ścieżka do lokalnego repo aplikacji na tym samym commicie>]   (bez --app: klon płytki do .cache/app)
+// Użycie: npm run dane [-- --app <ścieżka do lokalnego repo aplikacji na tym samym commicie>]   (bez --app: klon płytki do .cache/app). Eksportuje zawsze wszystkie 35 języków (ok. 10 s): config.json → `jezyki` mówi tylko, które języki są BUDOWANE, a testy i strażnicy sprawdzają 35 języków z `--wszystkie` budowania bez zmiany configu.
 // Narzędzia: eksport aplikacji potrzebuje tylko `typescript` i `terser` — instalowane (wersje z package.json / package-lock.json aplikacji) do .cache/tools, bez instalowania całej aplikacji.
 import { execFileSync } from 'node:child_process';
 import { copyFileSync } from 'node:fs';
@@ -11,7 +11,7 @@ const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { stdio: 'inherit'
 const out = (cmd, args, opts = {}) => execFileSync(cmd, args, { encoding: 'utf8', ...opts }).trim();
 const a = process.argv.slice(2), arg = n => { const i = a.indexOf(n); return i >= 0 ? a[i + 1] : undefined; };
 
-const pin = readJson('PIN.json'), cfg = readJson('config.json'), cache = join(ROOT, '.cache');
+const pin = readJson('PIN.json'), cache = join(ROOT, '.cache');
 if (!/^[0-9a-f]{40}$/.test(pin.commit)) throw new Error('PIN.json: commit musi być pełnym skrótem (40 znaków)');
 mkdirSync(cache, { recursive: true });
 
@@ -43,10 +43,10 @@ else if (!existsSync(join(nm, 'typescript')) || !existsSync(join(nm, 'terser')))
 
 /* 3. eksport i silnik */
 rmSync(join(cache, 'dane'), { recursive: true, force: true }); rmSync(join(cache, 'silnik'), { recursive: true, force: true });
-run('node', [join(app, 'scripts/strona/eksport.mjs'), '--out', join(cache, 'dane'), '--langs', cfg.jezyki.join(',')]);
+run('node', [join(app, 'scripts/strona/eksport.mjs'), '--out', join(cache, 'dane'), ]);
 run('node', [join(app, 'scripts/strona/silnik-build.mjs'), '--out', cache]);
 /* słownik terminów aplikacji (wzorce zakazane) dla strażnika terminów strony — jak wzorce źródeł: do .cache, nie do gita */
 copyFileSync(join(app, 'docs/lokalizacja/slownik-terminow.json'), join(cache, 'dane/slownik-terminow.json'));
 const man = readJson('.cache/dane/manifest.json');
 if (man.app.commit !== pin.commit) throw new Error(`eksport (${man.app.commit}) ≠ PIN.json (${pin.commit})`);
-console.log(`dane: wersja ${man.app.version}, commit ${pin.commit.slice(0, 7)}, języki: ${cfg.jezyki.join(',')}`);
+console.log(`dane: wersja ${man.app.version}, commit ${pin.commit.slice(0, 7)}, języki: ${man.languages.map(l => l.lang).join(',')}`);

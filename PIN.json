@@ -2,5 +2,5 @@
   "_opis": "Przypięcie do wersji aplikacji (D5 A, decyzja właściciela 26.10.2026): w repo nie ma żadnych danych — CI i `npm run dane` pobierają publiczne repo aplikacji w tym commicie (ref = tag wydania albo gałąź, commit = dokładny skrót), uruchamiają jej eksport i silnik figur do .cache/ (poza gitem). Zmiana wersji strony = zmiana tego pliku.",
   "repoAplikacji": "lkarwowski494/trening",
   "ref": "strona-eksport",
-  "commit": "c765f9b52cc5e83612f45e1bed2da848cea4fee5"
+  "commit": "a4ba3320e707d4801eba305b71cbb116469aa68b"
 }

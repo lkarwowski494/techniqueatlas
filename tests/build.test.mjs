@@ -6,7 +6,7 @@ import { gzipSync } from 'node:zlib';
 import { join, posix } from 'node:path';
 import { checkPin, build } from '../src/build.mjs';
 import { readJson, CACHE } from '../src/lib.mjs';
-import { buildOnce, requireData, distFiles, tmpDist } from './pomoc.mjs';
+import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU } from './pomoc.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
 
 requireData();
@@ -36,25 +36,25 @@ test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt za
 });
 
 test('indeksowanie włączone: D1 — indeksowane tylko ćwiczenia z własnymi wskazówkami (kompletnymi w języku), reszta noindex,follow; strony list i filtrów indeksowane; D3 — tylko języki z indeksujJezyki', async () => {
-  const { out } = await buildOnce('idx', INDEXING);
+  const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   for (const [l, d] of [['pl', PL], ['en', EN]]) for (const e of d.exercises) {
     const r = robots(read(out, `${l}/exercises/${e.slug}/index.html`)); const own = e.cues.scope === 'own' && !e.cues.missing;
     assert.equal(r, own ? null : 'noindex,follow', `${l} ${e.id} (${e.cues.scope})`);
   }
   for (const f of ['pl/index.html', 'pl/exercises/index.html', 'en/muscles/chest/index.html', 'index.html']) assert.equal(robots(read(out, f)), null, f);
   assert.equal(robots(read(out, '404.html')), 'noindex,nofollow');
-  const only = await build({ out: tmpDist(), cfg: { ...INDEXING, indeksujJezyki: ['pl'] } });
+  const only = await build({ out: tmpDist(), cfg: { ...INDEXING, indeksujJezyki: ['pl'] }, ...BEZ_STARTU });
   assert.equal(robots(read(only.out, 'en/exercises/back-squat/index.html')), 'noindex,follow'); assert.equal(robots(read(only.out, 'pl/exercises/back-squat/index.html')), null);
   assert.ok(!existsSync(join(only.out, 'sitemap-en.xml')) && existsSync(join(only.out, 'sitemap-pl.xml')));
 });
 test('reguła D1 sama zdejmuje noindex, gdy ćwiczenie dostanie własną treść: ćwiczenie ogólne → noindex,follow; ten sam wpis z własnymi wskazówkami → indeksowane', async () => {
   const general = EN.exercises.find(e => e.cues.scope === 'general'); assert.ok(general);
-  const { out } = await buildOnce('idx', INDEXING); assert.equal(robots(read(out, `en/exercises/${general.slug}/index.html`)), 'noindex,follow');
+  const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU); assert.equal(robots(read(out, `en/exercises/${general.slug}/index.html`)), 'noindex,follow');
   const own = EN.exercises.find(e => e.cues.scope === 'own' && !e.cues.missing); assert.equal(robots(read(out, `en/exercises/${own.slug}/index.html`)), null);
 });
 
 test('robots.txt i mapy witryny przy włączonym indeksowaniu: Allow + indeks map; mapa na język tylko ze stronami indeksowanymi, ≤ 50 000 adresów i ≤ 50 MB; strony noindex nie są w mapach', async () => {
-  const { out, pages } = await buildOnce('idx', INDEXING);
+  const { out, pages } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   assert.equal(read(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${readJson('config.json').domena}/sitemap.xml\n`);
   const index = read(out, 'sitemap.xml'); for (const l of ['pl', 'en', 'glowna']) assert.match(index, new RegExp(`sitemap-${l}\\.xml`));
   const noindex = new Set(pages.filter(p => !p.indexable).map(p => p.file.replace(/index\.html$/, '')));
@@ -67,7 +67,7 @@ test('robots.txt i mapy witryny przy włączonym indeksowaniu: Allow + indeks ma
   }
 });
 test('mapa witryny: alternatywy językowe (xhtml:link) są wzajemne i dotyczą tylko wersji indeksowanych', async () => {
-  const { out } = await buildOnce('idx', INDEXING);
+  const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   const parse = l => new Map([...read(out, `sitemap-${l}.xml`).matchAll(/<url><loc>([^<]+)<\/loc>((?:<xhtml:link[^>]*\/>)*)<\/url>/g)].map(m => [m[1], [...m[2].matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(x => [x[1], x[2]])]));
   const pl = parse('pl'), en = parse('en');
   for (const [loc, alts] of pl) { const mine = alts.find(a => a[0] === 'pl'); assert.equal(mine[1], loc); for (const [lg, href] of alts.filter(a => a[0] === 'en')) assert.ok((en.get(href) ?? []).some(a => a[1] === loc), `${loc} ↔ ${href}`); }
@@ -109,15 +109,46 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
   }
   assert.deepEqual(bad.slice(0, 5), []);
 });
-test('figura: ćwiczenia z figurą mają obraz statyczny głównego widoku, przyciski, moduł danych w assets/fig/ i skrypt; ćwiczenia bez figury — brak figury i skryptu animacji; budżety HTML i modułu danych', async () => {
-  const { out } = await buildOnce(); const withFig = EN.exercises.filter(e => e.figure);
-  assert.equal(withFig.length, readdirSync(join(out, 'assets/fig')).length);
+test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyjściowa, skrajna; figura statyczna — tylko skrajna, bez podpisu) z arkusza assets/poz/, ukryte animowane widoki, przyciski, moduł danych i skrypt; bez figury — brak figury; budżety', async () => {
+  const { out } = await buildOnce(); const withFig = EN.exercises.filter(e => e.figure); const figs = JSON.parse(readFileSync(join(CACHE, 'dane/figury.json'), 'utf8')).figures;
+  assert.equal(withFig.length, readdirSync(join(out, 'assets/fig')).length); assert.equal(withFig.length, readdirSync(join(out, 'assets/poz')).length);
+  let single = 0;
   for (const e of withFig) {
-    const h = read(out, `en/exercises/${e.slug}/index.html`); assert.match(h, /<svg role="img"[^>]*><g transform="matrix\(1 0 0 -1[^"]*" data-g><(path|circle)/); assert.match(h, /data-pause/); assert.match(h, /assets\/figura-strona\.js/);
-    assert.ok(gzipSync(readFileSync(join(out, `assets/fig/${e.slug}.js`))).length <= 30 * 1024, `${e.slug}: moduł figury > 30 KB gz`);
+    const h = read(out, `en/exercises/${e.slug}/index.html`), fig = figs[e.slug], poses = h.match(/<div class="pozycje" data-poses>(.*?)<\/div><\/div>\n/s)[1];
+    const uses = [...poses.matchAll(/<use href="\.\.\/\.\.\/\.\.\/assets\/poz\/([^"#]+)\.svg#(start|end)"\/>/g)].map(m => [m[1], m[2]]);
+    assert.deepEqual(uses, fig.static ? [[e.slug, 'end']] : [[e.slug, 'start'], [e.slug, 'end']], e.slug);
+    if (fig.static) { single++; assert.doesNotMatch(poses, /<p class="drobne">/); } else assert.deepEqual([...poses.matchAll(/<p class="drobne">([^<]*)<\/p>/g)].map(m => m[1]), ['Starting position', 'End position'], e.slug);
+    assert.match(poses, /<svg role="img" aria-label="Movement drawing: [^"]*"/); assert.doesNotMatch(h, /<path|<circle/); /* geometria poza HTML (budżet, wspólna dla języków) */
+    assert.match(h, /<div class="widoki" data-views hidden>(<svg role="img"[^>]*data-view="[a-z]+"><g [^>]*data-g><\/g><\/svg>)+<\/div>/); assert.match(h, /data-pause/); assert.match(h, /assets\/figura-strona\.js/);
+    const sheet = read(out, `assets/poz/${e.slug}.svg`); assert.equal([...sheet.matchAll(/<g id="(start|end)"/g)].map(m => m[1]).join(), fig.static ? 'end' : 'start,end'); assert.match(sheet, /var\(--f-skin/); assert.doesNotMatch(sheet, /#[0-9a-f]{6}/i);
+    assert.ok(gzipSync(readFileSync(join(out, `assets/fig/${e.slug}.js`))).length <= 30 * 1024, `${e.slug}: moduł figury > 30 KB gz`); assert.ok(gzipSync(sheet).length <= 30 * 1024, `${e.slug}: arkusz pozycji > 30 KB gz`);
   }
-  for (const e of EN.exercises.filter(x => !x.figure).slice(0, 50)) { const h = read(out, `en/exercises/${e.slug}/index.html`); assert.doesNotMatch(h, /data-figure|figura-strona/); }
+  const pl = read(out, 'pl/exercises/back-squat/index.html'); assert.match(pl, />Pozycja wyjściowa<\/p>/); assert.match(pl, />Pozycja końcowa<\/p>/);
+  for (const e of EN.exercises.filter(x => !x.figure).slice(0, 50)) { const h = read(out, `en/exercises/${e.slug}/index.html`); assert.doesNotMatch(h, /data-figure|figura-strona|data-poses/); }
   const big = htmlFiles(out).filter(f => /exercises\/[^/]+\/index\.html$/.test(f)).filter(f => statSync(join(out, f)).size > 20 * 1024); assert.deepEqual(big, []);
+});
+test('sylwetka mięśni: arkusz assets/sylwetka.svg + klasy stopni partii (bez inline style — CSP), przód i tył z podpisami, dekoracyjna (aria-hidden); zgodna z danymi eksportu; arkusz klas CSS dla wszystkich partii i stopni', async () => {
+  const { out } = await buildOnce(); const sil = JSON.parse(readFileSync(join(CACHE, 'dane/sylwetka.json'), 'utf8'));
+  assert.equal(read(out, 'assets/sylwetka.svg'), sil.sprite);
+  const css = read(out, 'assets/sylwetka.css'); for (let i = 0; i < sil.muscles.length; i++) for (const l of [1, 2, 3, 4]) assert.ok(css.includes(`.sylwetki.s${i}-${l}{--mm-${i}:var(--mm-l${l})}`), `${i}-${l}`);
+  for (const [l, d] of [['pl', PL], ['en', EN]]) for (const e of d.exercises) {
+    const h = read(out, `${l}/exercises/${e.slug}/index.html`), lv = sil.levels[e.slug], m = h.match(/<div class="sylwetki ([^"]*)" aria-hidden="true">(.*?)<\/div><\/div>/s);
+    if (!lv.some(v => v > 0)) { assert.equal(m, null, e.id); assert.doesNotMatch(h, /sylwetka\.css/); continue; }
+    assert.deepEqual(m[1].split(' ').sort(), lv.map((v, i) => v ? `s${i}-${v}` : '').filter(Boolean).sort(), e.id);
+    assert.match(m[2], /<use href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.svg#front"\/>.*>(Front|Przód)<\/p>.*<use href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.svg#back"\/>.*>(Back|Tył)<\/p>/s);
+    assert.match(h, /<link rel="stylesheet" href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.css">/); assert.doesNotMatch(h, /\sstyle="/);
+    if (l === 'en' && h.includes('Main muscles')) assert.ok(h.indexOf('class="sylwetki') < h.indexOf('Main muscles'), e.id); /* sylwetka przed listą mięśni */
+  }
+  const sq = read(out, 'en/exercises/back-squat/index.html'); assert.match(sq, /class="sylwetki s5-4 s7-2 s11-2"/);
+});
+test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy eksport je zawiera (ex.roles, etykieta regionu + zdanie, z ucieczką HTML); bez danych — tylko listy główne / pomocnicze, bez pustej listy', async () => {
+  const { exercisePage } = await import('../src/pages.mjs'); const { out, ctx } = await buildOnce();
+  assert.doesNotMatch(read(out, 'en/exercises/back-squat/index.html'), /class="role"/); /* dziś eksport nie ma ról */
+  const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
+  const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
+  assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
+  assert.ok(withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"') && withRoles.indexOf('class="role"') < withRoles.indexOf('>Tips<'));
+  for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
 });
 test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z pliku modułu; lista A–Z działa bez JS (pełna lista w HTML, filtry ukryte do uruchomienia skryptu)', async () => {
   const { out } = await buildOnce();

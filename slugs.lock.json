@@ -1,0 +1,4 @@
+{
+ "_opis": "Zamrożone adresy ćwiczeń (klucz katalogu → slug), docs/54 pkt 4. Pusty do pierwszej publikacji: wtedy `npm run slugi` zapisuje bieżące adresy. Po zamrożeniu zmiana adresu wymaga wpisu w slug-overrides.json (nadpisanie albo przekierowanie); build i tests/slugi.test.mjs pilnują.",
+ "slugi": {}
+}

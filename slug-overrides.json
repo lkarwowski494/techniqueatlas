@@ -1,0 +1,5 @@
+{
+ "_opis": "Ręczne rozstrzygnięcia adresów ćwiczeń (docs/54 pkt 4). nadpisania: id ćwiczenia → slug (zachowanie starego adresu po zmianie nazwy w aplikacji albo rozstrzygnięcie kolizji). przekierowania: stary slug → id ćwiczenia, które go zastąpiło, albo \"lista\" (ćwiczenie usunięte); strona pod starym adresem zostaje jako przekierowanie (meta refresh 0 s + canonical na nowy adres) w każdym budowanym języku, na stałe.",
+ "nadpisania": {},
+ "przekierowania": {}
+}

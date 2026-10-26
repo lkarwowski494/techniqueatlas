@@ -1,0 +1,4 @@
+{
+ "_opis": "S6 warunek startu: wyjątki od zasady „każde ćwiczenie ma figurę v2” (klucz katalogu → powód). Pusty = start dopiero przy komplecie figur. Przy config.indeksowanie=true ćwiczenie bez figury i bez wyjątku z powodem przerywa build.",
+ "wyjatki": {}
+}

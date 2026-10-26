@@ -24,4 +24,6 @@ export { ROOT, statSync };
 export function requireData() { if (!hasData()) throw new Error('brak danych z aplikacji (.cache) — uruchom: npm run dane'); }
 const memo = new Map();
 /** Budowanie raz na wariant ustawień (testy współdzielą wynik); zwraca { out, pages, cfg, report }. */
-export function buildOnce(name = 'domyslny', cfg = {}) { requireData(); if (!memo.has(name)) memo.set(name, build({ out: tmpDist(), cfg })); return memo.get(name); }
+export function buildOnce(name = 'domyslny', cfg = {}, opts = {}) { requireData(); if (!memo.has(name)) memo.set(name, build({ out: tmpDist(), cfg, ...opts })); return memo.get(name); }
+/** Opcje dla testów, które włączają indeksowanie na danych sprzed wydania: bez warunków startu S3/S4/S6 i zamrożenia adresów (mają własne testy), reszta bez zmian. */
+export const BEZ_STARTU = { pominStraznikowStartu: true };
