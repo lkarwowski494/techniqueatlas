@@ -12,6 +12,8 @@ export const esc = s => String(s).replace(/[&<>"']/g, c => ESC[c]);
 /** JSON do wstawienia w <script type="application/json">: bez sekwencji kończącej znacznik. */
 export const jsonForScript = o => JSON.stringify(o).replace(/</g, '\\u003c');
 /** Szablon {klucz}. */
+/** Forma tekstu zależna od liczby (CLDR przez Intl.PluralRules): forms to napis albo obiekt {zero, one, two, few, many, other}; brak formy → other. */
+export const plural = (lang, forms, n) => typeof forms === 'string' ? forms : (forms[new Intl.PluralRules(lang).select(n)] ?? forms.other);
 export const fill = (tpl, vars) => Object.entries(vars).reduce((s, [k, v]) => s.split(`{${k}}`).join(v), tpl);
 /** Adres względny z pliku `from` (np. "pl/exercises/x/index.html") do pliku/katalogu `to` (np. "pl/exercises/y/"). */
 export function relUrl(from, to) {

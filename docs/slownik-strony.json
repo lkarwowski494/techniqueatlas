@@ -1,0 +1,21 @@
+{
+  "_opis": "Terminy specyficzne dla strony (nazwy rodzin ruchów w src/ui/<kod>.json), dopisywane obok słownika aplikacji (pobieranego do .cache przez npm run dane). Strażnik: tests/straznik-terminy.test.mjs. Pole klucz = ścieżka w pliku języka; zalecany musi występować w tej wartości; zakazane (wyrażenia regularne, bez wielkości liter) nie mogą występować w wartości klucza albo, przy zakres=plik, w żadnym tekście pliku języka.",
+  "pojecia": [
+    { "id": "martwy_ciag_zawias", "klucz": ["families.hinge", "families.kneeling_hinge"], "powod": "Ten sam błąd wrócił w 6 językach: kalka „zgięcie biodra” zamiast nazwy martwego ciągu / skłonu.", "zakres": "plik",
+      "jezyki": { "cs": { "zalecany": "předklon", "zakazane": ["zanožen"] }, "de": { "zalecany": "Hip Hinge", "zakazane": ["Hüftbeuge"] }, "ru": { "zalecany": "наклон" } } },
+    { "id": "dipy", "klucz": ["families.dip"], "powod": "Aplikacja ma te terminy w etykietach sprzętu; strona ich nie użyła (np. et „süvend” = zagłębienie).", "zakres": "plik",
+      "jezyki": { "bg": { "zalecany": "кофички" }, "el": { "zalecany": "βυθίσεις" }, "sr": { "zalecany": "пропадања" }, "hr": { "zalecany": "propadanja" }, "ro": { "zalecany": "flotări la paralele" }, "et": { "zalecany": "dipid", "zakazane": ["süvend"] } } },
+    { "id": "kettlebell", "klucz": ["families.kb_ballistic"], "powod": "Rozjazd strona / aplikacja: w aplikacji kettlebell ma lokalną nazwę.", "zakres": "klucz",
+      "jezyki": { "bg": { "zalecany": "пудовка" }, "et": { "zalecany": "sangpomm" }, "lt": { "zalecany": "gir" }, "lv": { "zalecany": "svaru bumb" }, "fi": { "zalecany": "kahvakuul" } } },
+    { "id": "szrugsy_a_unoszenie_ramion", "klucz": ["families.shrug"], "powod": "W de „Schulterzucken” to gest wzruszenia ramion, a „Schulterheben” w rodzinie unoszenia ramion myliło się ze szrugsami.", "zakres": "plik",
+      "jezyki": { "de": { "zalecany": "Shrugs", "zakazane": ["Schulterzucken"] } } },
+    { "id": "unoszenie_ramion_de", "klucz": ["families.delt_raise"], "powod": "Unoszenie ramion bokiem i przodem to nie szrugsy.", "zakres": "klucz",
+      "jezyki": { "de": { "zalecany": "Seit- und Frontheben", "zakazane": ["Schulterheben"] } } },
+    { "id": "uginanie_prostowanie_nog", "klucz": ["families.leg_isolation"], "powod": "Błędy znaczeniowe: cs „zkracování”, el „καμπτήρες” (mięśnie), pt „Flexões” (pompki).", "zakres": "plik",
+      "jezyki": { "cs": { "zalecany": "zakopávání" }, "sk": { "zalecany": "zakopávanie" }, "pt-BR": { "zalecany": "mesa flexora" }, "el": { "zalecany": "κάμψεις", "zakazane": ["καμπτήρ"] } } },
+    { "id": "posladki_ms_id", "klucz": ["families.glute_floor"], "powod": "Fałszywy przyjaciel ms / id: w ms „punggung” = pośladki, w id „punggung” = plecy, a pośladki to „bokong”.", "zakres": "klucz",
+      "jezyki": { "ms": { "zalecany": "punggung", "zakazane": ["bokong"] }, "id": { "zalecany": "bokong", "zakazane": ["punggung"] } } },
+    { "id": "noszenie_ciezaru", "klucz": ["families.carry"], "powod": "ro „cărări” = ścieżki.", "zakres": "plik",
+      "jezyki": { "ro": { "zalecany": "mers cu greutăți", "zakazane": ["cărări"] } } }
+  ]
+}

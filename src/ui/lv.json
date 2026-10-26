@@ -4,7 +4,11 @@
   "home": "Sākums",
   "library": "Bibliotēka",
   "allExercises": "Visi vingrinājumi",
-  "countLine": "{n} vingrinājumi ar tehnikas aprakstu, muskuļiem un alternatīvām.",
+  "countLine": {
+    "zero": "{n} vingrinājumu ar tehnikas aprakstu, muskuļiem un alternatīvām.",
+    "one": "{n} vingrinājums ar tehnikas aprakstu, muskuļiem un alternatīvām.",
+    "other": "{n} vingrinājumi ar tehnikas aprakstu, muskuļiem un alternatīvām."
+  },
   "searchLabel": "Meklēt vingrinājumus",
   "searchPlaceholder": "Vingrinājuma nosaukums",
   "noResults": "Šiem filtriem vingrinājumu nav",
@@ -19,7 +23,7 @@
   "filterAll": "Visi",
   "alternatives": "Aizstājēji",
   "equipmentNeeded": "Nepieciešamais aprīkojums",
-  "chooseLanguage": "Izvēlies valodu",
+  "chooseLanguage": "Izvēlieties valodu",
   "language": "Valoda",
   "privacy": "Privātums",
   "rights": "© Apps4Brew. Visas tiesības aizsargātas.",
@@ -37,9 +41,9 @@
     "dip": "Atspiešanās uz līdzsvara stieņiem",
     "overhead_press": "Spiešana virs galvas",
     "row": "Airēšana",
-    "cable_row": "Airēšana ar trosi",
+    "cable_row": "Airēšana pie bloka",
     "pull_up": "Pievilkšanās un karāšanās",
-    "pulldown": "Vilkšana lejup",
+    "pulldown": "Augšējā bloka vilkšana",
     "lunge": "Izklupieni un uzkāpieni uz soliņa",
     "leg_machine": "Kāju trenažieri",
     "leg_isolation": "Kāju saliekšana un iztaisnošana",
@@ -71,7 +75,7 @@
     "forearm": "Apakšdelmi",
     "thruster": "Trasteri",
     "chest_press_machine": "Krūšu spiešanas trenažieri",
-    "cable_press": "Spiešana ar trosēm",
+    "cable_press": "Spiešana pie blokiem",
     "kneeling_hinge": "Gūžas locījums uz ceļiem"
   }
 }

@@ -32,7 +32,7 @@
   "families": {
     "squat": "Kniebeugen",
     "bench_press": "Bankdrücken",
-    "hinge": "Hüftbeuge (Kreuzheben)",
+    "hinge": "Kreuzheben und Hip Hinge",
     "pushup_plank": "Liegestütze und Planks",
     "dip": "Dips",
     "overhead_press": "Überkopfdrücken",
@@ -45,14 +45,14 @@
     "leg_isolation": "Beinbeuger und Beinstrecker",
     "calf_raise": "Wadenheben",
     "hip_bridge": "Hip Thrusts und Brücken",
-    "kb_ballistic": "Kettlebell-Schwünge und -Reißen",
+    "kb_ballistic": "Kettlebell-Swings und Snatches",
     "olympic": "Olympisches Gewichtheben",
-    "back_extension": "Rückenstrecker",
+    "back_extension": "Rückenstrecken (Hyperextensions)",
     "curl": "Curls",
     "triceps": "Trizepsstrecken",
-    "delt_raise": "Schulterheben",
+    "delt_raise": "Seit- und Frontheben",
     "chest_fly": "Fliegende",
-    "shrug": "Schulterzucken",
+    "shrug": "Shrugs (Schulterheben)",
     "rotator_cuff": "Rotatorenmanschette",
     "core_floor": "Bauch am Boden",
     "core_hang": "Bauch im Hang",
@@ -72,6 +72,6 @@
     "thruster": "Thrusters",
     "chest_press_machine": "Brustpressen-Geräte",
     "cable_press": "Kabeldrücken",
-    "kneeling_hinge": "Hüftbeuge im Kniestand"
+    "kneeling_hinge": "Hip Hinge kniend und sitzend"
   }
 }

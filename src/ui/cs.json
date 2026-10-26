@@ -4,7 +4,12 @@
   "home": "Domů",
   "library": "Knihovna",
   "allExercises": "Všechny cviky",
-  "countLine": "{n} cviků s popisem techniky, svaly a alternativami.",
+  "countLine": {
+    "one": "{n} cvik s popisem techniky, svaly a alternativami.",
+    "few": "{n} cviky s popisem techniky, svaly a alternativami.",
+    "many": "{n} cviku s popisem techniky, svaly a alternativami.",
+    "other": "{n} cviků s popisem techniky, svaly a alternativami."
+  },
   "searchLabel": "Hledat cviky",
   "searchPlaceholder": "Název cviku",
   "noResults": "Pro tyto filtry nejsou žádné cviky",
@@ -32,17 +37,17 @@
   "families": {
     "squat": "Dřepy",
     "bench_press": "Tlaky v lehu",
-    "hinge": "Zanožení v kyčlích (mrtvé tahy)",
+    "hinge": "Mrtvé tahy a předklony",
     "pushup_plank": "Kliky a prkna",
     "dip": "Dipy",
     "overhead_press": "Tlaky nad hlavu",
     "row": "Přítahy",
     "cable_row": "Přítahy na kladce",
     "pull_up": "Shyby a visy",
-    "pulldown": "Stahování na hrazdu",
+    "pulldown": "Stahování horní kladky",
     "lunge": "Výpady a výstupy na bednu",
     "leg_machine": "Stroje na nohy",
-    "leg_isolation": "Zkracování a natahování nohou",
+    "leg_isolation": "Zakopávání a předkopávání",
     "calf_raise": "Výpony na lýtka",
     "hip_bridge": "Hip thrusty a mostíky",
     "kb_ballistic": "Kettlebell: švihy a trhy",
@@ -66,12 +71,12 @@
     "hip_abd_add": "Přitahování a odtahování nohou",
     "mobility_stand": "Mobilita ve stoje",
     "mobility_floor": "Mobilita na zemi",
-    "foam_roll": "Válení pěnovým válcem",
+    "foam_roll": "Masážní válec",
     "neck": "Krk",
     "forearm": "Předloktí",
     "thruster": "Thrustery",
     "chest_press_machine": "Tlakové stroje na hrudník",
     "cable_press": "Tlaky na kladkách",
-    "kneeling_hinge": "Zanožení v kleku"
+    "kneeling_hinge": "Předklony v kleku a vsedě"
   }
 }

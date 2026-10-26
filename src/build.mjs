@@ -28,7 +28,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {} } = {}) {
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
     names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
-  const familyLabel = (l, f) => l === 'pl' ? data.pl?.labels.families?.[f] : ui[l].families?.[f];
+  const familyLabel = (l, f) => ui[l].families?.[f];
   const ctx = { cfg, man, figs, data, ui, collators, bySlug, names, langs, engine, familyLabel };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });

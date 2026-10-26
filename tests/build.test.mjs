@@ -94,7 +94,7 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
   assert.match(h, /<h1 lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1>Back Squat<\/h1>/);
-  const order = ['<h1', 'data-figure', '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>Common mistakes<', '>Equipment needed<', '>Alternatives<', 'medical advice']; let at = -1;
+  const order = ['<h1', 'data-figure', '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>Common mistakes<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
   for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/" lang="en">`));
   const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>Common mistakes<|General tips/);
@@ -157,4 +157,19 @@ test('Smart App Banner i wezwanie do App Store (D8): bez appStoreId brak obu; z 
 });
 test('liczby w szablonach pochodzą z danych (S5): w src/pages.mjs i src/ui nie ma liczby ćwiczeń wpisanej na sztywno', () => {
   for (const f of ['src/pages.mjs', 'src/ui/pl.json', 'src/ui/en.json']) assert.doesNotMatch(readFileSync(join(import.meta.dirname, '..', f), 'utf8'), /\b709\b|\b87\b/);
+});
+
+test('countLine: forma liczby wg Intl.PluralRules (pl, cs, lt, ro) dla 1, 2, 5, 21 i 709', async () => {
+  const { plural, fill } = await import('../src/lib.mjs');
+  const { readFileSync } = await import('node:fs');
+  const ui = l => JSON.parse(readFileSync(new URL(`../src/ui/${l}.json`, import.meta.url), 'utf8')).countLine;
+  const line = (l, n) => fill(plural(l, ui(l), n), { n });
+  const want = {
+    pl: { 1: '1 ćwiczenie', 2: '2 ćwiczenia', 5: '5 ćwiczeń', 21: '21 ćwiczeń', 709: '709 ćwiczeń' },
+    cs: { 1: '1 cvik', 2: '2 cviky', 5: '5 cviků', 21: '21 cviků', 709: '709 cviků' },
+    lt: { 1: '1 pratimas', 2: '2 pratimai', 5: '5 pratimai', 21: '21 pratimas', 709: '709 pratimai' },
+    ro: { 1: '1 exercițiu', 2: '2 exerciții', 5: '5 exerciții', 21: '21 de exerciții', 709: '709 exerciții' },
+  };
+  for (const [l, o] of Object.entries(want)) for (const [n, start] of Object.entries(o)) assert.ok(line(l, +n).startsWith(start + ' '), `${l} ${n}: ${line(l, +n)}`);
+  assert.equal(plural('en', 'tekst', 3), 'tekst');
 });

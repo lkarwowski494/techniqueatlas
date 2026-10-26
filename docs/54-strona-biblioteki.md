@@ -445,3 +445,39 @@ Proponowana kolejność pytań, pojedynczo, od najbardziej blokujących: D1, D3,
 - /home/user/trening/lib/equipment.ts
 - /home/user/trening/app/swap.tsx
 - /home/user/trening/app/exercises.tsx
+## Pytania do native speakerów (teksty stałe strony, recenzja 26.10.2026)
+
+Teksty stałe `src/ui/<kod>.json` przeszły recenzję lokalizacji; poprawki wysokiej i średniej wagi wprowadzone. Poniższe czekają na native speakera i zostały bez zmian (jedno zdanie, dwie opcje):
+
+1. el: rodzina przysiadów: „Squat” (jest) czy „Καθίσματα”?
+2. el: rwanie kettlebell: „ταλαντεύσεις και τραβήγματα” (jest) czy „swing και αρασέ”?
+3. fi: martwe ciągi: „Lonkkanivelen taivutus (maastavedot)” (jest) czy „Maastavedot ja lonkkasarana”?
+4. fi: unoszenie ramion: „Hartianostot” (jest) czy „Vipunostot sivuille ja eteen”?
+5. hu: martwe ciągi: „Csípőhajlítás (felhúzások)” (jest) czy „Felhúzások (hip hinge)”?
+6. ro: wyciskanie leżąc: „Împins la bancă” (jest) czy „Împins la piept”?
+7. ro: martwe ciągi: „Flexie de șold (îndreptări)” (jest) czy „Îndreptări (hip hinge)”?
+8. sr: szrugsy: „Слегање раменима” (jest) czy „Слегања рамена (шрагови)”?
+9. ms: czy „punggung” na liście partii czytasz jako pośladki, czy plecy (wtedy lepsze „glut” / „otot punggung”)? Strona używa „Punggung di lantai” zgodnie z aplikacją.
+10. ja: stopka: „無断転載を禁じます。” (jest) czy „All rights reserved.”?
+11. zh-Hant: thruster: „推舉蹲（Thruster）” (jest) czy „火箭推”?
+12. fr / nl / tr: „hip hinge”: termin lokalny (jest) czy anglicyzm?
+13. nl: unoszenie ramion: „Schouderheffen” (jest) czy „Lateral raises” / „Zijwaarts heffen”?
+14. es-419: noszenie ciężaru: „Cargas caminando” (jest) czy „Acarreos” / „Caminatas con carga”?
+15. et: wyciskanie leżąc: „Rinnalt surumine” (jest) czy „Lamades surumine”?
+16. et: rozpiętki: „Ristitõmbed” (jest) czy „Hantlitega laiali viimine”?
+17. lv: martwy ciąg: „vilkšana” (jest) czy „vilkme”?
+18. lv: stożek rotatorów: „Rotatoru aproce” (jest) czy „Rotatoru manšete”?
+19. uk: unoszenie ramion: „Підйоми на плечі” (jest) czy „Махи на плечі”?
+20. vi: wiosłowanie: „Kéo xô” (jest) czy „Chèo thuyền / Gập người kéo tạ”?
+21. ja: wiosłowanie: „ロウ” (jest) czy „ロウイング”?
+22. cs: deska: „prkna” (jest) czy „planky”?
+
+Niskiej wagi, niewprowadzone (do zbiorczej poprawki): apostrofy typograficzne w fr/it/tr/et, „Zamienniki” w `countLine` (alternatywy → termin z aplikacji), ja „プライバシーポリシー”, zh-Hant „隱私權政策”, hu „SMR hengerezés”, ro „Salt la conținut”, ko „랫 풀다운”, nazwy rodzin `kneeling_hinge` i `chest_press_machine` po zmianie wzorca en (przetłumaczyć ponownie), pl „Ścieżka nawigacji” wprowadzone.
+
+### Odznaki App Store do porównania z oficjalnymi odznakami Apple
+
+Tekst `appStore` jest własny; sprawdzić z zlokalizowanymi odznakami Apple (App Store Marketing Guidelines): pt („Transferir na App Store” — odznaka pt-PT może mieć „Descarregar”), pt-BR, es, es-419, tr, sl, hr, sr, bg, lt, lv, et. Pozostałe języki (cs, sk, hu, ro, uk, de, fr, it, nl, sv, da, nb, fi, el, id, ms, vi, ru, ja, ko, zh-Hant) też warto zestawić zbiorczo przy okazji.
+
+## Strażnik terminów strony
+
+`tests/straznik-terminy.test.mjs`: (1) wzorce „zakazane” ze słownika aplikacji (`docs/lokalizacja/slownik-terminow.json`, kopiowany przez `npm run dane` do `.cache/dane`, nie commitowany) nie mogą wystąpić w żadnym tekście `src/ui/<kod>.json`; (2) słownik strony `docs/slownik-strony.json` (nazwy rodzin ruchów): termin zalecany w kluczu, zakazane poza tekstem. `countLine` ma formy liczby (CLDR) wybierane w generatorze przez `Intl.PluralRules` (`plural` w `src/lib.mjs`).

@@ -6,7 +6,7 @@ import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { repoFiles, distFiles, buildOnce, ROOT } from './pomoc.mjs';
 
-const DATA_FILE = /(^|\/)(atlas-[\w-]+\.json|figury\.json|manifest\.json|wzorce-zrodel\.json)$/;
+const DATA_FILE = /(^|\/)(atlas-[\w-]+\.json|figury\.json|manifest\.json|wzorce-zrodel\.json|slownik-terminow\.json)$/;
 
 test('w repozytorium nie ma plików danych z aplikacji (atlas-*.json, figury.json, manifest.json, wzorce-zrodel.json), katalogu dane/ ani zatwierdzonego silnika', () => {
   const files = repoFiles();

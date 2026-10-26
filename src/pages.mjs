@@ -1,6 +1,6 @@
 // Szablony stron (specyfikacja docs/54, pkt 3): wybór języka, strona główna języka, lista A–Z z filtrami, strony jednego filtra, strona ćwiczenia, 404. Czyste funkcje: dane → HTML.
 // Minimalny wygląd (assets/site.css); wszystkie teksty stałe z src/ui/<język>.json, treść ćwiczeń z eksportu aplikacji — bez zastępczych tekstów z innych języków.
-import { esc, fill, jsonForScript, relUrl } from './lib.mjs';
+import { esc, fill, plural, jsonForScript, relUrl } from './lib.mjs';
 import { langPath, hreflang, GROUP_ID, EQUIPMENT_ID, familyId } from './taksonomia.mjs';
 
 const SECTION = ['setup', 'move'];
@@ -74,7 +74,7 @@ export function homePage(ctx, lang) {
   const chip = (kind, x) => `<li><a href="${u(urlOf(paths[kind](lang, x.id)))}">${esc(x.label)}</a></li>`;
   const basics = d.exercises.filter(e => !e.niche).sort((a, b) => ctx.collators[lang].compare(a.name, b.name));
   const body = `<h1>${esc(ui.siteName)}</h1>
-<p>${esc(fill(ui.countLine, { n: d.exercises.length }))}</p>
+<p>${esc(fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }))}</p>
 <div hidden><label for="szukaj">${esc(ui.searchLabel)}</label><br><input id="szukaj" type="search" autocomplete="off" placeholder="${esc(ui.searchPlaceholder)}" data-szukaj data-lang="${esc(lang)}" data-base="${u(urlOf(paths.list(lang)))}" data-brak="${esc(ui.noResults)}"><ul class="lista" data-wyniki aria-live="polite"></ul></div>
 <p><a href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)}</a></p>
 <h2>${esc(ui.byMuscle)}</h2><ul class="chipy">${g.muscles.map(x => chip('muscle', x)).join('')}</ul>
@@ -82,7 +82,7 @@ export function homePage(ctx, lang) {
 ${g.movements.length ? `<h2>${esc(ui.byMovement)}</h2><ul class="chipy">${g.movements.map(x => chip('movement', x)).join('')}</ul>` : ''}
 <h2>${esc(ui.basics)}</h2><ul class="lista">${basics.map(e => `<li><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nameAttr(lang, e)}>${esc(e.name)}</a></li>`).join('')}</ul>`;
   const webSite = { '@context': 'https://schema.org', '@type': 'WebSite', name: ui.siteName, url: abs(ctx.cfg, urlOf(file)), inLanguage: hreflang(lang) };
-  return { file, lang, kind: 'home', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: ui.siteName, description: fill(ui.countLine, { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
+  return { file, lang, kind: 'home', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: ui.siteName, description: fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, paths.home), xDefault: urlOf(paths.chooser()), jsonld: [webSite], scripts: ['assets/szukaj.js'], crumbs: [{ name: ui.home, path: file }] }, body) };
 }
 
@@ -99,7 +99,7 @@ export function listPage(ctx, lang) {
 <p data-brak hidden>${esc(ui.noResults)}</p>
 <ul class="lista" data-lista>${listItems(ctx, lang, file, sorted)}</ul>`;
   const crumbs = [...crumbBase(ctx, lang), { name: ui.allExercises, path: file }];
-  return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${ui.allExercises} — ${ui.siteName}`, description: fill(ui.countLine, { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
+  return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${ui.allExercises} — ${ui.siteName}`, description: fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, paths.list), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs }, body) };
 }
 

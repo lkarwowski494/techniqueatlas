@@ -2,6 +2,7 @@
 // Użycie: npm run dane [-- --app <ścieżka do lokalnego repo aplikacji na tym samym commicie>]   (bez --app: klon płytki do .cache/app)
 // Narzędzia: eksport aplikacji potrzebuje tylko `typescript` i `terser` — instalowane (wersje z package.json / package-lock.json aplikacji) do .cache/tools, bez instalowania całej aplikacji.
 import { execFileSync } from 'node:child_process';
+import { copyFileSync } from 'node:fs';
 import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync, lstatSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROOT, readJson } from './lib.mjs';
@@ -44,6 +45,8 @@ else if (!existsSync(join(nm, 'typescript')) || !existsSync(join(nm, 'terser')))
 rmSync(join(cache, 'dane'), { recursive: true, force: true }); rmSync(join(cache, 'silnik'), { recursive: true, force: true });
 run('node', [join(app, 'scripts/strona/eksport.mjs'), '--out', join(cache, 'dane'), '--langs', cfg.jezyki.join(',')]);
 run('node', [join(app, 'scripts/strona/silnik-build.mjs'), '--out', cache]);
+/* słownik terminów aplikacji (wzorce zakazane) dla strażnika terminów strony — jak wzorce źródeł: do .cache, nie do gita */
+copyFileSync(join(app, 'docs/lokalizacja/slownik-terminow.json'), join(cache, 'dane/slownik-terminow.json'));
 const man = readJson('.cache/dane/manifest.json');
 if (man.app.commit !== pin.commit) throw new Error(`eksport (${man.app.commit}) ≠ PIN.json (${pin.commit})`);
 console.log(`dane: wersja ${man.app.version}, commit ${pin.commit.slice(0, 7)}, języki: ${cfg.jezyki.join(',')}`);
