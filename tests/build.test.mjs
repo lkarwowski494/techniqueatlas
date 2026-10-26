@@ -25,7 +25,7 @@ test('przypięcie: dane z .cache pochodzą z commitu z PIN.json; rozjazd commitu
   for (const k of ['manifest', 'figury', 'silnik']) assert.throws(() => checkPin({ ...ok, [k]: { app: { commit: b } } }), new RegExp(k));
 });
 test('język bez tekstów stałych (src/ui/<język>.json) nie jest budowany — błąd zamiast tekstu zastępczego (S10)', async () => {
-  await assert.rejects(build({ out: tmpDist(), cfg: { jezyki: ['pl', 'de'] } }), /brak src\/ui\/de\.json|nie został wyeksportowany/);
+  await assert.rejects(build({ out: tmpDist(), cfg: { jezyki: ['pl', 'xx'] } }), /brak src\/ui\/xx\.json|nie został wyeksportowany/);
 });
 
 test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt zabrania wszystkiego, brak map witryny', async () => {
