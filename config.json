@@ -1,0 +1,10 @@
+{
+  "_opis": "Jedyne miejsce ustawień budowania. indeksowanie=false: każda strona ma noindex, robots.txt zabrania wszystkiego, brak map witryny — do startu z wersją 1.1 (decyzja właściciela; przełączenie to osobna decyzja razem z włączeniem Pages). indeksujJezyki (D3): do indeksu idą tylko te języki, pozostałe publikowane są z noindex,follow do przeglądu native speakera. appStoreId puste = bez wezwania do App Store i bez Smart App Banner (D8).",
+  "indeksowanie": false,
+  "domena": "https://techniqueatlas.com",
+  "jezyki": ["pl", "en"],
+  "indeksujJezyki": ["pl", "en"],
+  "jezykDomyslny": "en",
+  "appStoreId": "",
+  "polityka": "https://apps4brew.com/trening/privacy.html"
+}

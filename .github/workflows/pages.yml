@@ -1,0 +1,36 @@
+# Publikacja strony na GitHub Pages (budowanie generatorem statycznym → artefakt → wdrożenie). Do startu z wersją 1.1 WYŁĄCZNIE ręcznie (workflow_dispatch):
+# Pages są wyłączone, a config.json ma indeksowanie=false (noindex + robots Disallow). Po włączeniu Pages dopisać wyzwalacz push na main w tym samym PR.
+# Bez sekretów; token tylko do odczytu treści i wdrożenia Pages. Pierwszy przebieg po włączeniu Pages to przebieg dowodowy (docs aplikacji, lekcja L-001):
+# sprawdzić w wdrożonej stronie — noindex w HTML, robots.txt „Disallow: /”, ładowanie figury (konsola bez błędów), adres https://<org>.github.io/techniqueatlas/ albo domena.
+name: Pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm run dane
+      - run: npm test
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

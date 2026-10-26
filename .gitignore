@@ -1,0 +1,13 @@
+dist/
+node_modules/
+# dane z repozytorium aplikacji (D5 A) — pobierane skryptem, nigdy w gicie
+.cache/
+# sekrety i dane osobowe nigdy w repozytorium (repo jest publiczne)
+.env
+.env.*
+*.p8
+*.p12
+*.pem
+*.key
+*.mobileprovision
+.DS_Store

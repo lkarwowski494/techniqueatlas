@@ -1,0 +1,14 @@
+{
+  "name": "techniqueatlas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Strona z pełną biblioteką ćwiczeń (statyczna, GitHub Pages). Bez zależności uruchomieniowych.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "build": "node src/build.mjs",
+    "dane": "node src/sync-dane.mjs",
+    "pomiary": "node pomiary/mierz.mjs"
+  }
+}

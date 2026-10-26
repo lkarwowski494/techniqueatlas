@@ -1,0 +1,350 @@
+[
+ {
+  "tryb": "silnik",
+  "cwiczenie": "back-squat",
+  "cpu": 1,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 65989,
+   "htmlGz": 13338,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 538,
+   "p50": 1.8,
+   "p95": 3.1,
+   "max": 48.6
+  },
+  "odstep_klatek_ms": {
+   "n": 598,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 33.4,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 59.8,
+  "dlugie_zadania": 1,
+  "wezly_svg": 101
+ },
+ {
+  "tryb": "silnik",
+  "cwiczenie": "back-squat",
+  "cpu": 4,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 65989,
+   "htmlGz": 13338,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 467,
+   "p50": 7.8,
+   "p95": 15.6,
+   "max": 48.1
+  },
+  "odstep_klatek_ms": {
+   "n": 534,
+   "p50": 16.7,
+   "p95": 33.3,
+   "max": 166.8,
+   "powyzej33": 5,
+   "powyzej50": 2
+  },
+  "fps": 53.4,
+  "dlugie_zadania": 3,
+  "wezly_svg": 101
+ },
+ {
+  "tryb": "silnik",
+  "cwiczenie": "bench-press-barbell",
+  "cpu": 1,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 57431,
+   "htmlGz": 11439,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 481,
+   "p50": 1.6,
+   "p95": 3,
+   "max": 10.5
+  },
+  "odstep_klatek_ms": {
+   "n": 599,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 16.8,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 60,
+  "dlugie_zadania": 0,
+  "wezly_svg": 84
+ },
+ {
+  "tryb": "silnik",
+  "cwiczenie": "bench-press-barbell",
+  "cpu": 4,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 57431,
+   "htmlGz": 11439,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 464,
+   "p50": 6.7,
+   "p95": 11.9,
+   "max": 39.1
+  },
+  "odstep_klatek_ms": {
+   "n": 589,
+   "p50": 16.7,
+   "p95": 16.8,
+   "max": 33.4,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 58.9,
+  "dlugie_zadania": 0,
+  "wezly_svg": 84
+ },
+ {
+  "tryb": "silnik",
+  "cwiczenie": "pull-up",
+  "cpu": 1,
+  "notatka": "pilot: poza z generatora (kontrakt pozy)",
+  "przesyl": {
+   "htmlRaw": 45653,
+   "htmlGz": 11492,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 482,
+   "p50": 2,
+   "p95": 3.7,
+   "max": 12.4
+  },
+  "odstep_klatek_ms": {
+   "n": 599,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 16.8,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 60,
+  "dlugie_zadania": 0,
+  "wezly_svg": 97
+ },
+ {
+  "tryb": "silnik",
+  "cwiczenie": "pull-up",
+  "cpu": 4,
+  "notatka": "pilot: poza z generatora (kontrakt pozy)",
+  "przesyl": {
+   "htmlRaw": 45653,
+   "htmlGz": 11492,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 456,
+   "p50": 7.9,
+   "p95": 14.4,
+   "max": 23.3
+  },
+  "odstep_klatek_ms": {
+   "n": 578,
+   "p50": 16.7,
+   "p95": 16.8,
+   "max": 50.1,
+   "powyzej33": 1,
+   "powyzej50": 1
+  },
+  "fps": 57.8,
+  "dlugie_zadania": 0,
+  "wezly_svg": 97
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "back-squat",
+  "cpu": 1,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 4797947,
+   "htmlGz": 1137075,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 539,
+   "p50": 0.8,
+   "p95": 1.2,
+   "max": 2.6
+  },
+  "odstep_klatek_ms": {
+   "n": 599,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 16.8,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 60,
+  "dlugie_zadania": 0,
+  "wezly_svg": 101
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "back-squat",
+  "cpu": 4,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 4797947,
+   "htmlGz": 1137075,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 530,
+   "p50": 3.6,
+   "p95": 7.5,
+   "max": 18.6
+  },
+  "odstep_klatek_ms": {
+   "n": 593,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 50,
+   "powyzej33": 1,
+   "powyzej50": 0
+  },
+  "fps": 59.4,
+  "dlugie_zadania": 0,
+  "wezly_svg": 101
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "bench-press-barbell",
+  "cpu": 1,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 2720582,
+   "htmlGz": 367606,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 482,
+   "p50": 0.7,
+   "p95": 1,
+   "max": 5.1
+  },
+  "odstep_klatek_ms": {
+   "n": 598,
+   "p50": 16.7,
+   "p95": 16.8,
+   "max": 33.4,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 59.9,
+  "dlugie_zadania": 0,
+  "wezly_svg": 84
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "bench-press-barbell",
+  "cpu": 4,
+  "notatka": "gotowa rodzina (rig aplikacji)",
+  "przesyl": {
+   "htmlRaw": 2720582,
+   "htmlGz": 367606,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 471,
+   "p50": 3.1,
+   "p95": 6.4,
+   "max": 8.8
+  },
+  "odstep_klatek_ms": {
+   "n": 592,
+   "p50": 16.7,
+   "p95": 16.8,
+   "max": 116.7,
+   "powyzej33": 1,
+   "powyzej50": 1
+  },
+  "fps": 59.3,
+  "dlugie_zadania": 0,
+  "wezly_svg": 84
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "pull-up",
+  "cpu": 1,
+  "notatka": "pilot: poza z generatora (kontrakt pozy)",
+  "przesyl": {
+   "htmlRaw": 1665949,
+   "htmlGz": 371965,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 481,
+   "p50": 0.8,
+   "p95": 1.2,
+   "max": 7.1
+  },
+  "odstep_klatek_ms": {
+   "n": 596,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 49.9,
+   "powyzej33": 1,
+   "powyzej50": 0
+  },
+  "fps": 59.7,
+  "dlugie_zadania": 0,
+  "wezly_svg": 97
+ },
+ {
+  "tryb": "prerender",
+  "cwiczenie": "pull-up",
+  "cpu": 4,
+  "notatka": "pilot: poza z generatora (kontrakt pozy)",
+  "przesyl": {
+   "htmlRaw": 1665949,
+   "htmlGz": 371965,
+   "jsRaw": 22527,
+   "jsGz": 9614
+  },
+  "rysowanie_ms": {
+   "n": 478,
+   "p50": 3.4,
+   "p95": 6.2,
+   "max": 12.9
+  },
+  "odstep_klatek_ms": {
+   "n": 599,
+   "p50": 16.7,
+   "p95": 16.7,
+   "max": 33.3,
+   "powyzej33": 0,
+   "powyzej50": 0
+  },
+  "fps": 59.9,
+  "dlugie_zadania": 0,
+  "wezly_svg": 97
+ }
+]
