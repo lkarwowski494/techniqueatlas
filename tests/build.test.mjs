@@ -104,7 +104,7 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
   const { out } = await buildOnce(); const bad = [];
   for (const f of htmlFiles(out)) {
     const h = read(out, f); const dir = posix.dirname(f);
-    for (const m of h.matchAll(/\b(?:href|src)="([^"#]+)"/g)) { const u = m[1]; if (/^(https?:|\/\/|mailto:)/.test(u)) continue; const t = posix.normalize(posix.join(dir === '.' ? '' : dir, u)); const p = join(out, t); if (!(existsSync(p) && (statSync(p).isFile() || existsSync(join(p, 'index.html'))))) bad.push(`${f} → ${u}`); }
+    for (const m of h.matchAll(/\b(?:href|src)="([^"#]+)"/g)) { const u = m[1]; if (/^(https?:|\/\/|mailto:|data:)/.test(u)) continue; const t = posix.normalize(posix.join(dir === '.' ? '' : dir, u)); const p = join(out, t); if (!(existsSync(p) && (statSync(p).isFile() || existsSync(join(p, 'index.html'))))) bad.push(`${f} → ${u}`); }
     for (const m of h.matchAll(/<(?:a|link)[^>]*?\bhref="(https?:\/\/[^"]+)"/g)) { const u = m[1]; if (!/^https:\/\/(techniqueatlas\.com|apps4brew\.com|apps\.apple\.com)\//.test(u)) bad.push(`${f} → ${u}`); }
   }
   assert.deepEqual(bad.slice(0, 5), []);
@@ -179,6 +179,7 @@ test('JSON-LD: tylko BreadcrumbList i WebSite, poprawny JSON; meta generator z w
   for (const f of htmlFiles(out)) {
     const h = read(out, f); for (const m of h.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)) assert.ok(['BreadcrumbList', 'WebSite'].includes(JSON.parse(m[1])['@type']), f);
     assert.match(h, /<meta http-equiv="Content-Security-Policy" content="default-src 'self'/); assert.ok(h.includes(`<meta name="generator" content="techniqueatlas app ${man.app.version} ${man.app.commit.slice(0, 7)}">`), f);
+    assert.match(h, /<link rel="icon" href="data:,">/, f); /* bez żądania /favicon.ico (404 w konsoli przeglądarki) */
     assert.doesNotMatch(h, /data-(origin|key|id|source)=/); /* D10 B: bez znaczników pochodzenia */
   }
 });
