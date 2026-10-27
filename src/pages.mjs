@@ -19,6 +19,7 @@ export function layout(ctx, m, bodyHtml) {
     `<meta name="generator" content="techniqueatlas app ${esc(ctx.man.app.version)} ${esc(ctx.man.app.commit.slice(0, 7))}">`,
     m.refresh ? `<meta http-equiv="refresh" content="0;url=${esc(m.refresh)}">` : '', m.robots ? `<meta name="robots" content="${m.robots}">` : '', m.canonical ? `<link rel="canonical" href="${esc(abs(cfg, m.canonical))}">` : '', ...alt,
     cfg.appStoreId ? `<meta name="apple-itunes-app" content="app-id=${esc(cfg.appStoreId)}">` : '',
+    '<link rel="icon" href="data:,">', /* bez pliku ikony: przeglądarka nie prosi o /favicon.ico (404 w konsoli) */
     `<link rel="stylesheet" href="${u('assets/site.css')}">`, ...(m.styles ?? []).map(c => `<link rel="stylesheet" href="${u(c)}">`),
     ...(m.jsonld ?? []).map(j => `<script type="application/ld+json">${jsonForScript(j)}</script>`),
   ].filter(Boolean).join('\n');
@@ -169,7 +170,7 @@ export function exercisePage(ctx, lang, ex) {
   const main = ex.regions.filter(r => r.load >= 1).map(r => L.regions[r.id]), aux = ex.regions.filter(r => r.load >= 0.5 && r.load < 1).map(r => L.regions[r.id]);
   const figure = fig ? figureBlock(ctx, lang, ex, fig, file) : null;
   const text = SECTION.map(k => cue(k)).some(x => x?.length) ? SECTION.map(k => list(ui[k], cue(k))).join('\n') : '';
-  const roles = ex.roles?.length ? `<ul class="role">${ex.roles.map(r => `<li><strong>${esc(L.regions[r.id])}</strong> — ${esc(r.text)}</li>`).join('')}</ul>` : ''; /* zdania o roli mięśnia: tylko gdy eksport je zawiera (bez zastępczych) */
+  const roles = ex.roles?.length ? `<ul class="role">${ex.roles.map(r => `<li><strong>${esc(L.regions[r.region])}</strong> — ${esc(r.text)}</li>`).join('')}</ul>` : ''; /* zdania o roli mięśnia: tylko gdy eksport je zawiera (bez zastępczych) */
   const silhouette = silhouetteBlock(ctx, lang, ex, file);
   const muscles = silhouette + (main.length ? `<p>${esc(fill(ui.musclesMain, { lista: main.join(', ') }))}</p>` : '') + (aux.length ? `<p>${esc(fill(ui.musclesAux, { lista: aux.join(', ') }))}</p>` : '') + roles + (ex.musclesApproximate ? `<p class="drobne">${esc(ui.musclesApprox)}</p>` : '');
   const needs = ex.requires.length ? `<section><h2>${esc(site.equipmentNeeded)}</h2><ul>${ex.requires.map(g => `<li>${esc(g.map(c => L.capabilities[c]).join(' / '))}</li>`).join('')}</ul></section>` : '';
