@@ -143,9 +143,10 @@ test('sylwetka mięśni: arkusz assets/sylwetka.svg + klasy stopni partii (bez i
 });
 test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy eksport je zawiera (ex.roles, etykieta regionu + zdanie, z ucieczką HTML); bez danych — tylko listy główne / pomocnicze, bez pustej listy', async () => {
   const { exercisePage } = await import('../src/pages.mjs'); const { out, ctx } = await buildOnce();
-  assert.doesNotMatch(read(out, 'en/exercises/back-squat/index.html'), /class="role"/); /* dziś eksport nie ma ról */
+  assert.match(read(out, 'en/exercises/back-squat/index.html'), /<ul class="role"><li><strong>quads<\/strong> — Straightens your knee as you stand up\.<\/li><li><strong>glutes<\/strong>/); /* eksport aplikacji 1.1: roles = [{ region, text }] */
+  assert.doesNotMatch(read(out, 'en/exercises/back-squat/index.html'), /<strong>undefined</);
   const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
-  const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
+  const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ region: 'quads', text: 'Straightens the knee <when> you stand up.' }, { region: 'glutes', text: 'Helps extend the hip.' }] }).html;
   assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
   assert.ok(withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"') && withRoles.indexOf('class="role"') < withRoles.indexOf('>Tips<'));
   for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
