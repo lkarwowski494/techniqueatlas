@@ -38,13 +38,14 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, p
   warnings.push(...lockCheck.warnings);
   ({ data, figs, sil } = remapSlugs({ data, figs, sil }, new Map(data[langs[0]].exercises.map(e => [e.slug, eff.slugs.get(e.id)]))));
   for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
-  if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); if (g.errors.length) throw new Error(g.errors.join('\n')); warnings.push(...g.warnings); }
+  let startInfo = null;
+  if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); if (g.errors.length) throw new Error(g.errors.join('\n')); warnings.push(...g.warnings); startInfo = g.info; }
   const familyLabel = (l, f) => ui[l].families?.[f];
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
   const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, langs, engine, familyLabel };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });
-  const report = { languages: {} };
+  const report = { s6: startInfo, languages: {} };
   for (const l of langs) {
     pages.push(homePage(ctx, l), listPage(ctx, l));
     const g = groups(l); for (const kind of ['muscle', 'equipment', 'movement']) for (const x of g[kind]) { if (!x.id) throw new Error(`brak identyfikatora adresu: ${kind} ${x.value}`); pages.push(filterPage(ctx, l, kind, x)); }
