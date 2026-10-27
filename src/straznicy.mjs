@@ -36,18 +36,25 @@ export function checkVersion({ manifestVersion, releaseVersion = '', pinRef = ''
   return { errors, warnings };
 }
 
-/** S6 warunek startu: każde ćwiczenie ma figurę v2 (709/709) albo wyjątek z powodem w start-wyjatki.json; wyjątek dla ćwiczenia z figurą lub nieznanego id to błąd (nieaktualny). */
-export function checkStartCondition({ exercises, exceptions = {}, indexing }) {
+/**
+ * S6 warunek startu: każde ćwiczenie ma figurę v2 (709/709), wyjątek z powodem w start-wyjatki.json albo — jawny wyjątek automatyczny — należy do rodziny bez zatwierdzonego audytu
+ * (`audit` ≠ „zatwierdzona”; reguła właściciela 27.10.2026: animacja bez niezależnej recenzji nie jest eksportowana, tekst zostaje). Rodzina zatwierdzona bez figury nadal łamie S6.
+ * `audit` = manifest.audit z eksportu: `filter === false` (filtr wyłączony) to błąd zawsze, niezależnie od indeksowania; brak `audit` (paczka sprzed filtra) — bez wyjątków automatycznych.
+ * Wyjątek w pliku dla ćwiczenia z figurą lub nieznanego id to błąd (nieaktualny).
+ */
+export function checkStartCondition({ exercises, exceptions = {}, audit, indexing }) {
   const errors = [], warnings = [], ids = new Set(exercises.map(e => e.id));
-  const missing = exercises.filter(e => !e.figure && !(typeof exceptions[e.id] === 'string' && exceptions[e.id].trim())).map(e => e.id);
-  const withFigure = exercises.filter(e => e.figure).length;
+  if (audit && audit.filter !== true) errors.push('S6 warunek startu: filtr audytu wyłączony w paczce danych (manifest.audit.filter ≠ true) — figury bez zatwierdzonego audytu nie mogą trafić na stronę');
+  const byFilter = e => audit?.filter === true && typeof e.audit === 'string' && e.audit !== 'zatwierdzona';
+  const missing = exercises.filter(e => !e.figure && !byFilter(e) && !(typeof exceptions[e.id] === 'string' && exceptions[e.id].trim())).map(e => e.id);
+  const withFigure = exercises.filter(e => e.figure).length, filtered = exercises.filter(e => !e.figure && byFilter(e)).length;
   if (missing.length) verdict(indexing, errors, warnings, `S6 warunek startu: figury ma ${withFigure} z ${exercises.length} ćwiczeń; brak figury i wyjątku z powodem: ${missing.length} (${sample(missing)})`);
   for (const [id, why] of Object.entries(exceptions)) {
     if (!ids.has(id)) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla nieznanego ćwiczenia „${id}”`);
     else if (exercises.find(e => e.id === id).figure) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla „${id}” jest zbędny — ćwiczenie ma figurę`);
     else if (!String(why).trim()) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla „${id}” bez powodu`);
   }
-  return { errors, warnings, info: `figury: ${withFigure}/${exercises.length}` };
+  return { errors, warnings, info: `figury: ${withFigure}/${exercises.length}` + (audit ? `; bez figury przez filtr audytu: ${filtered} (rodzina bez zatwierdzonego audytu — tekst zostaje)` : '') };
 }
 
 const optional = rel => existsSync(join(ROOT, rel)) ? JSON.parse(readFileSync(join(ROOT, rel), 'utf8')) : {};
@@ -57,6 +64,6 @@ export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
   const checked = files.trademark ?? optional('trademark-check.json').nazwy, exceptions = files.wyjatki ?? optional('start-wyjatki.json').wyjatki;
   const names = langs.flatMap(l => data[l].exercises.map(e => e.name));
   const parts = [checkTrademarks({ names, checked, indexing }), checkVersion({ manifestVersion: manifest.app.version, releaseVersion: cfg.wersjaWydania, pinRef: pin.ref, indexing }),
-    checkStartCondition({ exercises: data[langs[0]].exercises, exceptions, indexing })];
+    checkStartCondition({ exercises: data[langs[0]].exercises, exceptions, audit: manifest.audit, indexing })];
   return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings), info: parts[2].info };
 }

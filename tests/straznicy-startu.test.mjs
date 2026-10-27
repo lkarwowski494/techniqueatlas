@@ -41,6 +41,23 @@ test('S6: komplet figur → zielone; brak figury bez wyjątku → błąd (liczba
   assert.match(checkStartCondition({ exercises: E, exceptions: { B: 'a', C: 'b', Z: 'c' }, indexing: true }).errors.join(), /nieznanego ćwiczenia „Z”/);
   const off = checkStartCondition({ exercises: E, indexing: false }); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
 });
+test('S6 + filtr audytu: ćwiczenie bez figury z rodziny niezatwierdzonej przechodzi (jawny wyjątek z powodem w info); zatwierdzona rodzina bez figury łamie S6; filtr wyłączony = błąd zawsze', () => {
+  const audit = { filter: true };
+  const E = [{ id: 'A', figure: {}, audit: 'zatwierdzona' }, { id: 'B', figure: null, audit: 'do_poprawy' }, { id: 'C', figure: null, audit: 'brak' }, { id: 'D', figure: null, audit: null }];
+  const r = checkStartCondition({ exercises: E.slice(0, 3), audit, indexing: true }); assert.deepEqual(r.errors, []); assert.match(r.info, /figury: 1\/3/); assert.match(r.info, /bez figury przez filtr audytu: 2/);
+  assert.match(checkStartCondition({ exercises: E, audit, indexing: true }).errors[0], /brak figury i wyjątku z powodem: 1 \(D\)/); /* audit null = brak informacji o rodzinie, nie wyjątek */
+  const approved = [{ id: 'A', figure: null, audit: 'zatwierdzona' }, E[1]];
+  assert.match(checkStartCondition({ exercises: approved, audit, indexing: true }).errors[0], /brak figury i wyjątku z powodem: 1 \(A\)/);
+  assert.match(checkStartCondition({ exercises: approved, audit, indexing: false }).warnings[0], /\(A\)/);
+  for (const indexing of [true, false]) { const off = checkStartCondition({ exercises: E.slice(0, 3), audit: { filter: false }, indexing }); assert.match(off.errors.join(), /filtr audytu wyłączony/); }
+  const legacy = checkStartCondition({ exercises: E.slice(0, 3), indexing: true }); assert.match(legacy.errors[0], /brak figury i wyjątku z powodem: 2 \(B, C\)/); /* paczka bez manifest.audit: bez wyjątków automatycznych */
+  assert.match(checkStartCondition({ exercises: [E[0], { ...E[1], figure: {} }], audit, exceptions: { B: 'x' }, indexing: true }).errors.join(), /„B” jest zbędny/);
+});
+test('startGuards przekazuje manifest.audit do S6 (filtr wyłączony w manifeście → błąd także bez indeksowania)', () => {
+  const data = { pl: { exercises: [{ id: 'B', name: 'B', figure: null, audit: 'brak' }] } }, base = { cfg: { indeksowanie: false, wersjaWydania: '1.1.0' }, pin: { ref: 'v1.1.0' }, data, langs: ['pl'], files: { trademark: { B: OK }, wyjatki: {} } };
+  const on = startGuards({ ...base, manifest: { app: { version: '1.1.0' }, audit: { filter: true } } }); assert.deepEqual(on.errors, []); assert.deepEqual(on.warnings, []);
+  assert.match(startGuards({ ...base, manifest: { app: { version: '1.1.0' }, audit: { filter: false } } }).errors.join(), /filtr audytu wyłączony/);
+});
 test('startGuards składa trzy strażniki z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
   const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, wersjaWydania: '1.1.0' };
   const base = { cfg, pin: { ref: 'v1.1.0-b1' }, manifest: { app: { version: '1.1.0' } }, data: { pl: d('pl'), en: d('en') }, langs: ['pl', 'en'] };

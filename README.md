@@ -52,6 +52,7 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 - `straznik-sekrety` — klucze, tokeny, certyfikaty, e-maile (tylko noreply), UDID, pliki `.env/.p8/.p12`, workflowy bez sekretów, autorzy commitów neutralni.
 - `straznik-analityka` — brak skryptów śledzących, pikseli, cookies, pamięci przeglądarki, wywołań sieciowych i zewnętrznych zasobów (kod i zbudowana strona).
 - `straznik-dane` — w repo i w `dist/` brak danych z aplikacji (D5 A), PIN bez danych, workflowy pobierają dane przed testami.
+- `S6` (warunek startu, `src/straznicy.mjs`) — każde ćwiczenie ma figurę albo wyjątek z powodem; jawny wyjątek automatyczny: rodzina bez zatwierdzonego audytu (`audit` ≠ `zatwierdzona`; eksport aplikacji pomija wtedy figurę, strona pokazuje sam tekst, bez miejsca na animację), liczba w raporcie budowania (`s6`). Paczka z `manifest.audit.filter = false` to błąd; rodzina zatwierdzona bez figury łamie S6.
 - `build` — przypięcie do commitu, noindex/robots/mapy witryny (D1, D3), hreflang wzajemny i canonical, struktura stron, figura, budżety (HTML ≤ 20 KB, moduł figury ≤ 30 KB gz, indeks ≤ 25 KB gz), linki wewnętrzne, JSON-LD, CSP, baner App Store.
 
 ## Zależności deweloperskie (tylko testy; strona nie ma zależności uruchomieniowych)
