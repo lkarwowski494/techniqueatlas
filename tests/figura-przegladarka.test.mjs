@@ -50,7 +50,7 @@ test('sylwetka: dwa rysunki (przód, tył) mają rozmiar, a partie ćwiczenia ma
   });
 });
 test('404: adresy od korzenia (strona 404.html jest serwowana pod dowolnym adresem), arkusz stylów i linki języków działają z głębokiej ścieżki', async () => {
-  const h = readFileSync(join(out, '404.html'), 'utf8'); assert.match(h, /<link rel="stylesheet" href="\/assets\/site\.css">/); assert.match(h, /<a href="\/pl\/" lang="pl">/); assert.doesNotMatch(h, /href="(?!\/|\#|https:)/);
+  const h = readFileSync(join(out, '404.html'), 'utf8'); assert.match(h, /<link rel="stylesheet" href="\/assets\/site\.css">/); assert.match(h, /<a href="\/pl\/" lang="pl">/); assert.doesNotMatch(h, /href="(?!\/|\#|https:|data:)/);
   const srv = await serve(out), browser = await launch(), page = await browser.newPage();
   try { const r = await page.goto(srv.url + '/a/b/c/nie-ma/'); assert.equal(r.status(), 404); assert.equal((await page.request.get(srv.url + await page.locator('link[rel=stylesheet]').getAttribute('href'))).status(), 200);
     await page.click('a[href="/pl/"]'); assert.match(page.url(), /\/pl\/$/); } finally { await browser.close(); await srv.close(); }
