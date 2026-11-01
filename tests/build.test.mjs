@@ -79,7 +79,7 @@ test('hreflang i canonical (S7): każda strona wymienia wszystkie języki wzajem
     const h = read(out, f), lang = f.split('/')[0], dir = f.replace(/index\.html$/, '');
     assert.equal(h.match(/<link rel="canonical" href="([^"]+)">/)?.[1], `${dom}/${dir}`, f);
     const alts = Object.fromEntries([...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)].map(m => [m[1], m[2]]));
-    assert.deepEqual(Object.keys(alts).sort(), ['en', 'pl', 'x-default'], f); assert.equal(alts[lang], `${dom}/${dir}`); assert.equal(alts['x-default'], `${dom}/`);
+    assert.deepEqual(Object.keys(alts).sort(), ['en', 'pl', 'x-default'], f); assert.equal(alts[lang], `${dom}/${dir}`); assert.equal(alts['x-default'], /^(pl|en)\/index\.html$/.test(f) ? `${dom}/` : `${dom}/${dir.replace(/^[^/]+/, readJson('config.json').jezykDomyslny)}`, 'x-default: strona główna → /, reszta → ta sama strona w języku domyślnym');
     const other = lang === 'pl' ? 'en' : 'pl'; assert.ok(existsSync(join(out, alts[other].slice(dom.length + 1), 'index.html')), `${f} → ${alts[other]}`);
     assert.ok(read(out, alts[other].slice(dom.length + 1) + 'index.html').includes(`hreflang="${lang}" href="${dom}/${dir}"`), `wzajemność ${f}`);
   }

@@ -39,6 +39,8 @@ export const paths = {
 export const urlOf = file => dirOf(file);
 const nameAttr = (lang, ex) => lang === 'pl' ? '' : ' lang="en"'; /* nazwy ćwiczeń są angielskie we wszystkich językach poza polskim (jak w aplikacji, DEC-13) */
 
+/** x-default stron poza stroną główną: ta sama strona w języku domyślnym (jezykDomyslny) — należy do własnego zestawu hreflang, więc wzajemność jest zachowana; strony główne języków wskazują `/` (wybór języka), które wymienia je wszystkie. */
+function defaultOf(ctx, make) { return urlOf(make(ctx.langs.includes(ctx.cfg.jezykDomyslny) ? ctx.cfg.jezykDomyslny : ctx.langs[0])); }
 function alternatesFor(ctx, make) { return ctx.langs.map(l => ({ lang: l, path: urlOf(make(l)) })); }
 const crumbBase = (ctx, lang) => [{ name: ctx.ui[lang].home, path: paths.home(lang) }];
 const bcJson = (ctx, items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: abs(ctx.cfg, urlOf(c.path)) })) });
@@ -101,7 +103,7 @@ export function listPage(ctx, lang) {
 <ul class="lista" data-lista>${listItems(ctx, lang, file, sorted)}</ul>`;
   const crumbs = [...crumbBase(ctx, lang), { name: ui.allExercises, path: file }];
   return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${ui.allExercises} — ${ui.siteName}`, description: fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, paths.list), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs }, body) };
+    alternates: alternatesFor(ctx, paths.list), xDefault: defaultOf(ctx, paths.list), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs }, body) };
 }
 
 export function filterPage(ctx, lang, kind, x) {
@@ -112,7 +114,7 @@ export function filterPage(ctx, lang, kind, x) {
   const crumbs = [...crumbBase(ctx, lang), { name: parent, path: paths.home(lang) }, { name: x.label, path: file }];
   const title = fill(ui.exercisesIn, { nazwa: x.label });
   return { file, lang, kind, indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${title} — ${ui.siteName}`, description: title, robots: robotsFor(ctx, lang), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], crumbs },
+    alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: defaultOf(ctx, l => paths[kind](l, x.id)), jsonld: [bcJson(ctx, crumbs)], crumbs },
     `<h1>${esc(title)}</h1>\n<ul class="lista">${listItems(ctx, lang, file, sorted)}</ul>`) };
 }
 
@@ -192,7 +194,7 @@ ${alts}
   const own = ex.cues.scope === 'own' && !ex.cues.missing;
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
   return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: `${ex.name} — ${site.siteName}`, description: `${ex.name}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs }, body) };
+    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs }, body) };
 }
 
 /** Stary adres ćwiczenia po przeniesieniu albo usunięciu (slug-overrides.json → przekierowania): meta refresh 0 s + canonical na nowy adres, w każdym budowanym języku; `to` null = lista ćwiczeń.
