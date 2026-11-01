@@ -28,10 +28,10 @@ test('język bez tekstów stałych (src/ui/<język>.json) nie jest budowany — 
   await assert.rejects(build({ out: tmpDist(), cfg: { jezyki: ['pl', 'xx'] } }), /brak src\/ui\/xx\.json|nie został wyeksportowany/);
 });
 
-test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt zabrania wszystkiego, brak map witryny', async () => {
+test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt NIE zabrania (Allow, bez Disallow i Sitemap — inaczej Google nie zobaczy noindex), brak map witryny', async () => {
   const { out } = await buildOnce();
   for (const f of htmlFiles(out)) assert.equal(robots(read(out, f)), 'noindex,nofollow', f);
-  assert.equal(read(out, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
+  assert.equal(read(out, 'robots.txt'), 'User-agent: *\nAllow: /\n'); assert.doesNotMatch(read(out, 'robots.txt'), /Disallow|Sitemap/i);
   assert.deepEqual(readdirSync(out).filter(f => /^sitemap/.test(f)), []);
 });
 
@@ -79,7 +79,7 @@ test('hreflang i canonical (S7): każda strona wymienia wszystkie języki wzajem
     const h = read(out, f), lang = f.split('/')[0], dir = f.replace(/index\.html$/, '');
     assert.equal(h.match(/<link rel="canonical" href="([^"]+)">/)?.[1], `${dom}/${dir}`, f);
     const alts = Object.fromEntries([...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)].map(m => [m[1], m[2]]));
-    assert.deepEqual(Object.keys(alts).sort(), ['en', 'pl', 'x-default'], f); assert.equal(alts[lang], `${dom}/${dir}`); assert.equal(alts['x-default'], `${dom}/`);
+    assert.deepEqual(Object.keys(alts).sort(), ['en', 'pl', 'x-default'], f); assert.equal(alts[lang], `${dom}/${dir}`); assert.equal(alts['x-default'], /^(pl|en)\/index\.html$/.test(f) ? `${dom}/` : `${dom}/${dir.replace(/^[^/]+/, readJson('config.json').jezykDomyslny)}`, 'x-default: strona główna → /, reszta → ta sama strona w języku domyślnym');
     const other = lang === 'pl' ? 'en' : 'pl'; assert.ok(existsSync(join(out, alts[other].slice(dom.length + 1), 'index.html')), `${f} → ${alts[other]}`);
     assert.ok(read(out, alts[other].slice(dom.length + 1) + 'index.html').includes(`hreflang="${lang}" href="${dom}/${dir}"`), `wzajemność ${f}`);
   }
@@ -105,7 +105,7 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
   for (const f of htmlFiles(out)) {
     const h = read(out, f); const dir = posix.dirname(f);
     for (const m of h.matchAll(/\b(?:href|src)="([^"#]+)"/g)) { const u = m[1]; if (/^(https?:|\/\/|mailto:|data:)/.test(u)) continue; const t = posix.normalize(posix.join(dir === '.' ? '' : dir, u)); const p = join(out, t); if (!(existsSync(p) && (statSync(p).isFile() || existsSync(join(p, 'index.html'))))) bad.push(`${f} → ${u}`); }
-    for (const m of h.matchAll(/<(?:a|link)[^>]*?\bhref="(https?:\/\/[^"]+)"/g)) { const u = m[1]; if (!/^https:\/\/(techniqueatlas\.com|apps4brew\.com|apps\.apple\.com)\//.test(u)) bad.push(`${f} → ${u}`); }
+    for (const m of h.matchAll(/<(?:a|link)[^>]*?\bhref="(https?:\/\/[^"]+)"/g)) { const u = m[1]; if (!/^https:\/\/(www\.techniqueatlas\.com|apps4brew\.com|apps\.apple\.com)\//.test(u)) bad.push(`${f} → ${u}`); }
   }
   assert.deepEqual(bad.slice(0, 5), []);
 });

@@ -1,7 +1,7 @@
 # Publikacja strony na GitHub Pages (budowanie generatorem statycznym → artefakt → wdrożenie). Do startu z wersją 1.1 WYŁĄCZNIE ręcznie (workflow_dispatch):
-# Pages są wyłączone, a config.json ma indeksowanie=false (noindex + robots Disallow). Po włączeniu Pages dopisać wyzwalacz push na main w tym samym PR.
+# Pages są wyłączone, a config.json ma indeksowanie=false (noindex w HTML; robots.txt BEZ Disallow — przy zablokowanym skanowaniu Google nie zobaczy noindex). Po włączeniu Pages dopisać wyzwalacz push na main w tym samym PR.
 # Bez sekretów; token tylko do odczytu treści i wdrożenia Pages. Pierwszy przebieg po włączeniu Pages to przebieg dowodowy (docs aplikacji, lekcja L-001):
-# sprawdzić w wdrożonej stronie — noindex w HTML, robots.txt „Disallow: /”, ładowanie figury (konsola bez błędów), adres https://<org>.github.io/techniqueatlas/ albo domena.
+# sprawdzić w wdrożonej stronie — noindex w HTML, robots.txt bez Disallow (Allow), ładowanie figury (konsola bez błędów), adres https://<org>.github.io/techniqueatlas/ albo domena.
 name: Pages
 on:
   workflow_dispatch:
@@ -35,3 +35,28 @@ jobs:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Sprawdzenie po wdrożeniu (tylko ostrzega, niczego nie wdraża)
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          # docs/badanie-indeksowania-2026-11-01.md, pkt 2, 5 i 7. Każde odstępstwo to ::warning:: do przeglądu, nie błąd przebiegu.
+          base="${PAGE_URL%/}"; host="${base#https://}"; host="${host%%/*}"
+          indeksowanie=$(node -p "require('./config.json').indeksowanie")
+          domena=$(node -p "require('./config.json').domena")
+          if [ "$indeksowanie" = "false" ]; then
+            robots=$(curl -s "$base/robots.txt")
+            if echo "$robots" | grep -qiE '^Disallow:[[:space:]]*/'; then echo "::warning::robots.txt zawiera Disallow: / przy indeksowanie=false (Google nie zobaczy noindex)"; fi
+            strona=$(cd dist && ls -d en/exercises/*/ | head -1)
+            if ! curl -s "$base/$strona" | grep -qi '<meta name="robots" content="noindex'; then echo "::warning::brak noindex w HTML strony ćwiczenia ($strona) przy indeksowanie=false"; fi
+          fi
+          case "$host" in
+            *.github.io) echo "Brak własnej domeny w ustawieniach Pages (adres $host) — pomijam sprawdzenie przekierowań HTTP→HTTPS i github.io→domena" ;;
+            *)
+              loc=$(curl -sI "http://$host/" | tr -d '\r' | awk 'tolower($1)=="location:" {print $2}')
+              case "$loc" in https://*) ;; *) echo "::warning::http://$host/ nie przekierowuje na HTTPS (Location: ${loc:-brak})" ;; esac
+              repo="${GITHUB_REPOSITORY#*/}"; strona="${strona:-en/exercises/}"
+              nagl=$(curl -sI "https://${GITHUB_REPOSITORY_OWNER}.github.io/${repo}/${strona}" | tr -d '\r')
+              loc=$(echo "$nagl" | awk 'tolower($1)=="location:" {print $2}')
+              case "$loc" in "$domena"/"$strona"*|"https://$host/$strona"*) ;; *) echo "::warning::github.io/${repo}/${strona} nie przekierowuje na domenę z zachowaniem ścieżki (Location: ${loc:-brak}); pierwsza linia: $(echo "$nagl" | head -1)" ;; esac ;;
+          esac

@@ -17,14 +17,14 @@ export function layout(ctx, m, bodyHtml) {
     `<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">`,
     `<title>${esc(m.title)}</title>`, m.description ? `<meta name="description" content="${esc(m.description)}">` : '',
     `<meta name="generator" content="techniqueatlas app ${esc(ctx.man.app.version)} ${esc(ctx.man.app.commit.slice(0, 7))}">`,
-    m.refresh ? `<meta http-equiv="refresh" content="0;url=${esc(m.refresh)}">` : '', m.robots ? `<meta name="robots" content="${m.robots}">` : '', m.canonical ? `<link rel="canonical" href="${esc(abs(cfg, m.canonical))}">` : '', ...alt,
+    m.refresh ? `<meta http-equiv="refresh" content="0;url=${esc(m.refresh)}">` : '', m.robots ? `<meta name="robots" content="${m.robots}">` : '', m.canonical !== undefined ? `<link rel="canonical" href="${esc(abs(cfg, m.canonical))}">` : '', ...alt,
     cfg.appStoreId ? `<meta name="apple-itunes-app" content="app-id=${esc(cfg.appStoreId)}">` : '',
     '<link rel="icon" href="data:,">', /* bez pliku ikony: przeglądarka nie prosi o /favicon.ico (404 w konsoli) */
     `<link rel="stylesheet" href="${u('assets/site.css')}">`, ...(m.styles ?? []).map(c => `<link rel="stylesheet" href="${u(c)}">`),
     ...(m.jsonld ?? []).map(j => `<script type="application/ld+json">${jsonForScript(j)}</script>`),
   ].filter(Boolean).join('\n');
   const crumbs = m.crumbs?.length ? `<nav aria-label="${esc(ui.breadcrumbs)}"><ol>${m.crumbs.map((c, i) => `<li>${c.path && i < m.crumbs.length - 1 ? `<a href="${u(c.path)}">${esc(c.name)}</a>` : `<span aria-current="page"${c.lang ? ` lang="${c.lang}"` : ''}>${esc(c.name)}</span>`}</li>`).join('')}</ol></nav>` : '';
-  const langs = (m.alternates ?? []).length > 1 ? `<p>${esc(ui.language)}: ${m.alternates.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`).join(' · ')}</p>` : '';
+  const langs = (m.alternates ?? []).length > 1 && !m.bezWierszaJezykow ? `<p>${esc(ui.language)}: ${m.alternates.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`).join(' · ')}</p>` : '';
   const store = cfg.appStoreId ? `<p><a href="https://apps.apple.com/app/id${esc(cfg.appStoreId)}?ct=techniqueatlas-${esc(m.lang ?? 'x')}">${esc(ui.appStore)}</a></p>` : '';
   const scripts = (m.scripts ?? []).map(s => `<script type="module" src="${u(s)}"></script>`).join('\n');
   return `<!doctype html>\n<html lang="${esc(hreflang(m.lang ?? cfg.jezykDomyslny))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n<header>${crumbs}</header>\n<main id="tresc">\n${bodyHtml}\n</main>\n<footer>\n${store}${langs}<p class="drobne"><a href="${esc(cfg.polityka)}">${esc(ui.privacy)}</a> · ${esc(ui.rights)}</p>\n</footer>\n${scripts}\n</body>\n</html>\n`;
@@ -39,6 +39,8 @@ export const paths = {
 export const urlOf = file => dirOf(file);
 const nameAttr = (lang, ex) => lang === 'pl' ? '' : ' lang="en"'; /* nazwy ćwiczeń są angielskie we wszystkich językach poza polskim (jak w aplikacji, DEC-13) */
 
+/** x-default stron poza stroną główną: ta sama strona w języku domyślnym (jezykDomyslny) — należy do własnego zestawu hreflang, więc wzajemność jest zachowana; strony główne języków wskazują `/` (wybór języka), które wymienia je wszystkie. */
+function defaultOf(ctx, make) { return urlOf(make(ctx.langs.includes(ctx.cfg.jezykDomyslny) ? ctx.cfg.jezykDomyslny : ctx.langs[0])); }
 function alternatesFor(ctx, make) { return ctx.langs.map(l => ({ lang: l, path: urlOf(make(l)) })); }
 const crumbBase = (ctx, lang) => [{ name: ctx.ui[lang].home, path: paths.home(lang) }];
 const bcJson = (ctx, items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: abs(ctx.cfg, urlOf(c.path)) })) });
@@ -52,7 +54,7 @@ export function robotsFor(ctx, lang, ownContent = true) {
 export function chooserPage(ctx) {
   const file = paths.chooser(); const ui = ctx.ui[ctx.cfg.jezykDomyslny];
   const items = ctx.langs.map(l => `<li><a href="${relUrl(file, urlOf(paths.home(l)))}" hreflang="${esc(hreflang(l))}" lang="${esc(hreflang(l))}">${esc(ctx.names[l])}</a></li>`).join('');
-  const html = layout(ctx, { file, lang: ctx.cfg.jezykDomyslny, title: ui.siteName, description: '', robots: robotsFor(ctx, ctx.cfg.jezykDomyslny), canonical: '', alternates: [], xDefault: '' },
+  const html = layout(ctx, { file, lang: ctx.cfg.jezykDomyslny, title: ui.siteName, description: '', robots: robotsFor(ctx, ctx.cfg.jezykDomyslny), canonical: urlOf(file), alternates: alternatesFor(ctx, paths.home), xDefault: urlOf(file), bezWierszaJezykow: true },
     `<h1>${esc(ui.siteName)}</h1>\n<h2>${esc(ui.chooseLanguage)}</h2>\n<ul class="chipy">${items}</ul>`);
   return { file, html, lang: null, kind: 'chooser', indexable: !!ctx.cfg.indeksowanie };
 }
@@ -101,7 +103,7 @@ export function listPage(ctx, lang) {
 <ul class="lista" data-lista>${listItems(ctx, lang, file, sorted)}</ul>`;
   const crumbs = [...crumbBase(ctx, lang), { name: ui.allExercises, path: file }];
   return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${ui.allExercises} — ${ui.siteName}`, description: fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, paths.list), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs }, body) };
+    alternates: alternatesFor(ctx, paths.list), xDefault: defaultOf(ctx, paths.list), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs }, body) };
 }
 
 export function filterPage(ctx, lang, kind, x) {
@@ -112,7 +114,7 @@ export function filterPage(ctx, lang, kind, x) {
   const crumbs = [...crumbBase(ctx, lang), { name: parent, path: paths.home(lang) }, { name: x.label, path: file }];
   const title = fill(ui.exercisesIn, { nazwa: x.label });
   return { file, lang, kind, indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: `${title} — ${ui.siteName}`, description: title, robots: robotsFor(ctx, lang), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], crumbs },
+    alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: defaultOf(ctx, l => paths[kind](l, x.id)), jsonld: [bcJson(ctx, crumbs)], crumbs },
     `<h1>${esc(title)}</h1>\n<ul class="lista">${listItems(ctx, lang, file, sorted)}</ul>`) };
 }
 
@@ -192,7 +194,7 @@ ${alts}
   const own = ex.cues.scope === 'own' && !ex.cues.missing;
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
   return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: `${ex.name} — ${site.siteName}`, description: `${ex.name}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: urlOf(paths.chooser()), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs }, body) };
+    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs }, body) };
 }
 
 /** Stary adres ćwiczenia po przeniesieniu albo usunięciu (slug-overrides.json → przekierowania): meta refresh 0 s + canonical na nowy adres, w każdym budowanym języku; `to` null = lista ćwiczeń.
@@ -200,6 +202,6 @@ ${alts}
 export function redirectPage(ctx, lang, from, to) {
   const file = paths.exercise(lang, from), ui = ctx.ui[lang], target = to === null ? paths.list(lang) : paths.exercise(lang, to), ex = to === null ? null : ctx.bySlug[lang].get(to);
   const name = ex ? ex.name : ui.allExercises, href = relUrl(file, urlOf(target));
-  return { file, lang, kind: 'redirect', indexable: false, html: layout(ctx, { file, lang, title: `${name} — ${ui.siteName}`, robots: ctx.cfg.indeksowanie ? '' : 'noindex,nofollow', canonical: urlOf(target), refresh: href },
+  return { file, lang, kind: 'redirect', indexable: false, html: layout(ctx, { file, lang, title: `${name} — ${ui.siteName}`, robots: ctx.cfg.indeksowanie ? '' : 'noindex,nofollow', canonical: urlOf(target), refresh: abs(ctx.cfg, urlOf(target)) /* pełny adres z domeną: dokumentacja Google nie rozstrzyga adresu względnego (badanie 01.11.2026, pkt 1) */ },
     `<h1${ex ? nameAttr(lang) : ''}><a href="${href}">${esc(name)}</a></h1>`) };
 }

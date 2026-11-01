@@ -75,7 +75,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, p
     write(out, 'sitemap-glowna.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(cfg.domena)}/</loc></url></urlset>\n`); sitemaps.push('sitemap-glowna.xml');
     write(out, 'sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemaps.map(s => `<sitemap><loc>${esc(cfg.domena)}/${s}</loc></sitemap>`).join('\n')}\n</sitemapindex>\n`);
     write(out, 'robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.domena}/sitemap.xml\n`);
-  } else write(out, 'robots.txt', 'User-agent: *\nDisallow: /\n');
+  } else write(out, 'robots.txt', 'User-agent: *\nAllow: /\n'); /* bez Disallow: przy zablokowanym skanowaniu Google nie zobaczy noindex (badanie indeksowania 01.11.2026, pkt 5); brak Sitemap */
   write(out, '.nojekyll', '');
   mkdirSync(CACHE, { recursive: true }); writeFileSync(join(CACHE, 'raport-brakow.json'), JSON.stringify({ app: man.app, ...report }, null, 1) + '\n'); /* raport poza dist: nie jest publikowany */
   return { out, pages, cfg, report, sitemaps, warnings, ctx };

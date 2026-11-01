@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { checkTrademarks, checkVersion, checkStartCondition, startGuards } from '../src/straznicy.mjs';
+import { checkTrademarks, checkVersion, checkStartCondition, checkIndexingStart, startGuards } from '../src/straznicy.mjs';
 import { build } from '../src/build.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
 import { requireData, tmpDist } from './pomoc.mjs';
@@ -42,7 +42,7 @@ test('S6: komplet figur → zielone; brak figury bez wyjątku → błąd (liczba
   const off = checkStartCondition({ exercises: E, indexing: false }); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
 });
 test('startGuards składa trzy strażniki z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
-  const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, wersjaWydania: '1.1.0' };
+  const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, indeksowanieOd: '2027-01-15', wersjaWydania: '1.1.0' };
   const base = { cfg, pin: { ref: 'v1.1.0-b1' }, manifest: { app: { version: '1.1.0' } }, data: { pl: d('pl'), en: d('en') }, langs: ['pl', 'en'] };
   const ok = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': OK }, wyjatki: {} } }); assert.deepEqual([ok.errors, ok.warnings, ok.info], [[], [], 'figury: 1/1']);
   const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK }, wyjatki: {} } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/);
@@ -63,4 +63,11 @@ test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S6, zamrożenie adre
   const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S6 */
   await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /S6 warunek startu/.test(err.message));
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /pominStraznikowStartu/);
+});
+
+test('S8 start indeksowania: indeksowanie=true bez daty indeksowanieOd to błąd, z datą — zielone; bez indeksowania nic do sprawdzenia', () => {
+  assert.match(checkIndexingStart({ indexing: true, from: '' }).errors[0], /S8 start indeksowania/);
+  assert.equal(checkIndexingStart({ indexing: true, from: 'jutro' }).errors.length, 1);
+  assert.deepEqual(checkIndexingStart({ indexing: true, from: '2027-01-15' }), { errors: [], warnings: [] });
+  assert.deepEqual(checkIndexingStart({ indexing: false, from: '' }), { errors: [], warnings: [] });
 });

@@ -1,7 +1,8 @@
 {
-  "_opis": "Jedyne miejsce ustawień budowania. indeksowanie=false: każda strona ma noindex, robots.txt zabrania wszystkiego, brak map witryny — do startu z wersją 1.1 (decyzja właściciela; przełączenie to osobna decyzja razem z włączeniem Pages). indeksujJezyki (D3): do indeksu idą tylko te języki, pozostałe publikowane są z noindex,follow do przeglądu native speakera. appStoreId puste = bez wezwania do App Store i bez Smart App Banner (D8). wersjaWydania (S4): wersja aplikacji, z której pochodzą dane strony; przy indeksowanie=true musi równać się manifest.app.version, a PIN.json → ref musi być tagiem v<wersja>….",
+  "_opis": "Jedyne miejsce ustawień budowania. indeksowanie=false: każda strona ma noindex, robots.txt zezwala (Allow, bez Disallow i Sitemap — przy zablokowanym skanowaniu Google nie zobaczy noindex), brak map witryny — do startu z wersją 1.1 (decyzja właściciela; przełączenie to osobna decyzja razem z włączeniem Pages). indeksowanieOd: data startu indeksowania RRRR-MM-DD (wymagana przy indeksowanie=true, S8; od niej liczy się minimum 365 dni trzymania przekierowań). indeksujJezyki (D3): do indeksu idą tylko te języki, pozostałe publikowane są z noindex,follow do przeglądu native speakera. appStoreId puste = bez wezwania do App Store i bez Smart App Banner (D8). wersjaWydania (S4): wersja aplikacji, z której pochodzą dane strony; przy indeksowanie=true musi równać się manifest.app.version, a PIN.json → ref musi być tagiem v<wersja>….",
   "indeksowanie": false,
-  "domena": "https://techniqueatlas.com",
+  "indeksowanieOd": "",
+  "domena": "https://www.techniqueatlas.com",
   "jezyki": [
     "pl",
     "en"
