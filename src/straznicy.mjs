@@ -50,6 +50,11 @@ export function checkStartCondition({ exercises, exceptions = {}, indexing }) {
   return { errors, warnings, info: `figury: ${withFigure}/${exercises.length}` };
 }
 
+/** S8 start indeksowania: przy indeksowanie=true config.json → indeksowanieOd (RRRR-MM-DD) musi być ustawione — od tej daty liczy się minimum trzymania przekierowań (slugi.mjs → REDIRECT_MIN_DAYS). Przed startem nic do sprawdzenia. */
+export function checkIndexingStart({ indexing, from }) {
+  const errors = indexing && !/^\d{4}-\d{2}-\d{2}$/.test(from ?? '') ? ['S8 start indeksowania: indeksowanie=true wymaga config.json → indeksowanieOd (RRRR-MM-DD) — od niej liczy się minimum 365 dni trzymania przekierowań'] : [];
+  return { errors, warnings: [] };
+}
 const optional = rel => existsSync(join(ROOT, rel)) ? JSON.parse(readFileSync(join(ROOT, rel), 'utf8')) : {};
 /** Wszystkie trzy strażniki dla budowania: `data` per język, `langs` budowane języki. Pliki ustawień czytane stąd, chyba że podane (test). */
 export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
@@ -57,6 +62,6 @@ export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
   const checked = files.trademark ?? optional('trademark-check.json').nazwy, exceptions = files.wyjatki ?? optional('start-wyjatki.json').wyjatki;
   const names = langs.flatMap(l => data[l].exercises.map(e => e.name));
   const parts = [checkTrademarks({ names, checked, indexing }), checkVersion({ manifestVersion: manifest.app.version, releaseVersion: cfg.wersjaWydania, pinRef: pin.ref, indexing }),
-    checkStartCondition({ exercises: data[langs[0]].exercises, exceptions, indexing })];
+    checkStartCondition({ exercises: data[langs[0]].exercises, exceptions, indexing }), checkIndexingStart({ indexing, from: cfg.indeksowanieOd })];
   return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings), info: parts[2].info };
 }

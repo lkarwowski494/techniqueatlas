@@ -41,7 +41,7 @@ Odstępstwa i otwarte:
 - **Języki:** wszystkie 35 mają stałe teksty (`src/ui/`, pisane przez agenta, do przeglądu tłumacza i recenzenta); do indeksu idą języki z `indeksujJezyki` (dziś pl, en).
 - **Warunek startu S6:** dziś 87 figur z 709 (S6 ostrzega).
 - **Drugi widok na pozycjach statycznych:** pokazany tylko główny widok (aplikacja pokazuje wszystkie widoki).
-- **Przekierowania:** czy wyszukiwarka traktuje meta refresh 0 s z canonical jak przekierowanie — do potwierdzenia przez badacza.
+- **Przekierowania (zamknięte 01.11.2026):** meta refresh 0 s traktowany jest jak przekierowanie stałe — dokumentacja Google: „Google Search interprets instant meta refresh redirects as permanent redirects.” (https://developers.google.com/search/docs/crawling-indexing/301-redirects; adres i cytat: docs/badanie-indeksowania-2026-11-01.md, pkt 1). Serwerowe 301 jest zalecane, ale GitHub Pages go nie daje; canonical na cel wzmacnia sygnał. Adres w `url=` jest pełny, z domeną (dokumentacja nie rozstrzyga adresu względnego).
 - **S1 w 33 językach, S10 w pełnym zakresie:** bez zmian, otwarte.
 
 ## 1. Cel
@@ -488,3 +488,28 @@ Tekst `appStore` jest własny; sprawdzić z zlokalizowanymi odznakami Apple (App
 
 ## Decyzja 26.10.2026 (właściciel): kreator planów na stronie — wariant B, po 1.1
 Kreator planu w przeglądarce (cel, miejsce, liczba sesji) na tych samych regułach co generator aplikacji (jedno źródło prawdy, eksport z repo aplikacji), eksport CSV (format importu aplikacji), PDF (wydruk) i Excel, oraz przycisk „Otwórz w aplikacji” (link przenoszący plan do aplikacji — wymaga domeny i osobnego wydania aplikacji). Strona nadal nic nie zbiera (przetwarzanie w przeglądarce). Uzasadnienie: zarabianie M5 S1 liczy dni treningowe, nie tworzenie planów — kreator nie zabiera przychodu, przyprowadza do aplikacji; zaczątek modułu trenerskiego z backlogu. Odrzucone: A (tylko CSV + PDF, import plikiem), C (bez kreatora). Zmienia wcześniejszą decyzję „strona = wyłącznie biblioteka ćwiczeń”. Termin: po starcie 1.1 (nie opóźnia 1.1). Otwarte: biblioteka do Excela (licencja, rozmiar), format linku do aplikacji.
+
+## Zasada infrastruktury a indeksowanie (właściciel 01.11.2026)
+
+Infrastruktura ma być ustawiona tak, by później nie zepsuć indeksowania w Google. Podstawa: `docs/badanie-indeksowania-2026-11-01.md` (cytaty i adresy źródeł tamże). Wdrożone tego dnia:
+- Przy `indeksowanie=false` `robots.txt` zezwala na skanowanie (`Allow: /`, bez `Disallow`, bez `Sitemap`), a strony mają `noindex` — przy zablokowanym skanowaniu Google nie zobaczy `noindex` (test w `tests/build.test.mjs`).
+- Strona `/` ma canonical na siebie i pełny zestaw hreflang (języki + x-default na siebie), wzajemnie ze stronami głównymi języków (`tests/hreflang.test.mjs`).
+- `meta refresh` przekierowania ma pełny adres z domeną.
+- Przekierowania w `slug-overrides.json` mają datę dodania (`od`); usunięcie wpisu młodszego niż 365 dni od startu indeksowania (`config.json` → `indeksowanieOd`) to błąd (`REDIRECT_MIN_DAYS` w `src/slugi.mjs`, `tests/slugi.test.mjs`); strażnik S8 wymaga `indeksowanieOd` przy `indeksowanie=true`.
+- Workflow Pages po wdrożeniu sprawdza (ostrzega) robots.txt, noindex, HTTP→HTTPS i github.io→domena ze ścieżką (`tests/workflow-pages.test.mjs`).
+
+### Decyzje właściciela 01.11.2026 (zamknięte)
+- **Adres kanoniczny z `www`** (wariant A): `https://www.techniqueatlas.com`. Odrzucone: domena bez `www` (GitHub zaleca `www`; apex jest tylko przekierowaniem). Test: `tests/slugi.test.mjs` („domena kanoniczna zaczyna się od https://www.”).
+- **Hosting: GitHub Pages** (wariant A). Odrzucone: Cloudflare Pages (Free: limit 20 000 plików, a strona ma ok. 24 815 stron przy 35 językach).
+
+### Lista kontrolna startu — ustalić PRZED pierwszym indeksowaniem
+(badanie, pkt 7; zmiana później = przenosiny witryny albo przekierowanie każdej strony × język)
+- [ ] Domena kupiona i podpięta w ustawieniach Pages; DNS dla `www` (i apex jako przekierowanie); weryfikacja domeny.
+- [ ] HTTPS wymuszone („Enforce HTTPS”, może być dostępne dopiero po 24 h) przed startem.
+- [ ] Schemat adresów `/{lang}/exercises/{slug}/` zatwierdzony (bez zmian po starcie).
+- [ ] Ukośnik końcowy: adresy z „/”; zachowanie Pages dla adresu bez „/” sprawdzone (`curl -sI`, otwarte).
+- [ ] Małe litery i myślniki w adresach (reguła slugów).
+- [ ] Canonical bezwzględny, ten sam język; `slugs.lock.json` zamrożony (`npm run slugi`).
+- [ ] `x-default` i hreflang na stronie `/` (wdrożone).
+- [ ] `indeksowanieOd` ustawione razem z `indeksowanie=true` (S8).
+- [ ] Przebieg dowodowy Pages: `curl -sI` github.io→domena (kod i ścieżka), HTTP→HTTPS, robots.txt, noindex.

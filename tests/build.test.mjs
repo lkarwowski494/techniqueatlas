@@ -28,10 +28,10 @@ test('język bez tekstów stałych (src/ui/<język>.json) nie jest budowany — 
   await assert.rejects(build({ out: tmpDist(), cfg: { jezyki: ['pl', 'xx'] } }), /brak src\/ui\/xx\.json|nie został wyeksportowany/);
 });
 
-test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt zabrania wszystkiego, brak map witryny', async () => {
+test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt NIE zabrania (Allow, bez Disallow i Sitemap — inaczej Google nie zobaczy noindex), brak map witryny', async () => {
   const { out } = await buildOnce();
   for (const f of htmlFiles(out)) assert.equal(robots(read(out, f)), 'noindex,nofollow', f);
-  assert.equal(read(out, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
+  assert.equal(read(out, 'robots.txt'), 'User-agent: *\nAllow: /\n'); assert.doesNotMatch(read(out, 'robots.txt'), /Disallow|Sitemap/i);
   assert.deepEqual(readdirSync(out).filter(f => /^sitemap/.test(f)), []);
 });
 
@@ -105,7 +105,7 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
   for (const f of htmlFiles(out)) {
     const h = read(out, f); const dir = posix.dirname(f);
     for (const m of h.matchAll(/\b(?:href|src)="([^"#]+)"/g)) { const u = m[1]; if (/^(https?:|\/\/|mailto:|data:)/.test(u)) continue; const t = posix.normalize(posix.join(dir === '.' ? '' : dir, u)); const p = join(out, t); if (!(existsSync(p) && (statSync(p).isFile() || existsSync(join(p, 'index.html'))))) bad.push(`${f} → ${u}`); }
-    for (const m of h.matchAll(/<(?:a|link)[^>]*?\bhref="(https?:\/\/[^"]+)"/g)) { const u = m[1]; if (!/^https:\/\/(techniqueatlas\.com|apps4brew\.com|apps\.apple\.com)\//.test(u)) bad.push(`${f} → ${u}`); }
+    for (const m of h.matchAll(/<(?:a|link)[^>]*?\bhref="(https?:\/\/[^"]+)"/g)) { const u = m[1]; if (!/^https:\/\/(www\.techniqueatlas\.com|apps4brew\.com|apps\.apple\.com)\//.test(u)) bad.push(`${f} → ${u}`); }
   }
   assert.deepEqual(bad.slice(0, 5), []);
 });

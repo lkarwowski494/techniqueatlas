@@ -24,7 +24,7 @@ const JS_IMPORT_HTTP = /\bimport\s*(?:\(|[^'"]*from)\s*["']https?:/;
 
 test('samokontrola: wzorce wykrywają próbki', () => {
   for (const s of ['<script src="https://www.google-' + 'analytics.com/a.js">', 'gtag' + '(\'js\')', 'plaus' + 'ible.io']) assert.ok(TRACKERS.test(s) || EXTERNAL_RES.test(s), s);
-  assert.ok(EXTERNAL_RES.test('<link rel="stylesheet" href="https://fonts.example.org/x.css">')); assert.ok(!EXTERNAL_RES.test('<link rel="canonical" href="https://techniqueatlas.com/pl/">')); assert.ok(!EXTERNAL_RES.test('<link rel="alternate" hreflang="en" href="https://techniqueatlas.com/en/">')); assert.ok(EXTERNAL_RES.test('<img src="//cdn.example.org/a.png">')); assert.ok(!EXTERNAL_RES.test('<a href="https://example.org/">x</a>')); assert.ok(!EXTERNAL_RES.test('<script src="../../assets/a.js">'));
+  assert.ok(EXTERNAL_RES.test('<link rel="stylesheet" href="https://fonts.example.org/x.css">')); assert.ok(!EXTERNAL_RES.test('<link rel="canonical" href="https://www.techniqueatlas.com/pl/">')); assert.ok(!EXTERNAL_RES.test('<link rel="alternate" hreflang="en" href="https://techniqueatlas.com/en/">')); assert.ok(EXTERNAL_RES.test('<img src="//cdn.example.org/a.png">')); assert.ok(!EXTERNAL_RES.test('<a href="https://example.org/">x</a>')); assert.ok(!EXTERNAL_RES.test('<script src="../../assets/a.js">'));
   assert.ok(NETWORK_API.test('fe' + 'tch("/x")')); assert.ok(!NETWORK_API.test('const y = 1'));
 });
 test('repozytorium (kod strony, generator, zasoby): brak skryptów śledzących; kod przeglądarki bez wywołań sieciowych, cookies i pamięci przeglądarki', () => {

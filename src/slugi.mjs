@@ -24,22 +24,44 @@ export function effectiveSlugs(exercises, overrides = {}) {
 }
 
 /**
- * Sprawdza zamrożenie adresów. `current`: Map id → slug (po nadpisaniach); `lock`: { id: slug }; `redirects`: { staryslug: id | "lista" }; `indexing`: config.indeksowanie.
+ * Sprawdza zamrożenie adresów. `current`: Map id → slug (po nadpisaniach); `lock`: { id: slug }; `redirects`: { staryslug: { do: id | "lista", od: "RRRR-MM-DD" } }; `indexing`: config.indeksowanie.
  * Zwraca { errors, warnings, redirects: [{ from, to: slug | null }] } — `to` null = lista ćwiczeń (ćwiczenie usunięte).
  */
+/** Najkrótszy czas trzymania przekierowania od startu indeksowania (dni): Google — „Keep the redirects for as long as possible, generally at least 1 year” (docs/badanie-indeksowania-2026-11-01.md, pkt 6). */
+export const REDIRECT_MIN_DAYS = 365;
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/, validDate = d => DATE_RE.test(d) && !Number.isNaN(Date.parse(d)) && new Date(d).toISOString().slice(0, 10) === d;
+const dayNum = d => Math.floor(Date.parse(d) / 86400000);
+const target = v => (v !== null && typeof v === 'object' ? v.do : v);
+
+/** Usunięcie przekierowania: błąd, gdy wpis zniknął, a od startu indeksowania (albo od daty dodania, jeśli późniejsza) minęło mniej niż REDIRECT_MIN_DAYS dni. `indexingFrom` puste = indeksowanie nie wystartowało. */
+export function checkRedirectRemoval({ before = {}, after = {}, indexingFrom = '', today }) {
+  const errors = [];
+  if (!indexingFrom) return { errors };
+  for (const [slug, v] of Object.entries(before)) {
+    if (slug in after) continue;
+    const since = [indexingFrom, v?.od].filter(validDate).sort().pop(), age = dayNum(today) - dayNum(since);
+    if (age < REDIRECT_MIN_DAYS) errors.push(`przekierowanie „${slug}” usunięte po ${age} dniach od startu indeksowania (od ${since}); trzymaj je co najmniej ${REDIRECT_MIN_DAYS} dni (docs/badanie-indeksowania-2026-11-01.md, pkt 6)`);
+  }
+  return { errors };
+}
+
 export function checkSlugLock({ current, lock = {}, redirects = {}, indexing = false }) {
   const errors = [], warnings = [], live = new Set(current.values()), idBySlug = new Map([...current].map(([id, s]) => [s, id]));
   const frozen = Object.keys(lock).length;
   if (!frozen) (indexing ? errors : warnings).push('slugs.lock.json jest pusty: adresy nie są zamrożone — przed pierwszą publikacją uruchom npm run slugi');
   for (const [id, old] of Object.entries(lock)) {
     const now = current.get(id);
-    if (now === undefined) { if (!(old in redirects)) errors.push(`ćwiczenie „${id}” (adres ${old}) zniknęło z danych bez przekierowania — dopisz w slug-overrides.json przekierowania: "${old}": "lista" (albo id ćwiczenia zastępczego)`); }
-    else if (now !== old && redirects[old] !== id) errors.push(`adres ćwiczenia „${id}” zmienił się z ${old} na ${now} bez przekierowania — zachowaj stary (slug-overrides.json, nadpisania: "${id}": "${old}") albo dopisz przekierowania: "${old}": "${id}"`);
+    if (now === undefined) { if (!(old in redirects)) errors.push(`ćwiczenie „${id}” (adres ${old}) zniknęło z danych bez przekierowania — dopisz w slug-overrides.json przekierowania: "${old}": { "do": "lista", "od": "RRRR-MM-DD" } (albo id ćwiczenia zastępczego)`); }
+    else if (now !== old && target(redirects[old]) !== id) errors.push(`adres ćwiczenia „${id}” zmienił się z ${old} na ${now} bez przekierowania — zachowaj stary (slug-overrides.json, nadpisania: "${id}": "${old}") albo dopisz przekierowania: "${old}": { "do": "${id}", "od": "RRRR-MM-DD" }`);
   }
   for (const [id, slug] of current) if (frozen && !(id in lock)) (indexing ? errors : warnings).push(`ćwiczenie „${id}” (${slug}) nie ma zamrożonego adresu — uruchom npm run slugi`);
   const out = [];
-  for (const [from, to] of Object.entries(redirects)) {
+  for (const [from, entry] of Object.entries(redirects)) {
     if (!SLUG_RE.test(from)) { errors.push(`przekierowanie: „${from}” nie jest poprawnym adresem`); continue; }
+    if (entry === null || typeof entry !== 'object') { errors.push(`przekierowanie „${from}”: wpis musi mieć postać { "do": …, "od": "RRRR-MM-DD" }`); continue; }
+    if (entry.od === undefined) { errors.push(`przekierowanie „${from}”: brak daty dodania (od) — potrzebna do pilnowania minimum ${REDIRECT_MIN_DAYS} dni`); continue; }
+    if (!validDate(entry.od)) { errors.push(`przekierowanie „${from}”: data dodania „${entry.od}” nie jest datą RRRR-MM-DD`); continue; }
+    const to = entry.do;
     if (live.has(from)) { errors.push(`przekierowanie z „${from}” zasłania żywą stronę ćwiczenia ${idBySlug.get(from)}`); continue; }
     if (to === LIST) { out.push({ from, to: null }); continue; }
     if (!current.has(to)) { errors.push(`przekierowanie z „${from}”: cel „${to}” nie jest ćwiczeniem (ani „${LIST}”)`); continue; }
@@ -53,7 +75,7 @@ export function freeze({ current, lock = {}, redirects = {} }) {
   const next = { ...lock }, errors = [];
   for (const [id, slug] of current) {
     if (!(id in lock) || lock[id] === slug) next[id] = slug;
-    else if (redirects[lock[id]] === id) next[id] = slug;
+    else if (target(redirects[lock[id]]) === id) next[id] = slug;
     else errors.push(`adres „${id}” zmienił się z ${lock[id]} na ${slug} bez przekierowania`);
   }
   return { lock: Object.fromEntries(Object.entries(next).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)), errors };

@@ -3,14 +3,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { effectiveSlugs, checkSlugLock, freeze, remapSlugs, SLUG_RE, SLUG_MAX } from '../src/slugi.mjs';
+import { execFileSync } from 'node:child_process';
+import { effectiveSlugs, checkSlugLock, checkRedirectRemoval, REDIRECT_MIN_DAYS, freeze, remapSlugs, SLUG_RE, SLUG_MAX } from '../src/slugi.mjs';
 import { build } from '../src/build.mjs';
-import { readJson, CACHE } from '../src/lib.mjs';
+import { readJson, CACHE, ROOT } from '../src/lib.mjs';
 import { requireData, tmpDist, distFiles, BEZ_STARTU } from './pomoc.mjs';
 
 requireData();
 const ex = (id, slug) => ({ id, slug, alternatives: [] });
 const cur = (...p) => new Map(p);
+const R = to => ({ do: to, od: '2026-11-01' }); /* wpis przekierowania: cel + data dodania */
 
 test('pliki ustawień: slugs.lock.json i slug-overrides.json istnieją, mają znany kształt, a wpisy są poprawnymi adresami', () => {
   const lock = readJson('slugs.lock.json'), ov = readJson('slug-overrides.json');
@@ -37,17 +39,17 @@ test('checkSlugLock: bez zmian — brak błędów; zmiana adresu bez przekierowa
   const lock = { A: 'a-old' };
   assert.deepEqual(checkSlugLock({ current: cur(['A', 'a-old']), lock }).errors, []);
   const e = checkSlugLock({ current: cur(['A', 'a-new']), lock }).errors; assert.equal(e.length, 1); assert.match(e[0], /zmienił się z a-old na a-new bez przekierowania/); assert.match(e[0], /nadpisania/); assert.match(e[0], /przekierowania/);
-  const ok = checkSlugLock({ current: cur(['A', 'a-new']), lock, redirects: { 'a-old': 'A' } }); assert.deepEqual(ok.errors, []); assert.deepEqual(ok.redirects, [{ from: 'a-old', to: 'a-new' }]);
-  assert.match(checkSlugLock({ current: cur(['A', 'a-new']), lock, redirects: { 'a-old': 'B' } }).errors.join('\n'), /bez przekierowania|nie jest ćwiczeniem/); /* przekierowanie na inne ćwiczenie nie tłumaczy zmiany */
+  const ok = checkSlugLock({ current: cur(['A', 'a-new']), lock, redirects: { 'a-old': R('A') } }); assert.deepEqual(ok.errors, []); assert.deepEqual(ok.redirects, [{ from: 'a-old', to: 'a-new' }]);
+  assert.match(checkSlugLock({ current: cur(['A', 'a-new']), lock, redirects: { 'a-old': R('B') } }).errors.join('\n'), /bez przekierowania|nie jest ćwiczeniem/); /* przekierowanie na inne ćwiczenie nie tłumaczy zmiany */
 });
 test('checkSlugLock: ćwiczenie usunięte wymaga przekierowania (na zastępcze albo „lista”); przekierowanie nie może zasłonić żywej strony ani wskazywać nieistniejącego celu', () => {
   const lock = { A: 'a', B: 'b' };
   assert.match(checkSlugLock({ current: cur(['B', 'b']), lock }).errors[0], /zniknęło z danych bez przekierowania/);
-  const r = checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: 'lista' } }); assert.deepEqual(r.errors, []); assert.deepEqual(r.redirects, [{ from: 'a', to: null }]);
-  assert.deepEqual(checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: 'B' } }).redirects, [{ from: 'a', to: 'b' }]);
-  assert.match(checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: 'Z' } }).errors.join('\n'), /cel „Z” nie jest ćwiczeniem/);
-  assert.match(checkSlugLock({ current: cur(['A', 'a'], ['B', 'b']), lock, redirects: { b: 'A' } }).errors.join('\n'), /zasłania żywą stronę/);
-  assert.match(checkSlugLock({ current: cur(['B', 'b']), lock: { B: 'b' }, redirects: { 'Zły': 'B' } }).errors.join('\n'), /nie jest poprawnym adresem/);
+  const r = checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: R('lista') } }); assert.deepEqual(r.errors, []); assert.deepEqual(r.redirects, [{ from: 'a', to: null }]);
+  assert.deepEqual(checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: R('B') } }).redirects, [{ from: 'a', to: 'b' }]);
+  assert.match(checkSlugLock({ current: cur(['B', 'b']), lock, redirects: { a: R('Z') } }).errors.join('\n'), /cel „Z” nie jest ćwiczeniem/);
+  assert.match(checkSlugLock({ current: cur(['A', 'a'], ['B', 'b']), lock, redirects: { b: R('A') } }).errors.join('\n'), /zasłania żywą stronę/);
+  assert.match(checkSlugLock({ current: cur(['B', 'b']), lock: { B: 'b' }, redirects: { 'Zły': R('B') } }).errors.join('\n'), /nie jest poprawnym adresem/);
 });
 test('checkSlugLock: pusty lub niepełny plik zamrożenia — błąd przy indeksowaniu, ostrzeżenie bez; nowe ćwiczenie dostaje to samo', () => {
   const empty = i => checkSlugLock({ current: cur(['A', 'a']), lock: {}, indexing: i });
@@ -58,7 +60,7 @@ test('checkSlugLock: pusty lub niepełny plik zamrożenia — błąd przy indeks
 test('freeze: dopisuje nowe, zachowuje usunięte, aktualizuje zmienione tylko z przekierowaniem (inaczej błąd i nic nie jest zapisane), wynik posortowany', () => {
   assert.deepEqual(freeze({ current: cur(['B', 'b'], ['A', 'a']), lock: { Z: 'z' } }), { lock: { A: 'a', B: 'b', Z: 'z' }, errors: [] });
   assert.match(freeze({ current: cur(['A', 'a2']), lock: { A: 'a' } }).errors[0], /bez przekierowania/);
-  assert.deepEqual(freeze({ current: cur(['A', 'a2']), lock: { A: 'a' }, redirects: { a: 'A' } }), { lock: { A: 'a2' }, errors: [] });
+  assert.deepEqual(freeze({ current: cur(['A', 'a2']), lock: { A: 'a' }, redirects: { a: R('A') } }), { lock: { A: 'a2' }, errors: [] });
 });
 test('remapSlugs: slug, zamienniki, klucze figur i sylwetek przechodzą na nowy adres we wszystkich językach; bez zmian — te same obiekty', () => {
   const data = { en: { exercises: [{ id: 'A', slug: 'a', alternatives: ['b'] }, { id: 'B', slug: 'b', alternatives: ['a'] }] } }, figs = { a: 1, b: 2 }, sil = { levels: { a: [1], b: [2] } };
@@ -84,13 +86,13 @@ test('build: zmiana adresu względem zamrożenia bez wpisu przerywa budowanie; n
 });
 test('build: przeniesiony adres zostaje jako przekierowanie (meta refresh 0 s + canonical na nowy adres) w każdym budowanym języku; usunięte → lista; poza mapami witryny', async () => {
   const sq = await first();
-  const slugi = { lock: { [sq.id]: 'old-squat', 'Usuniete Cwiczenie': 'removed-one' }, overrides: { nadpisania: {}, przekierowania: { 'old-squat': sq.id, 'removed-one': 'lista' } } };
+  const slugi = { lock: { [sq.id]: 'old-squat', 'Usuniete Cwiczenie': 'removed-one' }, overrides: { nadpisania: {}, przekierowania: { 'old-squat': R(sq.id), 'removed-one': R('lista') } } };
   const r = await build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi, ...BEZ_STARTU }); const dom = readJson('config.json').domena;
   for (const l of ['pl', 'en']) {
     const h = readFileSync(join(r.out, `${l}/exercises/old-squat/index.html`), 'utf8');
-    assert.match(h, /<meta http-equiv="refresh" content="0;url=\.\.\/back-squat\/">/); assert.ok(h.includes(`<link rel="canonical" href="${dom}/${l}/exercises/back-squat/">`)); assert.match(h, /<a href="\.\.\/back-squat\/"[^>]*>Back Squat<\/a>/);
+    assert.ok(h.includes(`<meta http-equiv="refresh" content="0;url=${dom}/${l}/exercises/back-squat/">`), 'meta refresh: pełny adres z domeną'); assert.ok(h.includes(`<link rel="canonical" href="${dom}/${l}/exercises/back-squat/">`)); assert.match(h, /<a href="\.\.\/back-squat\/"[^>]*>Back Squat<\/a>/);
     assert.doesNotMatch(h, /noindex|hreflang=/);
-    const g = readFileSync(join(r.out, `${l}/exercises/removed-one/index.html`), 'utf8'); assert.match(g, /<meta http-equiv="refresh" content="0;url=\.\.\/">/); assert.ok(g.includes(`<link rel="canonical" href="${dom}/${l}/exercises/">`));
+    const g = readFileSync(join(r.out, `${l}/exercises/removed-one/index.html`), 'utf8'); assert.ok(g.includes(`<meta http-equiv="refresh" content="0;url=${dom}/${l}/exercises/">`)); assert.ok(g.includes(`<link rel="canonical" href="${dom}/${l}/exercises/">`));
     assert.ok(!readFileSync(join(r.out, `sitemap-${l}.xml`), 'utf8').includes('old-squat'));
   }
   const off = await build({ out: tmpDist(), slugi }); assert.match(readFileSync(join(off.out, 'en/exercises/old-squat/index.html'), 'utf8'), /<meta name="robots" content="noindex,nofollow">/);
@@ -99,4 +101,40 @@ test('build: pusty plik zamrożenia — ostrzeżenie bez indeksowania, błąd pr
   const slugi = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } };
   const w = await build({ out: tmpDist(), slugi }); assert.ok(w.warnings.some(x => /slugs\.lock\.json jest pusty/.test(x)));
   await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi }), /slugs\.lock\.json jest pusty/);
+});
+
+/* Przekierowania z datą dodania i ochrona przed zbyt wczesnym usunięciem (badanie indeksowania 01.11.2026, pkt 6: „at least 1 year”). */
+test('przekierowania: każdy wpis ma cel (do) i datę dodania (od, RRRR-MM-DD); brak daty albo zła data to błąd', () => {
+  const lock = { A: 'a' }, cur1 = cur(['B', 'b']);
+  assert.match(checkSlugLock({ current: cur1, lock, redirects: { a: 'lista' } }).errors.join('\n'), /przekierowanie „a”: wpis musi mieć postać \{ "do": …, "od": "RRRR-MM-DD" \}/);
+  assert.match(checkSlugLock({ current: cur1, lock, redirects: { a: { do: 'lista' } } }).errors.join('\n'), /„a”: brak daty dodania \(od\)/);
+  for (const zla of ['2026-13-01', '1.11.2026', '2026-02-30', '']) assert.match(checkSlugLock({ current: cur1, lock, redirects: { a: { do: 'lista', od: zla } } }).errors.join('\n'), /„a”: data dodania/, zla);
+  assert.deepEqual(checkSlugLock({ current: cur1, lock, redirects: { a: R('lista') } }).errors, []);
+});
+test('przekierowania w repo: wszystkie wpisy slug-overrides.json mają datę dodania', () => {
+  for (const [k, v] of Object.entries(readJson('slug-overrides.json').przekierowania)) assert.match(v?.od ?? '', /^\d{4}-\d{2}-\d{2}$/, k);
+});
+test('checkRedirectRemoval: usunięcie przekierowania młodszego niż 365 dni od startu indeksowania to błąd; starsze albo przed startem — wolno; liczba 365 w jednym miejscu', () => {
+  assert.equal(REDIRECT_MIN_DAYS, 365);
+  const before = { a: { do: 'lista', od: '2026-11-01' }, b: { do: 'lista', od: '2027-02-01' } }, after = {}, start = '2027-01-01';
+  const r = (today, from = start) => checkRedirectRemoval({ before, after, indexingFrom: from, today });
+  const e = r('2027-06-01').errors.join('\n'); assert.match(e, /„a”/); assert.match(e, /365 dni/); assert.match(e, /„b”/);
+  assert.deepEqual(r('2028-01-01').errors.length, 1, 'po 365 dniach od startu (2028-01-01) „a” wolno usunąć; „b” (dodane 2027-02-01) jeszcze nie');
+  assert.deepEqual(r('2028-02-01').errors, []);
+  assert.deepEqual(r('2027-06-01', '').errors, [], 'indeksowanie jeszcze nie wystartowało — nic nie zaindeksowano');
+  assert.deepEqual(checkRedirectRemoval({ before, after: before, indexingFrom: start, today: '2027-02-01' }).errors, [], 'bez usunięcia — bez błędu');
+  assert.deepEqual(checkRedirectRemoval({ before: {}, after: before, indexingFrom: start, today: '2027-02-01' }).errors, [], 'dodanie — bez błędu');
+  assert.equal(checkRedirectRemoval({ before: { c: { do: 'lista', od: '2026-01-01' } }, after: {}, indexingFrom: '2027-01-01', today: '2027-06-01' }).errors.length, 1, 'wiek liczony od startu indeksowania, gdy wpis starszy niż start');
+});
+test('strażnik usuwania przekierowań w repo: względem main nie zniknął żaden wpis młodszy niż 365 dni od startu indeksowania', () => {
+  let base; try { base = JSON.parse(execFileSync('git', ['show', 'origin/main:slug-overrides.json'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })).przekierowania; } catch { return; } /* bez origin/main (płytki klon) — sprawdzi CI z fetch-depth 0 */
+  const cfg = readJson('config.json');
+  assert.deepEqual(checkRedirectRemoval({ before: base, after: readJson('slug-overrides.json').przekierowania, indexingFrom: cfg.indeksowanieOd, today: new Date().toISOString().slice(0, 10) }).errors, []);
+});
+test('config.json: indeksowanieOd (data startu indeksowania) puste przed startem; przy indeksowanie=true musi być datą', () => {
+  const cfg = readJson('config.json'); assert.equal(typeof cfg.indeksowanieOd, 'string');
+  if (cfg.indeksowanie) assert.match(cfg.indeksowanieOd, /^\d{4}-\d{2}-\d{2}$/); else assert.equal(cfg.indeksowanieOd, '');
+});
+test('config.json: domena kanoniczna zaczyna się od https://www. (decyzja właściciela 01.11.2026, wariant A: z www) i nie kończy ukośnikiem', () => {
+  const d = readJson('config.json').domena; assert.match(d, /^https:\/\/www\.[a-z0-9.-]+$/);
 });

@@ -47,13 +47,23 @@ test('strona ćwiczenia: es-419 to jeden adres pod wszystkimi kodami es-XX (żad
 });
 test('wzajemność: każda strona wymieniona w hreflang strony A wymienia A pod własnym kodem języka (wszystkie kody es-XX wskazują stronę es-419, która wymienia siebie)', () => {
   const pages = ['index.html', ...LANGS.flatMap(l => [`${l.toLowerCase()}/index.html`, `${l.toLowerCase()}/exercises/back-squat/index.html`, `${l.toLowerCase()}/muscles/legs/index.html`])].filter(f => existsSync(join(built.out, f)));
-  for (const f of pages.filter(f => f !== 'index.html')) {
+  const homes = new Set(LANGS.map(l => `${l.toLowerCase()}/index.html`)); /* x-default / z innych stron to wskazanie domyślnej wersji, nie członkostwo w grupie — wzajemność ze stroną / dotyczy stron głównych języków i samej / */
+  for (const f of pages) {
     const h = read(f), self = `${dom}/${f.replace(/index\.html$/, '')}`, mine = links(h);
     assert.ok(mine.some(a => a[1] === self), `${f}: wymienia siebie`);
-    for (const url of new Set(mine.map(a => a[1]).filter(u => u !== `${dom}/`))) {
+    for (const url of new Set(mine.map(a => a[1]).filter(u => u !== self && (u !== `${dom}/` || homes.has(f))))) {
       const other = links(read(url.slice(dom.length + 1) + 'index.html')); assert.ok(other.some(a => a[1] === self), `${f} ↔ ${url}`);
     }
   }
+});
+test('strona / (wybór języka): canonical na siebie, pełny zestaw hreflang (każdy język + x-default na siebie), wzajemnie ze stronami głównymi języków', () => {
+  const h = read('index.html'), alts = links(h), codes = alts.map(a => a[0]);
+  assert.ok(h.includes(`<link rel="canonical" href="${dom}/">`), 'canonical na siebie, pełny adres');
+  assert.equal(new Set(codes).size, codes.length);
+  assert.equal(alts.find(a => a[0] === 'x-default')[1], `${dom}/`);
+  for (const l of LANGS) for (const c of hreflangCodes(l)) assert.equal(alts.find(a => a[0] === c)?.[1], `${dom}/${l.toLowerCase()}/`, c);
+  for (const l of LANGS) assert.ok(links(read(`${l.toLowerCase()}/index.html`)).some(a => a[0] === 'x-default' && a[1] === `${dom}/`), `${l}: x-default wskazuje /`);
+  assert.doesNotMatch(h, /<p>[^<]*:\s*<span aria-current/, 'wiersz przełącznika języków nie dubluje listy wyboru');
 });
 test('lang strony: <html lang> i odnośniki językowe — sr-Cyrl dla serbskiego, es-419 zostaje (znacznik języka, nie kod wyszukiwarki)', () => {
   assert.match(read('sr/exercises/back-squat/index.html'), /<html lang="sr-Cyrl">/); assert.match(read('es-419/exercises/back-squat/index.html'), /<html lang="es-419">/);
