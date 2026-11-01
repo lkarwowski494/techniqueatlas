@@ -27,6 +27,11 @@ test('workflowy pobierają dane z aplikacji przed testami i budowaniem (npm run 
     const t = readFileSync(join(ROOT, f), 'utf8'); const i = t.indexOf('npm run dane'); assert.ok(i > 0, `${f}: brak npm run dane`); assert.ok(i < t.indexOf('npm test') && i < t.indexOf('npm run build'), `${f}: dane po testach`);
   }
 });
+test('workflowy instalują zależności (npm ci) przed pobraniem danych i testami — testy dostępności wymagają axe-core i playwright-core (07-jakosc-011)', () => {
+  for (const f of repoFiles().filter(f => /^\.github\/workflows\/(tests|pages)\.ya?ml$/.test(f))) {
+    const t = readFileSync(join(ROOT, f), 'utf8'); const c = t.indexOf('npm ci'); assert.ok(c > 0, `${f}: brak npm ci`); assert.ok(c < t.indexOf('npm run dane'), `${f}: npm ci po npm run dane`);
+  }
+});
 test('zbudowana strona nie zawiera plików danych do pobrania hurtem (JSON z katalogiem ćwiczeń, ZIP, CSV); są tylko HTML, CSS, moduły JS (figury i indeks nazw) i mapy witryny', async () => {
   const { out } = await buildOnce();
   const files = distFiles(out).map(p => p.slice(out.length + 1));
