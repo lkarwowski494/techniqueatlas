@@ -9,7 +9,8 @@ import { repoFiles, isText, read, ROOT } from './pomoc.mjs';
 const SECRETS = [/-----BEGIN [A-Z ]*PRIVATE KEY-----/, /\bgh[pousr]_[A-Za-z0-9]{30,}/, /\bgithub_pat_[A-Za-z0-9_]{30,}/, /\bAKIA[0-9A-Z]{16}\b/, /\bsk-[A-Za-z0-9_-]{20,}/, /\bxox[abprs]-[A-Za-z0-9-]{10,}/, /\bAIza[0-9A-Za-z_-]{35}/, /\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}/];
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g;
 /** Dozwolone tylko adresy neutralne (noreply). Adres kontaktowy strony dodaje właściciel świadomie — wpis tutaj w tym samym commicie. */
-const ALLOWED_EMAIL = [/^noreply@anthropic\.com$/, /@users\.noreply\.github\.com$/];
+/* noreply@github.com: komitent scalenia PR przez GitHub (interfejs i API) — adres neutralny, nie osobisty (01.11.2026, scalenie #3) */
+const ALLOWED_EMAIL = [/^noreply@anthropic\.com$/, /@users\.noreply\.github\.com$/, /^noreply@github\.com$/];
 const UDID = /\b[0-9A-Fa-f]{8}-[0-9A-Fa-f]{16}\b/; /* UDID urządzeń Apple (nowy format 8-16) */
 /** Przypięcia do commitu aplikacji (pole "commit" w danych i manifestach) nie są sekretem — usuwane przed szukaniem 40 znaków szesnastkowych. */
 const PINNED = /"commit":\s*"[0-9a-f]{40}"/g;
@@ -17,7 +18,7 @@ const BAD_FILE = [/(^|\/)\.env(\..*)?$/, /\.(p8|p12|pem|key|mobileprovision|pfx|
 
 test('samokontrola: wzorce wykrywają próbki (składane w locie)', () => {
   assert.ok(SECRETS[0].test('-----BEGIN ' + 'PRIVATE KEY-----')); assert.ok(SECRETS[1].test('gh' + 'p_' + 'a'.repeat(36))); assert.ok(UDID.test('00008030-' + '001A2B3C4D5E6F70'));
-  const mail = 'jan.kowalski' + '@' + 'example.com'; assert.ok(mail.match(EMAIL)); assert.ok(!ALLOWED_EMAIL.some(r => r.test(mail))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@anthropic.com')));
+  const mail = 'jan.kowalski' + '@' + 'example.com'; assert.ok(mail.match(EMAIL)); assert.ok(!ALLOWED_EMAIL.some(r => r.test(mail))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@anthropic.com'))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@github.com'))); assert.ok(!ALLOWED_EMAIL.some(r => r.test('x.noreply@github.com.evil.example')));
 });
 test('brak plików z sekretami (.env, .p8, .p12, .pem, klucze) w repozytorium', () => { assert.deepEqual(repoFiles().filter(f => BAD_FILE.some(r => r.test(f))), []); });
 test('brak kluczy, tokenów i identyfikatorów urządzeń w plikach tekstowych', () => {
