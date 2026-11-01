@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { extname } from 'node:path';
 import { repoFiles, isText, read, distFiles, buildOnce } from './pomoc.mjs';
 
-const TRACKERS = /google-analytics|googletagmanager|googlesyndication|doubleclick|adsbygoogle|\bgtag\s*\(|\bga\s*\(\s*['"]|analytics\.js|plausible|matomo|piwik|hotjar|mixpanel|segment\.(?:com|io)|amplitude|clarity\.ms|fullstory|posthog|umami|fathom|cloudflareinsights|simpleanalytics|goatcounter|sentry|datadoghq|newrelic|facebook\.(?:net|com)\/tr|\bfbq\s*\(|connect\.facebook|snap(?:chat)?\.com\/.*pixel|sc-static\.net|analytics\.tiktok|mc\.yandex|metrika|linkedin\.com\/px|static\.hotjar|bat\.bing/i;
+const TRACKERS = /google-analytics|googletagmanager|googlesyndication|doubleclick|adsbygoogle|\bgtag\s*\(|\bga\s*\(\s*['"]|analytics\.js|plausible|matomo|piwik|hotjar|mixpanel|segment\.(?:com|io)|amplitude\.com|cdn\.amplitude|amplitude-js|@amplitude|clarity\.ms|fullstory|posthog|umami|fathom|cloudflareinsights|simpleanalytics|goatcounter|sentry|datadoghq|newrelic|facebook\.(?:net|com)\/tr|\bfbq\s*\(|connect\.facebook|snap(?:chat)?\.com\/.*pixel|sc-static\.net|analytics\.tiktok|mc\.yandex|metrika|linkedin\.com\/px|static\.hotjar|bat\.bing/i;
 const NETWORK_API = /\bfetch\s*\(|XMLHttpRequest|sendBeacon|\bWebSocket\b|\bEventSource\b|new\s+Image\s*\(|document\.cookie|\blocalStorage\b|\bsessionStorage\b|\bindexedDB\b|importScripts|navigator\.serviceWorker/;
 const EXT = /(?:^|["'\s=])(?:https?:)?\/\/(?!localhost)/;
 /** Znacznik ładujący zasób z innej domeny: script/img/iframe/… z zewnętrznym src/srcset/data/poster albo <link> zasobowy (stylesheet, preload, icon, manifest, preconnect…) z zewnętrznym href. Metadane <link rel="canonical|alternate"> nie ładują zasobów. */
@@ -25,6 +25,7 @@ const JS_IMPORT_HTTP = /\bimport\s*(?:\(|[^'"]*from)\s*["']https?:/;
 test('samokontrola: wzorce wykrywają próbki', () => {
   for (const s of ['<script src="https://www.google-' + 'analytics.com/a.js">', 'gtag' + '(\'js\')', 'plaus' + 'ible.io']) assert.ok(TRACKERS.test(s) || EXTERNAL_RES.test(s), s);
   assert.ok(EXTERNAL_RES.test('<link rel="stylesheet" href="https://fonts.example.org/x.css">')); assert.ok(!EXTERNAL_RES.test('<link rel="canonical" href="https://www.techniqueatlas.com/pl/">')); assert.ok(!EXTERNAL_RES.test('<link rel="alternate" hreflang="en" href="https://techniqueatlas.com/en/">')); assert.ok(EXTERNAL_RES.test('<img src="//cdn.example.org/a.png">')); assert.ok(!EXTERNAL_RES.test('<a href="https://example.org/">x</a>')); assert.ok(!EXTERNAL_RES.test('<script src="../../assets/a.js">'));
+  assert.ok(TRACKERS.test('https://cdn.' + 'amplitude.com/libs/a.js')); for (const prose of ['réduisez l’amplitude', 'reduz a amplitude', 'Range of amplitude']) assert.ok(!TRACKERS.test(prose), prose); /* „amplitude” to zwykłe słowo (zakres ruchu) w fr/pt — tracker rozpoznajemy po domenie/pakiecie */
   assert.ok(NETWORK_API.test('fe' + 'tch("/x")')); assert.ok(!NETWORK_API.test('const y = 1'));
 });
 test('repozytorium (kod strony, generator, zasoby): brak skryptów śledzących; kod przeglądarki bez wywołań sieciowych, cookies i pamięci przeglądarki', () => {

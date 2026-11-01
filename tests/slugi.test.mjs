@@ -80,8 +80,8 @@ test('build: zmiana adresu względem zamrożenia bez wpisu przerywa budowanie; n
   await assert.rejects(build({ out: tmpDist(), slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), /zmienił się z back-squat-old na back-squat bez przekierowania/);
   const r = await build({ out: tmpDist(), slugi: { lock, overrides: { nadpisania: { [sq.id]: 'back-squat-old' }, przekierowania: {} } } });
   assert.ok(existsSync(join(r.out, 'en/exercises/back-squat-old/index.html'))); assert.ok(!existsSync(join(r.out, 'en/exercises/back-squat/index.html')));
-  assert.ok(existsSync(join(r.out, 'assets/fig/back-squat-old.js'))); assert.ok(existsSync(join(r.out, 'assets/poz/back-squat-old.svg')));
-  const h = readFileSync(join(r.out, 'en/exercises/back-squat-old/index.html'), 'utf8'); assert.match(h, /assets\/poz\/back-squat-old\.svg#start/); assert.match(h, /class="sylwetki /);
+  if (sq.figure) { assert.ok(existsSync(join(r.out, 'assets/fig/back-squat-old.js'))); assert.ok(existsSync(join(r.out, 'assets/poz/back-squat-old.svg'))); } else assert.ok(!existsSync(join(r.out, 'assets/fig/back-squat-old.js')), 'eksport bez figury back-squat (figury czekają na recenzję): moduł figury nie powstaje');
+  const h = readFileSync(join(r.out, 'en/exercises/back-squat-old/index.html'), 'utf8'); if (sq.figure) assert.match(h, /assets\/poz\/back-squat-old\.svg#start/); assert.match(h, /class="sylwetki /);
   for (const f of distFiles(r.out).filter(f => /exercises\/[^/]+\/index\.html$/.test(f))) assert.doesNotMatch(readFileSync(f, 'utf8'), /exercises\/back-squat\/|"\.\.\/back-squat\/"/);
 });
 test('build: przeniesiony adres zostaje jako przekierowanie (meta refresh 0 s + canonical na nowy adres) w każdym budowanym języku; usunięte → lista; poza mapami witryny', async () => {

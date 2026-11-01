@@ -16,11 +16,12 @@ import { join } from 'node:path';
 import { ROOT } from '../src/lib.mjs';
 function readJsonText(rel) { return readFileSync(join(ROOT, rel), 'utf8'); }
 
-/** Próbka ćwiczeń: z figurą i własnymi wskazówkami, z figurą i błędami innej rodziny, najdłuższa nazwa, bez wskazówek, ze wskazówkami ogólnymi bez figury. */
+/** Próbka ćwiczeń: back-squat, z figurą i błędami innej rodziny (gdy eksport ma figury), najdłuższa nazwa, bez wskazówek, ze wskazówkami ogólnymi bez figury (gdy występują); uzupełniona do 5 różnych ćwiczeń z własnymi wskazówkami (eksport od fba531d: zakres „general” zniknął, figury czekają na recenzję). */
 function sample(en) {
   const ex = en.exercises, longest = [...ex].sort((a, b) => b.name.length - a.name.length)[0];
-  const pick = [ex.find(e => e.slug === 'back-squat'), ex.find(e => e.figure && e.figure.errors.length >= 2 && e.family !== 'squat'), longest, ex.find(e => e.cues.scope === 'none'), ex.find(e => e.cues.scope === 'general' && !e.figure)];
-  assert.ok(pick.every(Boolean), 'próbka ćwiczeń kompletna'); assert.equal(new Set(pick.map(e => e.slug)).size, 5);
+  const pick = [ex.find(e => e.slug === 'back-squat'), ex.find(e => e.figure && e.figure.errors.length >= 2 && e.family !== 'squat'), longest, ex.find(e => e.cues.scope === 'none'), ex.find(e => e.cues.scope === 'general' && !e.figure)].filter((e, i, a) => e && a.indexOf(e) === i);
+  for (const e of ex) { if (pick.length >= 5) break; if (e.cues.scope === 'own' && !pick.includes(e)) pick.push(e); }
+  assert.equal(pick.length, 5, 'próbka ćwiczeń kompletna'); assert.equal(new Set(pick.map(e => e.slug)).size, 5);
   return pick.map(e => e.slug);
 }
 

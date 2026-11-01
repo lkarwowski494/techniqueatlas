@@ -8,6 +8,9 @@ import { buildOnce } from './pomoc.mjs';
 import { launch, serve } from './przegladarka.mjs';
 
 const { out } = await buildOnce();
+/* Eksport aplikacji pokazuje tylko figury po niezależnej recenzji; gdy żadna rodzina nie ma jeszcze statusu gotowej (eksport z 0 figur), testy zachowania figury są pomijane z powodem, a test „bez figury” sprawdza stronę w przeglądarce. Po ponownym przypięciu do commitu z figurami (`npm run przypnij`) wracają same. */
+const HAS_FIG = JSON.parse(readFileSync(new URL('../.cache/dane/figury.json', import.meta.url), 'utf8')).figures['back-squat'] !== undefined;
+const SKIP = HAS_FIG ? false : 'eksport aplikacji bez figury back-squat (figury czekają na recenzję) — testy figury wracają po przypięciu do commitu z figurami';
 const URL_ = '/en/exercises/back-squat/';
 async function withPage(opts, fn) {
   const srv = await serve(out), browser = await launch(), ctx = await browser.newContext({ viewport: { width: 700, height: 1000 }, ...opts }), page = await ctx.newPage(), errors = [];
@@ -16,7 +19,7 @@ async function withPage(opts, fn) {
 }
 const vis = (page, sel) => page.locator(sel).isVisible();
 
-test('„Ogranicz ruch”: widoczne dwie pozycje z podpisami, animowane widoki ukryte, przycisk „Wznów”; Wznów odsłania animowane widoki i chowa pozycje', async () => {
+test('„Ogranicz ruch”: widoczne dwie pozycje z podpisami, animowane widoki ukryte, przycisk „Wznów”; Wznów odsłania animowane widoki i chowa pozycje', { skip: SKIP }, async () => {
   await withPage({ reducedMotion: 'reduce' }, async page => {
     await page.waitForTimeout(300);
     assert.equal(await vis(page, '[data-poses]'), true); assert.equal(await vis(page, '[data-views]'), false);
@@ -27,14 +30,14 @@ test('„Ogranicz ruch”: widoczne dwie pozycje z podpisami, animowane widoki u
     assert.ok((await page.locator('[data-g]').first().innerHTML()).length > 100);
   });
 });
-test('„Ogranicz ruch”: wybór częstego błędu odsłania widoki z pozą błędu (bez startu animacji)', async () => {
+test('„Ogranicz ruch”: wybór częstego błędu odsłania widoki z pozą błędu (bez startu animacji)', { skip: SKIP }, async () => {
   await withPage({ reducedMotion: 'reduce' }, async page => {
     await page.waitForTimeout(300); await page.locator('[data-error]:visible').first().click();
     assert.equal(await vis(page, '[data-views]'), true); assert.equal(await vis(page, '[data-error-text]'), true);
     assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), 'true');
   });
 });
-test('bez ograniczenia ruchu: animowane widoki zastępują pozycje, przycisk „Pause animation”, kształty się zmieniają w czasie', async () => {
+test('bez ograniczenia ruchu: animowane widoki zastępują pozycje, przycisk „Pause animation”, kształty się zmieniają w czasie', { skip: SKIP }, async () => {
   await withPage({ reducedMotion: 'no-preference' }, async page => {
     await page.waitForSelector('[data-views]:not([hidden])');
     assert.equal(await vis(page, '[data-poses]'), false); assert.equal(await page.locator('[data-pause]').textContent(), 'Pause animation');
@@ -54,4 +57,10 @@ test('404: adresy od korzenia (strona 404.html jest serwowana pod dowolnym adres
   const srv = await serve(out), browser = await launch(), page = await browser.newPage();
   try { const r = await page.goto(srv.url + '/a/b/c/nie-ma/'); assert.equal(r.status(), 404); assert.equal((await page.request.get(srv.url + await page.locator('link[rel=stylesheet]').getAttribute('href'))).status(), 200);
     await page.click('a[href="/pl/"]'); assert.match(page.url(), /\/pl\/$/); } finally { await browser.close(); await srv.close(); }
+});
+
+test('bez figury w eksporcie: strona ćwiczenia w przeglądarce nie ma bloku figury ani przycisków animacji, ma sylwetkę mięśni i zero błędów w konsoli', { skip: HAS_FIG ? 'eksport ma figurę back-squat — zachowanie sprawdzają testy figury' : false }, async () => {
+  await withPage({ reducedMotion: 'no-preference' }, async page => {
+    assert.equal(await page.locator('[data-figure], [data-views], [data-poses], [data-pause]').count(), 0); assert.equal(await page.locator('.sylwetki svg').count(), 2);
+  });
 });

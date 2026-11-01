@@ -8,10 +8,11 @@ Specyfikacja: [docs/54-strona-biblioteki.md](docs/54-strona-biblioteki.md) (z se
 
 ```
 npm ci                  # tylko devDependencies testów dostępności (patrz niżej)
+npm run przypnij -- <skrót>   # ponowne przypięcie danych: podmienia commit w PIN.json (pełny skrót 40 znaków; opcjonalnie --ref <gałąź|tag>); potem npm run dane
 npm run dane            # pobiera publiczne repo aplikacji w commicie z PIN.json → .cache/ (eksport 35 języków + silnik figur); wymaga sieci i git
 npm test                # strażnicy + generator + dostępność (Node ≥ 22; wymaga npm run dane i zainstalowanego Chrome/Chromium)
 npm run slugi           # zamrożenie adresów ćwiczeń (slugs.lock.json) przy pierwszej publikacji
-npm run build           # dist/ — wszystkie ćwiczenia w językach z config.json (dziś pl, en: ok. 1500 stron, ok. 5 s)
+npm run build           # dist/ — wszystkie ćwiczenia w językach z config.json (dziś wszystkie 35 języków: ok. 25 tys. stron, ok. 340 MB, ok. 10 s; pomiar 01.11.2026)
 ```
 
 ## Przepływ danych (D5 A: dane nie są commitowane)
@@ -30,7 +31,7 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 
 - W repo jest tylko `PIN.json` (repo, ref, pełny skrót commitu). Zmiana wersji strony = zmiana tego pliku. Nie ma `dane/`, `atlas-*.json`, `figury.json` ani listy wzorców źródeł — pilnuje tego `tests/straznik-dane.test.mjs`.
 - Dane pochodzą z RUNTIME aplikacji (te same moduły i pliki, które trafiają do paczki), nie z rejestru źródeł; eksport ma bramkę anonimowości na wzorcach `lib/sources.ts` (pobierana razem z danymi, używa jej też strażnik w tym repo).
-- Zamienniki liczy ten sam kod co arkusz zamiany w aplikacji (top 3 dla nowego użytkownika, remisy po nazwie w języku strony; test parytetu po stronie aplikacji). Teksty interfejsu przy ćwiczeniu przychodzą z aplikacji w 35 językach; stałe teksty strony — `src/ui/<język>.json` (dziś pl i en).
+- Zamienniki liczy ten sam kod co arkusz zamiany w aplikacji (top 3 dla nowego użytkownika, remisy po nazwie w języku strony; test parytetu po stronie aplikacji). Teksty interfejsu przy ćwiczeniu przychodzą z aplikacji w 35 językach; stałe teksty strony — `src/ui/<język>.json` (35 języków).
 - Lokalnie można użyć własnego checkoutu aplikacji na tym samym commicie: `npm run dane -- --app ../trening`.
 - Zależność: wymaga, by repo aplikacji pozostało publiczne (R12 w specyfikacji).
 
@@ -52,6 +53,7 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 - `straznik-sekrety` — klucze, tokeny, certyfikaty, e-maile (tylko noreply), UDID, pliki `.env/.p8/.p12`, workflowy bez sekretów, autorzy commitów neutralni.
 - `straznik-analityka` — brak skryptów śledzących, pikseli, cookies, pamięci przeglądarki, wywołań sieciowych i zewnętrznych zasobów (kod i zbudowana strona).
 - `straznik-dane` — w repo i w `dist/` brak danych z aplikacji (D5 A), PIN bez danych, workflowy pobierają dane przed testami.
+- `jezyki-podglad` — podgląd 35 języków bez indeksowania: noindex wszędzie, robots.txt bez Disallow, brak map; po przełączeniu mapy i hreflang tylko dla `indeksujJezyki`; przeglądarka na wszystkich językach (konsola, żądania, figura, wyszukiwarka).
 - `build` — przypięcie do commitu, noindex/robots/mapy witryny (D1, D3), hreflang wzajemny i canonical, struktura stron, figura, budżety (HTML ≤ 20 KB, moduł figury ≤ 30 KB gz, indeks ≤ 25 KB gz), linki wewnętrzne, JSON-LD, CSP, baner App Store.
 
 ## Zależności deweloperskie (tylko testy; strona nie ma zależności uruchomieniowych)

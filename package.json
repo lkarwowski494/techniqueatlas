@@ -11,6 +11,7 @@
     "test": "node --test \"tests/*.test.mjs\"",
     "build": "node src/build.mjs",
     "dane": "node src/sync-dane.mjs",
+    "przypnij": "node src/przypnij.mjs",
     "pomiary": "node pomiary/mierz.mjs",
     "slugi": "node src/slugi.mjs"
   },

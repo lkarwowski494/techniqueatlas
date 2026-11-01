@@ -32,7 +32,7 @@
   "families": {
     "squat": "Squat",
     "bench_press": "Πιέσεις στον πάγκο",
-    "hinge": "Κάμψη ισχίου (νεκρές άρσεις)",
+    "hinge": "Κάμψη ισχίου (deadlift)",
     "pushup_plank": "Κάμψεις και σανίδα",
     "dip": "Βυθίσεις",
     "overhead_press": "Πιέσεις πάνω από το κεφάλι",
@@ -46,7 +46,7 @@
     "calf_raise": "Ανυψώσεις γάμπας",
     "hip_bridge": "Hip thrust και γέφυρες",
     "kb_ballistic": "Kettlebell: ταλαντεύσεις και τραβήγματα",
-    "olympic": "Ολυμπιακές άρσεις",
+    "olympic": "Ολυμπιακή άρση",
     "back_extension": "Εκτάσεις μέσης",
     "curl": "Κάμψεις δικεφάλων",
     "triceps": "Εκτάσεις τρικεφάλων",

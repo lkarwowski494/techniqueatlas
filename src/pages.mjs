@@ -10,7 +10,8 @@ const dirOf = file => file.replace(/index\.html$/, '');
 /** Wspólny układ strony. `meta`: { file, lang, title, description, robots, canonical, alternates: [{lang, path}], jsonld: [], scripts: [rel→assets], generator, appStoreId, csp } */
 export function layout(ctx, m, bodyHtml) {
   const { cfg } = ctx; const u = to => m.file === '404.html' ? `/${to}` : relUrl(m.file, to); /* 404.html jest serwowana pod dowolnym adresem (Pages) — tylko adresy od korzenia */ const ui = ctx.ui[m.lang ?? cfg.jezykDomyslny];
-  const alt = (m.alternates ?? []).flatMap(a => hreflangCodes(a.lang).map(c => `<link rel="alternate" hreflang="${esc(c)}" href="${esc(abs(cfg, a.path))}">`));
+  /* hreflang tylko dla języków indeksowanych (indeksujJezyki): zestaw w HTML = zestaw w mapach witryny, a wersje noindex (podgląd 35 języków) nie wchodzą do klastra; przełącznik języków w stopce pokazuje wszystkie budowane */
+  const alt = (m.alternates ?? []).filter(a => cfg.indeksujJezyki.includes(a.lang)).flatMap(a => hreflangCodes(a.lang).map(c => `<link rel="alternate" hreflang="${esc(c)}" href="${esc(abs(cfg, a.path))}">`));
   if (m.xDefault !== undefined) alt.push(`<link rel="alternate" hreflang="x-default" href="${esc(abs(cfg, m.xDefault))}">`);
   const head = [
     '<meta charset="utf-8">', '<meta name="viewport" content="width=device-width,initial-scale=1">',
@@ -172,7 +173,7 @@ export function exercisePage(ctx, lang, ex) {
   const main = ex.regions.filter(r => r.load >= 1).map(r => L.regions[r.id]), aux = ex.regions.filter(r => r.load >= 0.5 && r.load < 1).map(r => L.regions[r.id]);
   const figure = fig ? figureBlock(ctx, lang, ex, fig, file) : null;
   const text = SECTION.map(k => cue(k)).some(x => x?.length) ? SECTION.map(k => list(ui[k], cue(k))).join('\n') : '';
-  const roles = ex.roles?.length ? `<ul class="role">${ex.roles.map(r => `<li><strong>${esc(L.regions[r.region])}</strong> — ${esc(r.text)}</li>`).join('')}</ul>` : ''; /* zdania o roli mięśnia: tylko gdy eksport je zawiera (bez zastępczych) */
+  const roles = ex.roles?.length ? `<ul class="role">${ex.roles.map(r => `<li><strong>${esc(L.regions[r.id])}</strong> — ${esc(r.text)}</li>`).join('')}</ul>` : ''; /* zdania o roli mięśnia: tylko gdy eksport je zawiera (bez zastępczych) */
   const silhouette = silhouetteBlock(ctx, lang, ex, file);
   const muscles = silhouette + (main.length ? `<p>${esc(fill(ui.musclesMain, { lista: main.join(', ') }))}</p>` : '') + (aux.length ? `<p>${esc(fill(ui.musclesAux, { lista: aux.join(', ') }))}</p>` : '') + roles + (ex.musclesApproximate ? `<p class="drobne">${esc(ui.musclesApprox)}</p>` : '');
   const needs = ex.requires.length ? `<section><h2>${esc(site.equipmentNeeded)}</h2><ul>${ex.requires.map(g => `<li>${esc(g.map(c => L.capabilities[c]).join(' / '))}</li>`).join('')}</ul></section>` : '';

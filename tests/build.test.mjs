@@ -48,7 +48,7 @@ test('indeksowanie włączone: D1 — indeksowane tylko ćwiczenia z własnymi w
   assert.ok(!existsSync(join(only.out, 'sitemap-en.xml')) && existsSync(join(only.out, 'sitemap-pl.xml')));
 });
 test('reguła D1 sama zdejmuje noindex, gdy ćwiczenie dostanie własną treść: ćwiczenie ogólne → noindex,follow; ten sam wpis z własnymi wskazówkami → indeksowane', async () => {
-  const general = EN.exercises.find(e => e.cues.scope === 'general'); assert.ok(general);
+  const general = EN.exercises.find(e => e.cues.scope !== 'own' || e.cues.missing); assert.ok(general); /* eksport 1.1: zakres „general” już nie występuje (zostaje own/none), reguła D1 dotyczy każdego ćwiczenia bez własnych wskazówek */
   const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU); assert.equal(robots(read(out, `en/exercises/${general.slug}/index.html`)), 'noindex,follow');
   const own = EN.exercises.find(e => e.cues.scope === 'own' && !e.cues.missing); assert.equal(robots(read(out, `en/exercises/${own.slug}/index.html`)), null);
 });
@@ -94,11 +94,13 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
   assert.match(h, /<h1 lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1>Back Squat<\/h1>/);
-  const order = ['<h1', 'data-figure', '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>Common mistakes<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
+  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>Common mistakes<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
   for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/" lang="en">`));
   const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>Common mistakes<|General tips/);
-  const gen = EN.exercises.find(x => x.cues.scope === 'general' && x.cues.ok?.length); assert.match(read(out, `en/exercises/${gen.slug}/index.html`), /General tips for this movement/);
+  const gen = EN.exercises.find(x => x.cues.scope === 'general' && x.cues.ok?.length); if (gen) assert.match(read(out, `en/exercises/${gen.slug}/index.html`), /General tips for this movement/); /* zakres „general” zniknął z eksportu (od fba531d) */
+  else assert.ok(EN.exercises.every(x => x.cues.scope !== 'general'), 'brak ćwiczeń z zakresem general — nie ma czego sprawdzać');
+  if (!hasFig) assert.doesNotMatch(h, /data-figure|figura-strona|data-poses/); /* brak figury w eksporcie → strona bez figury */
 });
 test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowanych stronach prowadzą do istniejących plików (S7)', async () => {
   const { out } = await buildOnce(); const bad = [];
@@ -111,7 +113,8 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
 });
 test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyjściowa, skrajna; figura statyczna — tylko skrajna, bez podpisu) z arkusza assets/poz/, ukryte animowane widoki, przyciski, moduł danych i skrypt; bez figury — brak figury; budżety', async () => {
   const { out } = await buildOnce(); const withFig = EN.exercises.filter(e => e.figure); const figs = JSON.parse(readFileSync(join(CACHE, 'dane/figury.json'), 'utf8')).figures;
-  assert.equal(withFig.length, readdirSync(join(out, 'assets/fig')).length); assert.equal(withFig.length, readdirSync(join(out, 'assets/poz')).length);
+  const dirN = d => existsSync(join(out, d)) ? readdirSync(join(out, d)).length : 0; /* eksport bez gotowych figur (rodziny czekają na recenzję) → brak katalogów */
+  assert.equal(withFig.length, Object.keys(figs).filter(s => EN.exercises.some(e => e.slug === s)).length); assert.equal(withFig.length, dirN('assets/fig')); assert.equal(withFig.length, dirN('assets/poz'));
   let single = 0;
   for (const e of withFig) {
     const h = read(out, `en/exercises/${e.slug}/index.html`), fig = figs[e.slug], poses = h.match(/<div class="pozycje" data-poses>(.*?)<\/div><\/div>\n/s)[1];
@@ -123,7 +126,7 @@ test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyj
     const sheet = read(out, `assets/poz/${e.slug}.svg`); assert.equal([...sheet.matchAll(/<g id="(start|end)"/g)].map(m => m[1]).join(), fig.static ? 'end' : 'start,end'); assert.match(sheet, /var\(--f-skin/); assert.doesNotMatch(sheet, /#[0-9a-f]{6}/i);
     assert.ok(gzipSync(readFileSync(join(out, `assets/fig/${e.slug}.js`))).length <= 30 * 1024, `${e.slug}: moduł figury > 30 KB gz`); assert.ok(gzipSync(sheet).length <= 30 * 1024, `${e.slug}: arkusz pozycji > 30 KB gz`);
   }
-  const pl = read(out, 'pl/exercises/back-squat/index.html'); assert.match(pl, />Pozycja wyjściowa<\/p>/); assert.match(pl, />Pozycja końcowa<\/p>/);
+  if (withFig.some(e => e.slug === 'back-squat')) { const pl = read(out, 'pl/exercises/back-squat/index.html'); assert.match(pl, />Pozycja wyjściowa<\/p>/); assert.match(pl, />Pozycja końcowa<\/p>/); }
   for (const e of EN.exercises.filter(x => !x.figure).slice(0, 50)) { const h = read(out, `en/exercises/${e.slug}/index.html`); assert.doesNotMatch(h, /data-figure|figura-strona|data-poses/); }
   const big = htmlFiles(out).filter(f => /exercises\/[^/]+\/index\.html$/.test(f)).filter(f => statSync(join(out, f)).size > 20 * 1024); assert.deepEqual(big, []);
 });
@@ -143,10 +146,10 @@ test('sylwetka mięśni: arkusz assets/sylwetka.svg + klasy stopni partii (bez i
 });
 test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy eksport je zawiera (ex.roles, etykieta regionu + zdanie, z ucieczką HTML); bez danych — tylko listy główne / pomocnicze, bez pustej listy', async () => {
   const { exercisePage } = await import('../src/pages.mjs'); const { out, ctx } = await buildOnce();
-  assert.match(read(out, 'en/exercises/back-squat/index.html'), /<ul class="role"><li><strong>quads<\/strong> — Straightens your knee as you stand up\.<\/li><li><strong>glutes<\/strong>/); /* eksport aplikacji 1.1: roles = [{ region, text }] */
+  assert.match(read(out, 'en/exercises/back-squat/index.html'), /<ul class="role"><li><strong>quads<\/strong> — Straightens your knee as you stand up\.<\/li><li><strong>glutes<\/strong>/); /* eksport aplikacji 1.1 (kontrakt.json): roles = [{ id, text }], id jak regions[].id */
   assert.doesNotMatch(read(out, 'en/exercises/back-squat/index.html'), /<strong>undefined</);
   const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
-  const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ region: 'quads', text: 'Straightens the knee <when> you stand up.' }, { region: 'glutes', text: 'Helps extend the hip.' }] }).html;
+  const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
   assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
   assert.ok(withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"') && withRoles.indexOf('class="role"') < withRoles.indexOf('>Tips<'));
   for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
