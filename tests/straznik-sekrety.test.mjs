@@ -18,7 +18,7 @@ const BAD_FILE = [/(^|\/)\.env(\..*)?$/, /\.(p8|p12|pem|key|mobileprovision|pfx|
 
 test('samokontrola: wzorce wykrywają próbki (składane w locie)', () => {
   assert.ok(SECRETS[0].test('-----BEGIN ' + 'PRIVATE KEY-----')); assert.ok(SECRETS[1].test('gh' + 'p_' + 'a'.repeat(36))); assert.ok(UDID.test('00008030-' + '001A2B3C4D5E6F70'));
-  const mail = 'jan.kowalski' + '@' + 'example.com'; assert.ok(mail.match(EMAIL)); assert.ok(!ALLOWED_EMAIL.some(r => r.test(mail))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@anthropic.com'))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@github.com'))); assert.ok(!ALLOWED_EMAIL.some(r => r.test('x.noreply@github.com.evil.example')));
+  const mail = 'jan.kowalski' + '@' + 'example.com'; assert.ok(mail.match(EMAIL)); assert.ok(!ALLOWED_EMAIL.some(r => r.test(mail))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@anthropic.com'))); assert.ok(ALLOWED_EMAIL.some(r => r.test('noreply@github.com'))); assert.ok(!ALLOWED_EMAIL.some(r => r.test('x.noreply' + '@' + 'github.com.evil.example')));
 });
 test('brak plików z sekretami (.env, .p8, .p12, .pem, klucze) w repozytorium', () => { assert.deepEqual(repoFiles().filter(f => BAD_FILE.some(r => r.test(f))), []); });
 test('brak kluczy, tokenów i identyfikatorów urządzeń w plikach tekstowych', () => {
