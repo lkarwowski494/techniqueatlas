@@ -1,5 +1,132 @@
 # 54. Strona z biblioteką ćwiczeń (techniqueatlas.com) — specyfikacja
 
+## Kontrakt zakresu strony (03-zakres E3, 02.11.2026)
+
+Stan: E3 · Aktualizacja: 2026-11-02 · Wejście: raporty E0, E1, E2 roli 03-zakres (repo trening, `docs/przekazanie/notatki/linia-1-1/03-zakres-strona-E{0,1,2}-2026-11-02.md`), decyzje właściciela z 02.11.2026 (repo trening, `docs/18-przekazanie.md`, wpisy „strona techniqueatlas jako darmowe narzędzie”, „wyślij plan do aplikacji w 1.2”, „zakres narzędzi po sprawdzeniu popytu”, „startuje stopniowo od 1.1”, bramki E0, E1, E2) · Decyzje: D-001, D-002, D-003 · Zmiany: ZM-01…ZM-07.
+
+**Mapowanie identyfikatorów.** Skrypt kontroli (`zakres.mjs`, moduł `ciecie` roli 03) wymaga ID w formacie `F-nn`, więc F-01…F-22 odpowiadają kandydatom F-S01…F-S22 z raportów E0–E2 (ten sam numer; kolumna „Funkcja” podaje `(F-Snn)`). Hipotezy: H-01 = ZAL-001 = ZAL-S1 „narzędzia strony mają popyt” (hipoteza; raport popytu P2 przepadł), H-02 = ZAL-002 = ZAL-S2 „narzędzia przyprowadzają użytkowników do aplikacji” (hipoteza; token kampanii per narzędzie). Pozostałe założenia z raportów: ZAL-S3 (plany tym samym `generate()`) — podważone w obecnym kodzie; ZAL-S4 (druk dla trenerów a granica aplikacji ZP-08) — potwierdzone warunkowo; ZAL-S5 (pobranie CSV i druk przy CSP strony) — potwierdzone w Chromium, WebKit i Firefox `[DO USTALENIA]`. Decyzje (numeracja lokalna tego kontraktu, nie rejestru aplikacji): **D-001** = docs/18 repo trening, 02.11.2026, bramka E0 pkt 3 — dowód wartości narzędzi: wyjątek właściciela (MVP z dowodem H) i punkt kontrolny 8 tygodni po wejściu każdej fali; **D-002** = ta sama bramka, pkt 2 — właściciel niczego nie przegląda, zastępują go kontrole agentów (recenzent ≠ autor, strażniki buildu, przebieg w przeglądarce bezgłowej ze zrzutami ocenianymi przez innego agenta); **D-003** = bramka E2 — start W0, sylwetka PÓŹNIEJ, słownik jako tor treści po fali 2, CSV wariant A, gotowy plan PÓŹNIEJ → 1.2. BR: narzędzia strony nie mają wymagań w BRD aplikacji (persony odwiedzającego i trenera nie istnieją — errata ER-13, rola 01); jedyne BR strony to BR-BIB-006 (eksport figur z recenzją, repo trening `docs/brd/wymagania.md:551`), przypisane do F-01. **Wyjątek nazwany:** kontrakt sprawdzany bez `--brd` do czasu ER-13 — BRD aplikacji ma BR spoza strony, a BR strony jeszcze nie ma.
+
+### Główna praca i pętla
+- Główna praca (robocza **J-W1** — BR czeka na ER-13 w BRD aplikacji): „Kiedy szukam w sieci, jak zrobić ćwiczenie albo czym je zastąpić sprzętem, który mam, chcę od razu dostać technikę i gotowy do użycia wynik (zamiennik, plan na kartce albo w linku), bez konta i bez instalowania czegokolwiek, żeby zrobić trening dziś.” Praca druga (robocza J-W2, trener): „Kiedy układam trening podopiecznemu, chcę wydrukować czytelny plan z techniką i adresem strony, żeby podopieczny ćwiczył sam.”
+- Pętla główna: wyszukiwarka → strona ćwiczenia (F-01) → co zamiast / co zrobię z tym sprzętem (F-02, F-03) → dodaj do planu (F-04) → wynik: druk/PDF, CSV, link (F-17, F-04, F-05) → aplikacja jako jedna z opcji po wyniku (F-11). Funkcja MVP spoza tej linii ma podłogę albo decyzję D-nnn.
+- Poza pętlą (osobne wejścia z wyszukiwarki): F-07, F-08, F-19 (fala 2, D-003); F-06, F-09, F-10 — PÓŹNIEJ.
+- Apetyt: właściciel niczego nie przegląda (D-002) — koszt w godzinach właściciela ≈ 0 dla każdej funkcji; linię cięcia wyznaczają podłogi, warunki merytoryczne i ryzyko (raport E2 §2). Kolumna „Koszt [h]” niżej to czas kontroli zastępczych agentów [OCENA] — uproszczenie, nie godziny właściciela.
+- Wzorzec najlepszych (odczyt 02.11.2026, raport E1 §4; cudze treści na Dysku): zamienniki z filtrem sprzętu na własnym adresie, talerze z kg/lb, 1RM, sylwetka → lista, wszystko bez konta — standard; druku, PDF i CSV planu nie ma żaden z trzech serwisów (wyróżnik bez dowodu popytu).
+- Darmowe i płatne: cała strona i narzędzia bezpłatne (WTP-0, docs/18 02.11.2026); płatna jest tylko aplikacja (akapit o wsparciu, F-12).
+
+### Zakres
+| ID | Funkcja | Wymagania | Decyzja | Dowód wartości | WTP | Intuicyjność | Podłoga | Zależy od | Uzasadnienie |
+|---|---|---|---|---|---|---|---|---|---|
+| F-01 | Biblioteka: indeksowane ćwiczenia z pełną kartą i własnymi wskazówkami, reszta `noindex,follow` (F-S01) | BR-BIB-006 | MVP | decyzje właściciela 25.10 i 02.11.2026 (docs/18); R: strona ćwiczenia z techniką u 3/3 serwisów (E1 §4) | WTP-0 (R) | jedno zdanie: „jak zrobić ćwiczenie”; wynik: czeka na 04 | sklep: S4 (tylko dane wydanej wersji) | F-16 | start W0 (D-003); reguła indeksowania A z bramki E1 (ZM-06) |
+| F-02 | Co zamiast: zamienniki z filtrem sprzętu (F-S02) | H-01 | MVP | H-01 + R: 3/3 serwisy (E1 §4) | WTP-0 (H) | jedno zdanie, przycisk na karcie ćwiczenia; wynik: czeka na 04 | — | F-01, F-14, F-20 | fala 1; wyjątek właściciela D-001, ZAL-001 (hipoteza), punkt kontrolny 8 tyg. |
+| F-03 | Co zrobię z tym sprzętem (kilka sprzętów naraz, presety miejsc) (F-S03) | H-01 | MVP | H-01 + R (E1 §4) | WTP-0 (H) | jedno zdanie, bez nowych pojęć; wynik: czeka na 04 | — | F-01, F-14, F-20 | fala 1; D-001, ZAL-001 |
+| F-04 | Układanie planu z katalogu + CSV wariant A (jeden format: arkusz i import 1.2) + zapowiedź „wkrótce” ze strażnikiem (F-S04) | H-01 | MVP | H-01, bez R (wyróżnik, E1 §4) | WTP-0 (H) | jedno zdanie „dodaj do planu”; wynik: czeka na 04 | bezpieczeństwo: CSV bez formuł arkusza (OWASP); dane: plan tylko w adresie, bez pola imienia | F-01, F-14, F-18 | fala 1; D-001, ZAL-001; CSV A z D-003 (ZM-05); „wkrótce” z ZM-04 |
+| F-05 | Plan w linku: część po #, przechodzi przez zmianę języka (F-S05) | H-01 | MVP | H-01; stan w adresie to znany wzorzec (serwis C, E1 §4) | WTP-0 (H) | wymaga zdania „zapisz ten adres — plan jest w nim”; wynik: czeka na 04 | prywatność: D4/S9 bez zmian (bez localStorage) | F-04, F-18 | fala 1; D-001, ZAL-001; zachowanie # przy zmianie języka — bramka E1 pkt 2 A |
+| F-17 | Druk/PDF planu: stopka z adresem strony, zdanie „nie porada medyczna” (F-S17) | H-01 | MVP | H-01 (persona trenera J-W2), bez R | WTP-0 (H) | jedno zdanie „drukuj”; wynik: czeka na 04 | — | F-04, F-13 | fala 1; D-001, ZAL-001; warunek ZAL-S4 (bez pola imienia); przebieg WebKit przed wydaniem |
+| F-18 | Wersjonowany format planu w # z dekoderem i przekierowaniami slugów (F-S18) | H-01 | MVP | podłoga danych odwiedzającego (stary link po roku) | WTP-0 (H) | niewidoczne dla odwiedzającego | dane: stary link działa → F-05, F-04 | F-16 | fala 1, przed F-04 i F-05; D-001, ZAL-001 |
+| F-14 | Eksport słownika i tłumaczeń aplikacji na stronę (35 języków) (F-S14) | H-01 | MVP | warunek narzędzi (ponowne użycie tekstów zamiast nowych) | WTP-0 (H) | niewidoczne | jakość tekstów w 35 językach → F-02, F-03, F-04 | — | fala 1, przed narzędziami; D-001, ZAL-001; zmiana w repo aplikacji (linia 1.2 albo zapas limitu) |
+| F-07 | Szacowany maks na 1 powtórzenie i talerze na sztangę (F-S07) | H-01 | MVP | H-01 + R: 3/3 serwisy | WTP-0 (H) | nowe pojęcia: granica ok. 10 powtórzeń, gryf, zaciski; wynik: czeka na 04 | merytoryka: RD-01 z wektorami (e1RM), talerze — rachunek | F-14, F-22 | fala 2 (D-003); D-001, ZAL-001; bez opcji „talerze w aplikacji” (kalkulator talerzy w aplikacji wycięty, DEC-06) |
+| F-19 | Wybór kg/lb w F-07 (F-S19) | H-01 | MVP | R: 3/3 serwisy (E1 §4) | WTP-0 (R) | jedno ustawienie przy kalkulatorze; wynik: czeka na 04 | — | F-07 | fala 2 z F-07; D-003 — rekomendacja „wybór jednostki zostaje” bez sprzeciwu na bramce E2, potwierdzenie właściciela `[DO USTALENIA]`; przy odmowie → NIE przez ZM |
+| F-08 | Bilans serii na partię — tylko ocena „za mało” (F-S08) | H-01 | MVP | H-01 + R | WTP-0 (H) | nowe pojęcie: serie na tydzień; wynik: czeka na 04 | merytoryka: T-034, T-055, T-005, T-006 | F-04, F-22 | fala 2 (D-003); D-001, ZAL-001; „za dużo” nie pokazujemy (brak reguły) |
+| F-11 | Komponent „w aplikacji” + token kampanii per narzędzie (F-S11) | H-02 | MVP | decyzja właściciela 02.11.2026; H-02 | WTP-0 (H) | jedna opcja obok druku/CSV/linku, nie zamiast wyniku | sklep: pkt 9 (zdania tylko o funkcjach wydanej wersji) | F-01, F-20 | start W0; D-001, ZAL-002; słownik bez odnośnika do aplikacji |
+| F-12 | Akapit o wsparciu (brzmienie z docs/18, 02.11.2026) (F-S12) | H-02 | MVP | decyzja właściciela 02.11.2026 | WTP-0 (H) | jeden akapit w stopce albo „O stronie”, bez okna | prawo: bez „darmowa” przy płatnej części (art. 7 pkt 20 ustawy o przeciwdziałaniu nieuczciwym praktykom rynkowym, wg docs/18) | F-20 | start W0; D-001, ZAL-002; liczba dni z `PAYWALL.FREE_TRAINING_DAYS_PER_MONTH` |
+| F-13 | Polityka prywatności, licencja (druk dla trenerów, adres w stopce), regulamin, nowa stopka w 35 językach (F-S13, łączy F-S21) | H-01 | MVP | podłoga prawna | WTP-0 (H) | stopka na każdej stronie | prawo: licencja i teksty prawne → F-17 | — | start W0; D-001, ZAL-001; teksty przygotowuje agent z przeczytanych źródeł (wyjątek „bez prawnika”, docs/18 02.11.2026) |
+| F-16 | Przepięcie `PIN.json` na commit z nazwami EN, zamrożenie slugów 709 (F-S16) | H-01 | MVP | warunek indeksowania (raport E0 §4 pkt 1) | WTP-0 (H) | niewidoczne | indeksowanie: slugi zamrożone → F-01, F-18 | — | start W0, przed pierwszym indeksowaniem; D-001, ZAL-001 |
+| F-20 | Eksport rozszerzony z repo aplikacji: lista funkcji wydania, `FREE_TRAINING_DAYS_PER_MONTH`, pole „pełna”, presety miejsc (F-S20) | H-01 | MVP | warunek pkt 9 i narzędzi | WTP-0 (H) | niewidoczne | sklep: pkt 9 → F-11, F-12 | — | na starcie część „lista funkcji wydania”, reszta przed falą 1; D-001, ZAL-001 |
+| F-22 | Strażnik tekstu dziedzinowego w `src/ui` + S5/S8 dla narzędzi (F-S22) | H-01 | MVP | luka rejestru twierdzeń (repo trening `scripts/claims.mjs:22`) | WTP-0 (H) | niewidoczne | merytoryka: rejestr twierdzeń → F-07, F-08 | — | przed falą 2; D-001, ZAL-001 |
+| F-06 | Wyszukiwanie od sylwetki (F-S06) | H-01 | PÓŹNIEJ | H-01 + R częściowo | WTP-0 (H) | klikany rysunek | — | F-01 | kombajn: dubluje filtr partii (D-003). Powrót: w punkcie kontrolnym 8 tyg. strony list partii mają wejścia z wyszukiwarki — wtedy drugi widok filtra partii, bez osobnego narzędzia |
+| F-09 | Gotowy plan z kilku pytań (`generate()` aplikacji) (F-S09) | H-01 | PÓŹNIEJ | H-01 | WTP-0 (H) | presety miejsc | merytoryka: T-050 zamknięte przed publikacją | F-04, F-20 | ZAL-S3 podważone: `generate()` czyta stan aplikacji. Powrót: czysty `generate()` wydzielony w aplikacji (linia 1.2) i T-050 zamknięte (D-003) |
+| F-10 | Słownik pojęć (treść) (F-S10) | H-01 | PÓŹNIEJ | H-01 | WTP-0 (H) | tor treści, nie krok pętli | merytoryka: każda definicja przez rejestr twierdzeń | F-22 | tor treści roli 06 po fali 2, hasło po haśle, bez odnośnika do aplikacji (D-003). Powrót: fala 2 wydana i F-22 zielony; hasło publikowane po rejestrze twierdzeń i recenzji |
+| F-15 | Import planu do aplikacji (aplikacja 1.2, bez zmiany SCHEMA_VERSION) (F-S15) | H-01 | PÓŹNIEJ | decyzja właściciela 02.11.2026 | WTP-0 (H) | — | dane: import bez nadpisania szablonów | F-04 | odłożone → 1.2 (ZM-04); strażnik „wkrótce” idzie z F-04. Powrót: wydanie aplikacji 1.2 z importem pliku CSV formatu A |
+
+### NIE robimy
+| ID | Funkcja | Wymagania | Decyzja | Dowód wartości | WTP | Intuicyjność | Podłoga | Zależy od | Uzasadnienie |
+|---|---|---|---|---|---|---|---|---|---|
+| F-21 | Licencja strony i stopka w 35 językach (F-S21) | H-01 | NIE | — | — | — | — | — | połączona z F-13 (ta sama treść, raport E2 §2a); ID nie wraca. Powrót: —, połączona z F-13 |
+
+Odrzucone przez właściciela 02.11.2026 (bez ID F, nie wracają bez nowego ZM): mini karty techniki do druku, kod QR na wydruku, wydruk w innym języku jako osobny przycisk (wraca tylko jako skutek uboczny F-05), kalendarz `.ics`, RSS, „zgłoś uwagę”, przelicznik kg↔lb, strona jako sam katalog z wezwaniem do App Store, analityka B i C. Pętla opinii: wycięta z zapisanym powodem — sygnałem są tokeny kampanii i narzędzia webmastera (analityka A).
+
+### Ranking ([OCENA]: wszystkie funkcje WTP-0 albo z podłogą, więc stałe — R, I, C nie rozróżniają; koszt = czas kontroli zastępczych agentów, D-002)
+| ID | R | I | C | Koszt [h] | Metoda |
+|---|---|---|---|---|---|
+| F-16 | — | — | — | 1 | stała (podłoga); przebieg `npm run slugi` + S7, przegląd diffu lock przez drugiego agenta |
+| F-13 | — | — | — | 4 | stała (podłoga); recenzja tekstów prawnych przez drugiego agenta + recenzent lokalizacji × 35 języków |
+| F-20 | — | — | — | 2 | stała (podłoga); test eksportu w repo aplikacji + strażnik S4 |
+| F-01 | — | — | — | 3 | stała (WTP-0); S6/S7/S8 + zrzuty z przeglądarki bezgłowej oceniane przez drugiego agenta |
+| F-11 | — | — | — | 2 | stała (podłoga); strażnik zdań z listy funkcji wydania + zrzuty |
+| F-12 | — | — | — | 2 | stała (podłoga); recenzent lokalizacji × 35, strażnik słowa „darmowy” |
+| F-14 | — | — | — | 3 | stała (podłoga); test eksportu + S10 (brak kluczy) |
+| F-18 | — | — | — | 3 | stała (podłoga); testy dekodera na starych wersjach linku i przekierowaniach slugów |
+| F-02 | — | — | — | 4 | stała (WTP-0); recenzja autor ≠ recenzent, zrzuty, axe-core |
+| F-03 | — | — | — | 3 | stała (WTP-0); jak F-02 |
+| F-04 | — | — | — | 6 | stała (WTP-0); test CSV (BOM, separator, formuły), plik próbny w arkuszu, przebieg WebKit w CI macOS, strażnik „wkrótce” |
+| F-05 | — | — | — | 2 | stała (WTP-0); test # przy zmianie języka, S9 (bez localStorage) |
+| F-17 | — | — | — | 3 | stała (WTP-0); zrzut wydruku (`page.pdf`) oceniany przez drugiego agenta, WebKit |
+| F-22 | — | — | — | 3 | stała (podłoga); test celowo podstawionego tekstu dziedzinowego |
+| F-07 | — | — | — | 6 | stała (WTP-0); wektory RD-01, recenzja twierdzeń przez badacza, recenzent lokalizacji |
+| F-19 | — | — | — | 1 | stała (WTP-0); testy przeliczeń talerzy w lb |
+| F-08 | — | — | — | 5 | stała (WTP-0); wektory T-034, T-055, T-005, T-006, recenzja twierdzeń |
+| F-06 | — | — | — | 6 | stała (WTP-0); recenzja anatomii rysunku, axe-core dla klikanego SVG |
+| F-09 | — | — | — | 8 | stała (WTP-0); testy zgodności z `generate()` aplikacji, T-050 |
+| F-10 | — | — | — | 10 | stała (WTP-0); `[DO USTALENIA]` liczba haseł — 10 h dotyczy pierwszej partii haseł (badacz + rejestr twierdzeń + recenzja) |
+| F-15 | — | — | — | 4 | stała (WTP-0); praca w repo aplikacji 1.2 (test importu bez nadpisania szablonów) |
+
+Wynik `node zakres.mjs docs/54-strona-biblioteki.md` (bez `--brd`, wyjątek do czasu ER-13; przebieg 02.11.2026). „Kolejność budowy MVP” ze skryptu to tylko porządek zależności (alfabetycznie w obrębie poziomu) — kolejność wdrożenia wyznaczają fale niżej (D-003); ranking nie rozróżnia funkcji, bo wszystkie są stałe (WTP-0):
+
+```
+Ranking (R × I × C ÷ koszt [h]; stałe: podłoga albo WTP-0; „razem” liczy MVP i ten wiersz):
+  1. F-01 stała · 3 h, razem 3 h · MVP
+  2. F-02 stała · 4 h, razem 7 h · MVP
+  3. F-03 stała · 3 h, razem 10 h · MVP
+  4. F-04 stała · 6 h, razem 16 h · MVP
+  5. F-05 stała · 2 h, razem 18 h · MVP
+  6. F-06 stała · 6 h, razem 24 h · PÓŹNIEJ
+  7. F-07 stała · 6 h, razem 24 h · MVP
+  8. F-08 stała · 5 h, razem 29 h · MVP
+  9. F-09 stała · 8 h, razem 37 h · PÓŹNIEJ
+  10. F-10 stała · 10 h, razem 39 h · PÓŹNIEJ
+  11. F-11 stała · 2 h, razem 31 h · MVP
+  12. F-12 stała · 2 h, razem 33 h · MVP
+  13. F-13 stała · 4 h, razem 37 h · MVP
+  14. F-14 stała · 3 h, razem 40 h · MVP
+  15. F-15 stała · 4 h, razem 44 h · PÓŹNIEJ
+  16. F-16 stała · 1 h, razem 41 h · MVP
+  17. F-17 stała · 3 h, razem 44 h · MVP
+  18. F-18 stała · 3 h, razem 47 h · MVP
+  19. F-19 stała · 1 h, razem 48 h · MVP
+  20. F-20 stała · 2 h, razem 50 h · MVP
+  21. F-22 stała · 3 h, razem 53 h · MVP
+Kolejność budowy MVP: F-16 → F-01 → F-14 → F-20 → F-02 → F-03 → F-18 → F-04 → F-05 → F-22 → F-07 → F-08 → F-11 → F-12 → F-13 → F-17 → F-19
+22 funkcji (MVP 17, PÓŹNIEJ 4, TEST 0, NIE 1), 1 BR · 0 błędów, 0 uwag
+kod wyjścia: 0
+```
+
+### Kolejność i przekazanie
+- **Start W0 (z wydaniem 1.1, D-003):** F-16 (przepięcie PIN na commit z nazwami EN, potem `npm run slugi`) → F-13 (polityka, licencja, regulamin, stopka) → F-20 (część: lista funkcji wydania, `FREE_TRAINING_DAYS_PER_MONTH`) → F-01 (biblioteka, reguła indeksowania A) → F-11, F-12. Warunek: lista kontrolna „przed pierwszym indeksowaniem” (sekcja „Zasada infrastruktury a indeksowanie”) i S4 na tagu 1.1.
+- **Fala 1 (pętla, gdy jej podłogi i kontrole zastępcze są zielone; bez czekania na wydanie aplikacji):** F-14, F-20 (reszta: pole „pełna”, presety miejsc), F-18 → F-02, F-03 → F-04 (z CSV A i strażnikiem „wkrótce”) → F-05, F-17.
+- **Fala 2:** F-22 → F-07 (z F-19 po potwierdzeniu) → F-08.
+- **Po fali 2:** F-10 jako tor treści (rola 06), hasło po haśle. **PÓŹNIEJ:** F-06 (punkt kontrolny), F-09 i F-15 (aplikacja 1.2).
+- **Punkt kontrolny 8 tygodni (D-001):** liczony od wejścia każdej fali; sygnał: tokeny kampanii App Store per narzędzie i narzędzia webmastera; progi `[DO USTALENIA]` przy punkcie odniesienia (docs/18, analityka A). Warunek pomiaru: każde narzędzie ma własny adres.
+- **Krok przed pierwszym narzędziem z CSV albo drukiem (F-04, F-17):** przebieg Playwright WebKit na maszynie macOS w CI (pobranie CSV przez `blob:` i `data:`, `@media print`, `window.print`). ZAL-S5 potwierdzone 02.11.2026 tylko w Chromium (raport E2 §1, 0 naruszeń CSP); WebKit (w tym Safari na iOS) i Firefox `[DO USTALENIA]`. Bez zielonego przebiegu WebKit F-04 i F-17 nie wchodzą.
+- **Warunek ZAL-S4 (granica ZP-08 aplikacji):** strona nie ma listy podopiecznych, przypisywania planów, wglądu w wyniki ani pola imienia — w linku planu (F-05) i w CSV (F-04) nie ma pola imienia ani żadnego pola z danymi osoby; licencja na druk to zgoda prawna, nie funkcja relacji trener–podopieczny.
+- **Ochrona CSV przed formułami arkusza (F-04):** OWASP, „CSV Injection” (https://owasp.org/www-community/attacks/CSV_Injection, przekierowanie na community.owasp.org/attacks/CSV_Injection, odczyt 02.11.2026, surowy tekst przez curl): „To remediate it, ensure that no cells begin with any of the following characters:” — lista: `=`, `+`, `-`, `@`, tabulator, CR, LF i ich odpowiedniki pełnej szerokości. Ta sama strona: „Note: The above techniques are not reliable in Microsoft Excel after saving and re-opening the CSV file.” Skutek dla kontraktu: każde pole tekstowe zaczynające się od tych znaków dostaje prefiks `'` i cudzysłów, separator i cudzysłowy w polu są escapowane; test na wszystkie znaki z listy. Pola liczbowe planu (serie, powtórzenia, przerwa) nie są ujemne. Ryzyko resztkowe (Excel po zapisie i ponownym otwarciu) — nazwane; plan nie ma pól wpisywanych dowolnie przez odwiedzającego poza nazwami z katalogu `[DO USTALENIA]` przy projektowaniu F-04 (rola 04).
+- **Strażnik „wkrótce” (zadanie dla programisty, z F-04):** build strony zatrzymuje się, gdy `wersjaWydania` ≥ 1.2, a zapowiedź importu nie zamieniła się w działający przycisk (docs/18, 02.11.2026, ZM-04).
+- **Przekazanie:** rola 01 — ER-13 (persony odwiedzającego i trenera, J-W1, J-W2, BR dla F-02…F-08, F-17…F-19) i ER-14 (reguła indeksowania); po ER-13 kontrakt przechodzi `zakres.mjs --brd` z BR strony. Rola 04 — ścieżki pierwszego użycia z kolumny „Intuicyjność” (wynik wraca tutaj). Rola 05 — format # (F-18), CSV A, eksport rozszerzony (F-20, F-14). Rola 06 — F-10 i twierdzenia F-07, F-08. Rola 07 — strażniki z kolumny „Metoda” rankingu.
+
+### Zmiany zakresu
+| ID | Data | Prośba (kto, skąd) | Bramka: praca i dowód · intuicyjność · koszt · co wypada | Decyzja (ID, słowa właściciela) |
+|---|---|---|---|---|
+| ZM-01 | 2026-11-02 | cel strony: z „katalog prowadzący do App Store” na „darmowe narzędzie, aplikacja jako jedna z opcji” (właściciel, rozmowa po lekturze posta praktyka — szczebel 5) | J-W1 robocza, dowód H (ZAL-001) · narzędzia przy karcie ćwiczenia · kontrole agentów (D-002) · wypada „strona jako sam katalog z wezwaniem do App Store” | przyjęte — docs/18 02.11.2026 „strona techniqueatlas jako darmowe narzędzie, aplikacja jako opcja”; pkt 1 przepisany |
+| ZM-02 | 2026-11-02 | start stopniowy od wydania 1.1 zamiast startu przy 709/709 (właściciel) | J-W1 · bez zmiany pętli · start zależy od F-16, F-13, F-20, tagu 1.1 · wypada warunek 709/709 (DW-1, część) | przyjęte, wariant A — docs/18 02.11.2026 „startuje stopniowo od wydania 1.1”; pkt 2 i S6 przepisane |
+| ZM-03 | 2026-11-02 | zakres narzędzi po sprawdzeniu popytu (właściciel) | H-01 (P2 przepadł) · plan w adresie, komponent „w aplikacji”, licencja dla trenerów · ok. 60–120 kluczy × 35 [OCENA, E1] · odrzucone: mini karty, QR, wydruk w innym języku, `.ics`, RSS, „zgłoś uwagę”, przelicznik kg↔lb | przyjęte z wyjątkiem D-001 (dowód H, punkt kontrolny 8 tyg.) — docs/18 02.11.2026 „zakres narzędzi … po sprawdzeniu popytu”; pkt 8, 10, 11 przepisane |
+| ZM-04 | 2026-11-02 | import planu do aplikacji w 1.2 i zapowiedź „wkrótce” na stronie (właściciel) | H-01 · jedno zdanie bez daty · strażnik w buildzie · wyjątek od pkt 9 | przyjęte: F-15 PÓŹNIEJ → 1.2, wariant „wyjątek + strażnik” — docs/18 02.11.2026 „wyślij plan do aplikacji w wersji 1.2”; pkt 9 przepisany |
+| ZM-05 | 2026-11-02 | format CSV: sprzeczność „format importu aplikacji” (decyzja 26.10) vs „CSV do arkusza” (02.11) (raport E1 §6) | H-01 · jedna kolumna techniczna `id` w arkuszu · ochrona przed formułami (OWASP) · wypada Excel jako osobny format i „Otwórz w aplikacji” | wariant A (jeden format) — docs/18 02.11.2026, bramka E2 pkt 3 (D-003); decyzja 26.10 opatrzona odnośnikiem |
+| ZM-06 | 2026-11-02 | reguła indeksowania: „pełna karta i własne wskazówki” (raport E1 §7 pkt 1) | J-W1 · bez zmiany UI · mniej stron w indeksie na starcie · wypada „sama pełna karta” | wariant A — docs/18 02.11.2026, bramka E1 pkt 1; S6 przepisany |
+| ZM-07 | 2026-11-02 | start W0, fale; sylwetka PÓŹNIEJ, słownik jako tor treści, gotowy plan → 1.2 (raport E2 §3, §5) | J-W1 · fale z własnymi bramkami · W0 najmniejsze ryzyko · wypadają W1, W2, sylwetka w fali 2, słownik tylko przy narzędziach | W0 i (a)/(a) — docs/18 02.11.2026, bramka E2 pkt 1–2 (D-003) |
+
+Otwarte (`[DO USTALENIA]`): potwierdzenie F-19 (kg/lb); WebKit i Firefox dla CSV i druku; budżet JS narzędzi (pkt 10); progi punktu kontrolnego; format i limit długości tokenu kampanii per narzędzie (pkt 9); separator CSV w Excelu i Numbers według języka (plik próbny); liczba haseł F-10.
+
+
 Stan: specyfikacja analityka z 26.10.2026 po decyzjach właściciela (sekcja niżej); implementacja szkieletu w tym repo. Decyzje właściciela: docs/18 (25.10 — strona, domena, anonimowość; 26.10 — osobne repo, start z 1.1). Liczby poniżej pochodzą z danych aplikacji na `main` (docs/50, docs/51). W stronie każda liczba ma być wyliczana z danych, nie wpisywana ręcznie.
 
 
@@ -48,14 +175,18 @@ Odstępstwa i otwarte:
 - **S1 w 33 językach, S10 w pełnym zakresie:** bez zmian, otwarte.
 
 ## 1. Cel
-Pełna, publiczna biblioteka ćwiczeń aplikacji Trening w 35 językach. Prowadzi ruch z wyszukiwarki do App Store. Każda strona ma realną wartość: animacja ruchu, wskazówki, mięśnie, zamienniki, częsty błąd. Nie robimy masowych stron pod wyszukiwarkę.
+Publiczna biblioteka ćwiczeń aplikacji Trening w 35 językach i darmowe narzędzia przy niej (co zamiast, co zrobię z tym sprzętem, plan z drukiem/CSV/linkiem, potem kalkulatory i bilans) — dla odwiedzającego bez konta i bez aplikacji; aplikacja jest jedną z opcji po wyniku, nie warunkiem wyniku (zmienione 02.11.2026, ZM-01; zakres i kolejność: „Kontrakt zakresu strony” na początku dokumentu). Każda strona ma realną wartość: animacja ruchu, wskazówki, mięśnie, zamienniki, częsty błąd. Nie robimy masowych stron pod wyszukiwarkę.
+
+Poprzednio (26.10.2026, zastąpione 02.11.2026, ZM-01): „Prowadzi ruch z wyszukiwarki do App Store.”
 
 ## 2. Założenia i warunek startu
-- Start razem z wydaną wersją 1.1 aplikacji. Warunek: 709/709 ćwiczeń ma gotową rodzinę figur v2. Dziś gotowe są 3 z 43 rodzin, czyli 87 ćwiczeń (docs/51).
+- Start stopniowy od wydanej wersji 1.1 aplikacji: na starcie biblioteka, indeksowane tylko ćwiczenia z pełną kartą i własnymi wskazówkami (reguła A z bramki E1), pozostałe `noindex,follow` albo niepublikowane; narzędzia dochodzą falami (zmienione 02.11.2026, ZM-02, ZM-06, ZM-07). Warunek przed pierwszym indeksowaniem: lista kontrolna w sekcji „Zasada infrastruktury a indeksowanie” (w tym F-16: przepięcie PIN na commit z nazwami EN i zamrożenie slugów 709).
+  Poprzednio (zastąpione 02.11.2026, ZM-02): „Start razem z wydaną wersją 1.1 aplikacji. Warunek: 709/709 ćwiczeń ma gotową rodzinę figur v2. Dziś gotowe są 3 z 43 rodzin, czyli 87 ćwiczeń (docs/51).”
 - Hosting: osobne publiczne repo `techniqueatlas`, GitHub Pages publikowane przez workflow GitHub Actions, 0 zł poza domeną.
 - Strona opisuje wyłącznie funkcje wydanej wersji. Dane są z tagu tej wersji.
 - Publicznie zero wzmianek o źródłach, także ogólnych („sprawdzone”, „oparte na badaniach”, „według ekspertów”). Nie ma też poziomów pewności odwołujących się do badań.
-- Wszelkie prawa zastrzeżone. Nie ma pliku danych do pobrania ani API.
+- Licencja strony (F-13) pozwala drukować i rozdawać plany i treść strony podopiecznym, także w płatnej pracy trenera, bez sprzedaży samych wydruków i bez kopiowania grafik; wydruk ma w stopce adres strony (zmienione 02.11.2026, ZM-03; poprzednio: „Wszelkie prawa zastrzeżone”).
+- Nie ma pliku z danymi katalogu do pobrania (zrzutu ćwiczeń, figur, tłumaczeń) ani API. Odwiedzający może pobrać tylko **własny plan** jako CSV (format A, F-04) i wydruk/PDF (F-17), wygenerowane w przeglądarce z planu w adresie — to nie jest plik danych strony (zmienione 02.11.2026, ZM-03, ZM-05).
 
 **Ograniczenia hostingu** (przeczytane, docs.github.com „GitHub Pages limits”):
 - opublikowana strona najwyżej 1 GB;
@@ -109,7 +240,7 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
 9. Zamienniki: 3 propozycje (`SWAP_TOP`) liczone tą samą funkcją rankingu co w aplikacji. Profil: nowy użytkownik, bez miejsca i historii, collator danego języka. Każda jest linkiem do strony zamiennika.
 10. Wezwanie do App Store: jedno zdanie o tym, co aplikacja robi z tym ćwiczeniem (tylko funkcje z listy wydanej wersji, pkt 9) i oficjalna plakietka App Store.
 11. Jedno zdanie: „W razie bólu lub urazu skonsultuj się ze specjalistą”.
-12. Stopka: przełącznik języka (te same ćwiczenia w innych językach), © Apps4Brew, „Wszelkie prawa zastrzeżone”, prywatność (D12), wsparcie.
+12. Stopka: przełącznik języka (te same ćwiczenia w innych językach; plan w części po # przechodzi przez zmianę języka — bramka E1 pkt 2 A), © Apps4Brew, licencja strony (F-13; zamiast „Wszelkie prawa zastrzeżone” — zmienione 02.11.2026, ZM-03), prywatność (D12), akapit o wsparciu (F-12).
 
 **3.6 `404.html`** — jedna w katalogu głównym, bo tak działa Pages. Krótki tekst w EN i lista linków do 35 stron głównych języków.
 
@@ -196,6 +327,7 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
 
 ## 8. Prywatność
 - **Stan wyjściowy:** bez ciasteczek, bez localStorage, bez skryptów i zasobów zewnętrznych (fonty systemowe, wszystko z tej samej domeny). CSP w `<meta>`: `default-src 'self'`.
+- **Stan planu (F-04, F-05):** plan żyje wyłącznie w adresie, w części po # (nie trafia na serwer ani do logów hostingu), bez localStorage i bez ciasteczek — D4 i S9 bez zmian, strażnik `tests/straznik-analityka.test.mjs` bez zmian. Plan nie ma pola imienia ani innych danych osoby (warunek ZAL-S4). Kod narzędzi tylko w plikach `.js` z własnego źródła (CSP `default-src 'self'`). (zmienione 02.11.2026, ZM-03)
 - **Pomiar** — decyzja D4.
 - [DO WYJAŚNIENIA, badacz/prawnik] Hosting zapisuje adres IP w logach serwera. Czy potrzebna jest osobna informacja o prywatności strony i jak ją sformułować (D12).
 
@@ -203,7 +335,9 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
 - **Eksport z tagu wydania:**
   - `manifest`: wersja, build, `CATALOG_REV`, SHA tagu, lista języków, liczby.
   - Lista funkcji wydanej wersji: identyfikatory funkcji plus zatwierdzone zdania, w 35 językach przez `t()`.
-  - Wezwanie do App Store bierze zdania tylko z tej listy.
+  - Wezwanie do App Store bierze zdania tylko z tej listy. Ten sam komponent „w aplikacji” (F-11) stoi przy każdym narzędziu jako jedna z opcji obok druku/CSV/linku; słownik pojęć bez odnośnika do aplikacji (zmienione 02.11.2026, ZM-03).
+  - **Wyjątek „wkrótce” (zmienione 02.11.2026, ZM-04):** przed wydaniem importu planu w aplikacji 1.2 (F-15) przy CSV wolno pokazać jedno zdanie zapowiedzi „wkrótce” bez daty. Kontrola: strażnik w buildzie strony zatrzymuje build, gdy `wersjaWydania` ≥ 1.2, a zapowiedź nie zamieniła się w działający przycisk (zadanie dla programisty, razem z F-04). Poza tym wyjątkiem strona nadal mówi tylko o funkcjach wydanej wersji.
+  - Token kampanii: per narzędzie (decyzja 02.11.2026, analityka A; dziś per język — `src/pages.mjs:29`); format i limit długości `[DO USTALENIA]`.
 - **Link:** `https://apps.apple.com/app/id{APPLE_ID}` plus token kampanii App Store Connect (`ct=techniqueatlas-{lang}`), żeby w ASC było widać ruch ze strony. Format adresu i tokenu — [DO WYJAŚNIENIA, badacz].
 - **Smart App Banner:** `<meta name="apple-itunes-app" content="app-id=…">`, bez `app-argument` (D8). Strony Apple nie udało się przeczytać — szczegóły do potwierdzenia przez badacza. Działa tylko w Safari na iOS.
 - **Plakietka:** oficjalna grafika Apple, lokalizowana. Zasady użycia do sprawdzenia przez badacza.
@@ -214,20 +348,22 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
 - HTML strony ćwiczenia ≤ 20 KB bez kompresji. Same znaczniki hreflang to ok. 3 KB.
 - Animacja jako osobny, wspólny dla języków plik `/assets/fig/{slug}…` ≤ 30 KB, z pamięcią podręczną przeglądarki.
 - JS (pauza, przełączniki, filtry, wyszukiwarka) ≤ 15 KB na stronę, opcjonalny (strona działa bez niego). Indeks wyszukiwania ≤ 25 KB na język, ładowany dopiero po wejściu w pole.
+- JS narzędzi (F-02…F-08, F-17, F-18, F-19): osobne pliki ładowane tylko na stronach narzędzi i przy akcji na karcie ćwiczenia; budżet w KB `[DO USTALENIA]` (ustala programista z pomiarem przed falą 1, zapis tutaj i w strażniku S9). Bez JS narzędzie pokazuje stan „wymaga JavaScript” zamiast pustej strony; karta ćwiczenia działa jak dotąd (zmienione 02.11.2026, ZM-03).
 - Cała opublikowana strona ≤ 700 MB, build przerywany przy 800 MB (limit Pages 1 GB). Szacunek: 24 815 × 20 KB ≈ 0,5 GB.
 - Zero zapytań do innych domen. Docelowo „dobre” Core Web Vitals — progi do podania przez badacza ze źródła.
 - **Technika animacji w przeglądarce — decyzja programisty**, z wymaganiami: bez JS widać pozycje statyczne, pauza działa, reduced-motion respektowane, mieści się w budżecie. Warianty: (a) klatki policzone przy buildzie i zapisane jako SVG z animacją deklaratywną; (b) silnik v2 przeniesiony do przeglądarki (ok. 115 KB źródła). Rekomendacja: (a).
 
 ## 11. Czego strona NIE robi
-- Nie ma kont, logowania serii, planów ani generatora.
-- Nie ma pobierania danych (JSON, CSV, API, ZIP) ani komentarzy i treści użytkowników.
+- Nie ma kont ani logowania serii. Plany są (F-04: układanie z katalogu, w adresie), gotowego planu z generatora na razie nie ma — PÓŹNIEJ, po wydzieleniu czystego `generate()` w aplikacji (linia 1.2) i zamknięciu T-050 (F-09) (zmienione 02.11.2026, ZM-03, ZM-07; poprzednio: „Nie ma kont, logowania serii, planów ani generatora.”).
+- Nie ma pobierania danych katalogu (JSON, API, ZIP, zrzut CSV ćwiczeń) ani komentarzy i treści użytkowników na serwerze. Wyjątek: CSV i wydruk **własnego planu** odwiedzającego (F-04, F-17), generowane w przeglądarce (zmienione 02.11.2026, ZM-03, ZM-05).
+- Nie ma relacji trener–podopieczny: listy podopiecznych, przypisywania planów, wglądu w wyniki, pola imienia (warunek ZAL-S4; licencja na druk to zgoda prawna, nie funkcja) (zmienione 02.11.2026, ZM-03).
 - Nie ma reklam (decyzja 25.10) ani newslettera.
 - Nie ma ciasteczek i śledzenia (przy D4 A).
 - Nie podaje źródeł, autorów, bibliografii, „sprawdzone przez”, poziomów pewności z odwołaniem do badań.
 - Nie porównuje z innymi aplikacjami i nie używa nazw innych firm.
 - Nie udziela porad medycznych.
 - Nie podaje cen.
-- Nie zapowiada funkcji z przyszłych wersji.
+- Nie zapowiada funkcji z przyszłych wersji — z jednym wyjątkiem: „wkrótce” dla importu planu w 1.2, pilnowane strażnikiem (pkt 9; zmienione 02.11.2026, ZM-04).
 - Nie ma tekstów pisanych pod frazy ani stron kombinacji filtrów.
 - Nie tłumaczy automatycznie w czasie działania. Teksty pochodzą wyłącznie z wydania aplikacji, a teksty interfejsu strony — ze słownika przejrzanego przez tłumacza.
 
@@ -243,7 +379,7 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
   - `manifest.appVersion` równa się wersji w App Store — sprawdzane publicznym wyszukiwaniem po ID, [DO WYJAŚNIENIA, badacz: czy ta usługa jest stabilna];
   - zdania o funkcjach tylko z listy funkcji wydania.
 - **S5 liczby:** szablony nie zawierają liczb wpisanych na sztywno. Wszystkie liczby (ćwiczenia, języki, zamienniki) pochodzą z eksportu (test szuka cyfr w szablonach, z listą wyjątków z powodem).
-- **S6 warunek startu:** każde ćwiczenie ma gotową rodzinę v2 (709/709) albo build pierwszej publikacji jest przerwany.
+- **S6 warunek indeksowania (zmienione 02.11.2026, ZM-02, ZM-06):** do indeksu idzie tylko ćwiczenie z pełną kartą **i** własnymi wskazówkami (warunek `own` z `src/pages.mjs` zostaje, dochodzi pole „pełna” z eksportu, F-20); pozostałe `noindex,follow` albo niepublikowane. Kod dziś sprawdza figurę (`src/straznicy.mjs:39-51`, `checkStartCondition`) — zmiana strażnika to zadanie dla programisty. Poprzednio: „każde ćwiczenie ma gotową rodzinę v2 (709/709) albo build pierwszej publikacji jest przerwany.”
 - **S7 SEO:**
   - hreflang wzajemny i kompletny, kody z dozwolonej listy;
   - canonical wskazuje stronę samą;
@@ -324,7 +460,7 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
   - strony `noindex` zgodnie z D1 i D3.
 - **Prywatność:** zero zewnętrznych żądań przy otwarciu (test w przeglądarce bezgłowej); brak ciasteczek i `localStorage`; CSP obecne.
 - **App Store:** link i baner zawierają poprawne ID z jednego pliku konfiguracji; zdania wezwania tylko z listy funkcji wydania (S4).
-- **Strażnicy S1–S10:** każdy ma test, który celowo podstawiony błąd (nazwa źródła, nazwa firmy, liczba na sztywno, brak tłumaczenia, niesprawdzony znak towarowy, ćwiczenie bez figury v2) przerywa build.
+- **Strażnicy S1–S10:** każdy ma test, który celowo podstawiony błąd (nazwa źródła, nazwa firmy, liczba na sztywno, brak tłumaczenia, niesprawdzony znak towarowy, ćwiczenie indeksowane bez pełnej karty i własnych wskazówek) przerywa build (zmienione 02.11.2026, ZM-06; poprzednio: „ćwiczenie bez figury v2”).
 - **Dostępność:** skaner WCAG 2.2 AA bez błędów na próbce z S8. VoiceOver na iPhonie: krótka lista „tylko telefon” — odczyt nazwy angielskiej, pauza animacji, baner.
 
 ## 16. Decyzje dla właściciela
@@ -490,7 +626,9 @@ Tekst `appStore` jest własny; sprawdzić z zlokalizowanymi odznakami Apple (App
 `tests/straznik-terminy.test.mjs`: (1) wzorce „zakazane” ze słownika aplikacji (`docs/lokalizacja/slownik-terminow.json`, kopiowany przez `npm run dane` do `.cache/dane`, nie commitowany) nie mogą wystąpić w żadnym tekście `src/ui/<kod>.json`; (2) słownik strony `docs/slownik-strony.json` (nazwy rodzin ruchów): termin zalecany w kluczu, zakazane poza tekstem. `countLine` ma formy liczby (CLDR) wybierane w generatorze przez `Intl.PluralRules` (`plural` w `src/lib.mjs`).
 
 ## Decyzja 26.10.2026 (właściciel): kreator planów na stronie — wariant B, po 1.1
-Kreator planu w przeglądarce (cel, miejsce, liczba sesji) na tych samych regułach co generator aplikacji (jedno źródło prawdy, eksport z repo aplikacji), eksport CSV (format importu aplikacji), PDF (wydruk) i Excel, oraz przycisk „Otwórz w aplikacji” (link przenoszący plan do aplikacji — wymaga domeny i osobnego wydania aplikacji). Strona nadal nic nie zbiera (przetwarzanie w przeglądarce). Uzasadnienie: zarabianie M5 S1 liczy dni treningowe, nie tworzenie planów — kreator nie zabiera przychodu, przyprowadza do aplikacji; zaczątek modułu trenerskiego z backlogu. Odrzucone: A (tylko CSV + PDF, import plikiem), C (bez kreatora). Zmienia wcześniejszą decyzję „strona = wyłącznie biblioteka ćwiczeń”. Termin: po starcie 1.1 (nie opóźnia 1.1). Otwarte: biblioteka do Excela (licencja, rozmiar), format linku do aplikacji.
+Kreator planu w przeglądarce (cel, miejsce, liczba sesji) na tych samych regułach co generator aplikacji (jedno źródło prawdy, eksport z repo aplikacji), eksport CSV (format importu aplikacji), PDF (wydruk) i Excel, oraz przycisk „Otwórz w aplikacji” (link przenoszący plan do aplikacji — wymaga domeny i osobnego wydania aplikacji). Strona nadal nic nie zbiera (przetwarzanie w przeglądarce). Uzasadnienie: zarabianie M5 S1 liczy dni treningowe, nie tworzenie planów — kreator nie zabiera przychodu, przyprowadza do aplikacji; [określenie o module trenerskim usunięte 02.11.2026, ZM-03 — warunek ZAL-S4: strona nie ma funkcji relacji trener–podopieczny]. Odrzucone: A (tylko CSV + PDF, import plikiem), C (bez kreatora). Zmienia wcześniejszą decyzję „strona = wyłącznie biblioteka ćwiczeń”. Termin: po starcie 1.1 (nie opóźnia 1.1). Otwarte: biblioteka do Excela (licencja, rozmiar), format linku do aplikacji.
+
+**Zastąpione częściowo 02.11.2026 (ZM-03, ZM-04, ZM-05, ZM-07):** „eksport CSV (format importu aplikacji) … i Excel” → jeden format CSV wariant A (UTF-8 z BOM, separator według języka, kolumna `id` ćwiczenia, wersja formatu, ochrona przed formułami arkusza), czytany przez arkusz (także Excel — osobnego formatu Excel nie ma) i przez import w aplikacji 1.2; „przycisk „Otwórz w aplikacji”” → import planu w aplikacji 1.2 (F-15) i zapowiedź „wkrótce” ze strażnikiem; kreator z generatora (cel, miejsce, liczba sesji) → F-09 PÓŹNIEJ (czysty `generate()`, T-050); na stronie od fali 1 jest układanie planu z katalogu (F-04). Otwarte „biblioteka do Excela” i „format linku do aplikacji” — zamknięte tym samym (bez biblioteki; link `trening://` odrzucony w bramce E2, wariant B CSV).
 
 ## Zasada infrastruktury a indeksowanie (właściciel 01.11.2026)
 
