@@ -1,6 +1,6 @@
 // Pomocnicze dla strażników: lista plików repozytorium (śledzone przez git; bez gita — przejście po katalogu), odczyt tekstu, budowanie do katalogu tymczasowego.
 import { execFileSync } from 'node:child_process';
-import { readdirSync, readFileSync, statSync, mkdtempSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync, mkdtempSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { ROOT, hasData } from '../src/lib.mjs';
@@ -17,7 +17,14 @@ const TEXT = /\.(mjs|js|json|html|css|md|yml|yaml|txt|xml|svg)$|^\.gitignore$/;
 export const isText = f => TEXT.test(f);
 export const read = f => readFileSync(join(ROOT, f), 'utf8');
 export function distFiles(dir) { const out = []; const w = d => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); if (e.isDirectory()) w(p); else out.push(p); } }; w(dir); return out; }
-export const tmpDist = () => mkdtempSync(join(tmpdir(), 'atlas-dist-'));
+/* Katalogi tymczasowe testów (pełny build strony ok. 500 MB każdy): rejestrowane i usuwane przy końcu procesu pliku testów — także przy porażce testu,
+   wyjątku i przerwaniu (SIGINT/SIGTERM). 01.11.2026 pozostałości (85 × atlas-dist-*, ok. 40 GB) zapełniły dysk sesji; strażnik: tests/sprzatanie.test.mjs i tests/uruchom-testy.mjs. */
+const utworzone = new Set();
+export function tmpDir(prefix = 'atlas-dist-') { const d = mkdtempSync(join(tmpdir(), prefix)); utworzone.add(d); return d; }
+export const tmpDist = () => tmpDir('atlas-dist-');
+export function sprzatnijTmp() { for (const d of utworzone) { try { rmSync(d, { recursive: true, force: true }); } catch { /* sprzątanie nie może zasłonić wyniku testów */ } } utworzone.clear(); }
+process.on('exit', sprzatnijTmp);
+for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => { sprzatnijTmp(); process.kill(process.pid, sig); });
 export { ROOT, statSync };
 
 /** Dane z aplikacji (npm run dane) są warunkiem testów generatora i strażników zbudowanej strony — brak danych to jasny błąd, nie pominięcie testu. */

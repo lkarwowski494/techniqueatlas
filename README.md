@@ -54,6 +54,7 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 - `straznik-analityka` — brak skryptów śledzących, pikseli, cookies, pamięci przeglądarki, wywołań sieciowych i zewnętrznych zasobów (kod i zbudowana strona).
 - `straznik-dane` — w repo i w `dist/` brak danych z aplikacji (D5 A), PIN bez danych, workflowy pobierają dane przed testami.
 - `jezyki-podglad` — podgląd 35 języków bez indeksowania: noindex wszędzie, robots.txt bez Disallow, brak map; po przełączeniu mapy i hreflang tylko dla `indeksujJezyki`; przeglądarka na wszystkich językach (konsola, żądania, figura, wyszukiwarka).
+- `sprzatanie` — katalogi tymczasowe testów (pełny build strony ok. 500 MB każdy) tylko przez `tmpDist()`/`tmpDir()` z `tests/pomoc.mjs`, usuwane po pliku testów (sukces, porażka, wyjątek, SIGTERM); `npm test` (`tests/uruchom-testy.mjs`) biegnie we własnym `TMPDIR`, kończy się błędem, gdy zostanie w nim jakiś `atlas-*`, i zawsze go usuwa (02.11.2026: wcześniej jeden przebieg zostawiał 26 katalogów, 6,4 GB).
 - `build` — przypięcie do commitu, noindex/robots/mapy witryny (D1, D3), hreflang wzajemny i canonical, struktura stron, figura, budżety (HTML ≤ 20 KB, moduł figury ≤ 30 KB gz, indeks ≤ 25 KB gz), linki wewnętrzne, JSON-LD, CSP, baner App Store.
 
 ## Zależności deweloperskie (tylko testy; strona nie ma zależności uruchomieniowych)
