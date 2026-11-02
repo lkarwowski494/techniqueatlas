@@ -6,13 +6,13 @@ import { join } from 'node:path';
 import { build } from '../src/build.mjs';
 import { ES_419_HREFLANG_REGIONS, hreflang, hreflangCodes } from '../src/taksonomia.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
-import { requireData, tmpDist, BEZ_STARTU } from './pomoc.mjs';
+import { requireData, tmpDist, BEZ_STARTU, zPelna } from './pomoc.mjs';
 
 requireData();
 const LANGS = ['pl', 'en', 'es', 'es-419', 'sr', 'pt-BR', 'zh-Hant'];
 const CFG = { indeksowanie: true, jezyki: LANGS, indeksujJezyki: LANGS };
 const dom = readJson('config.json').domena;
-const built = await build({ out: tmpDist(), cfg: CFG, ...BEZ_STARTU });
+const built = await build({ out: tmpDist(), cfg: CFG, ...BEZ_STARTU, ...zPelna('back-squat') }); /* S6/ZM-06 (02.11.2026): ćwiczenie indeksowane wymaga pelna === true */
 const read = f => readFileSync(join(built.out, f), 'utf8');
 const links = h => [...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)].map(m => [m[1], m[2]]);
 

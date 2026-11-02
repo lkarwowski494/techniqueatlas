@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { build } from '../src/build.mjs';
 import { readJson } from '../src/lib.mjs';
 import { hreflangCodes, hreflang } from '../src/taksonomia.mjs';
-import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU } from './pomoc.mjs';
+import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU, zPelna } from './pomoc.mjs';
 import { launch, serve } from './przegladarka.mjs';
 
 requireData();
@@ -36,7 +36,7 @@ test('podgląd 35 języków: każda strona każdego języka ma noindex,nofollow;
   for (const f of html) assert.doesNotMatch(bezSzablonuFigury(read(out, f)), /undefined|\[object Object\]|\{[a-zA-Z]+\}/, f); /* nieuzupełnione miejsca w szablonach, pole spoza kontraktu eksportu (np. r.region zamiast r.id) */
 });
 test('po przełączeniu indeksowania (35 języków budowanych, indeksujJezyki bez zmian): mapy witryny tylko dla języków indeksowanych, pozostałe noindex,follow poza mapami; hreflang w HTML = tylko języki indeksowane (zgodnie z mapami); przełącznik języków w stopce zostaje pełny', async () => {
-  const idxLangs = cfg0.indeksujJezyki, other = ALL.find(l => !idxLangs.includes(l)), { out, sitemaps } = await build({ out: tmpDist(), cfg: { indeksowanie: true }, ...BEZ_STARTU });
+  const idxLangs = cfg0.indeksujJezyki, other = ALL.find(l => !idxLangs.includes(l)), { out, sitemaps } = await build({ out: tmpDist(), cfg: { indeksowanie: true }, ...BEZ_STARTU, ...zPelna('back-squat') });
   assert.deepEqual([...sitemaps].sort(), [...idxLangs.map(l => `sitemap-${l}.xml`), 'sitemap-glowna.xml'].sort());
   for (const l of ALL.filter(l => !idxLangs.includes(l))) assert.equal(existsSync(join(out, `sitemap-${l}.xml`)), false, l);
   const sitemapText = sitemaps.map(s => read(out, s)).join(''); assert.ok(!new RegExp(`/${other.toLowerCase()}/`).test(sitemapText), `${other} poza mapami`);
@@ -54,10 +54,10 @@ test('po przełączeniu indeksowania (35 języków budowanych, indeksujJezyki be
 });
 test('dodanie języka do indeksujJezyki: język dodany do indeksujJezyki wchodzi do klastra hreflang i map po obu stronach (wzajemnie), a ten sam język bez wpisu znika z obu', async () => {
   const add = ALL.find(l => !cfg0.indeksujJezyki.includes(l) && !/^(es-419|sr)$/.test(l)), langs = [...cfg0.indeksujJezyki, add];
-  const withAdd = await build({ out: tmpDist(), cfg: { indeksowanie: true, indeksujJezyki: langs }, ...BEZ_STARTU });
+  const withAdd = await build({ out: tmpDist(), cfg: { indeksowanie: true, indeksujJezyki: langs }, ...BEZ_STARTU, ...zPelna('back-squat') });
   const a = hrefs(read(withAdd.out, 'en/exercises/back-squat/index.html')), b = hrefs(read(withAdd.out, `${add.toLowerCase()}/exercises/back-squat/index.html`));
   assert.ok(a.some(x => x[0] === hreflang(add))); assert.ok(b.some(x => x[0] === 'en')); assert.ok(withAdd.sitemaps.includes(`sitemap-${add}.xml`));
-  const without = await build({ out: tmpDist(), cfg: { indeksowanie: true }, ...BEZ_STARTU }); assert.ok(!hrefs(read(without.out, 'en/exercises/back-squat/index.html')).some(x => x[0] === hreflang(add)));
+  const without = await build({ out: tmpDist(), cfg: { indeksowanie: true }, ...BEZ_STARTU, ...zPelna('back-squat') }); assert.ok(!hrefs(read(without.out, 'en/exercises/back-squat/index.html')).some(x => x[0] === hreflang(add)));
 });
 
 test('przeglądarka: 35 języków × (strona główna, ćwiczenie z figurą, wyszukiwarka) — zero błędów konsoli, zero żądań poza serwerem, noindex w DOM, figura się rysuje, <html lang> zgodny z językiem', { timeout: 15 * 60 * 1000 }, async () => {

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { checkTrademarks, checkVersion, checkIndexingRule, checkIndexingStart, startGuards } from '../src/straznicy.mjs';
 import { build } from '../src/build.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
-import { requireData, tmpDist } from './pomoc.mjs';
+import { requireData, tmpDist, zPelna } from './pomoc.mjs';
 
 const OK = { status: 'sprawdzone', data: '2026-10-26' };
 
@@ -90,4 +90,12 @@ test('S8 start indeksowania: indeksowanie=true bez daty indeksowanieOd to błąd
   assert.equal(checkIndexingStart({ indexing: true, from: 'jutro' }).errors.length, 1);
   assert.deepEqual(checkIndexingStart({ indexing: true, from: '2027-01-15' }), { errors: [], warnings: [] });
   assert.deepEqual(checkIndexingStart({ indexing: false, from: '' }), { errors: [], warnings: [] });
+});
+
+test('S6 (02.11.2026): strażnik jest podłączony do build() na zbudowanych stronach — raport liczy indeksowane ćwiczenia; testowe wejścia build() nie są w CLI', async () => {
+  requireData();
+  const r = await build({ out: tmpDist(), cfg: { indeksowanie: true, jezyki: ['pl', 'en'], indeksujJezyki: ['pl', 'en'] }, pominStraznikowStartu: true, ...zPelna('back-squat') });
+  assert.equal(r.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 2'); /* back-squat w pl i en (własne wskazówki kompletne) — przy odłączonym strażniku 0 */
+  const off = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en'] }, ...zPelna('back-squat') }); assert.equal(off.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 0');
+  assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /zmianaDanych/);
 });

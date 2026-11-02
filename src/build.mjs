@@ -18,8 +18,8 @@ export function checkPin(src = {}) {
 
 const write = (out, file, text) => { const p = join(out, file); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); };
 
-/** `slugi` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, drugie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
-export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, pominStraznikowStartu = false } = {}) {
+/** `slugi`, `zmianaDanych` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, `zmianaDanych` (data → data) podstawia pola eksportu (np. `pelna` przed PIN z F-20), ostatnie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
+export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, zmianaDanych, pominStraznikowStartu = false } = {}) {
   const cfg = { ...readJson('config.json'), ...over };
   if (!hasData()) throw new Error('brak danych z aplikacji — uruchom: npm run dane');
   checkPin();
@@ -31,6 +31,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, p
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
     names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
+  if (zmianaDanych) { data = zmianaDanych(data); for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e])); }
   /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S8 (S6 — po zbudowaniu stron) */
   const warnings = [], pin = readJson('PIN.json'), sl = slugi ?? { lock: readJson('slugs.lock.json').slugi, overrides: readJson('slug-overrides.json') };
   const eff = effectiveSlugs(data[langs[0]].exercises, sl.overrides.nadpisania), lockCheck = checkSlugLock({ current: eff.slugs, lock: sl.lock, redirects: sl.overrides.przekierowania, indexing: !!cfg.indeksowanie && !pominStraznikowStartu });
