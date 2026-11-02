@@ -56,9 +56,10 @@ test('pliki ustawień mają znany kształt (trademark-check.json, start-wyjatki.
 });
 test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S6, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
   requireData();
-  const w = await build({ out: tmpDist() }); const joined = w.warnings.join('\n');
+  const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json (F-16 zamroził 709 adresów 02.11.2026) */
+  const w = await build({ out: tmpDist(), slugi: pusty }); const joined = w.warnings.join('\n');
   for (const re of [/S3 znaki towarowe/, /S4 wersja/, /S6 warunek startu/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
-  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true } }), /slugs\.lock\.json jest pusty/);
+  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
   const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S6 */
   await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /S6 warunek startu/.test(err.message));

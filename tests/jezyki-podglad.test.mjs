@@ -32,7 +32,8 @@ test('podgląd 35 języków: każda strona każdego języka ma noindex,nofollow;
   assert.equal(read(out, 'robots.txt'), 'User-agent: *\nAllow: /\n'); assert.deepEqual(readdirSync(out).filter(f => /^sitemap/.test(f)), []);
   for (const l of ALL) for (const f of [`${l.toLowerCase()}/index.html`, `${l.toLowerCase()}/exercises/index.html`, `${l.toLowerCase()}/exercises/back-squat/index.html`]) assert.ok(existsSync(join(out, f)), f);
   assert.ok(pages.every(p => p.indexable === false));
-  for (const f of html) assert.doesNotMatch(read(out, f), /undefined|\[object Object\]|\{[a-zA-Z]+\}/, f); /* nieuzupełnione miejsca w szablonach, pole spoza kontraktu eksportu (np. r.region zamiast r.id) */
+  const bezSzablonuFigury = h => h.replace(/<script type="application\/json" data-labels>.*?<\/script>/s, ''); /* data-labels niesie szablon „{opis}” wypełniany w przeglądarce (assets/figura-strona.js, fmt) — zamierzony, nie luka */
+  for (const f of html) assert.doesNotMatch(bezSzablonuFigury(read(out, f)), /undefined|\[object Object\]|\{[a-zA-Z]+\}/, f); /* nieuzupełnione miejsca w szablonach, pole spoza kontraktu eksportu (np. r.region zamiast r.id) */
 });
 test('po przełączeniu indeksowania (35 języków budowanych, indeksujJezyki bez zmian): mapy witryny tylko dla języków indeksowanych, pozostałe noindex,follow poza mapami; hreflang w HTML = tylko języki indeksowane (zgodnie z mapami); przełącznik języków w stopce zostaje pełny', async () => {
   const idxLangs = cfg0.indeksujJezyki, other = ALL.find(l => !idxLangs.includes(l)), { out, sitemaps } = await build({ out: tmpDist(), cfg: { indeksowanie: true }, ...BEZ_STARTU });
