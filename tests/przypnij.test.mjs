@@ -1,12 +1,12 @@
 // Ponowne przypięcie danych strony jednym poleceniem (`npm run przypnij -- <skrót> [--ref <gałąź|tag>]`): zmienia tylko PIN.json, odrzuca skrót inny niż pełny (40 znaków).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { przypnij } from '../src/przypnij.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
+import { tmpDir } from './pomoc.mjs';
 
 const A = 'a'.repeat(40), B = 'b'.repeat(40), PIN = { _opis: 'x', repoAplikacji: 'o/r', ref: 'integracja-1-1', commit: A };
 
@@ -19,7 +19,7 @@ test('przypnij: skrót krótki, wielkie litery, puste, z białymi znakami i zły
   for (const ref of ['', 'a b', 'a;b', '$(x)']) assert.throws(() => przypnij(PIN, B, ref), /ref/, ref);
 });
 test('polecenie `npm run przypnij`: jedno wywołanie zmienia tylko commit w PIN.json (kopia repo w katalogu tymczasowym), PIN.json kończy się nową linią', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'atlas-pin-')); mkdirSync(join(dir, 'src'));
+  const dir = tmpDir('atlas-pin-'); mkdirSync(join(dir, 'src'));
   for (const f of ['src/przypnij.mjs', 'src/lib.mjs', 'PIN.json', 'package.json']) copyFileSync(join(ROOT, f), join(dir, f));
   execFileSync('node', [join(dir, 'src/przypnij.mjs'), B], { cwd: dir, stdio: 'pipe' });
   const after = JSON.parse(readFileSync(join(dir, 'PIN.json'), 'utf8')), before = readJson('PIN.json');

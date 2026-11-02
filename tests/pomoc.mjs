@@ -17,10 +17,14 @@ const TEXT = /\.(mjs|js|json|html|css|md|yml|yaml|txt|xml|svg)$|^\.gitignore$/;
 export const isText = f => TEXT.test(f);
 export const read = f => readFileSync(join(ROOT, f), 'utf8');
 export function distFiles(dir) { const out = []; const w = d => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); if (e.isDirectory()) w(p); else out.push(p); } }; w(dir); return out; }
-/** Katalogi tymczasowe budowań: każdy proces testowy sprząta swoje przy wyjściu (inaczej kolejne przebiegi zapełniają dysk — ok. 170 MB na budowanie). */
-const sprzatanie = new Set();
-process.on('exit', () => { for (const d of sprzatanie) { try { rmSync(d, { recursive: true, force: true }); } catch { /* ignoruj */ } } });
-export const tmpDist = () => { const d = mkdtempSync(join(tmpdir(), 'atlas-dist-')); sprzatanie.add(d); return d; };
+/* Katalogi tymczasowe testów (pełny build strony ok. 500 MB każdy): rejestrowane i usuwane przy końcu procesu pliku testów — także przy porażce testu,
+   wyjątku i przerwaniu (SIGINT/SIGTERM). 01.11.2026 pozostałości (85 × atlas-dist-*, ok. 40 GB) zapełniły dysk sesji; strażnik: tests/sprzatanie.test.mjs i tests/uruchom-testy.mjs. */
+const utworzone = new Set();
+export function tmpDir(prefix = 'atlas-dist-') { const d = mkdtempSync(join(tmpdir(), prefix)); utworzone.add(d); return d; }
+export const tmpDist = () => tmpDir('atlas-dist-');
+export function sprzatnijTmp() { for (const d of utworzone) { try { rmSync(d, { recursive: true, force: true }); } catch { /* sprzątanie nie może zasłonić wyniku testów */ } } utworzone.clear(); }
+process.on('exit', sprzatnijTmp);
+for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => { sprzatnijTmp(); process.kill(process.pid, sig); });
 export { ROOT, statSync };
 
 /** Dane z aplikacji (npm run dane) są warunkiem testów generatora i strażników zbudowanej strony — brak danych to jasny błąd, nie pominięcie testu. */
