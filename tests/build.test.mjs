@@ -5,6 +5,7 @@ import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import { join, posix } from 'node:path';
 import { checkPin, build } from '../src/build.mjs';
+import { exercisePage } from '../src/pages.mjs';
 import { readJson, CACHE } from '../src/lib.mjs';
 import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU } from './pomoc.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
@@ -35,22 +36,27 @@ test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt NI
   assert.deepEqual(readdirSync(out).filter(f => /^sitemap/.test(f)), []);
 });
 
-test('indeksowanie włączone: D1 — indeksowane tylko ćwiczenia z własnymi wskazówkami (kompletnymi w języku), reszta noindex,follow; strony list i filtrów indeksowane; D3 — tylko języki z indeksujJezyki', async () => {
+test('indeksowanie włączone: S6/ZM-06 (02.11.2026) — indeksowane tylko ćwiczenia z pelna === true i własnymi wskazówkami (kompletnymi w języku), reszta noindex,follow; strony list i filtrów indeksowane; D3 — tylko języki z indeksujJezyki', async () => {
   const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   for (const [l, d] of [['pl', PL], ['en', EN]]) for (const e of d.exercises) {
-    const r = robots(read(out, `${l}/exercises/${e.slug}/index.html`)); const own = e.cues.scope === 'own' && !e.cues.missing;
-    assert.equal(r, own ? null : 'noindex,follow', `${l} ${e.id} (${e.cues.scope})`);
+    const r = robots(read(out, `${l}/exercises/${e.slug}/index.html`)); const ok = e.pelna === true && e.cues.scope === 'own' && !e.cues.missing;
+    assert.equal(r, ok ? null : 'noindex,follow', `${l} ${e.id} (${e.cues.scope}, pelna=${e.pelna})`);
   }
   for (const f of ['pl/index.html', 'pl/exercises/index.html', 'en/muscles/chest/index.html', 'index.html']) assert.equal(robots(read(out, f)), null, f);
   assert.equal(robots(read(out, '404.html')), 'noindex,nofollow');
   const only = await build({ out: tmpDist(), cfg: { ...INDEXING, indeksujJezyki: ['pl'] }, ...BEZ_STARTU });
-  assert.equal(robots(read(only.out, 'en/exercises/back-squat/index.html')), 'noindex,follow'); assert.equal(robots(read(only.out, 'pl/exercises/back-squat/index.html')), null);
+  const plOk = PL.exercises.find(e => e.slug === 'back-squat'); assert.equal(robots(read(only.out, 'en/exercises/back-squat/index.html')), 'noindex,follow');
+  assert.equal(robots(read(only.out, 'pl/exercises/back-squat/index.html')), plOk.pelna === true && plOk.cues.scope === 'own' && !plOk.cues.missing ? null : 'noindex,follow');
   assert.ok(!existsSync(join(only.out, 'sitemap-en.xml')) && existsSync(join(only.out, 'sitemap-pl.xml')));
 });
-test('reguła D1 sama zdejmuje noindex, gdy ćwiczenie dostanie własną treść: ćwiczenie ogólne → noindex,follow; ten sam wpis z własnymi wskazówkami → indeksowane', async () => {
-  const general = EN.exercises.find(e => e.cues.scope !== 'own' || e.cues.missing); assert.ok(general); /* eksport 1.1: zakres „general” już nie występuje (zostaje own/none), reguła D1 dotyczy każdego ćwiczenia bez własnych wskazówek */
-  const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU); assert.equal(robots(read(out, `en/exercises/${general.slug}/index.html`)), 'noindex,follow');
-  const own = EN.exercises.find(e => e.cues.scope === 'own' && !e.cues.missing); assert.equal(robots(read(out, `en/exercises/${own.slug}/index.html`)), null);
+test('S6/ZM-06 (02.11.2026): reguła sama zdejmuje noindex, gdy ćwiczenie ma pełną kartę i własne wskazówki; brak pola „pelna” albo inna wartość niż true = noindex,follow (fail-closed); bez własnych wskazówek pełna karta nie wystarcza', async () => {
+  const { ctx } = await buildOnce('idx', INDEXING, BEZ_STARTU);
+  const own = ctx.data.en.exercises.find(e => e.cues.scope === 'own' && !e.cues.missing), general = ctx.data.en.exercises.find(e => e.cues.scope !== 'own' || e.cues.missing); assert.ok(own && general);
+  const page = ex => exercisePage(ctx, 'en', ex), bez = { ...own }; delete bez.pelna;
+  for (const [ex, want] of [[bez, false], [{ ...own, pelna: false }, false], [{ ...own, pelna: 'true' }, false], [{ ...own, pelna: 1 }, false], [{ ...own, pelna: true }, true], [{ ...general, pelna: true }, false]]) {
+    const p = page(ex); assert.equal(p.indexable, want, `pelna=${JSON.stringify(ex.pelna)} scope=${ex.cues.scope}`); assert.equal(robots(p.html), want ? null : 'noindex,follow');
+  }
+  const off = await buildOnce(); assert.equal(robots(exercisePage(off.ctx, 'en', { ...own, pelna: true }).html), 'noindex,nofollow'); /* globalny wyłącznik ma pierwszeństwo */
 });
 
 test('robots.txt i mapy witryny przy włączonym indeksowaniu: Allow + indeks map; mapa na język tylko ze stronami indeksowanymi, ≤ 50 000 adresów i ≤ 50 MB; strony noindex nie są w mapach', async () => {

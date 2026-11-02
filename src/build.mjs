@@ -6,7 +6,7 @@ import { pathToFileURL } from 'node:url';
 import { ROOT, CACHE, readJson, hasData, esc } from './lib.mjs';
 import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage, figureModule, poseSheet, redirectPage, paths, urlOf } from './pages.mjs';
 import { effectiveSlugs, checkSlugLock, remapSlugs } from './slugi.mjs';
-import { startGuards } from './straznicy.mjs';
+import { startGuards, checkIndexingRule } from './straznicy.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId, hreflangCodes } from './taksonomia.mjs';
 
 /** Sprawdza, że pobrane dane i silnik pochodzą z commitu z PIN.json. */
@@ -18,7 +18,7 @@ export function checkPin(src = {}) {
 
 const write = (out, file, text) => { const p = join(out, file); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); };
 
-/** `slugi` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, drugie wyłącza warunki startu: S3/S4/S6 i wymóg zamrożonych adresów (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
+/** `slugi` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, drugie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
 export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, pominStraznikowStartu = false } = {}) {
   const cfg = { ...readJson('config.json'), ...over };
   if (!hasData()) throw new Error('brak danych z aplikacji — uruchom: npm run dane');
@@ -31,14 +31,15 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, p
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
     names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
-  /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S6 */
+  /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S8 (S6 — po zbudowaniu stron) */
   const warnings = [], pin = readJson('PIN.json'), sl = slugi ?? { lock: readJson('slugs.lock.json').slugi, overrides: readJson('slug-overrides.json') };
   const eff = effectiveSlugs(data[langs[0]].exercises, sl.overrides.nadpisania), lockCheck = checkSlugLock({ current: eff.slugs, lock: sl.lock, redirects: sl.overrides.przekierowania, indexing: !!cfg.indeksowanie && !pominStraznikowStartu });
   if (eff.errors.length || lockCheck.errors.length) throw new Error([...eff.errors, ...lockCheck.errors].join('\n'));
   warnings.push(...lockCheck.warnings);
   ({ data, figs, sil } = remapSlugs({ data, figs, sil }, new Map(data[langs[0]].exercises.map(e => [e.slug, eff.slugs.get(e.id)]))));
   for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
-  if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); if (g.errors.length) throw new Error(g.errors.join('\n')); warnings.push(...g.warnings); }
+  const startErrors = []; /* błędy S3/S4/S8 zgłaszane razem z S6 (po zbudowaniu stron, przed zapisem): jeden komunikat ze wszystkimi naruszeniami */
+  if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); startErrors.push(...g.errors); warnings.push(...g.warnings); }
   const familyLabel = (l, f) => ui[l].families?.[f];
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
   const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, langs, engine, familyLabel };
@@ -52,6 +53,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, p
     report.languages[l] = { exercises: data[l].exercises.length, withoutFigure: data[l].exercises.filter(e => !e.figure).length, cuesWithoutText: data[l].meta.cuesWithoutText, missingFamilyLabels: [...new Set(data[l].exercises.map(e => e.family))].filter(f => !familyLabel(l, f)) };
   }
   for (const l of langs) for (const r of lockCheck.redirects) pages.push(redirectPage(ctx, l, r.from, r.to));
+  { const s6 = checkIndexingRule({ pages, data, indexing: !!cfg.indeksowanie, startCondition: !pominStraznikowStartu }); if (startErrors.length || s6.errors.length) throw new Error([...startErrors, ...s6.errors].join('\n')); warnings.push(...s6.warnings); report.indeksowaneCwiczenia = s6.info; }
   rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
   for (const p of pages) write(out, p.file, p.html);
   /* zasoby: własne pliki strony, silnik figur z aplikacji, dane figur i indeks nazw per język */

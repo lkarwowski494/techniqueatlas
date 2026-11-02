@@ -1,4 +1,4 @@
-// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw, S4 wersja danych, S6 komplet figur. Czyste funkcje: dane → { errors, warnings }.
+// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw, S4 wersja danych, S6 reguła indeksowania ćwiczeń (ZM-06), S8 start indeksowania. Czyste funkcje: dane → { errors, warnings }.
 // Zasada wspólna: przy config.indeksowanie=true każde naruszenie przerywa build (błąd); przy false to tylko ostrzeżenie — strona przed startem z wersją 1.1 ma być budowalna,
 // ale nie może zostać upubliczniona (włączenie indeksowania) z lukami. Bez zapytań sieciowych (sprawdzenie wersji w App Store po ID to osobny krok wydania, nie test).
 import { readFileSync, existsSync } from 'node:fs';
@@ -36,18 +36,25 @@ export function checkVersion({ manifestVersion, releaseVersion = '', pinRef = ''
   return { errors, warnings };
 }
 
-/** S6 warunek startu: każde ćwiczenie ma figurę v2 (709/709) albo wyjątek z powodem w start-wyjatki.json; wyjątek dla ćwiczenia z figurą lub nieznanego id to błąd (nieaktualny). */
-export function checkStartCondition({ exercises, exceptions = {}, indexing }) {
-  const errors = [], warnings = [], ids = new Set(exercises.map(e => e.id));
-  const missing = exercises.filter(e => !e.figure && !(typeof exceptions[e.id] === 'string' && exceptions[e.id].trim())).map(e => e.id);
-  const withFigure = exercises.filter(e => e.figure).length;
-  if (missing.length) verdict(indexing, errors, warnings, `S6 warunek startu: figury ma ${withFigure} z ${exercises.length} ćwiczeń; brak figury i wyjątku z powodem: ${missing.length} (${sample(missing)})`);
-  for (const [id, why] of Object.entries(exceptions)) {
-    if (!ids.has(id)) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla nieznanego ćwiczenia „${id}”`);
-    else if (exercises.find(e => e.id === id).figure) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla „${id}” jest zbędny — ćwiczenie ma figurę`);
-    else if (!String(why).trim()) verdict(indexing, errors, warnings, `S6 warunek startu: wyjątek dla „${id}” bez powodu`);
+/** S6 warunek indeksowania (ZM-06, decyzja właściciela 02.11.2026, bramka E1 wariant A; zastępuje „figura v2 dla 709/709”, ZM-02): do indeksu idzie tylko ćwiczenie z pełną kartą
+ *  (`pelna === true` z eksportu aplikacji, F-20) i własnymi wskazówkami kompletnymi w języku strony. Sprawdza ZBUDOWANE strony, niezależnie od reguły w pages.mjs: strona ćwiczenia jest
+ *  indeksowana, gdy ma flagę `indexable` ALBO jej HTML nie ma `noindex` w meta robots. Naruszenie przy indeksowaniu przerywa build (bez trybu pominięcia — reguła musi trzymać na każdych danych).
+ *  `startCondition` (domyślnie tak): eksport bez pola `pelna` w żadnym ćwiczeniu (PIN sprzed F-20) — błąd przy indeksowaniu, ostrzeżenie bez; testy na danych sprzed wydania mogą go wyłączyć. */
+export function checkIndexingRule({ pages, data, indexing, startCondition = true }) {
+  const errors = [], warnings = [], bad = [];
+  const robots = html => /<meta name="robots" content="([^"]*)">/.exec(html ?? '')?.[1] ?? '';
+  let indexed = 0;
+  for (const p of pages) {
+    if (p.kind !== 'exercise') continue;
+    if (!p.indexable && /(^|,)\s*noindex\s*(,|$)/.test(robots(p.html))) continue;
+    indexed++;
+    const ex = data[p.lang]?.exercises.find(e => e.slug === p.slug);
+    if (!(ex && ex.pelna === true && ex.cues?.scope === 'own' && !ex.cues.missing)) bad.push(`${p.lang}/${p.slug}`);
   }
-  return { errors, warnings, info: `figury: ${withFigure}/${exercises.length}` };
+  if (bad.length) verdict(indexing, errors, warnings, `S6 warunek indeksowania: ${bad.length} stron ćwiczeń indeksowanych bez pełnej karty (pelna === true) i własnych wskazówek (${sample(bad)})`);
+  const all = Object.values(data).flatMap(d => d.exercises);
+  if (startCondition && all.length && !all.some(e => Object.prototype.hasOwnProperty.call(e, 'pelna'))) verdict(indexing, errors, warnings, 'S6 warunek indeksowania: eksport bez pola „pelna” (PIN sprzed F-20) — żadne ćwiczenie nie trafi do indeksu; przepnij PIN na commit aplikacji z polem');
+  return { errors, warnings, info: `indeksowane ćwiczenia: ${indexed - bad.length}` };
 }
 
 /** S8 start indeksowania: przy indeksowanie=true config.json → indeksowanieOd (RRRR-MM-DD) musi być ustawione — od tej daty liczy się minimum trzymania przekierowań (slugi.mjs → REDIRECT_MIN_DAYS). Przed startem nic do sprawdzenia. */
@@ -56,12 +63,12 @@ export function checkIndexingStart({ indexing, from }) {
   return { errors, warnings: [] };
 }
 const optional = rel => existsSync(join(ROOT, rel)) ? JSON.parse(readFileSync(join(ROOT, rel), 'utf8')) : {};
-/** Wszystkie trzy strażniki dla budowania: `data` per język, `langs` budowane języki. Pliki ustawień czytane stąd, chyba że podane (test). */
+/** Strażniki przed budowaniem stron (S3, S4, S8): `data` per język, `langs` budowane języki. Pliki ustawień czytane stąd, chyba że podane (test). S6 działa na zbudowanych stronach (build.mjs). */
 export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
   const indexing = !!cfg.indeksowanie;
-  const checked = files.trademark ?? optional('trademark-check.json').nazwy, exceptions = files.wyjatki ?? optional('start-wyjatki.json').wyjatki;
+  const checked = files.trademark ?? optional('trademark-check.json').nazwy;
   const names = langs.flatMap(l => data[l].exercises.map(e => e.name));
   const parts = [checkTrademarks({ names, checked, indexing }), checkVersion({ manifestVersion: manifest.app.version, releaseVersion: cfg.wersjaWydania, pinRef: pin.ref, indexing }),
-    checkStartCondition({ exercises: data[langs[0]].exercises, exceptions, indexing }), checkIndexingStart({ indexing, from: cfg.indeksowanieOd })];
-  return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings), info: parts[2].info };
+    checkIndexingStart({ indexing, from: cfg.indeksowanieOd })];
+  return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings) };
 }
