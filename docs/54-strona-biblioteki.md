@@ -654,3 +654,6 @@ Infrastruktura ma być ustawiona tak, by później nie zepsuć indeksowania w Go
 - [ ] `x-default` i hreflang na stronie `/` (wdrożone).
 - [ ] `indeksowanieOd` ustawione razem z `indeksowanie=true` (S8).
 - [ ] Przebieg dowodowy Pages: `curl -sI` github.io→domena (kod i ścieżka), HTTP→HTTPS, robots.txt, noindex.
+
+## Decyzja 02.11.2026 (właściciel): katalogi tymczasowe testów — wariant A
+Sprzątanie `atlas-dist-*` (pełny build ok. 500 MB) po każdym pliku testów i strażnik całego przebiegu (`tests/pomoc.mjs`, `tests/sprzatanie.test.mjs`, `tests/uruchom-testy.mjs`); bez wspólnej pamięci buildów między plikami testów. Uzasadnienie: problem dysku rozwiązany (wcześniej 26 katalogów / 6,4 GB na przebieg, po zmianie 0; szczyt w trakcie ok. 2,8 GB), `buildOnce` już współdzieli build w obrębie pliku, pozostałe buildy mają różne ustawienia. Odrzucone: B (wspólna pamięć buildów między procesami — blokada między procesami, ryzyko izolacji, zysk czasu niezmierzony).
