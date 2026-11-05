@@ -38,7 +38,7 @@ dist/  = HTML, CSS, SVG, moduły JS (figury, indeks nazw), mapy witryny   ← je
 ## Struktura
 
 `src/build.mjs` (orkiestracja, mapy witryny) · `src/pages.mjs` (szablony stron) · `src/taksonomia.mjs` (adresy filtrów, hreflang) · `src/sync-dane.mjs` · `src/ui/` (teksty stałe) ·
-`assets/` (CSS, `figura-strona.js` — animacja, `szukaj.js` — filtry i wyszukiwarka) · `tests/` (strażnicy i generator) · `pomiary/` (wyniki pomiaru opcji renderowania figury).
+`assets/` (CSS, `figura-strona.js` — animacja, `figura-czas.js` — funkcja czasu wg trybu pętli (wahadło / jednokierunkowa), `szukaj.js` — filtry i wyszukiwarka) · `tests/` (strażnicy i generator) · `pomiary/` (wyniki pomiaru opcji renderowania figury).
 
 ## Decyzje techniczne
 

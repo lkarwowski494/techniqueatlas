@@ -133,7 +133,7 @@ function figureBlock(ctx, lang, ex, fig, file) {
   const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
   const views = fig.views.map(name => ({ name, box: E.boxOf(lists, name) }));
   const label = fill(ui.figureLabel, { opis: ex.name });
-  const phases = f.phases.map(p => p.name === ctx.data[lang].labels.phases.Pauza ? p.name : `${p.name} ${Math.round(p.ms / 100) / 10} s`).join(' · ');
+  const phases = f.phases.map(p => p.name === ctx.data[lang].labels.phases.Pauza || p.untimed ? p.name : `${p.name} ${Math.round(p.ms / 100) / 10} s`).join(' · ');
   const main = views[0], positions = poseIds(fig); /* jak staticPositions aplikacji: figura statyczna ma tylko pozycję skrajną (bez podpisu) */
   const caption = id => id === 'start' ? ui.startPose : ui.endPose;
   const poses = positions.map(id => `<div><svg role="img" aria-label="${esc(positions.length > 1 ? `${label}, ${caption(id)}` : label)}" viewBox="${E.viewBox(main.box)}"><use href="${relUrl(file, `assets/poz/${ex.slug}.svg`)}#${id}"/></svg>${positions.length > 1 ? `<p class="drobne">${esc(caption(id))}</p>` : ''}</div>`).join('');
@@ -160,7 +160,7 @@ export function silhouetteBlock(ctx, lang, ex, file) {
 /** Plik danych figury (moduł ES, wspólny dla języków): próbki klatek, błędy, tempo i kadr widoków. */
 export function figureModule(ctx, slug, fig) {
   const E = ctx.engine; const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
-  const data = { views: fig.views.map(name => ({ name, box: E.boxOf(lists, name) })), static: fig.static, lowerFirst: fig.lowerFirst, tempo: fig.tempo, frames: fig.frames,
+  const data = { views: fig.views.map(name => ({ name, box: E.boxOf(lists, name) })), static: fig.static, lowerFirst: fig.lowerFirst, ...(fig.loop ? { loop: fig.loop } : {}), tempo: fig.tempo, frames: fig.frames,
     errors: fig.errors.map(e => ({ id: e.id, kind: e.kind, ...(e.kind === 'tempo' ? { tempo: e.tempo } : {}) })), errorFrames: fig.errors.map(e => e.frames ?? null) };
   return `export default ${JSON.stringify(data)};\n`;
 }
