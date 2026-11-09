@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { checkTrademarks, checkVersion, checkIndexingRule, checkIndexingStart, startGuards } from '../src/straznicy.mjs';
 import { build } from '../src/build.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
-import { requireData, tmpDist, zPelna } from './pomoc.mjs';
+import { requireData, tmpDist, bezPelna, tylkoPelna } from './pomoc.mjs';
 
 const OK = { status: 'sprawdzone', data: '2026-10-26' };
 
@@ -76,12 +76,12 @@ test('pliki ustawień mają znany kształt (trademark-check.json, config.json �
 test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S6 pole „pelna”, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
   requireData();
   const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json (F-16 zamroził 709 adresów 02.11.2026) */
-  const w = await build({ out: tmpDist(), slugi: pusty }); const joined = w.warnings.join('\n');
+  const w = await build({ out: tmpDist(), slugi: pusty, ...bezPelna() }); const joined = w.warnings.join('\n');
   for (const re of [/S3 znaki towarowe/, /S4 wersja/, /S6 warunek indeksowania: eksport bez pola „pelna”/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
-  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
+  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: pusty, ...bezPelna() }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
   const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S6 */
-  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /S6 warunek indeksowania/.test(err.message));
+  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } }, ...bezPelna() }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /S6 warunek indeksowania/.test(err.message));
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /pominStraznikowStartu/);
 });
 
@@ -94,8 +94,8 @@ test('S8 start indeksowania: indeksowanie=true bez daty indeksowanieOd to błąd
 
 test('S6 (02.11.2026): strażnik jest podłączony do build() na zbudowanych stronach — raport liczy indeksowane ćwiczenia; testowe wejścia build() nie są w CLI', async () => {
   requireData();
-  const r = await build({ out: tmpDist(), cfg: { indeksowanie: true, jezyki: ['pl', 'en'], indeksujJezyki: ['pl', 'en'] }, pominStraznikowStartu: true, ...zPelna('back-squat') });
+  const r = await build({ out: tmpDist(), cfg: { indeksowanie: true, jezyki: ['pl', 'en'], indeksujJezyki: ['pl', 'en'] }, pominStraznikowStartu: true, ...tylkoPelna('back-squat') });
   assert.equal(r.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 2'); /* back-squat w pl i en (własne wskazówki kompletne) — przy odłączonym strażniku 0 */
-  const off = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en'] }, ...zPelna('back-squat') }); assert.equal(off.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 0');
+  const off = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en'] }, ...tylkoPelna('back-squat') }); assert.equal(off.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 0');
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /zmianaDanych/);
 });
