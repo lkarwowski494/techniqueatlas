@@ -10,6 +10,7 @@ import { requireData } from './pomoc.mjs';
 
 requireData();
 const KATALOG = 709; /* liczba ćwiczeń katalogu aplikacji (kontrakt F-16: „zamrożenie slugów 709”) */
+const UKRYTE = 1; /* Wide-Grip Pulldown Behind The Neck: ukryte w eksporcie (decyzja właściciela 02.11.2026, docs/18 aplikacji); adres w slug-overrides.json → lista */
 const man = readJson('.cache/dane/manifest.json'), cfg = readJson('config.json'), pin = readJson('PIN.json');
 const lock = readJson('slugs.lock.json').slugi, ov = readJson('slug-overrides.json');
 const dane = l => JSON.parse(readFileSync(join(CACHE, `dane/${man.languages.find(x => x.lang === l).file}`), 'utf8'));
@@ -21,7 +22,7 @@ test('F-16: slugs.lock.json ma 709 wpisów i zgadza się z adresami ćwiczeń w 
   assert.equal(Object.keys(lock).length, KATALOG);
   for (const l of cfg.jezyki) {
     const ex = dane(l).exercises, eff = effectiveSlugs(ex, ov.nadpisania);
-    assert.equal(ex.length, KATALOG, `${l}: liczba ćwiczeń`);
+    assert.equal(ex.length, KATALOG - UKRYTE, `${l}: liczba ćwiczeń`);
     assert.deepEqual(eff.errors, [], l);
     for (const [id, slug] of eff.slugs) assert.equal(lock[id], slug, `${l}: ${id}`);
     assert.deepEqual(checkSlugLock({ current: eff.slugs, lock, redirects: ov.przekierowania, indexing: true }).errors, [], l);

@@ -83,6 +83,7 @@ test('hreflang i canonical (S7): każda strona wymienia wszystkie języki wzajem
   const { out } = await buildOnce(); const dom = readJson('config.json').domena;
   for (const f of htmlFiles(out).filter(f => /^(pl|en)\//.test(f))) {
     const h = read(out, f), lang = f.split('/')[0], dir = f.replace(/index\.html$/, '');
+    if (/http-equiv="refresh"/.test(h)) continue; /* strona przekierowania starego adresu (slug-overrides.json): canonical na adres docelowy, bez hreflang */
     assert.equal(h.match(/<link rel="canonical" href="([^"]+)">/)?.[1], `${dom}/${dir}`, f);
     const alts = Object.fromEntries([...h.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)].map(m => [m[1], m[2]]));
     assert.deepEqual(Object.keys(alts).sort(), ['en', 'pl', 'x-default'], f); assert.equal(alts[lang], `${dom}/${dir}`); assert.equal(alts['x-default'], /^(pl|en)\/index\.html$/.test(f) ? `${dom}/` : `${dom}/${dir.replace(/^[^/]+/, readJson('config.json').jezykDomyslny)}`, 'x-default: strona główna → /, reszta → ta sama strona w języku domyślnym');
@@ -100,10 +101,10 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
   assert.match(h, /<h1 lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1>Back Squat<\/h1>/);
-  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>Common mistakes<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
+  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>What to avoid<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
   for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/" lang="en">`));
-  const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>Common mistakes<|General tips/);
+  const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>What to avoid<|General tips/);
   const gen = EN.exercises.find(x => x.cues.scope === 'general' && x.cues.ok?.length); if (gen) assert.match(read(out, `en/exercises/${gen.slug}/index.html`), /General tips for this movement/); /* zakres „general” zniknął z eksportu (od fba531d) */
   else assert.ok(EN.exercises.every(x => x.cues.scope !== 'general'), 'brak ćwiczeń z zakresem general — nie ma czego sprawdzać');
   if (!hasFig) assert.doesNotMatch(h, /data-figure|figura-strona|data-poses/); /* brak figury w eksporcie → strona bez figury */
@@ -162,8 +163,8 @@ test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy ekspor
 });
 test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z pliku modułu; lista A–Z działa bez JS (pełna lista w HTML, filtry ukryte do uruchomienia skryptu)', async () => {
   const { out } = await buildOnce();
-  for (const l of ['pl', 'en']) { const raw = read(out, `assets/idx/${l}.js`); assert.ok(gzipSync(raw).length <= 25 * 1024); assert.equal(JSON.parse(raw.replace(/^export default /, '').replace(/;\s*$/, '')).length, 709); }
-  const h = read(out, 'en/exercises/index.html'); assert.equal((h.match(/<li data-muscle=/g) ?? []).length, 709); assert.match(h, /data-filtry hidden/); assert.match(h, /<p data-brak hidden>No exercises match these filters<\/p>/);
+  for (const l of ['pl', 'en']) { const raw = read(out, `assets/idx/${l}.js`); assert.ok(gzipSync(raw).length <= 25 * 1024); assert.equal(JSON.parse(raw.replace(/^export default /, '').replace(/;\s*$/, '')).length, EN.exercises.length); }
+  const h = read(out, 'en/exercises/index.html'); assert.equal((h.match(/<li data-muscle=/g) ?? []).length, EN.exercises.length); assert.match(h, /data-filtry hidden/); assert.match(h, /<p data-brak hidden>No exercises match these filters<\/p>/);
 });
 test('lista A–Z posortowana collatorem języka; strony filtrów zawierają dokładnie ćwiczenia o tej wartości; identyfikatory adresów pokrywają wszystkie wartości z danych', async () => {
   const { out } = await buildOnce();
@@ -177,7 +178,7 @@ test('lista A–Z posortowana collatorem języka; strony filtrów zawierają dok
 });
 test('strona główna języka: liczba ćwiczeń z danych, wyszukiwarka, linki do wszystkich wartości filtrów, lista podstawowych = ćwiczenia nie-niszowe z eksportu; WebSite w JSON-LD', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/index.html');
-  assert.match(h, /709 exercises with technique notes/); assert.match(h, /data-szukaj data-lang="en"/);
+  assert.match(h, new RegExp(`${EN.exercises.length} exercises with technique notes`)); assert.match(h, /data-szukaj data-lang="en"/);
   const basics = [...h.slice(h.indexOf('Basic exercises')).matchAll(/<li><a href="exercises\/([^/]+)\/"/g)].map(m => m[1]).sort();
   assert.deepEqual(basics, EN.exercises.filter(e => !e.niche).map(e => e.slug).sort());
   for (const g of new Set(EN.exercises.map(e => e.group))) assert.ok(h.includes(`href="muscles/${GROUP_ID[g]}/"`));
