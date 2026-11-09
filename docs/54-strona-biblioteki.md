@@ -657,8 +657,9 @@ Infrastruktura ma być ustawiona tak, by później nie zepsuć indeksowania w Go
 
 ### Stan 09.11.2026 — PIN przepięty (F-20, ZM-06)
 - `PIN.json` wskazuje eksport z polem `pelna` (aplikacja `integracja-1-1` @ ab59dd5): w danych 179 z 708 ćwiczeń (PL) ma `pelna: true`; warunek S6 „eksport bez pola pelna” jest spełniony. Ćwiczenie ukryte przez właściciela 02.11.2026 (Wide-Grip Pulldown Behind The Neck) zniknęło z eksportu — adres przekierowany w `slug-overrides.json`.
-- Testy: `npm test` 101/102. Czerwony `tests/straznik-terminy.test.mjs` (słownik, wzorce zakazane): nazwy grup z danych aplikacji — en/nozyce „Lunges and step-ups”, pl/nozyce „Wykroki i wejścia na skrzynię”, uk/biodra „Відведення й приведення стегна” — trafiają na wzorce zakazane. Otwarte: zmiana nazw w aplikacji albo wyjątek w słowniku (decyzja właściciela / tłumacz); testu nie osłabiono.
+- Testy: strażnik terminów — 3 nazwy grup z danych aplikacji (en/pl `nozyce`, uk `biodra`) trafiały na wzorce zakazane innych pojęć; **decyzja właściciela 09.11.2026: wyjątek z powodem** (`WYJATKI` w `tests/straznik-terminy.test.mjs`; wyjątek nieużyty = błąd). Odrzucone: zmiana nazw grup w aplikacji (nazwy poprawne).
 - Helper `tmpDist` sprząta katalogi budowań przy wyjściu procesu (każdy plik testowy ~170 MB na budowanie).
 
+### Decyzja właściciela 09.11.2026: przekierowanie ukrytego ćwiczenia — wariant A (lista); pytanie poniżej zamknięte
 ### Pytanie produktowe (09.11.2026): dokąd przekierować ukryte ćwiczenie
 Ukryte ćwiczenie (Wide-Grip Pulldown Behind The Neck) przekierowano na listę ćwiczeń (`lista`). Opcje: (A) lista — prosto, bez ryzyka błędnego zamiennika (rekomendacja); (B) ćwiczenie pokrewne (np. ściąganie drążka do klatki) — lepsze dla wchodzących z wyszukiwarki, ale wymaga recenzji merytorycznej, że to bezpieczny zamiennik; (C) usunięcie adresu (410) — czyste, lecz traci ruch. Wykonalność: A i C w `src/pages.mjs` wymagają tylko wpisu w `slug-overrides.json` (sprawdzone przy tym przepięciu); B niesprawdzone.

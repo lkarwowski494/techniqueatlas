@@ -14,13 +14,22 @@ const ui = Object.fromEntries(langs.map(l => [l, JSON.parse(readFileSync(join(RO
 const strings = (o, out = []) => { if (typeof o === 'string') out.push(o); else if (Array.isArray(o)) o.forEach(x => strings(x, out)); else if (o && typeof o === 'object') Object.entries(o).forEach(([k, x]) => { if (!k.startsWith('_')) strings(x, out); }); return out; };
 const at = (o, path) => path.split('.').reduce((a, k) => a?.[k], o);
 
+// Wyjątki (decyzja właściciela 09.11.2026, docs/54): nazwy grup z danych aplikacji, w których wzorzec zakazany innego pojęcia trafia
+// na poprawny termin. Klucz: `${język}/${pojęcie}: tekst`; każdy z powodem. Wyjątek nieużyty = błąd (lista nie puchnie).
+const WYJATKI = {
+  'en/nozyce: Lunges and step-ups': 'nazwa grupy ćwiczeń — wykroki to wykroki; zakaz „lunge” dotyczy pozycji nożyc w opisie techniki',
+  'pl/nozyce: Wykroki i wejścia na skrzynię': 'nazwa grupy ćwiczeń — zakaz „wykrok” dotyczy pozycji nożyc w opisie techniki, nie nazwy grupy',
+  'uk/biodra: Відведення й приведення стегна': 'nazwa grupy — „стегно” = udo (odwodzenie/przywodzenie uda), poprawnie; zakaz dotyczy stawu biodrowego',
+};
 test('słownik aplikacji: wzorce zakazane nie występują w tekstach strony (wszystkie języki)', () => {
-  const bad = [];
+  const bad = []; const uzyte = new Set();
   for (const p of app.pojecia) for (const l of langs) for (const z of p.jezyki[l]?.zakazane ?? []) {
     const re = new RegExp(z.wzorzec, 'iu');
-    for (const s of strings(ui[l])) if (re.test(s)) bad.push(`${l}/${p.id}: „${s}” ~ ${z.wzorzec}`);
+    for (const s of strings(ui[l])) if (re.test(s)) { const k = `${l}/${p.id}: ${s}`; if (WYJATKI[k]) uzyte.add(k); else bad.push(`${l}/${p.id}: „${s}” ~ ${z.wzorzec}`); }
   }
   assert.deepEqual(bad, []);
+  assert.deepEqual(Object.keys(WYJATKI).filter(k => !uzyte.has(k)), [], 'wyjątek nieużyty — usuń z WYJATKI');
+  for (const [k, v] of Object.entries(WYJATKI)) assert.ok(v.length > 20, `wyjątek bez powodu: ${k}`);
 });
 test('słownik strony: struktura, zalecany termin w kluczu, zakazane poza tekstami', () => {
   const bad = [];
