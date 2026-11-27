@@ -4,9 +4,11 @@ import { mkdirSync, writeFileSync, cpSync, rmSync, readdirSync, readFileSync, ex
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ROOT, CACHE, readJson, hasData, esc } from './lib.mjs';
-import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage, figureModule, poseSheet, redirectPage, nazwaLokalna, paths, urlOf } from './pages.mjs';
+import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage, legalPage, figureModule, poseSheet, redirectPage, nazwaLokalna, paths, urlOf } from './pages.mjs';
 import { effectiveSlugs, checkSlugLock, remapSlugs } from './slugi.mjs';
-import { startGuards, checkIndexingRule } from './straznicy.mjs';
+import { startGuards, checkIndexingRule, checkPrawne, checkRamka } from './straznicy.mjs';
+import { DOKUMENTY, wczytajPrawne } from './prawne.mjs';
+import { dniBezOplat, dokumentRamki } from './aplikacja.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId, hreflangCodes } from './taksonomia.mjs';
 
 /** Sprawdza, że pobrane dane i silnik pochodzą z commitu z PIN.json. */
@@ -41,9 +43,13 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   const startErrors = []; /* błędy S3/S4/S8 zgłaszane razem z S6 (po zbudowaniu stron, przed zapisem): jeden komunikat ze wszystkimi naruszeniami */
   if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); startErrors.push(...g.errors); warnings.push(...g.warnings); }
+  /* Z-33: wstawki stron prawnych (administrator i kontakt ze zmiennych środowiska — repo jest publiczne), liczba dni bez opłat z kodu aplikacji, teksty prawne */
+  const wartosci = { administrator: cfg.administrator ?? process.env.TA_ADMINISTRATOR ?? '', kontakt: cfg.kontakt ?? process.env.TA_KONTAKT ?? '', dataObowiazywania: cfg.dataObowiazywania ?? '', politykaAplikacji: cfg.polityka, adresStrony: cfg.domena };
+  const uiEn = readJson('src/ui/en.json'), dni = dniBezOplat(), prawne = wczytajPrawne({ langs, wartosci, brak: Object.fromEntries(Object.entries(ui).map(([l, x]) => [l, x.prawneBrak]).filter(([, x]) => x)) });
+  if (!pominStraznikowStartu) for (const g of [checkPrawne({ wartosci, indexing: !!cfg.indeksowanie }), checkRamka({ doc: dokumentRamki(), ui: { pl: readJson('src/ui/pl.json'), en: uiEn }, wersjaWydania: cfg.wersjaWydania, indexing: !!cfg.indeksowanie })]) { startErrors.push(...g.errors); warnings.push(...g.warnings); }
   const familyLabel = (l, f) => ui[l].families?.[f];
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
-  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, langs, engine, familyLabel };
+  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });
   const report = { languages: {} };
@@ -51,6 +57,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
     pages.push(homePage(ctx, l), listPage(ctx, l));
     const g = groups(l); for (const kind of ['muscle', 'equipment', 'movement']) for (const x of g[kind]) { if (!x.id) throw new Error(`brak identyfikatora adresu: ${kind} ${x.value}`); pages.push(filterPage(ctx, l, kind, x)); }
     for (const ex of data[l].exercises) pages.push(exercisePage(ctx, l, ex));
+    for (const doc of DOKUMENTY) pages.push(legalPage(ctx, l, doc));
     report.languages[l] = { exercises: data[l].exercises.length, withoutFigure: data[l].exercises.filter(e => !e.figure).length, cuesWithoutText: data[l].meta.cuesWithoutText, missingFamilyLabels: [...new Set(data[l].exercises.map(e => e.family))].filter(f => !familyLabel(l, f)) };
   }
   for (const l of langs) for (const r of lockCheck.redirects) pages.push(redirectPage(ctx, l, r.from, r.to));

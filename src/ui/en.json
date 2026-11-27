@@ -84,5 +84,32 @@
     "chest_press_machine": "Press machines (chest and shoulders)",
     "cable_press": "Cable presses",
     "kneeling_hinge": "Kneeling and seated hinge"
+  },
+  "prawne": {
+    "nav": "Legal documents",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "license": "Content licence"
+  },
+  "prawneBrak": {
+    "administrator": "(operator details to be added at publication)",
+    "kontakt": "(contact address to be added at publication)",
+    "dataObowiazywania": "(publication date)"
+  },
+  "wsparcie": {
+    "w1": "This website is free to use.",
+    "w2": "The app gives you {dni} training days a month at no charge. The full version is paid: a subscription or lifetime access.",
+    "w3": "Buying it also supports this website."
+  },
+  "ramka": {
+    "tytul": "In the {nazwa} app",
+    "z1": "In the app, you can add this exercise to a workout or to your own template.",
+    "z2": "During a workout, you log each set and see your previous result next to it.",
+    "z3": "When you tick off a set, the rest timer starts.",
+    "z4": "If you don't have the equipment or it's taken, the app suggests alternatives, including the same movement with different equipment.",
+    "z5": "Once you choose where you train, the list shows the exercises you can do there.",
+    "z6": "The exercise screen lists your recent sessions with it, and Progress shows a chart and your records.",
+    "z7": "You can build a weekly plan from your templates, or generate templates and a plan from a few choices.",
+    "z8": "Your history, progress, templates and backups are always available, even without the paid version."
   }
 }

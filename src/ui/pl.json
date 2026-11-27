@@ -89,5 +89,32 @@
     "chest_press_machine": "Maszyny do wyciskania",
     "cable_press": "Wyciskanie na linkach",
     "kneeling_hinge": "Skłony w klęku i siedząc"
+  },
+  "prawne": {
+    "nav": "Dokumenty prawne",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "license": "Licencja treści"
+  },
+  "prawneBrak": {
+    "administrator": "(dane administratora zostaną uzupełnione przy publikacji)",
+    "kontakt": "(adres kontaktowy zostanie uzupełniony przy publikacji)",
+    "dataObowiazywania": "(data publikacji)"
+  },
+  "wsparcie": {
+    "w1": "Ta strona jest bezpłatna.",
+    "w2": "Aplikacja daje {dni} dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni.",
+    "w3": "Jej zakup wspiera też rozwój tej strony."
+  },
+  "ramka": {
+    "tytul": "W aplikacji {nazwa}",
+    "z1": "W aplikacji dodasz to ćwiczenie do treningu albo do własnego szablonu.",
+    "z2": "W czasie treningu zapisujesz każdą serię, a obok widzisz wynik z poprzedniego razu.",
+    "z3": "Po odhaczeniu serii zaczyna się odliczanie przerwy.",
+    "z4": "Gdy nie masz sprzętu albo jest zajęty, aplikacja podsuwa zamienniki, także ten sam ruch na innym przyrządzie.",
+    "z5": "Po wybraniu miejsca treningu lista pokazuje ćwiczenia, które da się tam zrobić.",
+    "z6": "Na ekranie ćwiczenia widzisz swoje ostatnie treningi z nim, a w „Postępach” wykres i rekordy.",
+    "z7": "Z szablonów ułożysz plan tygodnia albo wygenerujesz szablony i plan z kilku założeń.",
+    "z8": "Historia, postępy, szablony i kopia zapasowa są dostępne zawsze, także bez płatnej wersji."
   }
 }

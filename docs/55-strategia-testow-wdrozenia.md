@@ -4,7 +4,7 @@ Stan: 27.11.2026 · rola 07-jakosc (build) · gałąź `strona/z30-testy` od `st
 Wejście: `docs/design/system/design-spec.md` (Z-12, „Arkusz”), `docs/teksty/szablony-stron.md` + `src/szablony.mjs` (Z-22), `docs/teksty/prawne/` (Z-20), `docs/teksty/ramka-w-aplikacji.md` (Z-21), `docs/nazwy/pl.json` (Z-24, recenzja Z-25), `docs/badanie-zasiegu-2026-11-27.md` (Z-06, A1–A15, B1–B9, KO-130), `docs/55-plan-startu.md`.
 Zakres: tylko testy i ten dokument. `src/pages.mjs` i `assets/` bez zmian. Wdrożenie robią Z-31…Z-34.
 
-Oczekujące: Z-33 8, Z-34 15
+Oczekujące: Z-33 1, Z-34 15
 
 (Wiersz wyżej sprawdza `tests/z30-oczekujace.test.mjs`. Przy zdjęciu oznaczenia zmniejsz liczbę w tym samym commicie.)
 
@@ -76,18 +76,18 @@ Wynik: przebieg pojedynczych plików `node --test tests/z3x-*.test.mjs` 27.11.20
 | Wymaganie (źródło) | Test | Wynik dziś |
 |---|---|---|
 | Wyrocznie wczytane z dokumentów (8 zdań A, 3 zdania W) | `Z-33 wyrocznie wczytane` | zielony |
-| Stopka: polityka, regulamin, licencja strony; h1 i h2 jak w `docs/teksty/prawne/*.md`, `html lang` języka | `Z-33 strony prawne pl i en` | czerwony — „pl/index.html: brak linku do „Polityka prywatności strony Technique Atlas”” |
-| Strony prawne w języku podglądu (de; 33 języki po Z-26/Z-27) | `Z-33 strony prawne w języku podglądu` | czerwony — 0 linków prawnych |
+| Stopka: polityka, regulamin, licencja strony; h1 i h2 jak w `docs/teksty/prawne/*.md`, `html lang` języka | `Z-33 strony prawne pl i en` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: „pl/index.html: brak linku do „Polityka prywatności strony Technique Atlas””) |
+| Strony prawne w języku podglądu (de; 33 języki po Z-26/Z-27) | `Z-33 strony prawne w języku podglądu` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: 0 linków prawnych) |
 | Brak `{{wstawek}}`, `[DO KONSULTACJI]`, `[DO USTALENIA]` w dist | `Z-33 wstawki i znaczniki robocze` | zielony (strażnik; dziś trywialnie) |
-| Ramka wariant A, 8 zdań w kolejności (Z-21) | `Z-33 ramka „w aplikacji”` | czerwony — 1416 stron bez `aside.ramka` |
-| Ramka w języku podglądu, bez zdań pl/en | `Z-33 ramka w języku podglądu` | czerwony — 708 stron |
-| `appStoreId` ustawione → plakietka w ramce (D8, §5) | `Z-33 appStoreId ustawione` | czerwony — 1416 stron (link sklepu dziś tylko w stopce) |
-| `appStoreId` puste → ramka bez plakietki i bez `apple-itunes-app` | `Z-33 appStoreId puste` | czerwony — „brak ramki” |
-| Akapit o wsparciu W1–W3, {dni} = 5 (Z-21 §2; `lib/access.ts:25` tagu 1.1.1) | `Z-33 akapit o wsparciu` | czerwony — 1542 strony |
-| Liczba dni nie przepisana (wstawka `{dni}` w `src/`) | `Z-33 liczba dni nie jest przepisana` | czerwony — „src/: brak tekstu pl z {dni}” |
+| Ramka wariant A, 8 zdań w kolejności (Z-21) | `Z-33 ramka „w aplikacji”` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: 1416 stron bez `aside.ramka`) |
+| Ramka w języku podglądu, bez zdań pl/en | `Z-33 ramka w języku podglądu` | czerwony do przekładu API: zdania ramki w de (i 32 innych językach) są jeszcze angielskie z `lang="en"`; test pozostaje oznaczony `CZEKA('Z-33')` (poprzednio: 708 stron) |
+| `appStoreId` ustawione → plakietka w ramce (D8, §5) | `Z-33 appStoreId ustawione` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: 1416 stron (link sklepu dziś tylko w stopce)) |
+| `appStoreId` puste → ramka bez plakietki i bez `apple-itunes-app` | `Z-33 appStoreId puste` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: „brak ramki”) |
+| Akapit o wsparciu W1–W3, {dni} = 5 (Z-21 §2; `lib/access.ts:25` tagu 1.1.1) | `Z-33 akapit o wsparciu` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: 1542 strony) |
+| Liczba dni nie przepisana (wstawka `{dni}` w `src/`) | `Z-33 liczba dni nie jest przepisana` | zielony po wdrożeniu Z-33 (27.11.2026; poprzednio: „src/: brak tekstu pl z {dni}”) |
 | Brak „darmowy” na stronach pl (F-12) | `Z-33 słowo „darmowy”` | zielony (strażnik) |
 
-„Strażnik zdań ramki” z opisu Z-33 to kod wdrażającego; test wyżej jest jego testem akceptacyjnym (ramka = tabela dokumentu).
+„Strażnik zdań ramki” z opisu Z-33 to S13 w `src/straznicy.mjs` (`checkRamka`): zdania w `src/ui/pl.json` i `en.json` (klucze `ramka.z1…z8`, `wsparcie.w1…w3`) muszą być zdaniami z `docs/teksty/ramka-w-aplikacji.md`, a dokument musi być sprawdzony dla wersji = `config.json → wersjaWydania` (przy `indeksowanie=true` błąd, inaczej ostrzeżenie). S12 (`checkPrawne`): wstawki `{{administrator}}`, `{{kontakt}}`, `{{dataObowiazywania}}` wypełnione przed indeksowaniem. Test akceptacyjny ramki (tabela dokumentu) zostaje niezależnym sprawdzeniem.
 
 ### Z-34 zasięg wg A1–A15 i Z-22 (`tests/z34-zasieg.test.mjs`)
 

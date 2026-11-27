@@ -3,12 +3,13 @@
 import { esc, fill, plural, jsonForScript, relUrl } from './lib.mjs';
 import { langPath, hreflang, hreflangCodes, GROUP_ID, EQUIPMENT_ID, familyId } from './taksonomia.mjs';
 import { szablonyCwiczenia, JEZYKI as JEZYKI_SZABLONOW } from './szablony.mjs';
+import { DOKUMENTY } from './prawne.mjs';
 
 const SECTION = ['setup', 'move'];
 const abs = (cfg, path) => `${cfg.domena}/${path}`;
 const dirOf = file => file.replace(/index\.html$/, '');
 
-const MARKA = 'Technique Atlas'; /* nazwa marki w nagłówku (design-spec §5; nazwa aplikacji w ramce [DO USTALENIA] należy do Z-33) */
+const MARKA = 'Technique Atlas'; /* nazwa marki w nagłówku (design-spec §5); nazwa aplikacji w ramce: config.json → nazwaAplikacji */
 const ZNAK = '<svg class="znak" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M4 8v16M28 8v16M4 16h24M4 16l6-3.5M4 16l6 3.5M28 16l-6-3.5M28 16l-6 3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 /** Wspólny układ strony (system „Arkusz”): nagłówek z menu → arkusz (okruszki + treść) → stopka.
@@ -38,15 +39,20 @@ export function layout(ctx, m, bodyHtml) {
   const header = `<header class="glowka"><div class="glowka-w">\n${homeHref ? `<a class="marka" href="${homeHref}">${marka}</a>` : `<span class="marka">${marka}</span>`}\n${nav}\n</div></header>`;
   const crumbs = m.crumbs?.length ? `<nav class="okruszki" aria-label="${esc(ui.breadcrumbs)}"><ol>${m.crumbs.map((c, i) => `<li>${c.path && i < m.crumbs.length - 1 ? `<a href="${u(urlOf(c.path))}">${esc(c.name)}</a>` : `<span aria-current="page"${c.lang ? ` lang="${c.lang}"` : ''}>${esc(c.name)}</span>`}</li>`).join('')}</ol></nav>` : '';
   const langs = (m.alternates ?? []).length > 1 && !m.bezWierszaJezykow ? `<p class="jezyki">${esc(ui.language)}: ${m.alternates.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`).join(' · ')}</p>` : '';
+  /* stopka (Z-33): akapit o wsparciu, link do sklepu, języki, dokumenty prawne; teksty bez przekładu (jeszcze) = angielskie z lang="en" (przekład API, docs/przeklad) */
+  const wsp = ui.wsparcie ? { ui: ui.wsparcie, lang: '' } : { ui: ctx.uiEn.wsparcie, lang: ' lang="en"' };
+  const wsparcie = `<p class="wsparcie"${wsp.lang}>${esc(['w1', 'w2', 'w3'].map(k => fill(wsp.ui[k], { dni: ctx.dni })).join(' '))}</p>\n`;
+  const prawneTekst = k => ui.prawne?.[k] ? { t: ui.prawne[k], lang: '' } : { t: ctx.uiEn.prawne[k], lang: ' lang="en"' };
+  const prawneLinki = DOKUMENTY.map(d => { const tt = d.klucz === 'privacy' && !ui.prawne?.privacy ? { t: ui.privacy, lang: '' } : prawneTekst(d.klucz); /* „Prywatność” z tekstów stałych, gdy język nie ma jeszcze pełnej nazwy dokumentu */ return `<a href="${u(urlOf(paths.legal(lang, d.slug)))}"${tt.lang}>${esc(tt.t)}</a>`; }).join(' · ');
   const store = cfg.appStoreId ? `<p><a href="https://apps.apple.com/app/id${esc(cfg.appStoreId)}?ct=techniqueatlas-${esc(m.lang ?? 'x')}">${esc(ui.appStore)}</a></p>` : '';
   const scripts = (m.scripts ?? []).map(s => `<script type="module" src="${u(s)}"></script>`).join('\n');
-  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${store}${langs}<p class="prawne"><a href="${esc(cfg.polityka)}">${esc(ui.privacy)}</a> · ${esc(ui.rights)}</p>\n</div></footer>\n${scripts}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${wsparcie}${store}${langs}<p class="prawne">${prawneLinki} · ${esc(ui.rights)}</p>\n</div></footer>\n${scripts}\n</body>\n</html>\n`;
 }
 
 const P = lang => langPath(lang);
 export const paths = {
   chooser: () => 'index.html', home: l => `${P(l)}/index.html`, list: l => `${P(l)}/exercises/index.html`,
-  exercise: (l, slug) => `${P(l)}/exercises/${slug}/index.html`, muscle: (l, id) => `${P(l)}/muscles/${id}/index.html`, equipment: (l, id) => `${P(l)}/equipment/${id}/index.html`, movement: (l, id) => `${P(l)}/movements/${id}/index.html`,
+  exercise: (l, slug) => `${P(l)}/exercises/${slug}/index.html`, legal: (l, slug) => `${P(l)}/${slug}/index.html`, muscle: (l, id) => `${P(l)}/muscles/${id}/index.html`, equipment: (l, id) => `${P(l)}/equipment/${id}/index.html`, movement: (l, id) => `${P(l)}/movements/${id}/index.html`,
 };
 /** Adres katalogu strony (z końcowym „/”) dla alternatyw, canonical i sitemap. */
 export const urlOf = file => dirOf(file);
@@ -208,6 +214,15 @@ export function figureModule(ctx, slug, fig) {
   return `export default ${JSON.stringify(data)};\n`;
 }
 
+/** Ramka „w aplikacji” (Z-33, wariant A z docs/teksty/ramka-w-aplikacji.md; nie tekst z makiet — N-1): 8 zdań, nazwa aplikacji z config.json, plakietka sklepu tylko przy appStoreId.
+ * Język bez własnych zdań (przekład API jeszcze nie nałożony) pokazuje zdania angielskie z lang="en" na tytule i liście. */
+function ramkaHtml(ctx, lang) {
+  const own = !!ctx.ui[lang].ramka, r = own ? ctx.ui[lang].ramka : ctx.uiEn.ramka, k = own ? '' : ' lang="en"', ui = ctx.ui[lang], id = ctx.cfg.appStoreId;
+  const zdania = Array.from({ length: 8 }, (_, i) => `<li>${esc(r[`z${i + 1}`])}</li>`).join('');
+  const plakietka = id ? `<a class="plakietka" href="https://apps.apple.com/app/id${esc(id)}?ct=techniqueatlas-${esc(lang)}">${esc(ui.appStore)}</a>` : '';
+  return `<aside class="ramka" id="aplikacja" aria-labelledby="ramka-t">\n<h2 id="ramka-t"${k}>${esc(fill(r.tytul, { nazwa: ctx.cfg.nazwaAplikacji }))}</h2>\n<ul class="ramka-l"${k}>${zdania}</ul>\n${plakietka}</aside>`;
+}
+
 export function exercisePage(ctx, lang, ex) {
   const d = ctx.data[lang], ui = d.labels.ui, site = ctx.ui[lang], file = paths.exercise(lang, ex.slug), u = to => relUrl(file, to), L = d.labels;
   const fig = ctx.figs[ex.slug] && ex.figure ? ctx.figs[ex.slug] : null;
@@ -239,6 +254,7 @@ export function exercisePage(ctx, lang, ex) {
     : `<div class="uk uk-skrot bez-fig">${muscles}${needs ? `<div>${needs}</div>` : ''}${alts ? `<div>${alts}</div>` : ''}</div>`;
   const body = `<div class="arkusz-g"><h1 class="nazwa"${nazwaAttr(ctx, lang, ex)}>${nazwaLokalna(ctx, lang, ex) ? nazwaHtml(ctx, lang, ex) : esc(ex.name)}</h1>${tabliczka}</div>
 ${odp}${uklad}
+${ramkaHtml(ctx, lang)}
 <p class="zastrz">${esc(ui.disclaimer)}</p>`;
   const group = { name: L.groups[ex.group], path: paths.muscle(lang, GROUP_ID[ex.group]) };
   const crumbs = [...crumbBase(ctx, lang), { name: site.library, path: paths.list(lang) }, group, { name: nazwaStrony(ctx, lang, ex), path: file, lang: nazwaLokalna(ctx, lang, ex) ? '' : 'en' }];
@@ -249,6 +265,15 @@ ${odp}${uklad}
   const lokalna = nazwaLokalna(ctx, lang, ex), title = lokalna && JEZYKI_SZABLONOW.includes(lang) ? szablonyCwiczenia(d, site, lang, ex, { nazwaLokalna: lokalna }).tytul : ex.name;
   return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title, description: `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
     alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
+}
+
+/** Strona prawna (Z-33): dokument z docs/teksty/prawne/ w języku strony; język bez przekładu → wersja angielska z lang="en" (przekład API: docs/przeklad, źródło „prawne”). */
+export function legalPage(ctx, lang, doc) {
+  const own = ctx.prawne[doc.id][lang], d = own ?? ctx.prawne[doc.id].en, k = own ? '' : ' lang="en"', file = paths.legal(lang, doc.slug);
+  const crumbs = [...crumbBase(ctx, lang), { name: d.h1, path: file, lang: own ? '' : 'en' }];
+  const body = `<h1${k}>${esc(d.h1)}</h1>\n<div class="tekst-prawny"${k}>\n${d.html}\n</div>`;
+  return { file, lang, kind: 'legal', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && !!own, html: layout(ctx, { file, lang, title: d.h1, robots: robotsFor(ctx, lang, !!own), canonical: urlOf(file),
+    alternates: alternatesFor(ctx, l => paths.legal(l, doc.slug)), xDefault: defaultOf(ctx, l => paths.legal(l, doc.slug)), jsonld: [bcJson(ctx, crumbs)], crumbs, menu: true }, body) };
 }
 
 /** Stary adres ćwiczenia po przeniesieniu albo usunięciu (slug-overrides.json → przekierowania): meta refresh 0 s + canonical na nowy adres, w każdym budowanym języku; `to` null = lista ćwiczeń.

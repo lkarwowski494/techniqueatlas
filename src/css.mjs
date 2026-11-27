@@ -14,6 +14,9 @@ const UZUPELNIENIA = `
 [hidden]{display:none!important}
 .widoki{display:flex;flex-wrap:wrap;gap:var(--o4)}.widoki svg{flex:1 1 12rem;max-height:20rem;min-width:0}
 .drobne{font-size:var(--fs-drobne);color:var(--muted)}
+/* --- Z-33: uzupełnienia spoza systemu (do zgłoszenia roli 04): plakietka sklepu jako odsyłacz (po nadaniu appStoreId linia ciągła zamiast przerywanej) i szerokość tekstu stron prawnych --- */
+a.plakietka{border-style:solid;color:inherit;text-decoration:none}
+.tekst-prawny{max-width:var(--szer-tekst)}.tekst-prawny ul{padding-left:var(--o5)}
 `;
 export function zlozCss() { return NAGLOWEK + czytaj('fonty.css').split('url(../fonty/').join('url(fonty/') + '\n' + czytaj('tokeny.css') + '\n' + czytaj('komponenty.css') + UZUPELNIENIA; }
 if (process.argv[1] && import.meta.url === new URL(process.argv[1], 'file://').href) {

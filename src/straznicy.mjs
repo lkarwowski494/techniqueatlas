@@ -73,3 +73,28 @@ export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
     checkIndexingStart({ indexing, from: cfg.indeksowanieOd }), checkPlan({ text: files.plan ?? optionalText('docs/55-plan-startu.md'), indexing })];
   return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings) };
 }
+
+/**
+ * S12 wstawki stron prawnych: {{administrator}}, {{kontakt}} (dane z ustawień środowiska, nie z repo publicznego) i {{dataObowiazywania}} muszą być wypełnione przy indeksowaniu;
+ * przed startem to ostrzeżenie (strona pokazuje jawny tekst zastępczy).
+ */
+export function checkPrawne({ wartosci, indexing }) {
+  const errors = [], warnings = [], brak = ['administrator', 'kontakt', 'dataObowiazywania'].filter(k => !String(wartosci[k] ?? '').trim());
+  if (brak.length) verdict(indexing, errors, warnings, `S12 strony prawne: brak wartości wstawek ${brak.map(k => `{{${k}}}`).join(', ')} (administrator i kontakt: zmienne środowiska TA_ADMINISTRATOR, TA_KONTAKT; data: config.json → dataObowiazywania)`);
+  return { errors, warnings };
+}
+
+/**
+ * S13 ramka „w aplikacji”: zdania na stronach (src/ui/<pl|en>.json → ramka, wsparcie) są zdaniami z docs/teksty/ramka-w-aplikacji.md, a dokument był sprawdzony dla wersji
+ * równej config.json → wersjaWydania (zdania o funkcjach aplikacji są prawdziwe tylko dla wydanej wersji; po zmianie wersji trzeba je sprawdzić ponownie).
+ */
+export function checkRamka({ doc, ui, wersjaWydania, indexing }) {
+  const errors = [], warnings = [];
+  if (doc.wersja !== wersjaWydania) verdict(indexing, errors, warnings, `S13 ramka: zdania sprawdzono dla wersji ${doc.wersja || '(brak wpisu)'}, a config.json → wersjaWydania to ${wersjaWydania} — sprawdź zdania ramki z kodem tej wersji i zaktualizuj docs/teksty/ramka-w-aplikacji.md`);
+  for (const l of ['pl', 'en']) {
+    const r = ui[l]?.ramka ?? {}, w = ui[l]?.wsparcie ?? {};
+    const zle = [...doc.zdania[l].map((z, i) => [`ramka.z${i + 1}`, r[`z${i + 1}`], z]), ...doc.wsparcie[l].map((z, i) => [`wsparcie.w${i + 1}`, w[`w${i + 1}`], z])].filter(([, a, b]) => a !== b).map(([k]) => k);
+    if (zle.length || doc.zdania[l].length !== 8 || doc.wsparcie[l].length !== 3) errors.push(`S13 ramka: src/ui/${l}.json (${zle.join(', ') || 'liczba zdań'}) różni się od docs/teksty/ramka-w-aplikacji.md`);
+  }
+  return { errors, warnings };
+}
