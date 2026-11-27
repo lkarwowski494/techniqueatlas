@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync, cpSync, rmSync, readdirSync, readFileSync, ex
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ROOT, CACHE, readJson, hasData, esc } from './lib.mjs';
-import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage, figureModule, poseSheet, redirectPage, paths, urlOf } from './pages.mjs';
+import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage, figureModule, poseSheet, redirectPage, nazwaLokalna, paths, urlOf } from './pages.mjs';
 import { effectiveSlugs, checkSlugLock, remapSlugs } from './slugi.mjs';
 import { startGuards, checkIndexingRule } from './straznicy.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId, hreflangCodes } from './taksonomia.mjs';
@@ -25,11 +25,11 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   checkPin();
   const man = readJson('.cache/dane/manifest.json'); let figs = readJson('.cache/dane/figury.json').figures, sil = readJson('.cache/dane/sylwetka.json');
   const engine = await import(pathToFileURL(join(CACHE, 'silnik/figura.js')).href);
-  let data = {}; const langs = cfg.jezyki, ui = {}, collators = {}, bySlug = {}, names = {};
+  let data = {}; const langs = cfg.jezyki, ui = {}, collators = {}, bySlug = {}, names = {}, nazwy = {};
   for (const l of langs) {
     const m = man.languages.find(x => x.lang === l); if (!m) throw new Error(`język ${l} nie został wyeksportowany (manifest)`);
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
-    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
+    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); if (existsSync(join(ROOT, `docs/nazwy/${l}.json`))) nazwy[l] = readJson(`docs/nazwy/${l}.json`); /* Z-32: zrecenzowane nazwy lokalne; język bez pliku pokazuje nazwę angielską */ collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
   if (zmianaDanych) { data = zmianaDanych(data); for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e])); }
   /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S8 (S6 — po zbudowaniu stron) */
@@ -43,7 +43,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); startErrors.push(...g.errors); warnings.push(...g.warnings); }
   const familyLabel = (l, f) => ui[l].families?.[f];
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
-  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, langs, engine, familyLabel };
+  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, langs, engine, familyLabel };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });
   const report = { languages: {} };
@@ -63,7 +63,8 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   /* klasy stopni sylwetki (s<partia>-<stopień>) → zmienne CSS arkusza; kolory zmiennych --mm-* są w site.css (jasny/ciemny wygląd) */
   write(out, 'assets/sylwetka.css', sil.vars.muscle.flatMap((v, i) => [1, 2, 3, 4].map(l => `.sylwetki.s${i}-${l}{${v}:var(--mm-l${l})}`)).join('\n') + '\n');
   for (const [slug, f] of Object.entries(figs)) if (data[langs[0]].exercises.some(e => e.slug === slug)) { write(out, `assets/fig/${slug}.js`, figureModule(ctx, slug, f)); write(out, `assets/poz/${slug}.svg`, poseSheet(ctx, f)); }
-  for (const l of langs) write(out, `assets/idx/${l}.js`, `export default ${JSON.stringify(data[l].exercises.map(e => [e.name, e.slug]))};\n`);
+  /* indeks nazw: [nazwa do pokazania, slug, nazwa angielska (gdy jest lokalna — szukanie po obu), 1 = pokazywana nazwa jest angielska (lang="en")] */
+  for (const l of langs) write(out, `assets/idx/${l}.js`, `export default ${JSON.stringify(data[l].exercises.map(e => { const n = nazwaLokalna(ctx, l, e); return n ? [n, e.slug, e.name, 0] : [e.name, e.slug, '', 1]; }))};\n`);
   /* robots.txt i mapy witryny zależą od jednego ustawienia; w mapach tylko strony indeksowane, alternatywy tylko z indeksowanych wersji */
   const sitemaps = [];
   if (cfg.indeksowanie) {

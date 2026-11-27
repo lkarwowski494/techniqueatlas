@@ -4,7 +4,7 @@ Stan: 27.11.2026 · rola 07-jakosc (build) · gałąź `strona/z30-testy` od `st
 Wejście: `docs/design/system/design-spec.md` (Z-12, „Arkusz”), `docs/teksty/szablony-stron.md` + `src/szablony.mjs` (Z-22), `docs/teksty/prawne/` (Z-20), `docs/teksty/ramka-w-aplikacji.md` (Z-21), `docs/nazwy/pl.json` (Z-24, recenzja Z-25), `docs/badanie-zasiegu-2026-11-27.md` (Z-06, A1–A15, B1–B9, KO-130), `docs/55-plan-startu.md`.
 Zakres: tylko testy i ten dokument. `src/pages.mjs` i `assets/` bez zmian. Wdrożenie robią Z-31…Z-34.
 
-Oczekujące: Z-32 6, Z-33 8, Z-34 15
+Oczekujące: Z-33 8, Z-34 15
 
 (Wiersz wyżej sprawdza `tests/z30-oczekujace.test.mjs`. Przy zdjęciu oznaczenia zmniejsz liczbę w tym samym commicie.)
 
@@ -62,14 +62,14 @@ Wynik: przebieg pojedynczych plików `node --test tests/z3x-*.test.mjs` 27.11.20
 | Wymaganie (źródło) | Test | Wynik dziś |
 |---|---|---|
 | Komplet zrecenzowanych nazw pl (Z-24/Z-25) | `Z-32 nazwy pl` | zielony (strażnik) |
-| h1 pl: `span.nazwa-pl` + `span.nazwa-en lang="en"` (makieta `cwiczenie.html`); nazwa różna tylko wielkością liter → sama angielska z `lang="en"` (szablony-stron 2.1) | `Z-32 h1 pl` | czerwony — 708 stron (h1 tylko z nazwą angielską, bez `lang="en"`) |
+| h1 pl: `span.nazwa-pl` + `span.nazwa-en lang="en"` (makieta `cwiczenie.html`); nazwa różna tylko wielkością liter → sama angielska z `lang="en"` (szablony-stron 2.1) | `Z-32 h1 pl` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: 708 stron (h1 tylko z nazwą angielską, bez `lang="en"`)) |
 | Przypadek brzegowy „Face pull” (45 nazw) istnieje w danych | `Z-32 przypadek brzegowy` | zielony |
 | en i język bez nazw (de): sama angielska | `Z-32 h1 en i język bez nazw` | zielony (strażnik: nazwa pl nie wycieka) |
-| Każdy link do ćwiczenia na stronach pl z nazwą polską | `Z-32 każda strona pl: link` | czerwony — 4622 linki |
-| Lista A–Z wg nazwy polskiej (Collator pl) | `Z-32 lista A–Z pl: kolejność` | czerwony — kolejność wg nazwy angielskiej |
-| Okruszki i BreadcrumbList z nazwą polską | `Z-32 okruszki pl` | czerwony — 663 strony |
-| Wyszukiwarka zna nazwę polską (D-4) | `Z-32 wyszukiwarka pl` | czerwony — `bench-press` bez nazwy pl w `assets/idx/pl.js` |
-| Etykieta figury dla czytnika z nazwą polską (D-4) | `Z-32 opis rysunku pl` | czerwony — 503 strony |
+| Każdy link do ćwiczenia na stronach pl z nazwą polską | `Z-32 każda strona pl: link` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: 4622 linki) |
+| Lista A–Z wg nazwy polskiej (Collator pl) | `Z-32 lista A–Z pl: kolejność` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: kolejność wg nazwy angielskiej) |
+| Okruszki i BreadcrumbList z nazwą polską | `Z-32 okruszki pl` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: 663 strony) |
+| Wyszukiwarka zna nazwę polską (D-4) | `Z-32 wyszukiwarka pl` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: `bench-press` bez nazwy pl w `assets/idx/pl.js`) |
+| Etykieta figury dla czytnika z nazwą polską (D-4) | `Z-32 opis rysunku pl` | zielony po wdrożeniu Z-32 (27.11.2026; poprzednio: 503 strony) |
 
 ### Z-33 strony prawne + stopka + ramka + akapit (`tests/z33-prawne-ramka.test.mjs`)
 

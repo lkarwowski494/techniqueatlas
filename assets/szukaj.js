@@ -19,12 +19,12 @@ if (list) {
 const box = document.querySelector('[data-szukaj]');
 if (box) {
   const out = document.querySelector('[data-wyniki]'), lang = box.dataset.lang, base = box.dataset.base; let idx = null; box.parentElement.hidden = false;
-  const load = async () => { if (!idx) idx = (await import(`./idx/${lang}.js`)).default.map(([name, slug]) => [name, slug, fold(name)]); return idx; };
+  const load = async () => { if (!idx) idx = (await import(`./idx/${lang}.js`)).default.map(([name, slug, alt, en]) => [name, slug, fold(`${name} ${alt}`), en]); return idx; };
   box.addEventListener('focus', load);
   box.addEventListener('input', async () => {
     const q = fold(box.value); out.replaceChildren(); if (!q) return; const all = await load();
     const hits = all.filter(r => r[2].includes(q)).sort((a, b) => (b[2].startsWith(q) - a[2].startsWith(q)) || a[2].localeCompare(b[2], lang)).slice(0, 20);
     if (!hits.length) { const li = document.createElement('li'); li.textContent = box.dataset.brak; out.append(li); return; }
-    for (const [name, slug] of hits) { const li = document.createElement('li'), a = document.createElement('a'); a.href = `${base}${slug}/`; a.textContent = name; if (lang !== 'pl') a.lang = 'en'; li.append(a); out.append(li); }
+    for (const [name, slug, , en] of hits) { const li = document.createElement('li'), a = document.createElement('a'); a.href = `${base}${slug}/`; a.textContent = name; if (en) a.lang = 'en'; li.append(a); out.append(li); }
   });
 }

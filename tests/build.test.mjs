@@ -10,6 +10,7 @@ import { readJson, CACHE } from '../src/lib.mjs';
 import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU } from './pomoc.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
 import { effectiveSlugs } from '../src/slugi.mjs';
+import { nazwyLokalne, nazwaLokalna } from './strona-html.mjs';
 
 requireData();
 /* adresy jak w buildzie: surowy slug z eksportu + nadpisania ze slug-overrides.json (zamrożone adresy; od 27.11.2026, tag 1.1.1, 14 nadpisań) */
@@ -106,7 +107,7 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
-  assert.match(h, /<h1 class="nazwa" lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1 class="nazwa">Back Squat<\/h1>/);
+  assert.match(h, /<h1 class="nazwa" lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1 class="nazwa"><span class="nazwa-pl">Przysiad ze sztangą na plecach<\/span> <span class="nazwa-en" lang="en">Back Squat<\/span><\/h1>/); /* Z-32: pl pokazuje nazwę polską i angielską (wcześniej sama angielska) */
   const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', '>Tips<', '>What to avoid<', '>Equipment needed<', '>Substitutes<', '<p>Main muscles', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
   for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/"><span class="nazwa-pl" lang="en">`));
@@ -164,7 +165,9 @@ test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy ekspor
   const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
   const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
   assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
-  assert.ok(withRoles.indexOf('>Tips<') < withRoles.indexOf('<p>Main muscles') && withRoles.indexOf('<p>Main muscles') < withRoles.indexOf('class="role"'));
+  /* kolejność w sekcji mięśni: główne, potem pomocnicze, dopiero potem zdania o roli (przywrócone po Z-31, recenzja Z-31: kontrola względem mięśni pomocniczych; etykieta „Secondary muscles”, nie „Supporting”) */
+  const i = k => withRoles.indexOf(k), aux = `<p>${ctx.data.en.labels.ui.musclesAux.split(':')[0]}`; /* etykieta z danych: „Secondary muscles” (eksport 1.1.1) */ assert.ok(i(aux) > 0, 'back-squat ma mięśnie pomocnicze');
+  assert.ok(i('>Tips<') < i('<p>Main muscles') && i('<p>Main muscles') < i(aux) && i(aux) < i('class="role"'));
   for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
 });
 test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z pliku modułu; lista A–Z działa bez JS (pełna lista w HTML, filtry ukryte do uruchomienia skryptu)', async () => {
@@ -175,8 +178,10 @@ test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z
 test('lista A–Z posortowana collatorem języka; strony filtrów zawierają dokładnie ćwiczenia o tej wartości; identyfikatory adresów pokrywają wszystkie wartości z danych', async () => {
   const { out } = await buildOnce();
   for (const [l, d] of [['pl', PL], ['en', EN]]) {
-    const names = [...read(out, `${l}/exercises/index.html`).matchAll(/<tr data-muscle="[^"]*"[^>]*><th scope="row"><a href="[^"]*"[^>]*>([^<]*)<\/a>/g)].map(m => m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'"));
-    const c = new Intl.Collator(l); assert.deepEqual(names, [...d.exercises.map(e => e.name)].sort((a, b) => c.compare(a, b)));
+    /* Z-32: w pl wiersz ma nazwę polską (span.nazwa-pl) i angielską (span.nazwa-en); kolejność wg nazwy w języku strony */
+    const N = nazwyLokalne(l), wyswietlana = e => nazwaLokalna(l, N, e) ?? e.name;
+    const names = [...read(out, `${l}/exercises/index.html`).matchAll(/<tr data-muscle="[^"]*"[^>]*><th scope="row"><a href="[^"]*"[^>]*>([\s\S]*?)<\/a>/g)].map(m => (/<span class="nazwa-pl">([^<]*)<\/span>/.exec(m[1])?.[1] ?? m[1]).replace(/&amp;/g, '&').replace(/&#39;/g, "'"));
+    const c = new Intl.Collator(l); assert.deepEqual(names, [...d.exercises.map(wyswietlana)].sort((a, b) => c.compare(a, b)));
     for (const g of new Set(d.exercises.map(e => e.group))) { assert.ok(g in GROUP_ID, g); const h = read(out, `${l}/muscles/${GROUP_ID[g]}/index.html`); assert.equal((h.match(/<th scope="row">/g) ?? []).length, d.exercises.filter(e => e.group === g).length); }
     for (const q of new Set(d.exercises.map(e => e.equipment))) { assert.ok(q in EQUIPMENT_ID, q); assert.equal((read(out, `${l}/equipment/${EQUIPMENT_ID[q]}/index.html`).match(/<th scope="row">/g) ?? []).length, d.exercises.filter(e => e.equipment === q).length); }
   }

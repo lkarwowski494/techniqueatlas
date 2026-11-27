@@ -122,3 +122,24 @@ test('Z-31 CSP bez wyjątków: żadna strona nie ma atrybutu style ani skryptu w
   assert.deepEqual(zle, []);
 });
 
+
+/* --- uzupełnienia po recenzji Z-31 (znaleziska NISKIE, Z-32/Z-33): krótka odpowiedź i klasy linii wymiarowej --- */
+test('Z-31 krótka odpowiedź (KO-135): section.odp z h2 i akapitem na stronach pl i en tylko przy własnych wskazówkach kompletnych; przy wskazówkach ogólnych, brakach i bez wskazówek jej nie ma', () => {
+  const stan = { z: 0, bez: 0 };
+  for (const l of ['pl', 'en']) for (const e of ctx.data[l].exercises) {
+    const h = strona(l, e.slug), s = element(h, 'section', 'odp'), wlasne = e.cues.scope === 'own' && !e.cues.missing;
+    if (wlasne) { stan.z++; assert.ok(s, `${l}/${e.slug}: brak section.odp`); assert.match(s.wnetrze, /<h2 id="odp-t">[^<]+<\/h2><p>[^<]{20,}<\/p>/, `${l}/${e.slug}`); assert.match(s.otwarcie, /aria-labelledby="odp-t"/); }
+    else { stan.bez++; assert.equal(s, null, `${l}/${e.slug}: section.odp przy wskazówkach spoza zakresu own (scope ${e.cues.scope}, missing ${e.cues.missing})`); }
+  }
+  assert.ok(stan.z > 100 && stan.bez > 0, `próba za mała albo brak ćwiczeń ze wskazówkami ogólnymi: ${JSON.stringify(stan)}`);
+});
+
+test('Z-31 klasy linii wymiarowej: każda klasa t<ms/100> użyta na stronach pl i en ma regułę .t<N>{flex:N} w CSS strony (długość odcinka = czas fazy)', () => {
+  const uzyte = new Set();
+  for (const f of plikiHtml(out).filter(f => /^(pl|en)\/exercises\//.test(f))) for (const m of czytaj(out, f).matchAll(/class="wymiar-s t(\d+)[" ]/g)) uzyte.add(Number(m[1]));
+  assert.ok(uzyte.size >= 3, `użytych klas: ${[...uzyte]}`);
+  const style = bezSpacji(css());
+  assert.deepEqual([...uzyte].filter(n => !style.includes(`.t${n}{flex:${n}}`)).sort((a, b) => a - b), []);
+  const zdanych = new Set(ctx.data.pl.exercises.flatMap(e => (e.figure && ctx.figs[e.slug] && !e.figure.phases.some(p => p.untimed) ? e.figure.phases : []).filter(p => p.ms > 0).map(p => p.ms / 100)));
+  assert.deepEqual([...zdanych].filter(n => !uzyte.has(n)), [], 'czas fazy z danych bez odcinka na stronie');
+});

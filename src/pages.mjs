@@ -52,6 +52,14 @@ export const paths = {
 export const urlOf = file => dirOf(file);
 const nameAttr = (lang, ex) => lang === 'pl' ? '' : ' lang="en"'; /* nazwy ćwiczeń są angielskie we wszystkich językach poza polskim (jak w aplikacji, DEC-13) */
 
+/** Nazwa lokalna (Z-32): zrecenzowana nazwa z docs/nazwy/<język>.json (ctx.nazwy), gdy różni się od angielskiej nie tylko wielkością liter (szablony-stron.md 2.1); inaczej null → sama nazwa angielska. */
+export const nazwaLokalna = (ctx, lang, e) => { const n = ctx.nazwy?.[lang]?.[e.id]; return n && n.toLocaleLowerCase(lang) !== e.name.toLocaleLowerCase(lang) ? n : null; };
+/** Nazwa do wyświetlenia w języku strony (lokalna albo angielska) — do sortowania, okruszków, etykiet. */
+export const nazwaStrony = (ctx, lang, e) => nazwaLokalna(ctx, lang, e) ?? e.name;
+/** Nazwa w treści linku albo nagłówka: lokalna + angielska w osobnych spanach (lang="en" przy angielskiej) albo sama angielska (z lang="en" poza polskim). */
+const nazwaHtml = (ctx, lang, e) => { const l = nazwaLokalna(ctx, lang, e); return l ? `<span class="nazwa-pl">${esc(l)}</span> <span class="nazwa-en" lang="en">${esc(e.name)}</span>` : esc(e.name); };
+const nazwaAttr = (ctx, lang, e) => nazwaLokalna(ctx, lang, e) ? '' : ' lang="en"'; /* angielska nazwa bez lokalnej: lang="en" także w polskim (Face pull itd.) */
+
 /** x-default stron poza stroną główną: ta sama strona w języku domyślnym (jezykDomyslny) — należy do własnego zestawu hreflang, więc wzajemność jest zachowana; strony główne języków wskazują `/` (wybór języka), które wymienia je wszystkie. */
 function defaultOf(ctx, make) { return urlOf(make(ctx.langs.includes(ctx.cfg.jezykDomyslny) ? ctx.cfg.jezykDomyslny : ctx.langs[0])); }
 function alternatesFor(ctx, make) { return ctx.langs.map(l => ({ lang: l, path: urlOf(make(l)) })); }
@@ -91,13 +99,13 @@ const searchBlock = (ui, lang, u) => `<div class="szukaj" hidden><label for="szu
 export function homePage(ctx, lang) {
   const d = ctx.data[lang], ui = ctx.ui[lang], file = paths.home(lang), g = groupsOf(ctx, lang), u = to => relUrl(file, to);
   const item = (kind, x) => `<li><a href="${u(urlOf(paths[kind](lang, x.id)))}"><span>${esc(x.label)}</span> <span class="n">${x.n}</span></a></li>`;
-  const basics = d.exercises.filter(e => !e.niche).sort((a, b) => ctx.collators[lang].compare(a.name, b.name));
+  const basics = d.exercises.filter(e => !e.niche).sort((a, b) => ctx.collators[lang].compare(nazwaStrony(ctx, lang, a), nazwaStrony(ctx, lang, b)));
   const count = fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length });
   const body = `<div class="wstep"><h1>${esc(ui.siteName)}</h1><p class="licznik">${esc(count)}</p>\n${searchBlock(ui, lang, u)}</div>
 <div class="grupy"><section class="grupa" id="partie"><h2>${esc(ui.byMuscle)}</h2><ul class="grupa-l">${g.muscles.map(x => item('muscle', x)).join('')}</ul></section>
 <section class="grupa" id="sprzet"><h2>${esc(ui.byEquipment)}</h2><ul class="grupa-l">${g.equipment.map(x => item('equipment', x)).join('')}</ul></section></div>
 ${g.movements.length ? `<section class="grupa" id="ruch"><h2>${esc(ui.byMovement)}</h2><ul class="grupa-l">${g.movements.map(x => item('movement', x)).join('')}</ul></section>` : ''}
-<section><h2>${esc(ui.basics)}</h2><ul class="wiersze">${basics.map(e => `<li><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nameAttr(lang, e)}>${esc(e.name)}</a><span class="meta">${esc(d.labels.groups[e.group])} · ${esc(d.labels.equipment[e.equipment])}</span></li>`).join('')}</ul>
+<section><h2>${esc(ui.basics)}</h2><ul class="wiersze">${basics.map(e => `<li><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nazwaAttr(ctx, lang, e)}>${nazwaHtml(ctx, lang, e)}</a><span class="meta">${esc(d.labels.groups[e.group])} · ${esc(d.labels.equipment[e.equipment])}</span></li>`).join('')}</ul>
 <p><a class="dalej" href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)} (${d.exercises.length})</a></p></section>`;
   const webSite = { '@context': 'https://schema.org', '@type': 'WebSite', name: ui.siteName, url: abs(ctx.cfg, urlOf(file)), inLanguage: hreflang(lang) };
   return { file, lang, kind: 'home', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: ui.siteName, description: count, robots: robotsFor(ctx, lang), canonical: urlOf(file),
@@ -109,13 +117,13 @@ function wykaz(ctx, lang, file, exercises, kolumny, caption, filtrowany = false)
   const d = ctx.data[lang], ui = ctx.ui[lang], u = to => relUrl(file, to);
   const cell = { muscle: e => d.labels.groups[e.group], equipment: e => d.labels.equipment[e.equipment], movement: e => ctx.familyLabel(lang, e.family) ?? '' };
   const head = { muscle: ui.filterMuscle, equipment: ui.filterEquipment, movement: ui.filterMovement };
-  const rows = exercises.map(e => `<tr${filtrowany ? ` data-muscle="${GROUP_ID[e.group]}" data-equipment="${EQUIPMENT_ID[e.equipment]}" data-movement="${familyId(e.family)}"` : ''}><th scope="row"><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nameAttr(lang, e)}>${esc(e.name)}</a></th>${kolumny.map(k => `<td>${esc(cell[k](e))}</td>`).join('')}</tr>`).join('');
+  const rows = exercises.map(e => `<tr${filtrowany ? ` data-muscle="${GROUP_ID[e.group]}" data-equipment="${EQUIPMENT_ID[e.equipment]}" data-movement="${familyId(e.family)}"` : ''}><th scope="row"><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nazwaAttr(ctx, lang, e)}>${nazwaHtml(ctx, lang, e)}</a></th>${kolumny.map(k => `<td>${esc(cell[k](e))}</td>`).join('')}</tr>`).join('');
   return `<table class="wykaz"><caption class="wizualnie-ukryte">${esc(caption)}</caption><thead><tr><th scope="col">${esc(ui.nameLabel)}</th>${kolumny.map(k => `<th scope="col">${esc(head[k])}</th>`).join('')}</tr></thead><tbody${filtrowany ? ' data-lista' : ''}>${rows}</tbody></table>`;
 }
 
 export function listPage(ctx, lang) {
   const d = ctx.data[lang], ui = ctx.ui[lang], file = paths.list(lang), g = groupsOf(ctx, lang), u = to => relUrl(file, to);
-  const sorted = [...d.exercises].sort((a, b) => ctx.collators[lang].compare(a.name, b.name));
+  const sorted = [...d.exercises].sort((a, b) => ctx.collators[lang].compare(nazwaStrony(ctx, lang, a), nazwaStrony(ctx, lang, b)));
   const sel = (key, label, items) => `<div class="pole"><label for="f-${key}"><span>${esc(label)}</span></label><select id="f-${key}" data-filtr="${key}"><option value="">${esc(ui.filterAll)}</option>${items.map(x => `<option value="${x.id}">${esc(x.label)}</option>`).join('')}</select></div>`;
   const kolumny = ['muscle', 'equipment', ...(g.movements.length ? ['movement'] : [])];
   const body = `<h1>${esc(ui.allExercises)}</h1>
@@ -131,7 +139,7 @@ ${wykaz(ctx, lang, file, sorted, kolumny, ui.allExercises, true)}`;
 export function filterPage(ctx, lang, kind, x) {
   const d = ctx.data[lang], ui = ctx.ui[lang], file = paths[kind](lang, x.id), u = to => relUrl(file, to), g = groupsOf(ctx, lang);
   const key = { muscle: 'group', equipment: 'equipment', movement: 'family' }[kind];
-  const sorted = d.exercises.filter(e => e[key] === x.value).sort((a, b) => ctx.collators[lang].compare(a.name, b.name));
+  const sorted = d.exercises.filter(e => e[key] === x.value).sort((a, b) => ctx.collators[lang].compare(nazwaStrony(ctx, lang, a), nazwaStrony(ctx, lang, b)));
   const parent = { muscle: ui.byMuscle, equipment: ui.byEquipment, movement: ui.byMovement }[kind];
   const crumbs = [...crumbBase(ctx, lang), { name: parent, path: paths.home(lang) }, { name: x.label, path: file }];
   const title = fill(ui.exercisesIn, { nazwa: x.label });
@@ -166,7 +174,7 @@ function figureBlock(ctx, lang, ex, fig, file) {
   const ui = ctx.data[lang].labels.ui, site = ctx.ui[lang], E = ctx.engine, f = ex.figure;
   const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
   const views = fig.views.map(name => ({ name, box: E.boxOf(lists, name) }));
-  const label = fill(ui.figureLabel, { opis: ex.name });
+  const label = fill(ui.figureLabel, { opis: nazwaStrony(ctx, lang, ex) });
   const phases = f.phases.map(p => p.name === ctx.data[lang].labels.phases.Pauza || p.untimed ? p.name : `${p.name} ${Math.round(p.ms / 100) / 10} s`).join(' · '); /* podpis: kolejność faz; bez sekund przy pauzie i fazach untimed (BA, 27.11.2026) */
   const main = views[0], positions = poseIds(fig); /* jak staticPositions aplikacji: figura statyczna ma tylko pozycję skrajną (bez podpisu) */
   const caption = id => id === 'start' ? ui.startPose : ui.endPose;
@@ -214,7 +222,7 @@ export function exercisePage(ctx, lang, ex) {
   const muscles = silhouette + muscleText ? `<section class="miesnie"><h2>${esc(site.muscles)}</h2>${silhouette}${muscleText}</section>` : '';
   const needs = ex.requires.length ? `<section><h2>${esc(site.equipmentNeeded)}</h2><ul>${ex.requires.map(g => `<li>${esc(g.map(c => L.capabilities[c]).join(' / '))}</li>`).join('')}</ul></section>` : '';
   const bySlug = ctx.bySlug[lang];
-  const alts = ex.alternatives.length ? `<section><h2>${esc(site.alternatives)}</h2><ul class="zam">${ex.alternatives.map(s => `<li><a href="${u(urlOf(paths.exercise(lang, s)))}"><span class="nazwa-pl"${nameAttr(lang)}>${esc(bySlug.get(s).name)}</span></a></li>`).join('')}</ul></section>` : '';
+  const alts = ex.alternatives.length ? `<section><h2>${esc(site.alternatives)}</h2><ul class="zam">${ex.alternatives.map(s => `<li><a href="${u(urlOf(paths.exercise(lang, s)))}">${nazwaLokalna(ctx, lang, bySlug.get(s)) ? nazwaHtml(ctx, lang, bySlug.get(s)) : `<span class="nazwa-pl"${nameAttr(lang)}>${esc(bySlug.get(s).name)}</span>`}</a></li>`).join('')}</ul></section>` : '';
   const cueSections = [text, list(ui.tips, cue('tips')), list(ui.mistakes, cue('mistakes'))].filter(Boolean).join('\n');
   /* tabliczka rysunkowa: klasyfikacja jako linki do stron filtrów; nazwa angielska (w polskim — z eksportu en, gdy jest budowany) */
   const enName = ctx.bySlug.en?.get(ex.slug)?.name ?? ex.name, family = ctx.familyLabel(lang, ex.family);
@@ -229,15 +237,17 @@ export function exercisePage(ctx, lang, ex) {
   const uklad = fig || tekstowa
     ? `<div class="uk uk3${fig ? '' : ' bez-fig'}">${figure ? figure.html : ''}${tekstowa || (needs || alts ? `<div class="uk-p">${needs}${alts}</div>` : '')}${muscles}</div>`
     : `<div class="uk uk-skrot bez-fig">${muscles}${needs ? `<div>${needs}</div>` : ''}${alts ? `<div>${alts}</div>` : ''}</div>`;
-  const body = `<div class="arkusz-g"><h1 class="nazwa"${nameAttr(lang)}>${esc(ex.name)}</h1>${tabliczka}</div>
+  const body = `<div class="arkusz-g"><h1 class="nazwa"${nazwaAttr(ctx, lang, ex)}>${nazwaLokalna(ctx, lang, ex) ? nazwaHtml(ctx, lang, ex) : esc(ex.name)}</h1>${tabliczka}</div>
 ${odp}${uklad}
 <p class="zastrz">${esc(ui.disclaimer)}</p>`;
   const group = { name: L.groups[ex.group], path: paths.muscle(lang, GROUP_ID[ex.group]) };
-  const crumbs = [...crumbBase(ctx, lang), { name: site.library, path: paths.list(lang) }, group, { name: ex.name, path: file, lang: lang === 'pl' ? '' : 'en' }];
+  const crumbs = [...crumbBase(ctx, lang), { name: site.library, path: paths.list(lang) }, group, { name: nazwaStrony(ctx, lang, ex), path: file, lang: nazwaLokalna(ctx, lang, ex) ? '' : 'en' }];
   /* S6/ZM-08 (27.11.2026, P-1; odwraca ZM-06): do indeksu ćwiczenia z własnymi wskazówkami kompletnymi w tym języku (D1), bez wymogu pełnej karty (`pelna` nie ma znaczenia);
      reszta noindex,follow. Reguła sama zdejmuje noindex, gdy ćwiczenie spełni warunek. Strażnik S6 sprawdza wynik niezależnie. */
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
-  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: ex.name, description: `${ex.name}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
+  /* tytuł: z lokalną nazwą wg szablonu Z-22 („lokalna (angielska)”, sama lokalna przy limicie 60, SZ-7); bez niej sama angielska — dopiski i opisy dochodzą w Z-34 */
+  const lokalna = nazwaLokalna(ctx, lang, ex), title = lokalna && JEZYKI_SZABLONOW.includes(lang) ? szablonyCwiczenia(d, site, lang, ex, { nazwaLokalna: lokalna }).tytul : ex.name;
+  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title, description: `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
     alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
 }
 
@@ -245,7 +255,7 @@ ${odp}${uklad}
  * Strona ma widoczny link (nazwa ćwiczenia albo „Wszystkie ćwiczenia”), więc działa też bez przekierowania przeglądarki; poza mapami witryny i bez hreflang. */
 export function redirectPage(ctx, lang, from, to) {
   const file = paths.exercise(lang, from), ui = ctx.ui[lang], target = to === null ? paths.list(lang) : paths.exercise(lang, to), ex = to === null ? null : ctx.bySlug[lang].get(to);
-  const name = ex ? ex.name : ui.allExercises, href = relUrl(file, urlOf(target));
+  const name = ex ? nazwaStrony(ctx, lang, ex) : ui.allExercises, href = relUrl(file, urlOf(target));
   return { file, lang, kind: 'redirect', indexable: false, html: layout(ctx, { file, lang, title: name, robots: ctx.cfg.indeksowanie ? '' : 'noindex,nofollow', canonical: urlOf(target), refresh: abs(ctx.cfg, urlOf(target)) /* pełny adres z domeną: dokumentacja Google nie rozstrzyga adresu względnego (badanie 01.11.2026, pkt 1) */ },
-    `<h1${ex ? nameAttr(lang) : ''}><a href="${href}">${esc(name)}</a></h1>`) };
+    `<h1${ex ? nazwaAttr(ctx, lang, ex) : ''}><a href="${href}">${esc(name)}</a></h1>`) };
 }
