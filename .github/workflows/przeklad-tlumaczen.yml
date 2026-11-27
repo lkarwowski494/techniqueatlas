@@ -4,12 +4,17 @@
 # Pliki w repo NIE są zmieniane — wynik to artefakt `raport-przekladu` (7 dni): raporty JSON, podsumowanie.md, szacunek.json i wydatek.json.
 # Limity: 6 USD na przebieg (powyżej — stop bez zgoda_koszt=tak) i 80 USD łącznie wg docs/przeklad/wydatki.json (bez wyjątku). Po przebiegu płatnym zaksięguj wydatek lokalnie:
 #   node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog artefaktu>, potem commit docs/przeklad/wydatki.json.
-# Źródła (docs/przeklad/zrodla.json) leżą na gałęzi z tekstami — uruchom workflow z tej gałęzi („Use workflow from”); sam plik workflowu musi być na gałęzi domyślnej, żeby GitHub pokazał przycisk.
+# Workflow startuje WYŁĄCZNIE z main (jeden licznik wydatków, wspólna grupa concurrency z drugim workflowem). Teksty z innej gałęzi (np. strona/z24-nazwy-pl) podaj w polu galaz_tekstow: są tylko czytane do katalogu roboczego, nic nie jest zapisywane do repo.
+# Twarda granica kosztu to limit wydatków w konsoli Anthropic (krok właściciela); licznik w repo jest drugą, programową barierą.
 # Kolejność: przebieg dowodowy (limit=2) z tylko_szacuj=nie dopiero po przejrzeniu szacunku (tylko_szacuj=tak, domyślnie).
 name: Przekład tekstów strony (API, ręcznie)
 on:
   workflow_dispatch:
     inputs:
+      galaz_tekstow:
+        description: 'Gałąź z tekstami do przekładu (np. strona/z24-nazwy-pl); puste = teksty z main. Teksty są tylko czytane; workflow startuje wyłącznie z main'
+        type: string
+        default: ''
       zrodlo:
         description: 'Źródła po przecinku (nazwy, szablony, prawne, ramka); puste = wszystkie'
         type: string
@@ -39,19 +44,36 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: przeklad-tlumaczen
+  group: przeklad-api
   cancel-in-progress: false
 jobs:
   przeklad:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
+      - name: Start tylko z main (jeden licznik wydatków)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Uruchom z gałęzi main (Use workflow from: main); teksty z innej gałęzi podaj w polu galaz_tekstow."
+          exit 1
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+      - name: Teksty z gałęzi z wejścia (tylko odczyt, bez zapisu do repo)
+        env:
+          WEJ_GALAZ: ${{ inputs.galaz_tekstow }}
+        run: |
+          set -eu
+          if [ -n "$WEJ_GALAZ" ]; then
+            [[ "$WEJ_GALAZ" =~ ^[A-Za-z0-9._/-]+$ ]] && [[ "$WEJ_GALAZ" != -* ]] && [[ "$WEJ_GALAZ" != *..* ]] || { echo "::error::galaz_tekstow: niedozwolone znaki"; exit 1; }
+            git fetch --depth 1 origin "$WEJ_GALAZ"
+            for P in docs/nazwy docs/teksty src/szablony; do
+              if [ -n "$(git ls-tree --name-only FETCH_HEAD "$P")" ]; then git checkout FETCH_HEAD -- "$P"; fi
+            done
+          fi
       - name: Słownik terminów aplikacji (npm run dane, bez sekretów)
         run: npm run dane
       - name: Szacunek kosztu bez klucza — stop powyżej 6 USD bez zgody i powyżej 80 USD łącznie

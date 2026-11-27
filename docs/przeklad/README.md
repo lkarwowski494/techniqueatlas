@@ -28,9 +28,14 @@ Wzorzec: repo aplikacji (`lkarwowski494/trening`, gałąź `main`): `.github/wor
 
 1. Tylko `workflow_dispatch`, `permissions: contents: read`. Brak push, PR, zapisu do repo.
 2. `ANTHROPIC_API_KEY` tylko jako zmienna środowiskowa jednego kroku; skrypt maskuje klucz i wszystko w kształcie klucza w logu i raportach (test: żaden plik artefaktu ani log nie zawiera klucza, także przy błędzie API z kluczem w treści).
-3. Szacunek bez klucza przed krokiem płatnym. Powyżej 6 USD na przebieg: stop (kod 3), chyba że `zgoda_koszt=tak`.
-4. Limit łączny 80 USD (kod 5): suma z `docs/przeklad/wydatki.json` + szacunek przebiegu. Bez zgody-wyjątku; plik wydatków nie podnosi limitu (stała w `wspolne.mjs`).
-5. Wynik jako artefakt (7 dni); nałożenie lokalne.
+3. Szacunek bez klucza przed krokiem płatnym. **Limity liczone od górnej granicy kosztu**, nie od szacunku: każde żądanie dostaje `max_tokens` = szacowane wyjście × 1,5 (4000…64000), a górna granica = wejście + suma `max_tokens` (pole `koszt_gorny_usd` w `szacunek.json`). Powyżej 6 USD na przebieg: stop (kod 3), chyba że `zgoda_koszt=tak`.
+4. Limit łączny 80 USD (kod 5): suma z `docs/przeklad/wydatki.json` + górna granica przebiegu. Bez zgody-wyjątku; plik wydatków nie podnosi limitu (stała w `wspolne.mjs`).
+5. Wpis wydatku z kosztem tylko szacowanym (`rodzaj_kosztu: szacunek`, batch wysłany, ale niezaksięgowany jako rzeczywisty) **blokuje nowy przebieg płatny** (kod 6) do czasu `--wznow` i `--zapisz-wydatek`.
+6. Wynik jako artefakt (7 dni); nałożenie lokalne (istniejące tłumaczenia chronione, `--nadpisz` tylko jawnie).
+7. Oba workflowy mają **jedną grupę concurrency** `przeklad-api` (przebiegi nie biegną równolegle) i startują **tylko z `main`** (jeden licznik wydatków). Teksty z innej gałęzi podaje się w polu `galaz_tekstow` (walidacja wzorcem `^[A-Za-z0-9._/-]+$`, przez zmienną środowiskową); są tylko czytane do katalogu roboczego (`git fetch` + `git checkout FETCH_HEAD -- docs/nazwy docs/teksty src/szablony`), nic nie jest zapisywane do repo.
+8. Akcje w workflowach przypięte do tagów (`@v4`, `@v5`), spójnie z resztą repo; odnotowane, bez zmiany.
+
+**Granice licznika (uczciwie):** licznik w repo nie wykryje przebiegu, którego nikt nie zaksięgował i który nie zostawił wpisu; nie zatrzyma też ręcznych wywołań API poza workflowem. **Ostateczną, twardą granicą jest limit wydatków ustawiony w konsoli Anthropic dla klucza (krok właściciela, ok. 80 USD łącznie).** Licznik i limity w skryptach to druga, programowa bariera.
 
 ### Licznik wydatków: jak księgować
 
@@ -61,20 +66,20 @@ Metoda: `przyblizTokeny` (zawyżone celowo) + założenia wyjścia z kodu (`wspo
 | Przegląd razem (wejście: kopie polskich tekstów jako zastępnik tłumaczeń) | ok. 19,7 USD | ok. 9,8 USD |
 | **Przekład + przegląd** | **ok. 33 USD** | **ok. 17 USD** |
 
-Bez `ramka` (Z-21, ok. kilkanaście zdań: poniżej 0,5 USD). Przebieg dowodowy na 2 językach: przekład ok. 0,83 USD, przegląd ok. 1,19 USD (Opus). Każdy pełny przebieg przekracza 6 USD, więc wymaga `zgoda_koszt=tak`. Całość z dowodowymi zmieści się w 80 USD z zapasem ok. 2×; ewentualne poprawki odrzuconych pozycji to osobne, małe przebiegi z `--zrodlo` i `--limit`.
+Bez `ramka` (Z-21, ok. kilkanaście zdań: poniżej 0,5 USD). Przebieg dowodowy na 2 językach: przekład ok. 0,83 USD, przegląd ok. 1,19 USD (Opus). Górne granice (Opus, Σ `max_tokens`): przekład 19,1 USD, przegląd 27,7 USD, dowodowe 1,16 + 1,68 USD, razem ok. 49,7 USD < 80 USD. Każdy pełny przebieg przekracza 6 USD, więc wymaga `zgoda_koszt=tak`. Całość zmieści się w 80 USD także w najgorszym przypadku, ale bez zapasu na dwa pełne powtórzenia; ewentualne poprawki odrzuconych pozycji to osobne, małe przebiegi z `--zrodlo` i `--limit`.
 
 ## Wejścia przebiegów (do wklejenia w „Run workflow”)
 
-Uruchomienie z gałęzi, na której leżą teksty (po wciągnięciu `strona/z2x-*`), nie z `main` bez tekstów. Sekret `ANTHROPIC_API_KEY` ustawia właściciel w Settings → Secrets and variables → Actions.
+Workflow uruchamiaj z `main` („Use workflow from: main”); teksty z gałęzi (przed scaleniem `strona/z2x-*`) podaj w polu `galaz_tekstow`, np. `strona/z24-nazwy-pl` (jedna gałąź na przebieg; do pełnego przebiegu teksty muszą być na jednej gałęzi albo na `main`). Sekret `ANTHROPIC_API_KEY` ustawia właściciel w Settings → Secrets and variables → Actions.
 
-1. **Szacunek** (bez kosztu, bez użycia klucza do czegokolwiek płatnego): workflow „Przekład tekstów strony”: `zrodlo` puste, `model` opus, `limit` puste, `tylko_szacuj` tak, `zgoda_koszt` nie. Oczekiwany wynik: STOP (kod 3) z szacunkiem ≈ 13,6 USD w logu, bo przekracza 6 USD; to zamierzone. Żeby zobaczyć sam szacunek bez czerwonego kroku: `zgoda_koszt` tak (przy `tylko_szacuj` tak nic płatnego nie jest wysyłane).
-2. **Przebieg dowodowy na 2 językach**: `zrodlo` puste, `model` opus, `limit` 2, `tylko_szacuj` nie, `zgoda_koszt` nie (szacunek ≈ 0,83 USD < 6). Potem pobierz artefakt `raport-przekladu`, przejrzyj `podsumowanie.md`, zaksięguj wydatek.
-3. **Przegląd dowodowy**: najpierw `--zastosuj` propozycji z kroku 2 lokalnie i commit, potem workflow „Przegląd tłumaczeń strony”: `limit` 2, `tylko_szacuj` nie (≈ 1,19 USD).
+1. **Szacunek** (bez kosztu, bez użycia klucza do czegokolwiek płatnego): workflow „Przekład tekstów strony”: `zrodlo` puste, `model` opus, `limit` puste, `tylko_szacuj` tak, `zgoda_koszt` nie. Bez zgody krok kończy się STOP (kod 3): górna granica ≈ 19,1 USD przekracza 6 USD (szacunek ≈ 13,6 USD); to zamierzone. Żeby zobaczyć sam szacunek bez czerwonego kroku: `zgoda_koszt` tak (przy `tylko_szacuj` tak nic płatnego nie jest wysyłane).
+2. **Przebieg dowodowy na 2 językach**: `zrodlo` puste, `model` opus, `limit` 2, `tylko_szacuj` nie, `zgoda_koszt` nie (szacunek ≈ 0,83 USD, górna granica ≈ 1,16 USD < 6). Potem pobierz artefakt `raport-przekladu`, przejrzyj `podsumowanie.md`, zaksięguj wydatek.
+3. **Przegląd dowodowy**: najpierw `--zastosuj` propozycji z kroku 2 lokalnie i commit, potem workflow „Przegląd tłumaczeń strony”: `limit` 2, `tylko_szacuj` nie (≈ 1,19 USD, górna granica ≈ 1,68 USD).
 4. Pełny przebieg (33 języki): `limit` puste, `zgoda_koszt` tak; przed nim sprawdź wydatki.
 
 ## Otwarte [DO USTALENIA]
 
-- **Układ źródeł na gałęziach**: teksty leżą na `strona/z24-nazwy-pl`, `z22-szablony`, `z04-z07-z20-formalnosci`, `z21-ramka-akapit`, jeszcze nie na `main`. Mechanizm jest gotowy; przebieg płatny dopiero po ich wciągnięciu (albo uruchomienie z gałęzi, na którą je scalono).
+- **Układ źródeł na gałęziach**: teksty leżą na `strona/z24-nazwy-pl`, `z22-szablony`, `z04-z07-z20-formalnosci`, `z21-ramka-akapit`, jeszcze nie na `main`. Pole `galaz_tekstow` pobiera jedną gałąź; pełny przebieg wymaga ich zebrania na jednej gałęzi albo na `main` (według koordynatora: dopiero po recenzji Z-23 i poprawkach autorów).
 - **Ramka (Z-21)** to tabele pl/en w Markdownie (`docs/teksty/ramka-w-aplikacji.md`), nie JSON. Źródło `ramka` czeka na plik `docs/teksty/ramka/{pl,en}.json` (zdania wybranego wariantu); parsowania tabeli nie zrobiłem (decyzja o wariancie A/B należy do studia i właściciela).
 - **Angielskie nazwy ćwiczeń**: `en` dla `nazwy` to klucz mapy (id z eksportu, zwykle angielska nazwa). Gdy będzie osobny plik z angielskimi nazwami, zmienić `en_z_klucza` na `en` w `zrodla.json`.
 - **Teksty prawne** z Z-20 mają wstawki `{{administrator}}`, `{{kontakt}}` itd. i komentarze `<!-- … -->` z uwagami `[DO KONSULTACJI]`; prompt każe wstawki zachować, a komentarze pominąć. Przekład tekstów prawnych na 33 języki bez prawnika to ryzyko merytoryczne: wyniki traktować jako projekt do przeglądu (przegląd API wierności nie zastępuje konsultacji prawnej).

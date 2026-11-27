@@ -106,7 +106,7 @@ test('żądanie przeglądu: nie poprawia sam, zwraca listę poprawek; waga; pozy
 test('limit 6 USD na przebieg: szacunek powyżej limitu bez zgody → kod 3 i komunikat STOP; ze zgodą (--zgoda-koszt) → kod 0', async () => {
   const root = fixture({ nazw: 1500, jezykow: 33 }); /* 33 języki × 1500 nazw: koszt > 6 USD */
   const bez = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'nazwy'], { root });
-  assert.equal(bez.kod, 3); assert.match(bez.logi.join('\n'), /STOP: szacowany koszt .* USD przekracza limit 6 USD/);
+  assert.equal(bez.kod, 3); assert.match(bez.logi.join('\n'), /STOP: górna granica kosztu .* USD .*przekracza limit 6 USD/);
   const sz = czytaj(join(root, 'raport-przekladu/szacunek.json')); assert.ok(sz.koszt_usd > 6, `koszt ${sz.koszt_usd}`);
   const ze = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'nazwy', '--zgoda-koszt'], { root });
   assert.equal(ze.kod, 0);
@@ -132,7 +132,7 @@ test('limit łączny: bez wpisów suma 0; limit z pliku nie może przekroczyć 8
 });
 test('ledger: --zapisz-wydatek dopisuje koszt z artefaktu raz (idempotentnie po batch_id); zły plik → błąd', async () => {
   const root = fixture(); const wyj = join(root, 'raport');
-  mkdirSync(wyj, { recursive: true }); zapisz(root, 'raport/wydatek.json', { przebieg: 'przeklad', batch_id: 'msgbatch_Z', model: 'claude-opus-5-5', data: '2026-11-28', tokeny_we: 1000, tokeny_wy: 2000, koszt_usd: 0.022 });
+  mkdirSync(wyj, { recursive: true }); zapisz(root, 'raport/wydatek.json', { przebieg: 'przeklad', batch_id: 'msgbatch_Z', model: 'claude-opus-5-5', data: '2026-11-28', rodzaj_kosztu: 'rzeczywisty', tokeny_we: 1000, tokeny_wy: 2000, koszt_usd: 0.022 });
   assert.equal((await uruchom('przeklad', ['--zapisz-wydatek', wyj], { root })).kod, 0);
   assert.equal((await uruchom('przeklad', ['--zapisz-wydatek', wyj], { root })).kod, 0);
   const w = czytaj(join(root, 'docs/przeklad/wydatki.json')); assert.equal(w.wpisy.length, 1); assert.equal(w.wpisy[0].batch_id, 'msgbatch_Z'); assert.equal(wydatki.suma(root), 0.022);
@@ -179,7 +179,8 @@ test('artefakt przekładu: <wyjscie>/<źródło>/<język>.json (propozycje), pod
   assert.ok(!existsSync(join(wyj, 'nazwy/pt.json')), 'limit 2: bez pt');
   assert.ok(existsSync(join(wyj, 'podsumowanie.md')) && existsSync(join(wyj, 'szacunek.json')));
   const w = czytaj(join(wyj, 'wydatek.json'));
-  assert.deepEqual(Object.keys(w).sort(), ['batch_id', 'data', 'koszt_usd', 'model', 'przebieg', 'tokeny_we', 'tokeny_wy'].sort());
+  assert.deepEqual(Object.keys(w).sort(), ['batch_id', 'data', 'koszt_usd', 'model', 'przebieg', 'rodzaj_kosztu', 'tokeny_we', 'tokeny_wy'].sort());
+  assert.equal(w.rodzaj_kosztu, 'rzeczywisty');
   assert.equal(w.przebieg, 'przeklad'); assert.equal(w.batch_id, 'msgbatch_TEST123');
   const zadan = 3 * 2; /* 3 źródła × 2 języki */ assert.equal(w.tokeny_we, 10000 * zadan); assert.equal(w.tokeny_wy, 5000 * zadan);
   assert.ok(Math.abs(w.koszt_usd - ((w.tokeny_we * 4 + w.tokeny_wy * 20) / 1e6) * 0.5) < 1e-9, 'koszt = tokeny × cena Opus × rabat batcha 50%');
@@ -271,11 +272,12 @@ test('batch wysłany, ale odbiór przerwany (czas oczekiwania, kod 4): wydatek.j
   const root = fixture(); const wyj = join(root, 'raport'); const api = atrapa({ status: 'in_progress' });
   const r = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wyjscie', wyj, '--czekaj-min', '0'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
   assert.equal(r.kod, 4, r.logi.join('\n')); const w = czytaj(join(wyj, 'wydatek.json'));
-  assert.equal(w.batch_id, 'msgbatch_TEST123'); assert.ok(w.koszt_usd > 0); assert.equal(w.przebieg, 'przeklad');
+  assert.equal(w.batch_id, 'msgbatch_TEST123'); assert.ok(w.koszt_usd > 0); assert.equal(w.przebieg, 'przeklad'); assert.equal(w.rodzaj_kosztu, 'szacunek');
 });
 test('ledger: ten sam batch_id z dokładniejszym kosztem aktualizuje wpis (szacunek → rzeczywisty), nie dubluje', () => {
   const root = fixture(); const base = { przebieg: 'przeklad', batch_id: 'msgbatch_U', model: 'claude-opus-5-5', data: '2026-11-28', tokeny_we: 1, tokeny_wy: 1 };
-  wydatki.dopisz(root, { ...base, koszt_usd: 5 }); wydatki.dopisz(root, { ...base, koszt_usd: 3 });
+  const szac = { ...base, rodzaj_kosztu: 'szacunek' };
+  wydatki.dopisz(root, { ...szac, koszt_usd: 5 }); wydatki.dopisz(root, { ...base, rodzaj_kosztu: 'rzeczywisty', koszt_usd: 3 });
   assert.equal(czytaj(join(root, 'docs/przeklad/wydatki.json')).wpisy.length, 1); assert.equal(wydatki.suma(root), 3);
 });
 test('--zastosuj nie nadpisuje istniejących tłumaczeń (mapa i dokument) bez --nadpisz; z --nadpisz nadpisuje', async () => {
@@ -294,4 +296,35 @@ test('szacunek niepoprawny (NaN z count_tokens) zatrzymuje przebieg zamiast prze
   api.fetchFn = async (u, o) => (String(u).endsWith('/count_tokens') ? { ok: true, status: 200, json: async () => ({}) } : f(u, o));
   const r = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'szablony'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
   assert.notEqual(r.kod, 0); assert.match(r.logi.join('\n'), /szacunek niepoprawny/);
+});
+
+/* ---------- recenzja bezpieczeństwa koordynatora (27.11.2026): limit łączny twardszy, górna granica kosztu ---------- */
+test('niezaksięgowany batch w wydatki.json (koszt tylko szacowany) blokuje nowy przebieg płatny (kod 6) bez wysłania czegokolwiek; --wznow i --szacuj nadal działają', async () => {
+  const root = fixture(); const api = atrapa();
+  zapisz(root, 'docs/przeklad/wydatki.json', { limit_usd: 80, wpisy: [{ przebieg: 'przeklad', batch_id: 'msgbatch_OLD', model: 'claude-opus-5-5', data: '2026-11-28', rodzaj_kosztu: 'szacunek', tokeny_we: 1, tokeny_wy: 1, koszt_usd: 1 }] });
+  const r = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 6); assert.match(r.logi.join('\n'), /msgbatch_OLD/); assert.match(r.logi.join('\n'), /--wznow/);
+  assert.ok(!api.wywolania.some((w) => w.metoda === 'POST' && /\/messages\/batches$/.test(w.url)), 'żaden batch nie został utworzony');
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--zrodlo', 'szablony', '--limit', '1'], { root })).kod, 0);
+});
+test('górna granica kosztu: max_tokens żądania z szacunku (nie 64000), szacunek.json ma koszt_gorny_usd ≥ koszt_usd; limity 6 i 80 USD liczone od górnej granicy', async () => {
+  const root = fixture({ nazw: 1000, jezykow: 33 });
+  const z = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'nazwy', '--zgoda-koszt'], { root }); assert.equal(z.kod, 0);
+  const sz = czytaj(join(root, 'raport-przekladu/szacunek.json')); assert.ok(sz.koszt_gorny_usd > sz.koszt_usd, `${sz.koszt_gorny_usd} > ${sz.koszt_usd}`);
+  const sr = (sz.koszt_usd + sz.koszt_gorny_usd) / 2; const n = Math.round(1000 * 6 / sr);
+  const root2 = fixture({ nazw: n, jezykow: 33 });
+  const r = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'nazwy'], { root: root2 });
+  const s2 = czytaj(join(root2, 'raport-przekladu/szacunek.json'));
+  assert.ok(s2.koszt_usd < 6 && s2.koszt_gorny_usd > 6, `szacunek ${s2.koszt_usd}, górna granica ${s2.koszt_gorny_usd}`);
+  assert.equal(r.kod, 3, 'limit 6 USD sprawdzany wobec górnej granicy'); assert.match(r.logi.join('\n'), /górn/);
+  const api = atrapa(); await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.ok(api.zadania().every((x) => x.params.max_tokens < 64000 && x.params.max_tokens >= 4000), 'max_tokens z szacunku z zapasem');
+});
+test('workflowy: wspólna grupa concurrency, start tylko z main, teksty z gałęzi z wejścia (walidacja wzorcem, przez env), bez zapisu do repo', () => {
+  const yml = ['przeklad-tlumaczen.yml', 'przeglad-tlumaczen.yml'].map((f) => readFileSync(join(ROOT, '.github/workflows', f), 'utf8'));
+  for (const y of yml) {
+    assert.match(y, /concurrency:\n  group: przeklad-api\n  cancel-in-progress: false/);
+    assert.match(y, /github\.ref != 'refs\/heads\/main'/); assert.match(y, /galaz_tekstow:/); assert.match(y, /WEJ_GALAZ: \$\{\{ inputs\.galaz_tekstow \}\}/);
+    assert.match(y, /\^\[A-Za-z0-9\._\/-\]\+\$/); assert.match(y, /git fetch/); assert.doesNotMatch(y, /git (push|commit)/);
+  }
 });

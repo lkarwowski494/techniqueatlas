@@ -195,9 +195,11 @@ export function wierszSzacunku(tryb, zad, we) {
   else { const z = ZALOZENIA_PRZEGLADU; wy = Math.ceil(pozycje.reduce((s, p) => s + (1 - z.udzialPoprawek) * z.tokenyOk + z.udzialPoprawek * Math.max(z.tokenyPoprawka, przyblizTokeny(p.tlumaczenie)), 0)) + z.myslenie; }
   return { zrodlo: zad.zrodlo.id, jezyk: zad.kod, pozycji: pozycje.length, we, wy };
 }
+/** max_tokens żądania z szacunku wyjścia z zapasem 1,5× (w granicach 4000…MAX_TOKENS): górna granica kosztu przebiegu jest znana i bliska realnej, a nie 64000 na żądanie. */
+export const maxTokensZadania = (wy) => Math.min(MAX_TOKENS, Math.max(4000, Math.ceil(wy * 1.5)));
 export function szacunek(wiersze, model) {
-  const we = wiersze.reduce((s, w) => s + w.we, 0); const wy = wiersze.reduce((s, w) => s + w.wy, 0);
-  return { zadan: wiersze.length, pozycji: wiersze.reduce((s, w) => s + w.pozycji, 0), tokeny_we: we, tokeny_wy: wy, koszt_usd: kosztUsd(we, wy, model), koszt_wg_modelu: Object.fromEntries(Object.values(MODELE).map((m) => [m, kosztUsd(we, wy, m)])) };
+  const we = wiersze.reduce((s, w) => s + w.we, 0); const wy = wiersze.reduce((s, w) => s + w.wy, 0); const maks = wiersze.reduce((s, w) => s + w.max_tokens, 0);
+  return { zadan: wiersze.length, pozycji: wiersze.reduce((s, w) => s + w.pozycji, 0), tokeny_we: we, tokeny_wy: wy, tokeny_wy_maks: maks, koszt_usd: kosztUsd(we, wy, model), koszt_gorny_usd: kosztUsd(we, maks, model), koszt_wg_modelu: Object.fromEntries(Object.values(MODELE).map((m) => [m, kosztUsd(we, wy, m)])) };
 }
 
 /* ---------- cele: odczyt (przegląd) i nałożenie (przekład) ---------- */
@@ -301,22 +303,27 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
       if (!Number.isFinite(we)) throw new Error(`szacunek niepoprawny dla ${z.zrodlo.id}/${z.kod} (liczba tokenów wejścia: ${we}); przebieg wstrzymany`);
       const w = wierszSzacunku(tryb, z, we);
       if (w.wy > MAX_TOKENS) throw new Error(`żądanie ${z.zrodlo.id}/${z.kod} ma szacowane wyjście ${w.wy} tokenów (> ${MAX_TOKENS}); podziel źródło na mniejsze`);
+      w.max_tokens = maxTokensZadania(w.wy); z.batch.params.max_tokens = w.max_tokens;
       wiersze.push(w);
     }
     const s = szacunek(wiersze, o.model); szac = s; const wydane = wydatki.suma(root); const limit = Math.min(wydatki.limit(root), LIMIT_LACZNY_USD);
     const zrodloSz = api ? 'count_tokens (wejście), wyjście z założeń' : 'przybliżenie (bez klucza), wyjście z założeń';
     wyp(`szacunek (${zrodloSz}, Batch −${RABAT_BATCH * 100}%): wejście ${s.tokeny_we}, wyjście ${s.tokeny_wy} tokenów; ${Object.entries(s.koszt_wg_modelu).map(([m, c]) => `${m} ≈ ${c.toFixed(2)} USD`).join(', ')}`);
     writeFileSync(join(wyj, 'szacunek.json'), JSON.stringify({ tryb, zrodlo: zrodloSz, model: o.model, effort: o.effort, zalozenia: tryb === 'przeklad' ? ZALOZENIA_PRZEKLADU : ZALOZENIA_PRZEGLADU, ...s, wydano_dotad_usd: wydane, limit_laczny_usd: limit, wiersze }, null, 1) + '\n');
-    if (wydane + s.koszt_usd > limit) { wyp(`STOP: limit łączny ${limit} USD: wydano dotąd ${wydane.toFixed(2)} USD, ten przebieg ≈ ${s.koszt_usd.toFixed(2)} USD. Limit łączny nie ma zgody-wyjątku; podniesienie wymaga decyzji właściciela i zmiany w kodzie.`); return 5; }
-    if (s.koszt_usd > LIMIT_PRZEBIEGU_USD && !o.zgodaKoszt) { wyp(`STOP: szacowany koszt ${s.koszt_usd.toFixed(2)} USD przekracza limit ${LIMIT_PRZEBIEGU_USD} USD; uruchom ponownie z zgodą na koszt (--zgoda-koszt / zgoda_koszt=tak)`); return 3; }
+    if (!Number.isFinite(s.koszt_usd) || !Number.isFinite(s.koszt_gorny_usd)) throw new Error('szacunek niepoprawny (koszt nie jest liczbą); przebieg wstrzymany');
+    wyp(`górna granica kosztu (max_tokens każdego żądania): ${s.koszt_gorny_usd.toFixed(2)} USD`);
+    if (wydane + s.koszt_gorny_usd > limit) { wyp(`STOP: limit łączny ${limit} USD: wydano dotąd ${wydane.toFixed(2)} USD, górna granica tego przebiegu ${s.koszt_gorny_usd.toFixed(2)} USD (szacunek ${s.koszt_usd.toFixed(2)}). Limit łączny nie ma zgody-wyjątku; podniesienie wymaga decyzji właściciela i zmiany w kodzie.`); return 5; }
+    if (s.koszt_gorny_usd > LIMIT_PRZEBIEGU_USD && !o.zgodaKoszt) { wyp(`STOP: górna granica kosztu ${s.koszt_gorny_usd.toFixed(2)} USD (szacunek ${s.koszt_usd.toFixed(2)}) przekracza limit ${LIMIT_PRZEBIEGU_USD} USD; szacowany koszt ${s.koszt_usd.toFixed(2)} USD; uruchom ponownie z zgodą na koszt (--zgoda-koszt / zgoda_koszt=tak)`); return 3; }
     if (o.szacuj) return 0;
+    const wisi = wydatki.niezaksiegowane(root);
+    if (wisi.length) throw Object.assign(new Error(`niezaksięgowany batch w docs/przeklad/wydatki.json (koszt tylko szacowany): ${wisi.map((w) => w.batch_id).join(', ')}. Odbierz wyniki (--wznow <id>), zaksięguj koszt rzeczywisty (--zapisz-wydatek), potem uruchom ponownie.`), { kodWyjscia: 6 });
   }
   if (!api) { wyp('brak ANTHROPIC_API_KEY — przebieg płatny niemożliwy (użyj --szacuj)'); return 2; }
 
   let id = o.wznow;
   if (!id) { const b = await api.utworz(zadania.map((z) => z.batch)); id = b.id; wyp(`wysłano batch ${id}`);
     /* wpis do zaksięgowania zapisany od razu po wysłaniu (szacunek); po odbiorze wyników zastępuje go koszt rzeczywisty — batch opłacony, ale nieodebrany też da się zaksięgować */
-    writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: o.model, data: new Date().toISOString().slice(0, 10), tokeny_we: szac.tokeny_we, tokeny_wy: szac.tokeny_wy, koszt_usd: szac.koszt_usd }, null, 1) + '\n'); }
+    writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: o.model, data: new Date().toISOString().slice(0, 10), rodzaj_kosztu: 'szacunek', tokeny_we: szac.tokeny_we, tokeny_wy: szac.tokeny_wy_maks, koszt_usd: szac.koszt_gorny_usd }, null, 1) + '\n'); }
   const batch = await czekajNaBatch(api, id, { czekajMin: o.czekajMin, interwalS: INTERWAL_S, log: wyp, spij });
   const linie = (await api.wyniki(batch.results_url)).split('\n').filter((l) => l.trim());
   const odczyty = new Map(linie.map((l) => { const r = odczytajLinie(l, klucz); return [`${r.zrodlo}/${r.kod}`, r]; }));
@@ -328,7 +335,7 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   const wiersz = [...odczyty.values()].map((r) => ({ model: CENY[r.model] ? r.model : o.model, we: r.uzycie?.input_tokens ?? 0, wy: r.uzycie?.output_tokens ?? 0 }));
   const we = wiersz.reduce((s, r) => s + r.we, 0); const wy = wiersz.reduce((s, r) => s + r.wy, 0); const koszt = wiersz.reduce((s, r) => s + kosztUsd(r.we, r.wy, r.model), 0);
   const modeleWyniku = [...new Set(wiersz.map((r) => r.model))]; const modelKsiegowany = modeleWyniku.length === 1 ? modeleWyniku[0] : (modeleWyniku.sort((a, b) => CENY[b].wy - CENY[a].wy)[0] ?? o.model);
-  writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: modelKsiegowany, data: new Date().toISOString().slice(0, 10), tokeny_we: we, tokeny_wy: wy, koszt_usd: koszt }, null, 1) + '\n');
+  writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: modelKsiegowany, data: new Date().toISOString().slice(0, 10), rodzaj_kosztu: 'rzeczywisty', tokeny_we: we, tokeny_wy: wy, koszt_usd: koszt }, null, 1) + '\n');
   wyp(`raport: ${o.wyjscie}/ (${raporty.length} żądań); koszt wg użycia ${koszt.toFixed(2)} USD — zaksięguj: node scripts/przeklad/${tryb}-api.mjs --zapisz-wydatek ${o.wyjscie}`);
   return raporty.some((r) => r.blad) ? 1 : 0;
 }
