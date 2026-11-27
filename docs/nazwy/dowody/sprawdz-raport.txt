@@ -1,0 +1,3 @@
+# komenda: node sprawdz-raport.mjs docs/nazwy/recenzja-pl-2026-11-27.md . --rola 09-lokalizacja
+OK: odwołania, cytaty, pliki dowodów i sekrety sprawdzone; format raportu 09-lokalizacja
+# kod wyjścia: 0

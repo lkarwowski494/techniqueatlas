@@ -1,0 +1,192 @@
+# nazwy polskie zrecenzowane w aplikacji (docs/lokalizacja/nazwy-lokalne.json, pole pl, tag v1.1.1-b1042) vs docs/nazwy/pl.json
+# wspólnych kluczy: 276; różnych nazw: 189; kluczy tylko na stronie: 432
+# klucz	aplikacja	strona
+Bench Press (sztanga)	Wyciskanie sztangi na ławce płaskiej	Wyciskanie sztangi leżąc
+Bench Press (hantle)	Wyciskanie hantli na ławce płaskiej	Wyciskanie hantli leżąc
+Chest Fly (hantle)	Rozpiętki z hantlami na ławce płaskiej	Rozpiętki z hantlami leżąc
+One Arm Row (hantle)	Wiosłowanie hantlą jednorącz	Wiosłowanie jednorącz z hantlem
+Chest Supported Row	Wiosłowanie z oparciem klatki piersiowej	Wiosłowanie z podparciem klatki piersiowej
+Wiosłowanie na linkach (siedząc)	Wiosłowanie na wyciągach siedząc	Wiosłowanie na dwóch wyciągach siedząc
+Straight Arm Pulldown	Ściąganie drążka prostymi rękami	Ściąganie drążka wyciągu na prostych rękach
+Upright Row (hantle)	Wiosłowanie hantlami do brody	Przyciąganie hantli wzdłuż tułowia (upright row)
+EZ Bar Curl	Uginanie ramion ze sztangą EZ	Uginanie ramion ze sztangą łamaną
+Concentration Curl (hantle)	Uginanie koncentryczne z hantlą	Uginanie skoncentrowane z hantlem
+Skullcrusher (hantle)	Wyciskanie francuskie hantli leżąc	Wyciskanie francuskie z hantlami
+Skullcrusher (EZ)	Wyciskanie francuskie sztangą EZ leżąc	Wyciskanie francuskie ze sztangą łamaną
+Triceps Dips (ławka)	Dipy na ławce	Dipy tricepsowe na ławce
+Overhead Triceps Extension (hantel)	Prostowanie ramion z hantlą zza głowy	Wyciskanie francuskie z hantlem zza głowy
+Cable Overhead Extension	Prostowanie ramion nad głową na wyciągu	Prostowanie ramion zza głowy na wyciągu
+Przysiad z pasem (linki)	Przysiad z pasem na wyciągu	Belt squat na wyciągu
+Walking Lunges	Wykroki chodzone	Chodzone wykroki
+Hip Thrust (sztanga)	Hip thrust	Hip thrust ze sztangą
+Hip Thrust (hantel)	Hip thrust z hantlą	Hip thrust z hantlem
+Decline Bench Press (hantle)	Wyciskanie hantli głową w dół	Wyciskanie hantli na ławce skośnej głową w dół
+Squeeze Press (hantle)	Wyciskanie hantli ze ściskaniem	Wyciskanie hantli ściśniętych razem (squeeze press)
+Single Arm Cable Fly	Rozpiętki na wyciągu jednorącz	Rozpiętki jednorącz na wyciągu
+Single Arm Cable Chest Press	Wyciskanie na wyciągu jednorącz	Wyciskanie jednorącz na wyciągu
+Smith Machine Incline Press	Wyciskanie na suwnicy Smitha na ławce skośnej	Wyciskanie na ławce skośnej na suwnicy Smitha
+Pullover (hantel)	Pullover z hantlą	Pullover z hantlem
+Single Arm Cable Row	Wiosłowanie na wyciągu jednorącz	Wiosłowanie jednorącz na wyciągu
+Seal Row (sztanga)	Wiosłowanie sztangą z oparciem na ławce	Wiosłowanie sztangą leżąc na ławce (seal row)
+Single Arm Lat Pulldown	Ściąganie wyciągu górnego jednorącz	Ściąganie drążka wyciągu górnego jednorącz
+Single Arm Overhead Press (hantel)	Wyciskanie hantli nad głowę jednorącz	Wyciskanie hantla jednorącz nad głowę
+Y Raise (hantle)	Unoszenie hantli w literę Y	Unoszenie hantli w kształt litery Y
+Upright Row (linki)	Wiosłowanie na wyciągu do brody	Przyciąganie wzdłuż tułowia na wyciągu (upright row)
+Upright Row (sztanga)	Wiosłowanie sztangą do brody	Przyciąganie sztangi wzdłuż tułowia (upright row)
+Pike Push Up	Pompki w pozycji odwróconego V	Pompki pike
+External Rotation (linki)	Rotacja zewnętrzna na wyciągu	Rotacja zewnętrzna ramienia na wyciągu
+External Rotation (hantel)	Rotacja zewnętrzna z hantlą	Rotacja zewnętrzna ramienia z hantlem
+Band Pull Apart	Rozciąganie gumy w poziomie	Rozciąganie gumy na boki (band pull-apart)
+Hammer Curl (linki)	Uginanie młotkowe na wyciągu	Uginanie ramion chwytem młotkowym na wyciągu
+Preacher Curl (EZ)	Uginanie ramion ze sztangą EZ na modlitewniku	Uginanie ramion na modlitewniku ze sztangą łamaną
+Reverse Wrist Curl (hantle)	Uginanie nadgarstków nachwytem z hantlami	Odwrotne uginanie nadgarstków z hantlami
+Single Arm Triceps Pushdown	Prostowanie ramienia na wyciągu jednorącz	Prostowanie ramienia jednorącz na wyciągu górnym
+Triceps Kickback (linki)	Prostowanie ramienia w opadzie na wyciągu	Prostowanie ramienia w opadzie tułowia na wyciągu (kickback)
+Overhead Triceps Extension (EZ)	Prostowanie ramion ze sztangą EZ zza głowy	Prostowanie ramion zza głowy ze sztangą łamaną
+Skullcrusher (sztanga)	Wyciskanie francuskie sztangi leżąc	Wyciskanie francuskie ze sztangą
+Single Leg RDL (hantel)	Rumuński martwy ciąg jednonóż z hantlą	Rumuński martwy ciąg na jednej nodze z hantlem
+Single Leg RDL (linki)	Rumuński martwy ciąg jednonóż na wyciągu	Rumuński martwy ciąg na jednej nodze na wyciągu
+Single Leg Press	Wypychanie na suwnicy jedną nogą	Wypychanie jedną nogą na suwnicy
+Sumo Squat (hantel)	Przysiad sumo z hantlą	Przysiad sumo z hantlem
+Leg Curl (hantel)	Uginanie nóg z hantlą	Uginanie nóg z hantlem
+Cable Pull Through	Przeciąganie wyciągu między nogami	Pull-through na wyciągu
+Sumo Deadlift (kettlebell)	Martwy ciąg sumo z kettlebellem	Martwy ciąg sumo z kettlebell
+Plank Shoulder Taps	Podpórka z dotykaniem barków	Deska z dotykaniem barków
+GHD Sit Up	Brzuszki na maszynie GHD	Brzuszki na ławce GHD
+Sit Up	Brzuszki	Brzuszki z podniesieniem tułowia (sit-up)
+Rollout (sztanga)	Wyjazdy ze sztangą	Rollout ze sztangą
+Side Bend (hantel)	Skłony boczne z hantlą	Skłony boczne z hantlem
+Snatch (hantel)	Rwanie hantlą	Szarpnięcie z hantlem (snatch)
+Single Arm RDL (hantel/linka)	Rumuński martwy ciąg jednorącz, hantla lub wyciąg	Rumuński martwy ciąg jednorącz z hantlem lub na wyciągu
+Belt Squat Machine	Przysiad z pasem na maszynie	Belt squat na maszynie
+Around The Worlds	Around the world z hantlami	Okrążenia ramion z hantlami leżąc (around the world)
+One-Arm Flat Bench Dumbbell Fly	Rozpiętka z hantlą jednorącz na ławce	Rozpiętki jednorącz z hantlem leżąc
+One-Arm Kettlebell Floor Press	Wyciskanie kettlebella jednorącz leżąc na podłodze	Wyciskanie kettlebell jednorącz leżąc na podłodze
+One Arm Dumbbell Bench Press	Wyciskanie hantli jednorącz na ławce	Wyciskanie hantla jednorącz leżąc
+Wide-Grip Barbell Bench Press	Wyciskanie sztangi na ławce szerokim chwytem	Wyciskanie sztangi leżąc szerokim chwytem
+Front Raise And Pullover	Unoszenie sztangi i pullover leżąc	Unoszenie ramion przodem z pullover
+Wide-Grip Decline Barbell Pullover	Pullover ze sztangą głową w dół	Pullover ze sztangą szerokim chwytem na ławce głową w dół
+Smith Machine Decline Press	Wyciskanie na suwnicy Smitha głową w dół	Wyciskanie na ławce skośnej głową w dół na suwnicy Smitha
+Leverage Decline Chest Press	Wyciskanie na maszynie, skos ujemny	Wyciskanie na maszynie głową w dół
+Leverage Incline Chest Press	Wyciskanie na maszynie, skos dodatni	Wyciskanie na maszynie na ławce skośnej
+Push-Up Wide	Pompki szeroko	Pompki szerokim chwytem
+Isometric Wipers	Pompki szeroko z przesunięciem na boki	Wycieraczki izometryczne
+Incline Push-Up Reverse Grip	Pompki odwrotnym chwytem na podwyższeniu	Pompki na podwyższeniu odwrotnym chwytem
+Plyo Kettlebell Push-Ups	Pompki z przeskokiem dłoni nad kettlebellem	Pompki plyometryczne na kettlebell
+Full Range-Of-Motion Lat Pulldown	Ściąganie drążka pełnym zakresem ruchu	Ściąganie drążka wyciągu górnego w pełnym zakresie ruchu
+Gironda Sternum Chins	Podciąganie do mostka w stylu Girondy	Podciąganie Girondy do mostka
+Kneeling High Pulley Row	Wiosłowanie na wyciągu górnym w klęku	Wiosłowanie na klęczkach na wyciągu górnym
+Leverage High Row	Wiosłowanie na maszynie z górnym uchwytem	Wiosłowanie wysokie na maszynie
+One Arm Chin-Up	Podciąganie jednorącz	Podciąganie podchwytem jednorącz
+Reverse Grip Bent Over Row	Wiosłowanie sztangą podchwytem w opadzie	Wiosłowanie sztangą w opadzie tułowia podchwytem
+Seated Good Mornings	Dzień dobry siedząc	Good morning siedząc
+Smith Machine Behind the Back Shrug	Szrugsy na suwnicy Smitha za plecami	Szrugsy za plecami na suwnicy Smitha
+Smith Machine Bent Over Row	Wiosłowanie na suwnicy Smitha w opadzie	Wiosłowanie w opadzie tułowia na suwnicy Smitha
+See-Saw Press (Alternating Side Press)	Naprzemienne wyciskanie hantli nad głowę	Wyciskanie naprzemienne boczne (see-saw press)
+Kettlebell Seated Press	Wyciskanie kettlebella siedząc	Wyciskanie kettlebell siedząc
+One-Arm Kettlebell Push Press	Push press z kettlebellem jednorącz	Push press z kettlebell jednorącz
+One-Arm Kettlebell Jerk	Podrzut kettlebella jednorącz	Jerk z kettlebell jednorącz
+One-Arm Kettlebell Split Jerk	Podrzut nożycowy kettlebella jednorącz	Split jerk z kettlebell jednorącz
+One-Arm Lateral Raise (hantel)	Unoszenie hantli bokiem jednorącz	Unoszenie hantla bokiem jednorącz
+One-Arm Incline Lateral Raise	Unoszenie hantli bokiem jednorącz, ławka skośna	Unoszenie hantla bokiem jednorącz na ławce skośnej
+Cable Seated Lateral Raise	Unoszenie ramion bokiem na wyciągu siedząc	Unoszenie ramienia bokiem na wyciągu siedząc
+Front Incline Dumbbell Raise	Unoszenie hantli w przód na ławce skośnej	Unoszenie hantli przodem na ławce skośnej
+Straight Raises on Incline Bench	Unoszenie sztangi na ławce skośnej leżąc przodem	Unoszenie prostych ramion na ławce skośnej
+Car Drivers	Obroty talerzem jak kierownicą	Kierowca (car driver)
+Kettlebell Pirate Ships	Pirate ship z kettlebellem	Statek piracki z kettlebell
+Dumbbell Incline Shoulder Raise	Wypychanie barków z hantlami na ławce skośnej	Unoszenie hantli na ławce skośnej (barki)
+Barbell Incline Shoulder Raise	Wypychanie barków ze sztangą na ławce skośnej	Unoszenie sztangi na ławce skośnej (barki)
+Smith Incline Shoulder Raise	Wypychanie barków na suwnicy Smitha	Unoszenie na ławce skośnej na suwnicy Smitha (barki)
+Dumbbell One-Arm Upright Row	Wiosłowanie hantlą do brody jednorącz	Przyciąganie hantla wzdłuż tułowia jednorącz (upright row)
+Smith Machine One-Arm Upright Row	Wiosłowanie do brody na suwnicy Smitha jednorącz	Przyciąganie wzdłuż tułowia jednorącz na suwnicy Smitha (upright row)
+Dumbbell Lying One-Arm Rear Lateral Raise	Unoszenie hantli w tył leżąc jednorącz	Unoszenie hantla w tył jednorącz leżąc bokiem
+One-Arm Cable Rear Lateral Raise	Unoszenie ramion w tył na wyciągu jednorącz	Unoszenie ramienia w tył jednorącz na wyciągu
+Cable Rope Rear-Delt Rows	Wiosłowanie liną na wyciągu na tył barków	Wiosłowanie na tylne aktony z linką na wyciągu
+External Rotation with Band	Rotacja zewnętrzna z gumą	Rotacja zewnętrzna ramienia z gumą
+Internal Rotation with Band	Rotacja wewnętrzna z gumą	Rotacja wewnętrzna ramienia z gumą
+Isometric Neck Exercise - Front And Back	Izometryczne napinanie szyi przód i tył	Izometria mięśni szyi: przód i tył
+Isometric Neck Exercise - Sides	Izometryczne napinanie szyi na boki	Izometria mięśni szyi: boki
+Lying Neck Extension (talerz)	Prostowanie szyi leżąc z talerzem	Prostowanie szyi z talerzem leżąc
+Lying Neck Flexion (talerz)	Zginanie szyi leżąc z talerzem	Zginanie szyi z talerzem leżąc
+One-Arm Kettlebell Clean and Jerk	Zarzut i podrzut kettlebella jednorącz	Clean and jerk z kettlebell jednorącz
+Spider Curl (sztanga)	Spider curl ze sztangą	Uginanie ramion spider curl ze sztangą
+Seated Close-Grip Concentration Barbell Curl	Uginanie koncentryczne ze sztangą siedząc	Uginanie skoncentrowane ze sztangą wąskim chwytem siedząc
+Cross Body Hammer Curl	Uginanie młotkowe po przekątnej	Uginanie ramion chwytem młotkowym przed ciałem
+Lying Supine Dumbbell Curl	Uginanie ramion z hantlami leżąc	Uginanie ramion z hantlami leżąc na plecach
+One Arm Dumbbell Preacher Curl	Uginanie z hantlą na modlitewniku jednorącz	Uginanie ramienia z hantlem na modlitewniku jednorącz
+Preacher Hammer Dumbbell Curl	Uginanie młotkowe z hantlami na modlitewniku	Uginanie ramion chwytem młotkowym na modlitewniku
+Standing One-Arm Cable Curl	Uginanie ramienia na wyciągu stojąc jednorącz	Uginanie ramienia na wyciągu jednorącz stojąc
+Lying Close-Grip Bar Curl On High Pulley	Uginanie ramion na górnym wyciągu leżąc	Uginanie ramion wąskim chwytem na wyciągu górnym leżąc
+Dumbbell Lying Pronation	Pronacja leżąc z hantlą	Pronacja z hantlem leżąc
+Dumbbell Lying Supination	Supinacja leżąc z hantlą	Supinacja z hantlem leżąc
+One-Arm Dumbbell Wrist Curl	Uginanie nadgarstka z hantlą jednorącz	Uginanie nadgarstka z hantlem jednorącz
+One-Arm Dumbbell Reverse Wrist Curl	Uginanie nadgarstka nachwytem z hantlą jednorącz	Odwrotne uginanie nadgarstka z hantlem jednorącz
+Reverse Plate Curls	Uginanie ramion z talerzem nachwytem	Uginanie ramion nachwytem z talerzem
+Bottoms-Up Clean From The Hang Position	Zarzut kettlebella dnem do góry ze zwisu	Clean z kettlebell dnem do góry z zawisu
+Smith Machine Close-Grip Bench Press	Wyciskanie wąskim chwytem na suwnicy Smitha	Wyciskanie leżąc wąskim chwytem na suwnicy Smitha
+Reverse Grip Bench Press	Wyciskanie sztangi na ławce odwrotnym chwytem	Wyciskanie leżąc podchwytem
+Decline Close-Grip Bench To Skull Crusher	Wyciskanie wąsko do francuskiego głową w dół	Wyciskanie wąsko na ławce głową w dół przechodzące we francuskie
+Decline EZ Bar Triceps Extension	Prostowanie ramion ze sztangą EZ głową w dół	Prostowanie ramion ze sztangą łamaną na ławce głową w dół
+Lying Close-Grip Barbell Triceps Extension Behind The Head	Wyciskanie francuskie wąsko zza głowy leżąc	Prostowanie ramion za głowę ze sztangą wąskim chwytem leżąc
+One-Arm Lying Dumbbell Triceps Extension	Prostowanie ramienia z hantlą leżąc jednorącz	Prostowanie ramienia z hantlem jednorącz leżąc
+Dumbbell One-Arm Triceps Extension	Prostowanie ramienia z hantlą jednorącz	Prostowanie ramienia z hantlem jednorącz
+Standing Overhead Barbell Triceps Extension	Prostowanie ramion ze sztangą nad głową	Prostowanie ramion zza głowy ze sztangą stojąc
+Cable Incline Triceps Extension	Prostowanie ramion na wyciągu, ławka skośna	Prostowanie ramion na wyciągu na ławce skośnej
+Reverse Grip Triceps Pushdown	Prostowanie ramion na wyciągu podchwytem	Prostowanie ramion na wyciągu górnym podchwytem
+Standing Low-Pulley One-Arm Triceps Extension	Prostowanie ramienia na dolnym wyciągu jednorącz	Prostowanie ramienia na wyciągu dolnym jednorącz stojąc
+Ring Dips	Dipy na kółkach	Dipy na kółkach gimnastycznych
+Incline Push-Up Close-Grip	Pompki wąsko z rękami na podwyższeniu	Pompki wąskie na podwyższeniu
+One-Arm Overhead Kettlebell Squat	Przysiad z kettlebellem nad głową jednorącz	Przysiad z kettlebell nad głową jednorącz
+Hip Flexion with Band	Zginanie biodra z gumą	Unoszenie kolana z gumą
+One-Arm Side Deadlift	Martwy ciąg z boku jednorącz	Martwy ciąg boczny jednorącz
+Sled Drag (Harness)	Ciągnięcie sanek w szelkach	Ciągnięcie sanek w uprzęży
+Alternate Leg Diagonal Bound	Naprzemienny skok po przekątnej	Skoki diagonalne naprzemiennie
+Alternate Leg Push-Off	Wyskoki z nogą na skrzyni naprzemiennie	Odbicia naprzemiennie jedną nogą
+Single Leg Push-Off	Wyskoki z nogą na skrzyni	Odbicia jedną nogą
+Side to Side Box Shuffle	Przeskoki na podwyższeniu z boku na bok	Przeskoki ze strony na stronę przez skrzynię
+Dumbbell Seated Box Jump	Wskok na skrzynię z siadu z hantlami	Wskok na skrzynię z hantlami z siadu
+Double Leg Butt Kick	Podskoki z piętami do pośladków obunóż	Doskoki piętami do pośladków obunóż
+Single Leg Butt Kick	Podskoki z piętami do pośladków jednonóż	Doskoki piętą do pośladka jednonóż
+Front Cone Hops	Skoki przez pachołek w przód	Przeskoki przez pachołki do przodu
+Downward Facing Balance	Balans na piłce gimnastycznej leżąc przodem	Równowaga w pozycji psa głową w dół
+Dumbbell Seated One-Leg Calf Raise	Wspięcia na palce siedząc jednonóż z hantlą	Wspięcia na palce siedząc na jednej nodze z hantlem
+Prone Flutter Kicks	Nożyce leżąc na brzuchu	Nożyce nóg leżąc na brzuchu
+Hip Extension with Bands	Prostowanie biodra z gumami	Prostowanie biodra z gumą
+Lateral Cone Hops	Skoki przez pachołek w bok	Skoki boczne przez pachołki
+One-Arm Kettlebell Swings	Wymachy kettlebellem jednorącz	Swing kettlebell jednorącz
+Alternate Heel Touchers	Naprzemienne dotykanie pięt	Dotykanie pięt naprzemiennie
+Bosu Ball Cable Crunch With Side Bends	Brzuszki na wyciągu ze skłonami, półkula	Spięcia brzucha na wyciągu z bocznymi skłonami na półkuli balansowej
+Butt-Ups	Unoszenie bioder z podporu na przedramionach	Butt-up
+Cable Russian Twists	Rosyjskie skręty na wyciągu	Russian twist na wyciągu
+Cable Seated Crunch	Brzuszki na wyciągu siedząc	Spięcia brzucha na wyciągu siedząc
+Cocoons	Scyzoryk z ugiętymi nogami	Cocoon
+Gorilla Chin/Crunch	Podciąganie z unoszeniem kolan	Gorilla chin-up z brzuszkiem
+Kneeling Cable Crunch With Alternating Oblique Twists	Brzuszki na wyciągu w klęku ze skrętami	Spięcia brzucha na wyciągu na klęczkach ze skrętami tułowia
+One-Arm High-Pulley Cable Side Bends	Skłony boczne na górnym wyciągu jednorącz	Skłony boczne na wyciągu górnym jednorącz
+One-Arm Medicine Ball Slam	Rzut piłką lekarską o podłogę jednorącz	Rzuty piłką lekarską o podłogę jednorącz
+Seated Flat Bench Leg Pull-In	Przyciąganie nóg siedząc na ławce	Przyciąganie nóg do klatki siedząc na ławce
+Sledgehammer Swings	Uderzenia młotem w oponę	Uderzenia młotem
+Supine One-Arm Overhead Throw	Rzut jednorącz nad głowę leżąc na plecach	Rzut znad głowy jednorącz leżąc na plecach
+Weighted Sit-Ups - With Bands	Brzuszki z gumą na ławce skośnej głową w dół	Brzuszki na ławce skośnej z gumą
+Chin To Chest Stretch	Rozciąganie karku w skłonie brody do klatki	Rozciąganie karku: broda do klatki
+Leg Swings (Front-to-Back)	Wymachy nóg w przód i w tył	Wymachy nogą w przód i w tył
+Groiners	Przyciąganie stopy do dłoni z podporu	Groiner
+Iron Crosses (Stretch)	Żelazny krzyż (rozciąganie)	Iron cross (rozciąganie)
+One Knee To Chest	Kolano do klatki piersiowej	Przyciąganie jednego kolana do klatki
+Round The World Shoulder Stretch	Rozciąganie barków z krążeniem ramion	Rozciąganie barków (okrążenia ramion)
+Leg Swings (Side-to-Side)	Wymachy nóg na boki	Wymachy nogą na boki
+Side Lying Groin Stretch	Rozciąganie pachwiny leżąc na boku	Rozciąganie przywodzicieli leżąc na boku
+Standing Soleus And Achilles Stretch	Rozciąganie łydki i ścięgna Achillesa stojąc	Rozciąganie mięśnia płaszczkowatego i ścięgna Achillesa stojąc
+Standing Toe Touches	Dotykanie palców stóp stojąc	Skłony do dotknięcia palców stojąc
+Adductor-SMR	Rolowanie przywodzicieli	Rolowanie przywodzicieli wałkiem
+Calves-SMR	Rolowanie łydek	Rolowanie łydek wałkiem
+Foam Roll: Hamstrings	Rolowanie tyłu uda	Rolowanie tylnej części uda wałkiem
+Iliotibial Tract-SMR	Rolowanie pasma biodrowo-piszczelowego	Rolowanie pasma biodrowo-piszczelowego wałkiem
+Latissimus Dorsi-SMR	Rolowanie najszerszego grzbietu	Rolowanie najszerszych grzbietu wałkiem
+Peroneals-SMR	Rolowanie boku łydki	Rolowanie mięśni strzałkowych wałkiem
+Piriformis-SMR	Rolowanie mięśnia gruszkowatego	Rolowanie mięśnia gruszkowatego wałkiem
+Foam Roll: Quadriceps	Rolowanie przodu uda	Rolowanie czworogłowego wałkiem
+Rhomboids-SMR	Rolowanie górnej części pleców	Rolowanie górnej części pleców wałkiem
+Foot-SMR	Rolowanie stopy	Rolowanie stopy piłeczką
+Frog Hops	Skoki żabką	Skoki żabki
+Toe Touchers	Dotykanie palców stóp leżąc	Dotykanie palców stóp

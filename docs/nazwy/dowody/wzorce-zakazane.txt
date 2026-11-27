@@ -1,0 +1,17 @@
+# komenda: node dowody.mjs docs/nazwy/pl.json <tag>/docs/lokalizacja/slownik-terminow.json <tag>/docs/lokalizacja/nazwy-lokalne.json docs/nazwy/dowody
+# polskie wzorce „zakazane” ze słownika terminów (tag v1.1.1-b1042) zastosowane do 708 nazw; pojęcie, wzorzec, klucz, nazwa
+nozyce	/wykrok/	Lunges (hantle)	Wykroki z hantlami
+nozyce	/wykrok/	Walking Lunges	Chodzone wykroki
+nozyce	/wykrok/	Reverse Lunge	Wykroki w tył
+nozyce	/wykrok/	Lateral Lunge	Wykroki w bok
+nozyce	/wykrok/	Curtsy Lunge	Wykroki skrzyżne (curtsy)
+nozyce	/wykrok/	Lunges (sztanga)	Wykroki ze sztangą
+nozyce	/wykrok/	Slider Reverse Lunge	Wykroki w tył na ślizgaczach
+nozyce	/wykrok/	Barbell Walking Lunge	Chodzone wykroki ze sztangą
+nozyce	/wykrok/	Elevated Back Lunge	Wykroki w tył z podwyższenia
+nozyce	/wykrok/	Lunge Pass Through	Wykroki z przekładaniem piłki
+nozyce	/wykrok/	Crossover Reverse Lunge	Wykroki w tył ze skrzyżowaniem nóg
+rack_kettlebell	/pozycj\w*\s+rack|(?<![\p{L}])rack(?![\p{L}])|w\s+pozycji\s+przy\s+barku/	Rack Pull	Rack pull
+rack_kettlebell	/pozycj\w*\s+rack|(?<![\p{L}])rack(?![\p{L}])|w\s+pozycji\s+przy\s+barku/	Rack Pull with Bands	Rack pull z gumami
+rack_kettlebell	/pozycj\w*\s+rack|(?<![\p{L}])rack(?![\p{L}])|w\s+pozycji\s+przy\s+barku/	Rack Delivery	Rack delivery
+# trafień: 14

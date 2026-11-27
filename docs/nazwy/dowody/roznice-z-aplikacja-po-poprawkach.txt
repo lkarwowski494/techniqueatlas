@@ -1,0 +1,27 @@
+# to samo porównanie na nazwach proponowanych w recenzji (kolumna „strona” = proponowana); komenda jak w roznice-z-aplikacja.txt, kod 0
+# wspólnych kluczy: 276; różnych nazw: 24; kluczy tylko na stronie: 432
+# klucz	aplikacja	strona
+Bench Press (sztanga)	Wyciskanie sztangi na ławce płaskiej	Wyciskanie sztangi leżąc
+Bench Press (hantle)	Wyciskanie hantli na ławce płaskiej	Wyciskanie hantli leżąc
+Chest Fly (hantle)	Rozpiętki z hantlami na ławce płaskiej	Rozpiętki z hantlami leżąc
+Przysiad z pasem (linki)	Przysiad z pasem na wyciągu	Belt squat na wyciągu
+Decline Bench Press (hantle)	Wyciskanie hantli głową w dół	Wyciskanie hantli na ławce skośnej głową w dół
+Plank Shoulder Taps	Podpórka z dotykaniem barków	Deska z dotykaniem barków
+Sit Up	Brzuszki	Brzuszki z podniesieniem tułowia (sit-up)
+Rollout (sztanga)	Wyjazdy ze sztangą	Rollout ze sztangą
+Single Arm RDL (hantel/linka)	Rumuński martwy ciąg jednorącz, hantla lub wyciąg	Rumuński martwy ciąg jednorącz z hantlą lub na wyciągu
+Belt Squat Machine	Przysiad z pasem na maszynie	Belt squat na maszynie
+One-Arm Flat Bench Dumbbell Fly	Rozpiętka z hantlą jednorącz na ławce	Rozpiętki z hantlą jednorącz leżąc
+One Arm Dumbbell Bench Press	Wyciskanie hantli jednorącz na ławce	Wyciskanie hantli jednorącz leżąc
+Wide-Grip Barbell Bench Press	Wyciskanie sztangi na ławce szerokim chwytem	Wyciskanie sztangi leżąc szerokim chwytem
+Wide-Grip Decline Barbell Pullover	Pullover ze sztangą głową w dół	Pullover ze sztangą szerokim chwytem na ławce skośnej głową w dół
+Smith Machine Decline Press	Wyciskanie na suwnicy Smitha głową w dół	Wyciskanie na ławce skośnej głową w dół na suwnicy Smitha
+Leverage Decline Chest Press	Wyciskanie na maszynie, skos ujemny	Wyciskanie na maszynie głową w dół
+Leverage Incline Chest Press	Wyciskanie na maszynie, skos dodatni	Wyciskanie na maszynie na ławce skośnej
+Seated Good Mornings	Dzień dobry siedząc	Good morning siedząc
+One-Arm Incline Lateral Raise	Unoszenie hantli bokiem jednorącz, ławka skośna	Unoszenie hantli bokiem jednorącz na ławce skośnej
+Reverse Grip Bench Press	Wyciskanie sztangi na ławce odwrotnym chwytem	Wyciskanie sztangi leżąc podchwytem
+Decline EZ Bar Triceps Extension	Prostowanie ramion ze sztangą EZ głową w dół	Prostowanie ramion ze sztangą EZ na ławce skośnej głową w dół
+Cable Incline Triceps Extension	Prostowanie ramion na wyciągu, ławka skośna	Prostowanie ramion na wyciągu na ławce skośnej
+Hip Flexion with Band	Zginanie biodra z gumą	Unoszenie kolana z gumą
+Bosu Ball Cable Crunch With Side Bends	Brzuszki na wyciągu ze skłonami, półkula	Spięcia brzucha na wyciągu ze skłonami bocznymi na półkuli balansowej
