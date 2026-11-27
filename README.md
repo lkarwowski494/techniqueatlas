@@ -1,6 +1,6 @@
 # Technique Atlas — strona z pełną biblioteką ćwiczeń
 
-Statyczna strona (GitHub Pages, 0 zł) z biblioteką ćwiczeń aplikacji Trening: opis, mięśnie, wskazówki techniki, częste błędy, zamienniki i animowana figura ruchu, w 35 językach.
+Statyczna strona (GitHub Pages, 0 zł) z biblioteką ćwiczeń aplikacji Trening: opis i mięśnie, a przy większości ćwiczeń także wskazówki techniki, częste błędy, zamienniki i animowana figura ruchu, w 35 językach.
 Specyfikacja: [docs/54-strona-biblioteki.md](docs/54-strona-biblioteki.md) (z sekcją „Decyzje właściciela 26.10.2026”). Start razem z wersją 1.1 aplikacji.
 **Stan: szkielet techniczny.** Do startu: `config.json` → `indeksowanie: false` (noindex,nofollow na każdej stronie, `robots.txt` „Disallow: /”, brak map witryny), Pages wyłączone, workflow publikacji tylko ręczny.
 
