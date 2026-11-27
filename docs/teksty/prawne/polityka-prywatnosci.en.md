@@ -5,7 +5,7 @@ Effective {{dataObowiazywania}} · version 1
 
 ## In short
 
-The Technique Atlas website does not collect your personal data. It has no accounts, forms or ads. It uses no cookies, no browser storage, no analytics and no tracking tools. <!-- D-1, D-2, D-3, D-4 -->
+The Technique Atlas website itself does not collect your personal data. It has no accounts, forms or ads. It uses no cookies, no browser storage, no analytics and no tracking tools. <!-- D-1, D-2, D-3, D-4 -->
 The site loads only its own files. Search and filters run in your browser. <!-- D-5, D-6 -->
 The site is served by a hosting service that logs your IP address on every visit for security purposes (details below). <!-- D-8 -->
 Questions: {{kontakt}}.
@@ -41,7 +41,7 @@ The site has no contact form. <!-- D-3 --> If you email {{kontakt}}, we handle y
 ## Your rights
 
 You have the right to access, rectify and erase your data, to restrict processing, to object and to data portability. You can also lodge a complaint with a supervisory authority; in Poland, the President of the Personal Data Protection Office (UODO).
-Because the site collects no personal data, we hold no data we could provide or delete, except emails you send us. For the hosting logs, write to us and we will tell you who the provider is and how to contact them.
+Because the site itself collects no personal data, we hold no data we could provide or delete, except emails you send us. For the hosting logs, write to us and we will tell you who the provider is and how to contact them.
 
 ## Do you have to provide data
 
@@ -53,7 +53,7 @@ We make no decisions based solely on automated processing, including profiling.
 
 ## Children
 
-The site collects no data from anyone, including children.
+The site itself collects no data from anyone, including children.
 
 ## Changes
 
