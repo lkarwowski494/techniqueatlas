@@ -27,6 +27,7 @@ Effective {{dataObowiazywania}} · version 1
 
 The collection of exercises with descriptions, cues, drawings and translations is a database we prepared with our own investment. Without written permission you may not extract or make publicly available the whole or a substantial part of this database, also in a modified form, including to build other apps, databases or datasets for training models. This also covers repeated extraction of small parts that together make up a substantial part.
 Section 1 (indexing, quoting and summarising with a link) is not such extraction.
+The exception is crawlers that this site's robots.txt file explicitly allows; they use the content within the scope their provider describes.
 
 ## 5. Permission for other uses
 

@@ -27,6 +27,7 @@ Obowiązuje od {{dataObowiazywania}} · wersja 1
 
 Zbiór ćwiczeń z opisami, wskazówkami, rysunkami i tłumaczeniami to baza danych, którą opracowaliśmy własnym nakładem. Bez pisemnej zgody nie wolno pobierać ani udostępniać publicznie całości albo istotnej części tej bazy, także w przekształconej formie, w tym do tworzenia innych aplikacji, baz danych lub zbiorów do uczenia modeli. Dotyczy to też powtarzalnego pobierania niewielkich części, jeśli razem dają istotną część. <!-- .cache/app/LICENSE:11-20; dyrektywa 96/9/WE i ustawa o ochronie baz danych — cytowane w LICENSE aplikacji, nieczytane dziś u źródła: [DO KONSULTACJI] L-2 -->
 Punkt 1 (indeksowanie, cytowanie i streszczanie z odnośnikiem) nie jest takim pobraniem.
+Wyjątkiem są roboty, którym plik robots.txt tej strony wprost pozwala na dostęp; korzystają z treści w zakresie opisanym przez ich dostawcę. <!-- 06-tresci-003: zgodność z robots.txt (KO-130, decyzje koordynacji 27.11.2026); bez nazw firm, zdanie nadąża za zmianami robots.txt -->
 
 ## 5. Zgoda na inne użycie
 
