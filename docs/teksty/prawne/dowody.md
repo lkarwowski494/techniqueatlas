@@ -19,7 +19,7 @@ Każde twierdzenie z polityki, regulaminu i licencji o tym, co robi strona, ma t
 | D-12 | Przycisk App Store z oznaczeniem `techniqueatlas-<język>`, bez danych osoby | `src/pages.mjs:29` (`?ct=techniqueatlas-${m.lang}`) | tylko gdy `config.json` → `appStoreId` niepuste; dziś puste, więc przycisku nie ma. Zdanie wchodzi na stronę razem z Z-33 (appStoreId) |
 | D-13 | Baner aplikacji pokazuje przeglądarka na podstawie znacznika | `src/pages.mjs:22` (`<meta name="apple-itunes-app">`) | jak D-12; czy przeglądarka łączy się przy tym z serwerem sklepu: **[DO USTALENIA] T-2** |
 | D-14 | Kod strony i historia zmian są publiczne | repozytorium `lkarwowski494/techniqueatlas`: `private: false` (API GitHub, 27.11.2026) | — |
-| D-15 | Zakres usługi: biblioteka (opis, mięśnie, wskazówki, błędy, zamienniki, rysunek), lista z filtrami, wyszukiwarka, wiele języków; bezpłatnie, bez rejestracji | README wiersz 3; plan, „JUŻ ZROBIONE”; brak płatności i kont: D-1 | — |
+| D-15 | Zakres usługi: biblioteka (opis, mięśnie, wskazówki, błędy, zamienniki, rysunek), lista z filtrami, wyszukiwarka, wiele języków; bezpłatnie, bez rejestracji | README wiersz 3; plan, „JUŻ ZROBIONE”; brak płatności i kont: D-1; liczby z eksportu 1.1.1 (708 ćwiczeń: rysunek 528, wskazówki 567, częste błędy 440, zamienniki 609) | recenzja Z-23 (06-tresci-006): opis i mięśnie przy każdym, reszta „przy większości” |
 
 ## [DO KONSULTACJI] (pytania do prawnika, bezpieczniejsza opcja, decyzja właściciela)
 
