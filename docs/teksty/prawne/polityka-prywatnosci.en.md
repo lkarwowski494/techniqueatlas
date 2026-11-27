@@ -19,7 +19,7 @@ The site is run by {{administrator}}, contact: {{kontakt}}.
 
 - Your browser downloads the site's files (HTML, CSS, scripts, exercise drawings) from the hosting server. The site loads nothing from other services: no fonts, scripts, images or plugins. <!-- D-5 -->
 - The hosting server logs your IP address on every visit and stores it for security purposes. These logs are kept by the hosting provider, a company based in the United States, under its own terms. Data may therefore be processed in the United States. The provider states that it complies with the EU-U.S. Data Privacy Framework (a European Commission adequacy decision). <!-- D-8, D-10; [DO KONSULTACJI] PP-3 -->
-- We do not see these logs and receive no reports from them. <!-- D-9 [DO USTALENIA] -->
+- The site has no visitor statistics of its own. <!-- D-9 → D-4 (06-tresci-004) -->
 
 ## Search, filters and drawings
 

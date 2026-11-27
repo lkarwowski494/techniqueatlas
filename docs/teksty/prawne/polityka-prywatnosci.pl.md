@@ -19,7 +19,7 @@ Stronę prowadzi {{administrator}}, kontakt: {{kontakt}}.
 
 - Twoja przeglądarka pobiera pliki strony (HTML, CSS, skrypty, rysunki ćwiczeń) z serwera hostingu. Strona nie pobiera nic z innych serwisów: czcionek, skryptów, obrazów ani wtyczek. <!-- D-5 -->
 - Serwer hostingu zapisuje Twój adres IP przy każdej wizycie i przechowuje go ze względów bezpieczeństwa. Logi prowadzi dostawca hostingu, firma z siedzibą w USA, na własnych zasadach. Dane mogą być więc przetwarzane w USA. Dostawca deklaruje przestrzeganie Ram ochrony danych UE–USA (decyzja Komisji Europejskiej o odpowiednim stopniu ochrony). <!-- D-8, D-10; [DO KONSULTACJI] PP-3: nazwa dostawcy na stronie albo kategoria (art. 13 ust. 1 lit. e RODO: „odbiorcach lub kategoriach odbiorców”) -->
-- Nie widzimy tych logów i nie dostajemy z nich raportów. <!-- D-9 [DO USTALENIA] -->
+- Strona nie ma własnych statystyk odwiedzin. <!-- D-9 → D-4 (06-tresci-004: zdanie „nie widzimy tych logów” bez dowodu zastąpione zdaniem z dowodem D-4) -->
 
 ## Wyszukiwarka, filtry i rysunki
 
