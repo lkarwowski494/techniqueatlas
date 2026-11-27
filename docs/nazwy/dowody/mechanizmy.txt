@@ -1,0 +1,195 @@
+# mechanizmy w docs/nazwy/pl.json: wzorzec → liczba i nazwy
+
+## kettlebell nieodmienione /kettlebell(?![\p{L}])/u: 24
+Kettlebell Swing	Swing kettlebell
+Kettlebell Press	Wyciskanie kettlebell
+Sumo Deadlift (kettlebell)	Martwy ciąg sumo z kettlebell
+Kettlebell Windmill	Windmill z kettlebell
+Kettlebell Clean	Clean z kettlebell
+Kettlebell Snatch	Szarpnięcie kettlebell (snatch)
+One-Arm Kettlebell Floor Press	Wyciskanie kettlebell jednorącz leżąc na podłodze
+Plyo Kettlebell Push-Ups	Pompki plyometryczne na kettlebell
+Kettlebell Sumo High Pull	Wysokie przyciąganie kettlebell w rozkroku sumo
+Kettlebell Arnold Press	Wyciskanie Arnolda z kettlebell
+Kettlebell Seated Press	Wyciskanie kettlebell siedząc
+One-Arm Kettlebell Push Press	Push press z kettlebell jednorącz
+One-Arm Kettlebell Jerk	Jerk z kettlebell jednorącz
+One-Arm Kettlebell Split Jerk	Split jerk z kettlebell jednorącz
+Kettlebell Halo	Halo z kettlebell
+Kettlebell Halo with Overhead Extension	Halo z kettlebell z prostowaniem ramion nad głową
+Kettlebell Pirate Ships	Statek piracki z kettlebell
+One-Arm Kettlebell Clean and Jerk	Clean and jerk z kettlebell jednorącz
+Kettlebell Thruster	Thruster z kettlebell
+Bottoms-Up Clean From The Hang Position	Clean z kettlebell dnem do góry z zawisu
+Kettlebell Overhead Triceps Extension	Prostowanie ramion zza głowy z kettlebell
+One-Arm Overhead Kettlebell Squat	Przysiad z kettlebell nad głową jednorącz
+One-Arm Kettlebell Swings	Swing kettlebell jednorącz
+Kettlebell Figure 8	Ósemka z kettlebell
+
+## kettlebell odmienione /kettlebell(em|a|ami|i|e)(?![\p{L}])/u: 8
+Double Kettlebell Front Squat	Przysiad z dwoma kettlebellami z przodu
+Double Kettlebell Front Rack Carry	Spacer z dwoma kettlebellami opartymi przy barkach
+Double Kettlebell Press	Wyciskanie dwóch kettlebelli
+Double Kettlebell Push Press	Push press z dwoma kettlebellami
+Double Kettlebell Jerk	Jerk z dwoma kettlebellami
+Double Kettlebell Snatch	Snatch z dwoma kettlebellami
+Double Kettlebell Clean	Clean z dwoma kettlebellami
+Double Kettlebell Windmill	Windmill z dwoma kettlebellami
+
+## hantel (z hantlem / hantla jako dopełniacz) /hantl(em|a)(?![\p{L}])/u: 29
+One Arm Row (hantle)	Wiosłowanie jednorącz z hantlem
+Concentration Curl (hantle)	Uginanie skoncentrowane z hantlem
+Overhead Triceps Extension (hantel)	Wyciskanie francuskie z hantlem zza głowy
+Hip Thrust (hantel)	Hip thrust z hantlem
+Pullover (hantel)	Pullover z hantlem
+Single Arm Overhead Press (hantel)	Wyciskanie hantla jednorącz nad głowę
+External Rotation (hantel)	Rotacja zewnętrzna ramienia z hantlem
+Single Leg RDL (hantel)	Rumuński martwy ciąg na jednej nodze z hantlem
+Sumo Squat (hantel)	Przysiad sumo z hantlem
+Leg Curl (hantel)	Uginanie nóg z hantlem
+Side Bend (hantel)	Skłony boczne z hantlem
+Snatch (hantel)	Szarpnięcie z hantlem (snatch)
+Single Arm RDL (hantel/linka)	Rumuński martwy ciąg jednorącz z hantlem lub na wyciągu
+One-Arm Flat Bench Dumbbell Fly	Rozpiętki jednorącz z hantlem leżąc
+One Arm Dumbbell Bench Press	Wyciskanie hantla jednorącz leżąc
+One-Arm Lateral Raise (hantel)	Unoszenie hantla bokiem jednorącz
+One-Arm Incline Lateral Raise	Unoszenie hantla bokiem jednorącz na ławce skośnej
+Single Dumbbell Front Raise	Unoszenie jednego hantla przodem
+Dumbbell One-Arm Upright Row	Przyciąganie hantla wzdłuż tułowia jednorącz (upright row)
+Dumbbell Lying One-Arm Rear Lateral Raise	Unoszenie hantla w tył jednorącz leżąc bokiem
+One Arm Dumbbell Preacher Curl	Uginanie ramienia z hantlem na modlitewniku jednorącz
+Dumbbell Lying Pronation	Pronacja z hantlem leżąc
+Dumbbell Lying Supination	Supinacja z hantlem leżąc
+One-Arm Dumbbell Wrist Curl	Uginanie nadgarstka z hantlem jednorącz
+One-Arm Dumbbell Reverse Wrist Curl	Odwrotne uginanie nadgarstka z hantlem jednorącz
+One-Arm Lying Dumbbell Triceps Extension	Prostowanie ramienia z hantlem jednorącz leżąc
+Dumbbell One-Arm Triceps Extension	Prostowanie ramienia z hantlem jednorącz
+Dumbbell Squat	Przysiad z hantlem
+Dumbbell Seated One-Leg Calf Raise	Wspięcia na palce siedząc na jednej nodze z hantlem
+
+## sztanga łamana /sztang\p{L}* łaman/u: 7
+EZ Bar Curl	Uginanie ramion ze sztangą łamaną
+Skullcrusher (EZ)	Wyciskanie francuskie ze sztangą łamaną
+Preacher Curl (EZ)	Uginanie ramion na modlitewniku ze sztangą łamaną
+Overhead Triceps Extension (EZ)	Prostowanie ramion zza głowy ze sztangą łamaną
+Reverse EZ-Bar Preacher Curl	Uginanie ramion nachwytem ze sztangą łamaną na modlitewniku
+Close-Grip EZ-Bar Press	Wyciskanie sztangi łamanej wąskim chwytem
+Decline EZ Bar Triceps Extension	Prostowanie ramion ze sztangą łamaną na ławce głową w dół
+
+## Clean/Snatch/Jerk po angielsku /(?<![\p{L}])(clean|snatch|jerk)(?![\p{L}])/iu: 38
+Kettlebell Clean	Clean z kettlebell
+Kettlebell Snatch	Szarpnięcie kettlebell (snatch)
+Snatch (hantel)	Szarpnięcie z hantlem (snatch)
+Power Clean	Power clean
+Clean Shrug	Szrugsy z clean
+Snatch Shrug	Szrugsy ze snatch
+Double Kettlebell Jerk	Jerk z dwoma kettlebellami
+One-Arm Kettlebell Jerk	Jerk z kettlebell jednorącz
+One-Arm Kettlebell Split Jerk	Split jerk z kettlebell jednorącz
+Clean and Press	Clean and press
+Clean and Jerk	Clean and jerk (rwanie i podrzut)
+Jerk Balance	Jerk balance
+Double Kettlebell Snatch	Snatch z dwoma kettlebellami
+Double Kettlebell Clean	Clean z dwoma kettlebellami
+One-Arm Kettlebell Clean and Jerk	Clean and jerk z kettlebell jednorącz
+Bottoms-Up Clean From The Hang Position	Clean z kettlebell dnem do góry z zawisu
+Jerk Dip Squat	Przysiad jerk dip
+Hang Clean	Hang clean
+Clean Pull	Clean pull
+Block Clean	Clean z podwyższenia
+Split Clean	Split clean
+Barbell Snatch	Snatch ze sztangą
+Block Snatch	Snatch z podwyższenia
+Block Power Snatch	Power snatch z podwyższenia
+Snatch Balance	Snatch balance
+Power Jerk	Power jerk
+Split Jerk	Split jerk
+Squat Jerk	Squat jerk
+Clean	Clean
+Clean Deadlift	Martwy ciąg z clean
+Dumbbell Clean	Clean z hantlami
+Hang Snatch	Hang snatch
+Muscle Snatch	Muscle snatch
+Block Power Clean	Power clean z podwyższenia
+Power Snatch	Power snatch
+Snatch Deadlift	Martwy ciąg ze snatch
+Snatch Pull	Snatch pull
+Split Snatch	Split snatch
+
+## aktony /akton/u: 2
+Cable Rope Rear-Delt Rows	Wiosłowanie na tylne aktony z linką na wyciągu
+Barbell Rear Delt Row	Wiosłowanie sztangą na tylne aktony
+
+## nawias z objaśnieniem /\(.*\)/u: 64
+Pec Deck	Pec deck (rozpiętki na maszynie)
+Machine Chest Press	Wyciskanie na maszynie (klatka)
+Machine Shoulder Press	Wyciskanie na maszynie (barki)
+Upright Row (hantle)	Przyciąganie hantli wzdłuż tułowia (upright row)
+Triceps Kickback	Prostowanie ramienia w opadzie tułowia (kickback)
+Pistol Squat	Przysiad na jednej nodze (pistol)
+Mountain Climbers	Wspinaczka (mountain climbers)
+Assault Bike	Rower powietrzny (assault bike)
+Squeeze Press (hantle)	Wyciskanie hantli ściśniętych razem (squeeze press)
+Seal Row (sztanga)	Wiosłowanie sztangą leżąc na ławce (seal row)
+Upright Row (linki)	Przyciąganie wzdłuż tułowia na wyciągu (upright row)
+Upright Row (sztanga)	Przyciąganie sztangi wzdłuż tułowia (upright row)
+Band Pull Apart	Rozciąganie gumy na boki (band pull-apart)
+Triceps Kickback (linki)	Prostowanie ramienia w opadzie tułowia na wyciągu (kickback)
+Split Squat	Przysiad z jedną nogą z tyłu (split squat)
+Curtsy Lunge	Wykroki skrzyżne (curtsy)
+Cable Woodchop	Drwal na wyciągu (woodchop)
+Sit Up	Brzuszki z podniesieniem tułowia (sit-up)
+Kettlebell Snatch	Szarpnięcie kettlebell (snatch)
+Snatch (hantel)	Szarpnięcie z hantlem (snatch)
+Stair Climber	Maszyna schodowa (stair climber)
+Ski Erg	Ergometr narciarski (ski erg)
+Around The Worlds	Okrążenia ramion z hantlami leżąc (around the world)
+Chain Press	Wyciskanie z łańcuchami (chain press)
+Drop Push	Pompki z opadnięciem (drop push)
+Deficit Deadlift	Martwy ciąg ze stania na podwyższeniu (deficit)
+Keg Load	Podnoszenie beczki (keg)
+Smith Machine Upright Row	Przyciąganie wzdłuż tułowia na suwnicy Smitha (upright row)
+Band Upright Row	Przyciąganie wzdłuż tułowia z gumą (upright row)
+See-Saw Press (Alternating Side Press)	Wyciskanie naprzemienne boczne (see-saw press)
+Log Lift	Podnoszenie kłody (log lift)
+Crucifix	Krzyż (crucifix)
+Car Drivers	Kierowca (car driver)
+Dumbbell Incline Shoulder Raise	Unoszenie hantli na ławce skośnej (barki)
+Barbell Incline Shoulder Raise	Unoszenie sztangi na ławce skośnej (barki)
+Smith Incline Shoulder Raise	Unoszenie na ławce skośnej na suwnicy Smitha (barki)
+Dumbbell One-Arm Upright Row	Przyciąganie hantla wzdłuż tułowia jednorącz (upright row)
+Smith Machine One-Arm Upright Row	Przyciąganie wzdłuż tułowia jednorącz na suwnicy Smitha (upright row)
+Clean and Jerk	Clean and jerk (rwanie i podrzut)
+Wrist Roller	Wałek do nadgarstków (wrist roller)
+Plate Pinch	Ściskanie talerzy palcami (plate pinch)
+Board Press	Wyciskanie z deską na klatce (board press)
+Pin Press	Wyciskanie z zatrzymaniem na kołkach (pin press)
+Two-Arm Dumbbell Kickback	Prostowanie ramion w opadzie tułowia z dwoma hantlami (kickback)
+Barbell Side Split Squat	Przysiad boczny ze sztangą (side split)
+Dip Belt Squat	Przysiad z obciążeniem na uprzęży (dip belt)
+Yoke Walk	Spacer z jarzmem (yoke)
+Conan's Wheel	Koło Conana (Conan's wheel)
+Depth Jump	Zeskok i wyskok (depth jump)
+Split Jump	Skoki z nogami w rozkroku (split jump)
+Carioca Quick Step	Karioka (szybkie kroki w bok)
+Donkey Calf Raise	Wspięcia na palce w pochyleniu (donkey)
+Tuck Jump	Skok z podciągnięciem kolan (tuck jump)
+Lateral Bound	Skoki boczne (lateral bound)
+Leg Pull-In	Przyciąganie nóg do klatki (leg pull-in)
+Spider Crawl	Pajęczy chód (spider crawl)
+Supine Figure-Four Stretch	Rozciąganie piriformis leżąc (figura czwórki)
+Intermediate Groin Stretch	Rozciąganie przywodzicieli (poziom średni)
+Iron Crosses (Stretch)	Iron cross (rozciąganie)
+Round The World Shoulder Stretch	Rozciąganie barków (okrążenia ramion)
+Standing Gastrocnemius Calf Stretch	Rozciąganie łydki (mięsień brzuchaty) stojąc
+World's Greatest Stretch	Najlepsze rozciąganie świata (world's greatest stretch)
+Lower Back Curl	Zwijanie dolnej części pleców (lower back curl)
+Stomach Vacuum	Próżnia brzucha (stomach vacuum)
+
+## aplikacja: hantla/hantlą: 22
+
+## aplikacja: kettlebell odmienione: 12
+
+## aplikacja: sztanga EZ: 5
+
+## duplikaty nazw (bez wielkości liter): 0
