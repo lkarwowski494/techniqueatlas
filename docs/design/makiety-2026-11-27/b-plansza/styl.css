@@ -1,0 +1,62 @@
+/* Kierunek B „Plansza”: plansza atlasu anatomicznego. Element firmowy: sylwetka z legendą obciążenia (stopnie mięśni z danych, te same co w aplikacji) obok figury ruchu. */
+:root{--bg:#ffffff;--ink:#1b2533;--muted:#556070;--frame:#c5cedb;--frame-ui:#7a8595;--accent:#1a4fa0;--tint:#f3f6fa;--l4:var(--mm-l4);--l2:var(--mm-l2)}
+@media (prefers-color-scheme:dark){:root{--bg:#11151b;--ink:#e6eaf0;--muted:#a4adbb;--frame:#2f3743;--frame-ui:#7f8a9a;--accent:#9cc0ff;--tint:#182029}}
+body{background:var(--bg);color:var(--ink)}
+a{color:var(--accent);text-underline-offset:.18em}
+h1,h2,.marka-n,.legenda-t{font-family:"Serif4",Georgia,serif}
+.glowka-w,.tresc,.stopka-w{max-width:74rem;margin:0 auto;padding-left:1.25rem;padding-right:1.25rem}
+.glowka{border-bottom:1px solid var(--frame)}
+.glowka-w{padding-top:.4rem;padding-bottom:.4rem}
+.znak{color:var(--l4)}
+.marka-n{font-weight:600;font-size:1.25rem}.marka-p{font-size:.8rem;color:var(--muted)}
+.menu{margin-left:auto}.menu a{font-size:.95rem}
+.glowka-n{margin-left:0}
+@media (max-width:759px){.glowka-n{margin-left:auto}}
+.menu-p,.jezyk{background:var(--bg);color:var(--ink);border:1px solid var(--frame-ui);border-radius:999px;padding:0 1rem}
+.tresc{padding-top:.5rem;padding-bottom:2.5rem}
+.okruszki{font-size:.9rem;color:var(--muted)}
+h1,.nazwa{font-weight:600;font-size:clamp(2rem,5vw,3.1rem);line-height:1.08;letter-spacing:-.005em;margin:.4rem 0 0}
+.nazwa-en{font-family:-apple-system,system-ui,sans-serif;font-weight:400;font-size:max(1rem,.36em);color:var(--muted);letter-spacing:0;margin-top:.5rem}
+.odp{margin:1.25rem 0 1.5rem;max-width:46rem}
+.odp h2{font-size:1.2rem;margin:0 0 .3rem}.odp p{margin:0;font-size:1.1rem;line-height:1.5}
+h2{font-weight:600;font-size:1.35rem;line-height:1.2;margin:1.75rem 0 .45rem}
+.plansza .uk{display:grid;gap:0 3.5rem}
+@media (min-width:960px){.plansza .uk3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.plansza .uk-p{border-left:1px solid var(--frame);padding-left:3rem}.uk-p>section:first-child h2{margin-top:.25rem}}
+.fig{background:var(--tint);border-radius:6px;padding:1.25rem 1rem 1rem}
+.podpis{font-size:.85rem;color:var(--muted);margin:.4rem 0 0;text-align:center}
+.fig>.podpis,.fig>figcaption{text-align:left}
+.fig-ster button{background:var(--bg);color:var(--ink);border:1px solid var(--frame-ui);border-radius:999px;padding:0 1rem;font-size:.95rem}
+.fig-ster .b-anim{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fig-bledy-t{font-size:.9rem;color:var(--muted);flex-basis:100%;margin:.25rem 0 0}
+.plansza-m{display:flex;flex-wrap:wrap;gap:1.25rem 2rem;align-items:center}
+.plansza-m .sylwetki{flex:0 0 13rem}
+.legenda{flex:1 1 12rem}
+.legenda-t{font-weight:600;margin:0 0 .4rem;font-size:1.05rem}
+.legenda ul{list-style:none;padding:0;margin:0}.legenda li{display:flex;gap:.6rem;align-items:flex-start;margin:.45rem 0}
+.pole-l{flex:none;width:1.6rem;height:1.1rem;border-radius:3px;margin-top:.25rem}
+.pole-l.l4{background:var(--l4)}.pole-l.l2{background:var(--l2)}
+.uk-p ul,.miesnie ul{padding-left:1.2rem}.uk-p li{margin:.25rem 0}
+.zam{list-style:none;padding:0!important}.zam li{margin:0!important}.zam a{display:block;padding:.5rem 0;text-decoration:none}
+.zam .nazwa-pl{text-decoration:underline}.zam .nazwa-en{font-size:.85rem;color:var(--muted)}
+.ramka{margin:2rem 0 0;border-top:3px solid var(--l4);padding-top:.25rem}
+.ramka h2{margin-top:.75rem}.ramka p{margin:0 0 1rem}
+.zastrz{font-size:.85rem;color:var(--muted);border-top:1px solid var(--frame);padding-top:1rem;margin-top:2rem}
+.szukaj label{font-weight:600}.szukaj input,.pole select{background:var(--bg);color:var(--ink);border:1px solid var(--frame-ui);border-radius:8px;padding:0 .8rem}
+.glowna .wstep{padding:1.5rem 0 1.75rem;border-bottom:1px solid var(--frame)}
+.licznik{color:var(--muted);margin:.4rem 0 1.25rem;font-size:1.1rem}
+.grupy{display:grid;gap:0 3.5rem}@media (min-width:960px){.grupy{grid-template-columns:1fr 1fr}}
+.grupa-l{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.grupa-l a{display:inline-flex;gap:.5rem;align-items:center;min-height:44px;padding:0 1rem;border:1px solid var(--frame-ui);border-radius:999px;text-decoration:none;color:var(--ink)}
+.grupa-l .n{color:var(--muted);font-size:.85rem}
+.wiersze{list-style:none;padding:0;margin:0;display:grid;gap:0 3rem}
+@media (min-width:960px){.wiersze{grid-template-columns:1fr 1fr}}
+.wiersze li{border-bottom:1px solid var(--frame);padding:.55rem 0}
+.wiersze a{text-decoration:none}.wiersze .nazwa-pl{text-decoration:underline;font-weight:500}.wiersze .nazwa-en,.meta{font-size:.85rem;color:var(--muted)}
+.meta{display:block}.dalej{font-weight:600}
+.filtry{margin:1.25rem 0 .5rem}.wyczysc{background:var(--bg);color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0 1rem}
+.pole span{font-size:.85rem;color:var(--muted)}
+.wynik{margin:1rem 0 .25rem;font-size:1.05rem}
+.dalej-w{color:var(--muted);font-size:.9rem}
+.stopka{border-top:1px solid var(--frame);margin-top:1rem}
+.stopka-w{padding-top:1.25rem;padding-bottom:2rem;font-size:.9rem}
+.wsparcie{max-width:44rem}.jezyki a,.prawne a{display:inline-block;padding:.6rem 0}.prawne{color:var(--muted)}
