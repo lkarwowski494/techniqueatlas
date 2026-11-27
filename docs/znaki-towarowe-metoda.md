@@ -88,7 +88,13 @@ Dziś wszystkie 35 języków mają te same 708 nazw angielskich, więc wybór ni
 
 Rekomendacja: **opcja 1 bez zmiany kodu S3** i warunek dla Z-32: nazwa lokalna wyświetla się tylko ze statusem `sprawdzone`. Do tego trzeba zmienić kod (nazwa lokalna przekazana do `checkTrademarks`), a zmiana kodu to osobne zadanie dla roli 08.
 
-## 6. Pytanie do właściciela (Z-08)
+## Decyzja właściciela Z-08 (27.11.2026)
+
+Dosłownie (przekazane przez koordynatora 27.11.2026, 14:48 UTC): „Nie robimy tego.” (sprawdzanie znaków towarowych). Żadna z metod A–C nie jest wykonywana, a `trademark-check.json` zostaje bez zmian.
+**Skutek do rozstrzygnięcia przez koordynatora (osobne zadanie, nie Z-07):** strażnik S3 (`src/straznicy.mjs:17-27`, R-016, docs/54:376) przy `indeksowanie=true` przerywa build, gdy nazwa nie ma statusu „sprawdzone”. Z pustym plikiem Z-60 się nie zbuduje. Potrzebna jest zmiana S3 albo jego wyłączenie z zapisem decyzji (zmiana kodu: rola 08), a w planie zadanie Z-28 do usunięcia lub zmiany.
+Ryzyko, które ta decyzja przyjmuje: nazwa ćwiczenia może kolidować z zarejestrowanym znakiem (przykład z sekcji 3: „Superman”). Pytania Z7-K1…K3 zostają bez odpowiedzi.
+
+## 6. Pytanie do właściciela (Z-08, zamknięte decyzją wyżej)
 
 Którą metodą sprawdzić znaki towarowe 708 nazw (en) i nazw pl?
 - **B (rekomendacja):** ok. 1,5–2 h Twojej pracy w TMview i w wyszukiwarce USPTO na słowach wyróżniających, agent ok. 1,5 h. Bez kont. Ryzyko: znak ze słów ogólnych może umknąć.

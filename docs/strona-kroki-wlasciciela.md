@@ -17,6 +17,8 @@ Każdą ścieżkę w interfejsie przepisałem ze strony pomocy, którą przeczyt
 
 Ważne: na domenie **już jest** rekord TXT weryfikacji Google. Ktoś zaczął albo skończył weryfikację w Search Console. **Nie usuwaj go** (krok 9), podobnie jak rekordu SPF (`v=spf1…`), który dotyczy poczty, a nie strony.
 
+Postęp: krok 1/1a zrobiony przez właściciela 27.11.2026 („Successfully verified techniqueatlas.com”, wiadomość koordynatora).
+
 ## Kolejność i czas
 
 1–3 GitHub (weryfikacja domeny, źródło Pages, własna domena) → 4–6 Porkbun (zdjęcie parkingu, rekordy) → 7 sprawdzenie → 8 „Enforce HTTPS” (do 24 h później) → 9–10 wyszukiwarki (weryfikacja od razu, mapa witryny dopiero po Z-62).
@@ -150,7 +152,7 @@ Mapę witryny, jeśli nie przejdzie z importu, zgłasza się w module „Sitemap
 | K3 | Czy pole „Custom domain” jest dostępne przed pierwszym wdrożeniem | krok 3 | właściciel; jeśli nie: koordynator przestawia DNS po Z-51 |
 | K4 | Jak usunąć przekierowanie / co ustawia parking `…l.ink` | krok 4.1 | właściciel + sprawdzenie `curl` po kroku 7 |
 | K5 | Certyfikat przed pierwszym wdrożeniem | krok 8 | sprawdzenie po 24 h albo po Z-51 |
-| K6 | Kto dodał istniejący TXT weryfikacji Google | krok 9.0 | właściciel (selektor właściwości) |
+| K6 | Kto dodał istniejący TXT weryfikacji Google | zamknięte 27.11.2026: dodał go wcześniej właściciel (wiadomość koordynatora) | — |
 | K7 | Dokładny CNAME Bing / Domain Connect | krok 10 (gdy bez importu) | ekran Bing |
 | K8 | Ścieżka zgłoszenia mapy w Bing | Z-63 | sesja Z-63 (strona pomocy) |
 
