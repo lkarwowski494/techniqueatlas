@@ -1,0 +1,43 @@
+{
+ "_opis": "Źródła tekstów do przekładu i przeglądu przez API (scripts/przeklad/, docs/przeklad/README.md). Rodzaje: „mapa” (JSON pl + en albo en_z_klucza; klucze z „_” pomijane), „dokumenty” (Markdown <nazwa>.pl.md + <nazwa>.en.md). id: [a-z0-9]+ (trafia do custom_id batcha). oczekuje=true: pliki powstaną dopiero po wciągnięciu gałęzi z tekstami; przy braku plików źródło jest pomijane w przebiegu bez --zrodlo (z komunikatem), a wybrane wprost (--zrodlo) kończy się błędem.",
+ "zrodla": [
+  {
+   "id": "nazwy",
+   "rodzaj": "mapa",
+   "pl": "docs/nazwy/pl.json",
+   "en_z_klucza": true,
+   "cel": "docs/nazwy/{kod}.json",
+   "opis": "nazwy ćwiczeń siłowych (klucz = identyfikator ćwiczenia z eksportu, zwykle angielska nazwa)",
+   "wskazowka": "Pozycje to nazwy ćwiczeń: „pl” to nazwa polska, „en” angielska nazwa-identyfikator. Nazwę podaj tak, jak mówi się o ćwiczeniu na siłowni w języku docelowym (czynność + sprzęt słownie); jeśli w tym języku utrwaliła się nazwa angielska, zachowaj ją."
+  },
+  {
+   "id": "szablony",
+   "rodzaj": "mapa",
+   "pl": "src/szablony/pl.json",
+   "en": "src/szablony/en.json",
+   "cel": "src/szablony/{kod}.json",
+   "opis": "szablony tytułu, opisu i nagłówków-pytań strony ćwiczenia (Z-22)",
+   "wskazowka": "Zmienne {…} (np. {nazwa}, {lista}) zostaw bez zmian; teksty mają zmieścić się w tytule (≤ 60 znaków) i opisie strony."
+  },
+  {
+   "id": "prawne",
+   "rodzaj": "dokumenty",
+   "katalog": "docs/teksty/prawne",
+   "koncowka_pl": ".pl.md",
+   "koncowka_en": ".en.md",
+   "cel": "docs/teksty/prawne/{nazwa}.{kod}.md",
+   "opis": "teksty prawne strony (polityka prywatności, regulamin, licencja treści; Z-20)",
+   "wskazowka": "Każda pozycja to cały dokument Markdown. Wstawki {{…}} zostaw bez zmian. To projekt, nie porada prawna."
+  },
+  {
+   "id": "ramka",
+   "rodzaj": "mapa",
+   "pl": "docs/teksty/ramka/pl.json",
+   "en": "docs/teksty/ramka/en.json",
+   "cel": "docs/teksty/ramka/{kod}.json",
+   "oczekuje": true,
+   "opis": "ramka „w aplikacji” i akapit o wsparciu (Z-21)",
+   "wskazowka": "Zdania o funkcjach aplikacji: bez superlatyw, bez obietnic, bez nazw innych firm."
+  }
+ ]
+}

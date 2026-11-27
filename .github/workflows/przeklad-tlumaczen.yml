@@ -1,0 +1,104 @@
+# Przekład tekstów strony na 33 języki przez API Anthropic (decyzja właściciela 27.11.2026: tłumaczenie przez API Claude; wzorzec: repo aplikacji, przeklad-tlumaczen.yml).
+# Tylko ręcznie (workflow_dispatch), odczyt repozytorium (contents: read). Płatny z kredytów API właściciela (Message Batches, −50%). Klucz: sekret ANTHROPIC_API_KEY
+# (ustawia właściciel w Settings → Secrets and variables → Actions), użyty w JEDNYM kroku jako zmienna środowiskowa; skrypt nigdy go nie wypisuje.
+# Pliki w repo NIE są zmieniane — wynik to artefakt `raport-przekladu` (7 dni): raporty JSON, podsumowanie.md, szacunek.json i wydatek.json.
+# Limity: 6 USD na przebieg (powyżej — stop bez zgoda_koszt=tak) i 80 USD łącznie wg docs/przeklad/wydatki.json (bez wyjątku). Po przebiegu płatnym zaksięguj wydatek lokalnie:
+#   node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog artefaktu>, potem commit docs/przeklad/wydatki.json.
+# Źródła (docs/przeklad/zrodla.json) leżą na gałęzi z tekstami — uruchom workflow z tej gałęzi („Use workflow from”); sam plik workflowu musi być na gałęzi domyślnej, żeby GitHub pokazał przycisk.
+# Kolejność: przebieg dowodowy (limit=2) z tylko_szacuj=nie dopiero po przejrzeniu szacunku (tylko_szacuj=tak, domyślnie).
+name: Przekład tekstów strony (API, ręcznie)
+on:
+  workflow_dispatch:
+    inputs:
+      zrodlo:
+        description: 'Źródła po przecinku (nazwy, szablony, prawne, ramka); puste = wszystkie'
+        type: string
+        default: ''
+      model:
+        description: 'Model (domyślnie najnowszy Opus, effort medium)'
+        type: choice
+        default: opus
+        options: [opus, sonnet]
+      limit:
+        description: 'Tylko N pierwszych języków (puste = wszystkie 33); przebieg dowodowy: 2'
+        type: string
+        default: ''
+      tylko_szacuj:
+        description: 'Tylko szacunek kosztu, bez wysyłania czegokolwiek płatnego'
+        type: boolean
+        default: true
+      zgoda_koszt:
+        description: 'Zgoda na koszt powyżej 6 USD na przebieg (tak / nie); limit 80 USD łącznie obowiązuje zawsze'
+        type: choice
+        default: 'nie'
+        options: ['nie', 'tak']
+      wznow:
+        description: 'Odbiór wyników wysłanego wcześniej batcha (msgbatch_… z logu przebiegu, który przekroczył czas oczekiwania); puste = nowy przebieg'
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: przeklad-tlumaczen
+  cancel-in-progress: false
+jobs:
+  przeklad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Słownik terminów aplikacji (npm run dane, bez sekretów)
+        run: npm run dane
+      - name: Szacunek kosztu bez klucza — stop powyżej 6 USD bez zgody i powyżej 80 USD łącznie
+        env:
+          WEJ_ZRODLO: ${{ inputs.zrodlo }}
+          WEJ_MODEL: ${{ inputs.model }}
+          WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
+        run: |
+          set -eu
+          [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
+          ARGS=(--szacuj --zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przekladu)
+          if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
+          node scripts/przeklad/przeklad-api.mjs "${ARGS[@]}"
+      - name: Przebieg (szacunek dokładny lub batch)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          WEJ_ZRODLO: ${{ inputs.zrodlo }}
+          WEJ_MODEL: ${{ inputs.model }}
+          WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
+          WEJ_SZACUJ: ${{ inputs.tylko_szacuj }}
+          WEJ_WZNOW: ${{ inputs.wznow }}
+        run: |
+          set -eu
+          [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
+          ARGS=(--zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przekladu)
+          if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
+          if [ "$WEJ_SZACUJ" = "true" ]; then ARGS+=(--szacuj); fi
+          if [ -n "$WEJ_WZNOW" ]; then
+            [[ "$WEJ_WZNOW" =~ ^msgbatch_[A-Za-z0-9]+$ ]] || { echo "::error::wznow: oczekiwany identyfikator msgbatch_…"; exit 1; }
+            ARGS+=(--wznow "$WEJ_WZNOW")
+          fi
+          node scripts/przeklad/przeklad-api.mjs "${ARGS[@]}"
+      - name: Podsumowanie w logu przebiegu
+        if: always()
+        run: |
+          if [ -f raport-przekladu/podsumowanie.md ]; then cat raport-przekladu/podsumowanie.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f raport-przekladu/szacunek.json ]; then node -e "const s=require('./raport-przekladu/szacunek.json');console.log('Szacunek: '+JSON.stringify(s.koszt_wg_modelu)+'; wydano dotąd: '+s.wydano_dotad_usd+' USD')" >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Artefakt (tylko raporty, 7 dni)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raport-przekladu
+          path: |
+            raport-przekladu/**/*.json
+            raport-przekladu/*.json
+            raport-przekladu/podsumowanie.md
+          if-no-files-found: ignore
+          retention-days: 7

@@ -19,9 +19,10 @@ const zapisz = (root, f, tresc) => { mkdirSync(dirname(join(root, f)), { recursi
 const czytaj = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
 /** Fixture: projekt z 3 językami do przekładu (fr, de, pt), trzema źródłami (mapa płaska, mapa zagnieżdżona, dokumenty) i słownikiem terminów. */
-function fixture({ nazw = 3 } = {}) {
+function fixture({ nazw = 3, jezykow = 3 } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'przeklad-')); sprzatanie.push(root);
-  zapisz(root, 'config.json', { jezyki: ['pl', 'en', 'fr', 'de', 'pt'] });
+  const kody = ['fr', 'de', 'pt']; for (let i = 4; i <= jezykow; i++) kody.push(`x${String(i).padStart(2, '0')}`);
+  zapisz(root, 'config.json', { jezyki: ['pl', 'en', ...kody] });
   const nazwy = {}; for (let i = 1; i <= nazw; i++) nazwy[`Press ${i}`] = `Wyciskanie ${i}`;
   zapisz(root, 'docs/nazwy/pl.json', nazwy);
   zapisz(root, 'src/szablony/pl.json', { _opis: 'opis roboczy, nie do przekładu', sprzet: 'Potrzebny sprzęt: {lista}.', pytania: { setup: 'Jak się ustawić?', move: 'Jak wykonać ruch?' } });
@@ -46,7 +47,7 @@ function atrapa({ tryb = 'ok', uzycie = { input_tokens: 10000, output_tokens: 50
     const user = z.params.messages[0].content; const lista = JSON.parse(user.split('\n').pop());
     const tekst = z.custom_id.startsWith('pg-')
       ? JSON.stringify(Object.fromEntries(lista.map((p, i) => [p.id, i === 0 ? { poprawka: `POPRAWKA ${p.tlumaczenie}`, powod: 'test', waga: 'krytyczna' } : 'ok'])))
-      : JSON.stringify(Object.fromEntries(lista.map((p) => [p.id, p.pl.replace(/[^{}\s]+/g, (s) => (/^\{.*\}$/.test(s) ? s : `T:${s}`))])));
+      : JSON.stringify(Object.fromEntries(lista.map((p) => [p.id, `T:${p.pl}`])));
     return JSON.stringify({ custom_id: z.custom_id, result: { type: 'succeeded', message: { content: [{ type: 'text', text: tekst }], stop_reason: 'end_turn', usage: uzycie } } });
   };
   const fetchFn = async (url, opts = {}) => {
@@ -55,8 +56,8 @@ function atrapa({ tryb = 'ok', uzycie = { input_tokens: 10000, output_tokens: 50
     if (tryb === 'blad-z-kluczem') return odpowiedz({ error: { message: `invalid x-api-key ${opts.headers['x-api-key']}` } }, 401);
     if (u.pathname.endsWith('/count_tokens')) return odpowiedz({ input_tokens: 12000 });
     if (u.pathname.endsWith('/messages/batches') && opts.method === 'POST') { zadania = JSON.parse(opts.body).requests; return odpowiedz({ id: 'msgbatch_TEST123' }); }
-    if (u.pathname.includes('/messages/batches/')) return odpowiedz({ id: 'msgbatch_TEST123', processing_status: 'ended', results_url: 'https://api.anthropic.com/v1/messages/batches/msgbatch_TEST123/results' });
     if (u.pathname.endsWith('/results')) return odpowiedz(zadania.map(odp).join('\n'));
+    if (u.pathname.includes('/messages/batches/')) return odpowiedz({ id: 'msgbatch_TEST123', processing_status: 'ended', results_url: 'https://api.anthropic.com/v1/messages/batches/msgbatch_TEST123/results' });
     return odpowiedz({}, 404);
   };
   return { fetchFn, wywolania, zadania: () => zadania };
@@ -103,7 +104,7 @@ test('żądanie przeglądu: nie poprawia sam, zwraca listę poprawek; waga; pozy
 
 /* ---------- limity kosztu ---------- */
 test('limit 6 USD na przebieg: szacunek powyżej limitu bez zgody → kod 3 i komunikat STOP; ze zgodą (--zgoda-koszt) → kod 0', async () => {
-  const root = fixture({ nazw: 4000 }); /* duży zestaw: koszt > 6 USD */
+  const root = fixture({ nazw: 1500, jezykow: 33 }); /* 33 języki × 1500 nazw: koszt > 6 USD */
   const bez = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'nazwy'], { root });
   assert.equal(bez.kod, 3); assert.match(bez.logi.join('\n'), /STOP: szacowany koszt .* USD przekracza limit 6 USD/);
   const sz = czytaj(join(root, 'raport-przekladu/szacunek.json')); assert.ok(sz.koszt_usd > 6, `koszt ${sz.koszt_usd}`);
@@ -111,9 +112,9 @@ test('limit 6 USD na przebieg: szacunek powyżej limitu bez zgody → kod 3 i ko
   assert.equal(ze.kod, 0);
 });
 test('limit 6 USD obowiązuje także przegląd; bez klucza szacunek nie wysyła niczego do sieci', async () => {
-  const root = fixture({ nazw: 4000 }); const api = atrapa();
-  zapisz(root, 'docs/nazwy/fr.json', Object.fromEntries(Object.entries(czytaj(join(root, 'docs/nazwy/pl.json'))).map(([k, v]) => [k, `fr ${v}`])));
-  const r = await uruchom('przeglad', ['--szacuj', '--zrodlo', 'nazwy', '--limit', '3'], { root, api });
+  const root = fixture({ nazw: 1500, jezykow: 33 }); const api = atrapa();
+  for (const kod of rdzen.jezykiDoPrzekladu(root)) zapisz(root, `docs/nazwy/${kod}.json`, Object.fromEntries(Object.entries(czytaj(join(root, 'docs/nazwy/pl.json'))).map(([k, v]) => [k, `${kod} ${v}`])));
+  const r = await uruchom('przeglad', ['--szacuj', '--zrodlo', 'nazwy'], { root, api });
   assert.equal(r.kod, 3); assert.equal(api.wywolania.length, 0, 'bez klucza żadnego połączenia');
 });
 test('limit 80 USD łącznie: dotychczasowe wydatki + szacunek > 80 → kod 5, także ze zgodą na koszt; poniżej limitu przechodzi', async () => {
@@ -131,7 +132,7 @@ test('limit łączny: bez wpisów suma 0; limit z pliku nie może przekroczyć 8
 });
 test('ledger: --zapisz-wydatek dopisuje koszt z artefaktu raz (idempotentnie po batch_id); zły plik → błąd', async () => {
   const root = fixture(); const wyj = join(root, 'raport');
-  mkdirSync(wyj, { recursive: true }); zapisz(root, 'raport/wydatek.json', { przebieg: 'przeklad', batch_id: 'msgbatch_Z', model: 'claude-opus-5-5', tokeny_we: 1000, tokeny_wy: 2000, koszt_usd: 0.022 });
+  mkdirSync(wyj, { recursive: true }); zapisz(root, 'raport/wydatek.json', { przebieg: 'przeklad', batch_id: 'msgbatch_Z', model: 'claude-opus-5-5', data: '2026-11-28', tokeny_we: 1000, tokeny_wy: 2000, koszt_usd: 0.022 });
   assert.equal((await uruchom('przeklad', ['--zapisz-wydatek', wyj], { root })).kod, 0);
   assert.equal((await uruchom('przeklad', ['--zapisz-wydatek', wyj], { root })).kod, 0);
   const w = czytaj(join(root, 'docs/przeklad/wydatki.json')); assert.equal(w.wpisy.length, 1); assert.equal(w.wpisy[0].batch_id, 'msgbatch_Z'); assert.equal(wydatki.suma(root), 0.022);
@@ -243,7 +244,8 @@ for (const [plik, tryb] of [['przeklad-tlumaczen.yml', 'przeklad'], ['przeglad-t
     assert.ok(!/secrets\./.test(linie.slice(iSz, iKlucz - 3).join('\n')), 'krok szacunku bez sekretów');
     assert.match(yml, /zgoda_koszt:/); assert.match(yml, /6 USD/); assert.match(yml, /type: choice/);
     assert.match(yml, /retention-days: 7/); assert.match(yml, /actions\/upload-artifact@v4/); assert.match(yml, /wydatek\.json/);
-    assert.doesNotMatch(yml.split('run:').slice(1).join('\n'), /\$\{\{ *inputs\./, 'wejścia tylko przez env (bez wstrzykiwania do powłoki)');
+    const bloki = []; linie.forEach((l, i) => { const m = /^(\s+)run:/.exec(l); if (!m) return; const w = [l]; for (let j = i + 1; j < linie.length && (linie[j].trim() === '' || linie[j].search(/\S/) > m[1].length); j++) w.push(linie[j]); bloki.push(w.join('\n')); });
+    assert.ok(bloki.length >= 3); assert.doesNotMatch(bloki.join('\n'), /\$\{\{ *(inputs|secrets)\./, 'wejścia i sekrety tylko przez env (bez wstrzykiwania do powłoki)');
     assert.match(yml, new RegExp(`scripts/przeklad/${tryb}-api\\.mjs`)); assert.match(yml, /npm run dane/);
     assert.match(yml, /concurrency:/);
   });

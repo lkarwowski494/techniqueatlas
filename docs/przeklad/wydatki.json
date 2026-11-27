@@ -1,0 +1,5 @@
+{
+ "_opis": "Licznik wydatków łącznych na API przekładu i przeglądu (limit 80 USD, słowa właściciela 27.11.2026). Wpisy dopisuje lokalnie: node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog raportu>; limit w kodzie (scripts/przeklad/wspolne.mjs) jest nadrzędny wobec pola limit_usd.",
+ "limit_usd": 80,
+ "wpisy": []
+}
