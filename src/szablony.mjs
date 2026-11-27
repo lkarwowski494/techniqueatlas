@@ -45,12 +45,16 @@ function zdanieMiesni(d, t, e) {
 export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false, wspolneZdania = null, sprzetMimoPowtorzenia = false, rozrozniajaceMimoPowtorzenia = false } = {}) {
   const t = teksty[lang];
   /* Tytuł: nazwa (lokalna + angielska, gdy jest lokalna) i dopisek w języku strony: etykieta rodziny ruchu, a gdy powtarza słowa nazwy — mięśnie główne. Bez nazwy witryny (podaje ją WebSite JSON-LD na stronie /, A6 Z-06). */
-  const nazwa = nazwaLokalna && nazwaLokalna !== e.name ? fill(t.nazwaPodwojna, { lokalna: nazwaLokalna, angielska: e.name }) : e.name;
+  /* Nazwa lokalna (Z-32): różna od angielskiej (nie tylko wielkością liter) → „{lokalna} ({angielska})”; gdy to przekracza limit — sama lokalna
+     (angielska zostaje w h1 strony); lokalna dłuższa niż limit zostaje w całości (nazwy nie ucinamy, obcina wyszukiwarka). */
+  const lokalna = nazwaLokalna && nazwaLokalna.toLocaleLowerCase(lang) !== e.name.toLocaleLowerCase(lang) ? nazwaLokalna : null;
+  const podwojna = lokalna && fill(t.nazwaPodwojna, { lokalna, angielska: e.name });
+  const nazwa = !lokalna ? e.name : dl(podwojna) <= LIMITY.tytul.max ? podwojna : lokalna;
   const glowne = e.regions.filter(r => r.load >= 1).map(r => d.labels.regions[r.id]).join(', ');
   /* dopisek z myślnikiem w etykiecie (np. „barki — przód”) odpada: tytuł miałby dwa myślniki */
-  const dopiski = nazwaLokalna && nazwaLokalna !== e.name ? [] : [ui.families?.[e.family], glowne].filter(k => k && !k.includes('—') && !wspolne(lang, nazwa, k).length && dl(fill(t.tytulCwiczenia, { nazwa, dopisek: k })) <= LIMITY.tytul.max);
+  const dopiski = lokalna ? [] : [ui.families?.[e.family], glowne].filter(k => k && !k.includes('—') && !wspolne(lang, nazwa, k).length && dl(fill(t.tytulCwiczenia, { nazwa, dopisek: k })) <= LIMITY.tytul.max);
   const rodzina = ui.families?.[e.family];
-  const jezykNazwy = lang !== 'en' && !(nazwaLokalna && nazwaLokalna !== e.name); /* strona nie po angielsku, a w tytule tylko nazwa angielska */
+  const jezykNazwy = lang !== 'en' && !lokalna; /* strona nie po angielsku, a w tytule tylko nazwa angielska */
   const warianty = [...dopiski.map(k => fill(t.tytulCwiczenia, { nazwa, dopisek: k })), nazwa];
 
   /* Opis: zdania z danych w kolejności ważności; zdanie, które powtarza słowo tytułu albo przekracza limit, wypada (bierze się następne). */
@@ -100,7 +104,8 @@ export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false,
   if (e.requires.length) pytania.sprzet = P.sprzet;
   if (e.alternatives.length) pytania.zamienniki = P.zamienniki;
   const wyjatek = czesciOpisu.filter(z => wspolne(lang, tytul, z.tekst).length).map(z => z.zrodlo); /* zdania wpuszczone mimo powtórzenia słowa z tytułem (tylko przy rozdzielaniu powtórzonych opisów) */
-  return { tytul, opis, odpowiedz, pytania, czesciOpisu, czesciOdpowiedzi, pominiete, wyjatek };
+  /* pusty opis (tylko strony noindex: wszystkie słowa danych są w tytule) → pominOpis: Z-34 nie wstawia <meta name="description"> (jak layout() przy pustym polu) */
+  return { tytul, opis, pominOpis: opis === '', odpowiedz, pytania, czesciOpisu, czesciOdpowiedzi, pominiete, wyjatek };
 }
 
 /** Szablony wszystkich ćwiczeń języka (Map slug → wynik): opis, który powtarza się u innego ćwiczenia, dostaje kolejne zdania z danych do limitu (unikalność, Z-06 A10). */

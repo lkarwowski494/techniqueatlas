@@ -88,6 +88,37 @@ for (const lang of JEZYKI) {
   });
 }
 
+/* Nazwa podwójna (Z-32): przykłady dosłownie z docs/nazwy/pl.json (gałąź strona/z24-nazwy-pl, odczyt 27.11.2026) — krótkie, za długie jako podwójne, lokalne > 60, różnica tylko wielkością liter. */
+const NAZWY_PL = {
+  'bench-press': 'Wyciskanie sztangi leżąc',
+  'deadlift': 'Martwy ciąg',
+  'decline-bench-press': 'Wyciskanie sztangi na ławce skośnej głową w dół',
+  'decline-close-grip-bench-to-skull-crusher': 'Wyciskanie wąsko na ławce głową w dół przechodzące we francuskie',
+  'two-arm-dumbbell-kickback': 'Prostowanie ramion w opadzie tułowia z dwoma hantlami (kickback)',
+  'nordic-curl': 'Nordic curl',
+};
+test('pl z nazwą lokalną: tytuł ≤ 60 (podwójna → sama lokalna); dłuższa lokalna zostaje w całości, bez ucinania', () => {
+  const d = dane.pl, mapa = szablonyCwiczen(d, ui.pl, 'pl', Object.fromEntries(Object.entries(NAZWY_PL).map(([k, v]) => [k, { nazwaLokalna: v }])));
+  for (const [slug, lok] of Object.entries(NAZWY_PL)) {
+    const e = d.exercises.find(x => x.slug === slug), s = mapa.get(slug), podw = `${lok} (${e.name})`;
+    /* lokalna różna od angielskiej tylko wielkością liter = ta sama nazwa (bez „Nordic curl (Nordic Curl)”) */
+    const ta = lok.toLocaleLowerCase('pl') === e.name.toLocaleLowerCase('pl');
+    const oczek = ta ? s.tytul.split(' — ')[0] === e.name && s.tytul : dl(podw) <= LIMITY.tytul.max ? podw : lok;
+    assert.equal(s.tytul, oczek, slug);
+    assert.ok(dl(s.tytul) <= LIMITY.tytul.max || s.tytul === lok, `${slug}: ${s.tytul}`);
+    assert.deepEqual(wspolne('pl', s.tytul, s.czesciOpisu.filter(z => !s.wyjatek.includes(z.zrodlo)).map(z => z.tekst).join(' ')), [], slug);
+  }
+});
+
+for (const lang of JEZYKI) test(`${lang}: pusty opis tylko poza indeksem i jawnie: pominOpis = true (Z-34 nie wstawia meta description)`, () => {
+  const d = dane[lang], mapa = szablonyCwiczen(d, ui[lang], lang);
+  for (const e of d.exercises) {
+    const s = mapa.get(e.slug);
+    assert.equal(s.pominOpis, s.opis === '', `${e.slug}: pominOpis`);
+    if (s.pominOpis) assert.ok(!wlasne(e), `${e.slug}: pusty opis na stronie indeksowanej`);
+  }
+});
+
 test('wzorce: 5 ćwiczeń o różnym profilu danych istnieje w eksporcie', () => {
   for (const w of WZORCE) assert.ok(dane.pl.exercises.some(e => e.slug === w.slug), w.slug);
 });
