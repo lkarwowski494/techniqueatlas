@@ -1,0 +1,2 @@
+// Z-12 · zrzut otwartego menu na telefonie (390 px, oba motywy). Użycie: node zrzut-menu.cjs <katalog>; serwer w docs/design/system na porcie 8123.
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();for(const t of ['light','dark']){const p=await b.newPage({viewport:{width:390,height:700},colorScheme:t,reducedMotion:'reduce'});await p.goto('http://localhost:8123/szablony/lista.html');await p.click('summary');await p.waitForTimeout(200);await p.screenshot({path:process.argv[2]+'/menu-'+t+'.png'});}await b.close()})()

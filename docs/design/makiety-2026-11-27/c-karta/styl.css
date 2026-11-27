@@ -1,0 +1,62 @@
+/* Kierunek C „Karta”: katalog kartkowy biblioteki. Element firmowy: sygnatura (partia / sprzęt / rodzaj ruchu) na karcie i karty przewodnie liter na liście. */
+:root{--bg:#e4e9e6;--card:#ffffff;--ink:#1a211d;--muted:#4f5d56;--edge:#7d8982;--hair:#cfd7d2;--accent:#17604a;--tab:#d3ddd7}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1210;--card:#171d1a;--ink:#e3ebe6;--muted:#a3b1a9;--edge:#6d7a73;--hair:#2c3530;--accent:#7fd1ae;--tab:#243029}}
+body{background:var(--bg);color:var(--ink)}
+a{color:var(--accent);text-underline-offset:.18em}
+h1,.nazwa-pl,.sygn,.litera,.marka-n,.litery a{font-family:"Courier Prime","Courier New",monospace}
+h2{font-family:-apple-system,system-ui,sans-serif}
+.glowka-w,.tresc,.stopka-w{max-width:68rem;margin:0 auto;padding-left:1rem;padding-right:1rem}
+.glowka{background:var(--card);border-bottom:1px solid var(--edge)}
+.glowka-w{padding-top:.3rem;padding-bottom:.3rem}
+.marka-n{font-weight:700;font-size:1.2rem}.marka-p{font-size:.8rem;color:var(--muted)}
+.menu{margin-left:1rem}.menu a{font-size:.95rem}
+.menu-p,.jezyk{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:4px;padding:0 .9rem}
+.tresc{padding-top:.5rem;padding-bottom:2rem}
+.okruszki{font-size:.9rem}
+.karta,.glowna,.lista,.ramka{background:var(--card);border:1px solid var(--edge);border-radius:4px;padding:1.1rem 1.25rem 1.5rem}
+.sygn{display:flex;flex-wrap:wrap;gap:.1rem .5rem;align-items:baseline;margin:0 0 .75rem;font-size:.95rem;padding-bottom:.6rem;border-bottom:1px solid var(--hair)}
+.sygn-t{font-family:-apple-system,system-ui,sans-serif;font-size:.8rem;color:var(--muted);margin-right:.25rem}
+.sygn a{display:inline-flex;align-items:center;min-height:44px}.sygn-k{color:var(--muted)}
+.wiersze .sygn{border:0;padding:0;margin:.1rem 0 0;font-size:.85rem;color:var(--muted)}
+h1,.nazwa{font-weight:700;font-size:clamp(1.75rem,4.2vw,2.6rem);line-height:1.12;margin:.2rem 0 0}
+.nazwa-en{font-weight:400;font-size:max(1rem,.42em);color:var(--muted);margin-top:.4rem;font-family:-apple-system,system-ui,sans-serif}
+.odp{margin:1.25rem 0;padding:.9rem 1rem;background:var(--tab);border-radius:4px}
+.odp h2{margin:0 0 .25rem;font-size:1.1rem}.odp p{margin:0}
+h2{font-weight:650;font-size:1.2rem;line-height:1.25;margin:1.5rem 0 .4rem}
+.uk{display:grid;gap:0 2.5rem}
+@media (min-width:960px){.uk{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uk-p>section:first-child h2{margin-top:.25rem}.uk2{border-top:1px solid var(--hair);margin-top:1.5rem}}
+.podpis{font-size:.85rem;color:var(--muted);margin:.35rem 0 0;text-align:center}
+.fig>.podpis,.fig>figcaption{text-align:left}
+.fig-ster button{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:4px;padding:0 .8rem;font-size:.95rem}
+.fig-bledy-t{font-size:.9rem;color:var(--muted)}
+.uk-p ul,.miesnie ul{padding-left:1.2rem}.uk-p li{margin:.2rem 0}
+.zam{list-style:none;padding:0!important}.zam li{border-top:1px dashed var(--hair)}.zam a{display:block;padding:.5rem 0;text-decoration:none}
+.zam .nazwa-pl{text-decoration:underline;font-weight:700}.zam .nazwa-en{font-size:.85rem;color:var(--muted)}
+.ramka{margin:1rem 0}.ramka h2{margin-top:0}.ramka p{margin:0 0 1rem;max-width:44rem}
+.zastrz{font-size:.85rem;color:var(--muted)}
+.szukaj label{font-weight:600}.szukaj input,.pole select{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:4px;padding:0 .7rem}
+.licznik{color:var(--muted);margin:.25rem 0 1rem}
+.glowna .wstep{border-bottom:1px solid var(--hair);padding-bottom:1.25rem}
+.grupy{display:grid;gap:0 2.5rem}@media (min-width:960px){.grupy{grid-template-columns:1fr 1fr}}
+.grupa-l{list-style:none;padding:0;margin:0;columns:2 12rem;column-gap:1.5rem}
+.grupa-l li{break-inside:avoid}
+.grupa-l a{display:flex;justify-content:space-between;gap:1rem;align-items:center;min-height:44px;padding:0 .6rem;margin:0 0 .4rem;border:1px solid var(--edge);border-top-width:4px;border-radius:4px 4px 2px 2px;text-decoration:none;color:var(--ink)}
+.grupa-l .n{color:var(--muted);font-size:.85rem}
+#ruch .grupa-l{columns:3 13rem}
+.wiersze{list-style:none;padding:0;margin:0}
+.wiersze li{border-bottom:1px solid var(--hair);padding:.5rem 0}
+.wiersze a{text-decoration:none}.wiersze .nazwa-pl{text-decoration:underline;font-weight:700}.wiersze .nazwa-en{font-size:.85rem;color:var(--muted)}
+.dalej{font-weight:600}
+.filtry{margin:1rem 0 .5rem}.wyczysc{background:var(--card);color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 .9rem}
+.pole span{font-size:.85rem;color:var(--muted)}
+.wynik{margin:.75rem 0}
+.litery{display:flex;flex-wrap:wrap;gap:.35rem;margin:.5rem 0 1rem}
+.litery a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;background:var(--tab);border-radius:6px 6px 0 0;border-bottom:2px solid var(--edge);text-decoration:none;color:var(--ink);font-weight:700}
+.przewodnik{margin-top:1rem}
+.litera{display:inline-block;margin:0;padding:.15rem 1rem 0;background:var(--tab);border:1px solid var(--edge);border-bottom:0;border-radius:6px 6px 0 0;font-size:1.25rem}
+.przewodnik .wiersze{border-top:2px solid var(--edge)}
+.dalej-w{color:var(--muted);font-size:.9rem}
+.stopka{margin-top:.5rem}
+.stopka-w{padding-top:.5rem;padding-bottom:1.5rem;font-size:.9rem}
+.wsparcie{max-width:44rem}.jezyki a,.prawne a{display:inline-block;padding:.6rem 0}.prawne{color:var(--muted)}
+@media (max-width:759px){.karta,.glowna,.lista,.ramka{padding:.9rem .9rem 1.25rem}.tresc{padding-left:.6rem;padding-right:.6rem}}
