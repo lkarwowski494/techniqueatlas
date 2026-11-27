@@ -4,12 +4,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { requireData, read } from './pomoc.mjs';
-import { readJson } from '../src/lib.mjs';
+import { readJson, fill } from '../src/lib.mjs';
 import { LIMITY, WZORCE, JEZYKI, rdzenie, wspolne, szablonyCwiczenia, szablonyCwiczen, szablonyGlownej, szablonyListy, szablonyKategorii, tabelaWzorcow } from '../src/szablony.mjs';
 
 requireData();
 const dane = Object.fromEntries(JEZYKI.map(l => [l, readJson(`.cache/dane/atlas-${l}.json`)]));
 const ui = Object.fromEntries(JEZYKI.map(l => [l, readJson(`src/ui/${l}.json`)]));
+const SZ = Object.fromEntries(JEZYKI.map(l => [l, readJson(`src/szablony/${l}.json`)]));
 const wlasne = e => e.cues.scope === 'own' && !e.cues.missing;
 const dl = s => [...s].length;
 
@@ -40,10 +41,14 @@ for (const lang of JEZYKI) {
     assert.deepEqual(zaDlugie, []);
     const idx = wyniki.filter(({ e }) => wlasne(e));
     assert.equal(idx.length, 310, 'liczba ćwiczeń z własnymi wskazówkami (P-1) — zmiana danych wymaga przeglądu szablonów');
-    /* krótszy niż minimum tylko wtedy, gdy dane się wyczerpały: każde pominięte zdanie powtarza słowo tytułu albo przekracza limit (nie dopisujemy tekstu spoza danych) */
+    /* krótszy niż minimum tylko wtedy, gdy dane się wyczerpały: poniżej minimum wchodzą też zdania z powtórzeniem słowa tytułu (06-tresci-007, SZ-5),
+       więc jedynym powodem pominięcia zdania w krótkim opisie jest limit długości (nie dopisujemy tekstu spoza danych); próg krótkich opisów 0 */
     const krotkie = idx.filter(({ s }) => dl(s.opis) < LIMITY.opis.min);
-    for (const { e, s } of krotkie) for (const z of s.pominiete) assert.ok(z.powod === 'powtórzenie' ? wspolne(lang, s.tytul, z.tekst).length : dl(`${s.opis} ${z.tekst}`) > LIMITY.opis.max, `${e.slug}: ${z.zrodlo}`);
-    assert.ok(krotkie.length <= 15, `opisów krótszych niż ${LIMITY.opis.min} znaków przy wyczerpanych danych: ${krotkie.length} (próg przeglądu 15) — ${krotkie.map(({ e }) => e.slug).join(', ')}`);
+    for (const { e, s } of krotkie) for (const z of s.pominiete) assert.ok(dl(`${s.opis} ${z.tekst}`) > LIMITY.opis.max, `${e.slug}: pominięte ${z.zrodlo} (${z.powod}) przy opisie krótszym niż ${LIMITY.opis.min}`);
+    assert.equal(krotkie.length, 0, `opisów krótszych niż ${LIMITY.opis.min} znaków: ${krotkie.map(({ e, s }) => `${e.slug} „${s.opis}”`).join('; ')}`);
+    /* opis z samej partii mięśniowej (np. „Muscle group: other.”) nic nie mówi o stronie */
+    const samaPartia = idx.filter(({ s }) => s.czesciOpisu.every(z => z.zrodlo === 'group' || z.zrodlo === 'family')).map(({ e, s }) => `${e.slug} „${s.opis}”`);
+    assert.deepEqual(samaPartia, []);
     for (const { e, s } of krotkie) assert.ok(s.opis.length, `${e.slug}: pusty opis`);
     /* powtórzony opis dozwolony tylko, gdy ćwiczenia mają identyczne dane (mięśnie, sprzęt, wskazówki) — różnią się wyłącznie nazwą */
     const po = new Map(); for (const { e, s } of idx) po.set(s.opis, [...(po.get(s.opis) ?? []), e]);
@@ -58,9 +63,21 @@ for (const lang of JEZYKI) {
       const zdania = [...s.czesciOpisu, ...s.czesciOdpowiedzi].filter(c => c.zrodlo.startsWith('cues.'));
       for (const c of zdania) {
         assert.ok(wlasne(e), `${e.slug}: wskazówka w opisie ćwiczenia bez własnych wskazówek`);
-        const [, k, i] = c.zrodlo.split('.'); assert.equal(c.tekst, e.cues[k][+i], `${e.slug}: ${c.zrodlo}`);
+        /* zdanie z listy błędów stoi w ramce tekstu stałego (06-tresci-001), reszta wskazówek dosłownie */
+        const [, k, i] = c.zrodlo.split('.'); assert.equal(c.tekst, k === 'mistakes' ? fill(SZ[lang].blad, { zdanie: e.cues[k][+i] }) : e.cues[k][+i], `${e.slug}: ${c.zrodlo}`);
       }
     }
+  });
+
+  /* 06-tresci-001: w opisie meta nie ma nagłówka „Jakich błędów unikać?”, więc zdanie z cues.mistakes bez ramki czyta się jak zalecenie. */
+  test(`${lang}: zdanie z listy częstych błędów w opisie zawsze z ramką słowną („${SZ[lang].blad}”)`, () => {
+    assert.ok(SZ[lang].blad?.includes('{zdanie}'), `src/szablony/${lang}.json: brak tekstu stałego „blad” z {zdanie}`);
+    const [przed] = SZ[lang].blad.split('{zdanie}');
+    const zle = wyniki.flatMap(({ e, s }) => s.czesciOpisu.filter(z => z.zrodlo.startsWith('cues.mistakes.') && !z.tekst.startsWith(przed)).map(z => `${e.slug}: ${z.tekst}`));
+    assert.deepEqual(zle, []);
+    /* bez ramki żadne zdanie błędu nie trafia do opisu także w innym miejscu tekstu */
+    const goly = wyniki.flatMap(({ e, s }) => (wlasne(e) ? e.cues.mistakes ?? [] : []).filter(m => s.opis.includes(m) && !s.opis.includes(fill(SZ[lang].blad, { zdanie: m }))).map(m => `${e.slug}: ${m}`));
+    assert.deepEqual(goly, []);
   });
 
   test(`${lang}: krótka odpowiedź — w limicie, zawiera ruch przy własnych wskazówkach`, () => {

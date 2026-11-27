@@ -10,7 +10,7 @@ Stronę {{adresStrony}} prowadzi {{administrator}}, kontakt: {{kontakt}} (dalej:
 ## 2. Co oferuje strona
 
 Bezpłatnie i bez rejestracji udostępniamy: <!-- D-1, D-15 -->
-- bibliotekę ćwiczeń: opis, mięśnie, wskazówki techniki, częste błędy, zamienniki i rysunek ruchu;
+- bibliotekę ćwiczeń z opisem i mięśniami, a przy większości także ze wskazówkami techniki, częstymi błędami, zamiennikami i rysunkiem ruchu; <!-- 06-tresci-006: eksport 1.1.1, 708 ćwiczeń: rysunek 528, wskazówki 567, częste błędy 440, zamienniki 609 -->
 - listę ćwiczeń z filtrami i wyszukiwarkę nazw;
 - wersje strony w wielu językach.
 

@@ -10,7 +10,7 @@ The website {{adresStrony}} is run by {{administrator}}, contact: {{kontakt}} ("
 ## 2. What the site offers
 
 Free of charge and without registration, we provide: <!-- D-1, D-15 -->
-- an exercise library: description, muscles, technique cues, common mistakes, substitutes and a movement drawing;
+- an exercise library with descriptions and muscles, and for most exercises also technique cues, common mistakes, substitutes and a movement drawing;
 - an exercise list with filters and name search;
 - versions of the site in many languages.
 

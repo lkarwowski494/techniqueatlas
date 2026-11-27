@@ -7,6 +7,7 @@
   "partia": "Muscle group: {grupa}.",
   "sprzet": "Equipment needed: {lista}.",
   "rodzaj": "Movement type: {rodzaj}.",
+  "blad": "Common mistake: {zdanie}",
   "albo": " or ",
   "pytania": {
     "setup": "How do you set up?",

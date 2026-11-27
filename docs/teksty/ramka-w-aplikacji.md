@@ -51,17 +51,17 @@ Liczba dni pochodzi z kodu: `lib/access.ts:25` na tagu 1.1.1 → `FREE_TRAINING_
 | # | pl | en | Dowód |
 |---|---|---|---|
 | W1 | Ta strona jest bezpłatna. | This website is free to use. | strona bez opłat: `docs/54-strona-biblioteki.md:15` („cała strona i narzędzia bezpłatne”) |
-| W2 | Aplikacja: {dni} dni treningowych w miesiącu bez opłat, pełna wersja płatna (subskrypcja albo dostęp dożywotni). | The app: {dni} training days a month at no charge; the full version is paid (subscription or lifetime access). | `lib/access.ts:25` (`FREE_TRAINING_DAYS_PER_MONTH: 5`), `lib/access.ts:2-3` (decyzja 22.10.2026: Pro — subskrypcja albo dostęp dożywotni zdejmuje limit), `lib/access.ts:42` (`ENTITLEMENT_PLANS = ['monthly', 'yearly', 'lifetime']`) |
-| W3 | To wspiera też rozwój tej strony. | It also supports the development of this website. | brzmienie z docs/18:177 (deklaracja właściciela, nie funkcja kodu) |
+| W2 | Aplikacja daje {dni} dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. | The app gives you {dni} training days a month at no charge. The full version is paid: a subscription or lifetime access. | `lib/access.ts:25` (`FREE_TRAINING_DAYS_PER_MONTH: 5`), `lib/access.ts:2-3` (decyzja 22.10.2026: Pro — subskrypcja albo dostęp dożywotni zdejmuje limit), `lib/access.ts:42` (`ENTITLEMENT_PLANS = ['monthly', 'yearly', 'lifetime']`) |
+| W3 | Jej zakup wspiera też rozwój tej strony. | Buying it also supports this website. | sens z docs/18:177 (deklaracja właściciela, nie funkcja kodu); brzmienie z podmiotem po recenzji Z-23 (06-tresci-010) |
 
-Pełny tekst pl (dla {dni} = 5): „Ta strona jest bezpłatna. Aplikacja: 5 dni treningowych w miesiącu bez opłat, pełna wersja płatna (subskrypcja albo dostęp dożywotni). To wspiera też rozwój tej strony.”
+Pełny tekst pl (dla {dni} = 5): „Ta strona jest bezpłatna. Aplikacja daje 5 dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. Jej zakup wspiera też rozwój tej strony.”
 
-Pełny tekst en (dla {dni} = 5): “This website is free to use. The app: 5 training days a month at no charge; the full version is paid (subscription or lifetime access). It also supports the development of this website.”
+Pełny tekst en (dla {dni} = 5): “This website is free to use. The app gives you 5 training days a month at no charge. The full version is paid: a subscription or lifetime access. Buying it also supports this website.”
 
 ### Odstępstwa od brzmienia z docs/18:177 (do weta, 27.11.2026)
 
 1. **„Strona i narzędzia są bezpłatne” → „Ta strona jest bezpłatna”.** Na starcie strona nie ma narzędzi: fale 1 i 2 przychodzą po starcie (`docs/54-strona-biblioteki.md:105`; plan z 27.11, „Czego nie robimy”: narzędzi strony przed startem; Z-75). Zdanie o narzędziach, których nie ma, łamie zasadę „mówimy tylko o tym, co jest” (docs/54 pkt 9). Słowa „i narzędzia” wracają razem z falą 1. Kontrolę zastępczą przy F-04 opisuje docs/54:339.
-2. **Średnik przed „to wspiera” → osobne zdanie.** Zmiana tylko interpunkcyjna, dla czytelności. Sens bez zmian.
+2. **Średnik przed „to wspiera” → osobne zdanie; potem pełne zdania z podmiotem.** Po rozdzieleniu „To wspiera…” mogło odnosić się do 5 bezpłatnych dni, a „Aplikacja: …” brzmiało telegraficznie. Recenzja Z-23 (06-tresci-010, opcja a) daje każdemu zdaniu podmiot: „Aplikacja daje…”, „Pełna wersja jest płatna…”, „Jej zakup wspiera…” (en: „Buying it also supports this website.”). Sens bez zmian: wspiera zakup pełnej wersji, jak w docs/18:177. Do weta właściciela (wariant b: brzmienie z docs/18).
 3. **Słowo „darmowy” i en „free” przy aplikacji: brak.** Przy części płatnej stoi „bez opłat” / „at no charge” (decyzja 02.11, docs/18:177). En „free to use” dotyczy tylko strony, która jest bezpłatna w całości. Pytanie, czy „at no charge” przy dniach aplikacji jest bezpieczne prawnie po angielsku tak samo jak „bez opłat” po polsku, zostaje dla recenzenta Z-23: `[DO USTALENIA]`.
 
 ### Uwaga merytoryczna do „dni treningowych” (bez zmiany brzmienia)
