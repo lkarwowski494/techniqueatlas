@@ -1,7 +1,25 @@
 {
- "_opis": "Ręczne rozstrzygnięcia adresów ćwiczeń (docs/54 pkt 4). nadpisania: id ćwiczenia → slug (zachowanie starego adresu po zmianie nazwy w aplikacji albo rozstrzygnięcie kolizji). przekierowania: stary slug → id ćwiczenia, które go zastąpiło, albo \"lista\" (ćwiczenie usunięte), w postaci { \"do\": …, \"od\": \"RRRR-MM-DD\" } (od = data dodania; usunięcie wpisu młodszego niż 365 dni od startu indeksowania to błąd — badanie indeksowania 01.11.2026, pkt 6); strona pod starym adresem zostaje jako przekierowanie (meta refresh 0 s + canonical na nowy adres) w każdym budowanym języku, na stałe.",
- "nadpisania": {},
- "przekierowania": {
-  "wide-grip-pulldown-behind-the-neck": { "do": "lista", "od": "2026-11-09" }
- }
+  "_opis": "Ręczne rozstrzygnięcia adresów ćwiczeń (docs/54 pkt 4). nadpisania: id ćwiczenia → slug (zachowanie starego adresu po zmianie nazwy w aplikacji albo rozstrzygnięcie kolizji). przekierowania: stary slug → id ćwiczenia, które go zastąpiło, albo \"lista\" (ćwiczenie usunięte), w postaci { \"do\": …, \"od\": \"RRRR-MM-DD\" } (od = data dodania; usunięcie wpisu młodszego niż 365 dni od startu indeksowania to błąd — badanie indeksowania 01.11.2026, pkt 6); strona pod starym adresem zostaje jako przekierowanie (meta refresh 0 s + canonical na nowy adres) w każdym budowanym języku, na stałe.",
+  "nadpisania": {
+    "Cable Overhead Extension": "cable-overhead-extension",
+    "Push-Ups With Feet On A Stability Ball": "push-up-with-feet-on-a-stability-ball",
+    "Side To Side Chins": "side-to-side-chin-up",
+    "One-Arm Incline Lateral Raise": "incline-single-arm-lateral-raise",
+    "External Rotation with Band": "external-rotation-with-band",
+    "Internal Rotation with Band": "internal-rotation-with-band",
+    "Preacher Hammer Dumbbell Curl": "preacher-hammer-dumbbell-curl",
+    "Standing Overhead Barbell Triceps Extension": "standing-overhead-barbell-triceps-extension",
+    "One-Arm Overhead Kettlebell Squat": "single-arm-overhead-kettlebell-squat",
+    "Hip Flexion with Band": "hip-flexion-with-band",
+    "Treadmill Walking": "treadmill-walking",
+    "Hip Extension with Bands": "hip-extension-with-bands",
+    "Bosu Ball Cable Crunch With Side Bends": "balance-dome-cable-crunch-with-side-bend",
+    "Weighted Sit-Ups - With Bands": "weighted-sit-up-with-bands"
+  },
+  "przekierowania": {
+    "wide-grip-pulldown-behind-the-neck": {
+      "do": "lista",
+      "od": "2026-11-09"
+    }
+  }
 }
