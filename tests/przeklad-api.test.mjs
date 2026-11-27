@@ -41,14 +41,14 @@ function fixture({ nazw = 3, jezykow = 3 } = {}) {
 }
 
 /** Atrapa API: count_tokens, tworzenie batcha (odpowiedzi generowane z żądań), odczyt statusu i wyników. `tryb`: 'ok' | 'blad-z-kluczem' | 'przeglad'. */
-function atrapa({ tryb = 'ok', uzycie = { input_tokens: 10000, output_tokens: 5000 } } = {}) {
+function atrapa({ tryb = 'ok', uzycie = { input_tokens: 10000, output_tokens: 5000 }, modelWyniku = null, status = 'ended' } = {}) {
   const wywolania = []; let zadania = [];
   const odp = (z) => {
     const user = z.params.messages[0].content; const lista = JSON.parse(user.split('\n').pop());
     const tekst = z.custom_id.startsWith('pg-')
       ? JSON.stringify(Object.fromEntries(lista.map((p, i) => [p.id, i === 0 ? { poprawka: `POPRAWKA ${p.tlumaczenie}`, powod: 'test', waga: 'krytyczna' } : 'ok'])))
       : JSON.stringify(Object.fromEntries(lista.map((p) => [p.id, `T:${p.pl}`])));
-    return JSON.stringify({ custom_id: z.custom_id, result: { type: 'succeeded', message: { content: [{ type: 'text', text: tekst }], stop_reason: 'end_turn', usage: uzycie } } });
+    return JSON.stringify({ custom_id: z.custom_id, result: { type: 'succeeded', message: { ...(modelWyniku ? { model: modelWyniku } : {}), content: [{ type: 'text', text: tekst }], stop_reason: 'end_turn', usage: uzycie } } });
   };
   const fetchFn = async (url, opts = {}) => {
     wywolania.push({ url, metoda: opts.method, naglowki: opts.headers });
@@ -57,7 +57,7 @@ function atrapa({ tryb = 'ok', uzycie = { input_tokens: 10000, output_tokens: 50
     if (u.pathname.endsWith('/count_tokens')) return odpowiedz({ input_tokens: 12000 });
     if (u.pathname.endsWith('/messages/batches') && opts.method === 'POST') { zadania = JSON.parse(opts.body).requests; return odpowiedz({ id: 'msgbatch_TEST123' }); }
     if (u.pathname.endsWith('/results')) return odpowiedz(zadania.map(odp).join('\n'));
-    if (u.pathname.includes('/messages/batches/')) return odpowiedz({ id: 'msgbatch_TEST123', processing_status: 'ended', results_url: 'https://api.anthropic.com/v1/messages/batches/msgbatch_TEST123/results' });
+    if (u.pathname.includes('/messages/batches/')) return odpowiedz({ id: 'msgbatch_TEST123', processing_status: status, results_url: 'https://api.anthropic.com/v1/messages/batches/msgbatch_TEST123/results' });
     return odpowiedz({}, 404);
   };
   return { fetchFn, wywolania, zadania: () => zadania };
@@ -257,4 +257,41 @@ test('workflowy: pliki przeklad-tlumaczen.yml i przeglad-tlumaczen.yml nie są u
 test('repo strony: docs/przeklad/zrodla.json istnieje, jest poprawny i wskazuje cele zgodne z ustaleniami (nazwy 33 języków, szablony, teksty prawne)', () => {
   const k = czytaj(join(ROOT, 'docs/przeklad/zrodla.json')); assert.deepEqual(k.zrodla.map((z) => z.id), ['nazwy', 'szablony', 'prawne', 'ramka']);
   const w = czytaj(join(ROOT, 'docs/przeklad/wydatki.json')); assert.equal(w.limit_usd, 80); assert.ok(Array.isArray(w.wpisy));
+});
+
+/* ---------- poprawki z przeglądu P0/P1 (niezależny przegląd, 27.11.2026) ---------- */
+test('--wznow: koszt księgowany wg modelu z wyniku batcha, nie z argumentu --model (nie da się zaniżyć licznika parametrem)', async () => {
+  const root = fixture(); const wyj = join(root, 'raport'); const api = atrapa({ modelWyniku: 'claude-opus-5-5' });
+  await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wyjscie', wyj], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  const r = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wyjscie', wyj, '--wznow', 'msgbatch_TEST123', '--model', 'sonnet'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 0, r.logi.join('\n')); const w = czytaj(join(wyj, 'wydatek.json'));
+  assert.equal(w.model, 'claude-opus-5-5'); assert.ok(Math.abs(w.koszt_usd - ((10000 * 4 + 5000 * 20) / 1e6) * 0.5) < 1e-9, `koszt ${w.koszt_usd}`);
+});
+test('batch wysłany, ale odbiór przerwany (czas oczekiwania, kod 4): wydatek.json ze szacunkiem istnieje już po wysłaniu, więc da się go zaksięgować', async () => {
+  const root = fixture(); const wyj = join(root, 'raport'); const api = atrapa({ status: 'in_progress' });
+  const r = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wyjscie', wyj, '--czekaj-min', '0'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 4, r.logi.join('\n')); const w = czytaj(join(wyj, 'wydatek.json'));
+  assert.equal(w.batch_id, 'msgbatch_TEST123'); assert.ok(w.koszt_usd > 0); assert.equal(w.przebieg, 'przeklad');
+});
+test('ledger: ten sam batch_id z dokładniejszym kosztem aktualizuje wpis (szacunek → rzeczywisty), nie dubluje', () => {
+  const root = fixture(); const base = { przebieg: 'przeklad', batch_id: 'msgbatch_U', model: 'claude-opus-5-5', data: '2026-11-28', tokeny_we: 1, tokeny_wy: 1 };
+  wydatki.dopisz(root, { ...base, koszt_usd: 5 }); wydatki.dopisz(root, { ...base, koszt_usd: 3 });
+  assert.equal(czytaj(join(root, 'docs/przeklad/wydatki.json')).wpisy.length, 1); assert.equal(wydatki.suma(root), 3);
+});
+test('--zastosuj nie nadpisuje istniejących tłumaczeń (mapa i dokument) bez --nadpisz; z --nadpisz nadpisuje', async () => {
+  const root = fixture(); const wyj = join(root, 'raport');
+  await uruchom('przeklad', ['--limit', '1', '--wyjscie', wyj], { root, env: { ANTHROPIC_API_KEY: KLUCZ } });
+  zapisz(root, 'docs/nazwy/fr.json', { 'Press 1': 'RĘCZNIE 1' }); zapisz(root, 'docs/teksty/prawne/regulamin.fr.md', 'RĘCZNIE DOKUMENT\n');
+  const r = await uruchom('przeklad', ['--zastosuj', wyj], { root });
+  assert.equal(r.kod, 0, r.logi.join('\n')); const n = czytaj(join(root, 'docs/nazwy/fr.json'));
+  assert.equal(n['Press 1'], 'RĘCZNIE 1'); assert.match(n['Press 2'], /^T:/, 'brakujące klucze uzupełnione');
+  assert.equal(readFileSync(join(root, 'docs/teksty/prawne/regulamin.fr.md'), 'utf8'), 'RĘCZNIE DOKUMENT\n'); assert.match(r.logi.join('\n'), /istnieje.*--nadpisz/);
+  await uruchom('przeklad', ['--zastosuj', wyj, '--nadpisz'], { root });
+  assert.match(czytaj(join(root, 'docs/nazwy/fr.json'))['Press 1'], /^T:/); assert.match(readFileSync(join(root, 'docs/teksty/prawne/regulamin.fr.md'), 'utf8'), /^# T:|T:# /m);
+});
+test('szacunek niepoprawny (NaN z count_tokens) zatrzymuje przebieg zamiast przejść oba limity', async () => {
+  const root = fixture(); const api = atrapa(); const f = api.fetchFn;
+  api.fetchFn = async (u, o) => (String(u).endsWith('/count_tokens') ? { ok: true, status: 200, json: async () => ({}) } : f(u, o));
+  const r = await uruchom('przeklad', ['--szacuj', '--zrodlo', 'szablony'], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.notEqual(r.kod, 0); assert.match(r.logi.join('\n'), /szacunek niepoprawny/);
 });

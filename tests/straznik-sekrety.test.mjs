@@ -36,11 +36,14 @@ test('brak adresów e-mail poza neutralnymi (noreply)', () => {
   for (const f of repoFiles().filter(isText)) for (const m of read(f).match(EMAIL) ?? []) if (!ALLOWED_EMAIL.some(r => r.test(m))) bad.push(`${f}: ${m}`);
   assert.deepEqual(bad, []);
 });
+/** Wyjątek nazwany (27.11.2026, słowa właściciela: „Tłumaczenie i sprawdzanie i wszystko wokół tego ma być przez API Claude”): jedyny sekret w workflowach to ANTHROPIC_API_KEY, tylko w dwóch ręcznych workflowach przekładu i przeglądu
+ * (jeden krok, zmienna środowiskowa; pilnuje tego tests/przeklad-api.test.mjs). Każdy inny sekret albo inny plik nadal łamie strażnika. */
+const SEKRET_API_W = new Set(['.github/workflows/przeklad-tlumaczen.yml', '.github/workflows/przeglad-tlumaczen.yml']);
 test('workflowy: bez sekretów (poza GITHUB_TOKEN), z jawnymi uprawnieniami, bez wywołań poza GitHub Actions', () => {
   const bad = [];
   for (const f of repoFiles().filter(f => /^\.github\/workflows\/.+\.ya?ml$/.test(f))) {
     const t = read(f);
-    for (const m of t.matchAll(/secrets\.([A-Za-z0-9_]+)/g)) if (m[1] !== 'GITHUB_TOKEN') bad.push(`${f}: secrets.${m[1]}`);
+    for (const m of t.matchAll(/secrets\.([A-Za-z0-9_]+)/g)) if (m[1] !== 'GITHUB_TOKEN' && !(m[1] === 'ANTHROPIC_API_KEY' && SEKRET_API_W.has(f))) bad.push(`${f}: secrets.${m[1]}`);
     if (!/^permissions:/m.test(t)) bad.push(`${f}: brak jawnych uprawnień`);
     for (const m of t.matchAll(/uses:\s*([^\s@]+)@/g)) if (!/^actions\//.test(m[1])) bad.push(`${f}: akcja spoza actions/: ${m[1]}`);
   }

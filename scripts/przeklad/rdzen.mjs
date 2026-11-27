@@ -128,12 +128,12 @@ export function parsujOdpowiedzPrzegladu(tekst, idy) {
 /** Jedna linia wyniku batcha → { zrodlo, kod, blad, tekst, uzycie }. Nie zachowuje nagłówków ani surowej odpowiedzi; komunikaty błędów maskowane. */
 export function odczytajLinie(linia, klucz = '') {
   const r = JSON.parse(linia); const m0 = /^(?:pr|pg)-([a-z0-9]+)-(.+)$/.exec(String(r.custom_id)); const zrodlo = m0?.[1] ?? ''; const kod = m0?.[2] ?? String(r.custom_id); const res = r.result ?? {};
-  if (res.type !== 'succeeded') return { zrodlo, kod, blad: maskuj(`${res.type}${res.error?.error?.message ? `: ${res.error.error.message}` : res.error?.message ? `: ${res.error.message}` : ''}`, klucz), tekst: null, uzycie: null };
-  const m = res.message ?? {};
+  if (res.type !== 'succeeded') return { zrodlo, kod, model: null, blad: maskuj(`${res.type}${res.error?.error?.message ? `: ${res.error.error.message}` : res.error?.message ? `: ${res.error.message}` : ''}`, klucz), tekst: null, uzycie: null };
+  const m = res.message ?? {}; const model = typeof m.model === 'string' ? m.model : null;
   const tekst = (m.content ?? []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
-  if (m.stop_reason === 'max_tokens') return { zrodlo, kod, blad: 'odpowiedź ucięta (max_tokens)', tekst: null, uzycie: m.usage ?? null };
-  if (m.stop_reason === 'refusal') return { zrodlo, kod, blad: 'odmowa modelu (refusal)', tekst: null, uzycie: m.usage ?? null };
-  return { zrodlo, kod, blad: null, tekst, uzycie: m.usage ?? null };
+  if (m.stop_reason === 'max_tokens') return { zrodlo, kod, model, blad: 'odpowiedź ucięta (max_tokens)', tekst: null, uzycie: m.usage ?? null };
+  if (m.stop_reason === 'refusal') return { zrodlo, kod, model, blad: 'odmowa modelu (refusal)', tekst: null, uzycie: m.usage ?? null };
+  return { zrodlo, kod, model, blad: null, tekst, uzycie: m.usage ?? null };
 }
 
 /* ---------- raporty ---------- */
@@ -214,7 +214,7 @@ export function zTlumaczeniem(root, zrodlo, kod) {
 }
 
 /** Nakłada propozycje z katalogu raportu przekładu na pliki celów (lokalnie, po przeglądzie; bez sieci i klucza). Klucze spoza źródła i tłumaczenia z innymi zmiennymi są pomijane. */
-export function zastosuj(root, katalog) {
+export function zastosuj(root, katalog, { nadpisz = false } = {}) {
   const zrodla = wczytajZrodla(root); const kody = jezykiDoPrzekladu(root); const wynik = { zapisanych: 0, plikow: 0, pominietych: [] };
   for (const z of zrodla) for (const kod of kody) {
     const f = join(katalog, z.id, `${kod}.json`); if (!existsSync(f)) continue;
@@ -224,6 +224,8 @@ export function zastosuj(root, katalog) {
       const poz = wg.get(klucz);
       if (!poz) { wynik.pominietych.push(`${z.id}/${kod}: klucz spoza źródła „${klucz.slice(0, 40)}”`); continue; }
       if (typeof tl !== 'string' || !tl.trim() || zmienne(poz.pl).join('') !== zmienne(tl).join('')) { wynik.pominietych.push(`${z.id}/${kod}: zmienne „${klucz.slice(0, 40)}”`); continue; }
+      const istnieje = z.rodzaj === 'mapa' ? (typeof pobierz(d, poz.sciezka) === 'string' && pobierz(d, poz.sciezka).trim() !== '') : existsSync(join(root, sciezkaCelu(z, kod, klucz)));
+      if (istnieje && !nadpisz) { wynik.pominietych.push(`${z.id}/${kod}: „${klucz.slice(0, 40)}” istnieje (użyj --nadpisz, żeby zastąpić)`); continue; }
       if (z.rodzaj === 'mapa') ustaw(d, poz.sciezka, typografia(kod, tl));
       else { const p = join(root, sciezkaCelu(z, kod, klucz)); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, tl.endsWith('\n') ? tl : `${tl}\n`); wynik.plikow++; }
       zmienione++; wynik.zapisanych++;
@@ -235,7 +237,7 @@ export function zastosuj(root, katalog) {
 
 /* ---------- argumenty i przebieg ---------- */
 export function parsujArgumenty(tryb, argv) {
-  const o = { model: DOMYSLNY_MODEL, effort: DOMYSLNY_EFFORT, szacuj: false, limit: null, wyjscie: tryb === 'przeklad' ? 'raport-przekladu' : 'raport-przegladu', zrodla: [], zgodaKoszt: false, wznow: null, czekajMin: CZEKAJ_MIN_DOMYSLNIE, zastosuj: null, zapiszWydatek: null };
+  const o = { model: DOMYSLNY_MODEL, effort: DOMYSLNY_EFFORT, szacuj: false, limit: null, wyjscie: tryb === 'przeklad' ? 'raport-przekladu' : 'raport-przegladu', zrodla: [], zgodaKoszt: false, wznow: null, czekajMin: CZEKAJ_MIN_DOMYSLNIE, zastosuj: null, nadpisz: false, zapiszWydatek: null };
   const wart = (i, n) => { if (i + 1 >= argv.length) throw new Error(`brak wartości dla ${n}`); return argv[i + 1]; };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -249,6 +251,7 @@ export function parsujArgumenty(tryb, argv) {
     else if (a === '--wznow') { const v = wart(i++, a); if (v !== '') { if (!/^msgbatch_[A-Za-z0-9]+$/.test(v)) throw new Error('--wznow: oczekiwany identyfikator msgbatch_…'); o.wznow = v; } }
     else if (a === '--czekaj-min') o.czekajMin = Number(wart(i++, a));
     else if (a === '--zastosuj' && tryb === 'przeklad') o.zastosuj = wart(i++, a);
+    else if (a === '--nadpisz' && tryb === 'przeklad') o.nadpisz = true;
     else if (a === '--zapisz-wydatek') o.zapiszWydatek = wart(i++, a);
     else throw new Error(`nieznany argument: ${a}`);
   }
@@ -268,11 +271,11 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   const wyj = resolve(root, o.wyjscie);
   if (o.zapiszWydatek) {
     const w = czytaj(join(resolve(root, o.zapiszWydatek), 'wydatek.json')); const r = wydatki.dopisz(root, w);
-    wyp(`${r.dopisano ? 'dopisano' : 'już zaksięgowano'}: ${w.przebieg} ${w.batch_id}, ${Number(w.koszt_usd).toFixed(2)} USD; wydano łącznie ${r.suma.toFixed(2)} z ${LIMIT_LACZNY_USD} USD. Dalej: git add docs/przeklad/wydatki.json i commit.`);
+    wyp(`${r.dopisano ? 'dopisano' : 'zaktualizowano wpis'}: ${w.przebieg} ${w.batch_id}, ${Number(w.koszt_usd).toFixed(2)} USD; wydano łącznie ${r.suma.toFixed(2)} z ${LIMIT_LACZNY_USD} USD. Dalej: git add docs/przeklad/wydatki.json i commit.`);
     return 0;
   }
   if (o.zastosuj) {
-    const p = zastosuj(root, resolve(root, o.zastosuj));
+    const p = zastosuj(root, resolve(root, o.zastosuj), { nadpisz: o.nadpisz });
     wyp(`nałożono ${p.zapisanych} tłumaczeń w ${p.plikow} plikach; pominięte: ${p.pominietych.length}`); for (const x of p.pominietych) wyp(`  pominięto: ${x}`);
     wyp('Dalej: przegląd (workflow „Przegląd tłumaczeń”), npm test, commit.');
     return 0;
@@ -290,15 +293,17 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   wyp(`${tryb}: źródeł ${zrodla.length}, języków ${kody.length}, żądań ${zadania.length}; model ${o.model}, effort ${o.effort}`);
   mkdirSync(wyj, { recursive: true });
 
+  let szac = null;
   if (!o.wznow) {
     const wiersze = [];
     for (const z of zadania) {
       const we = api ? await api.liczTokeny(o.model, z.batch.params) : przyblizTokeny(tekstZadania(z.batch.params));
+      if (!Number.isFinite(we)) throw new Error(`szacunek niepoprawny dla ${z.zrodlo.id}/${z.kod} (liczba tokenów wejścia: ${we}); przebieg wstrzymany`);
       const w = wierszSzacunku(tryb, z, we);
       if (w.wy > MAX_TOKENS) throw new Error(`żądanie ${z.zrodlo.id}/${z.kod} ma szacowane wyjście ${w.wy} tokenów (> ${MAX_TOKENS}); podziel źródło na mniejsze`);
       wiersze.push(w);
     }
-    const s = szacunek(wiersze, o.model); const wydane = wydatki.suma(root); const limit = Math.min(wydatki.limit(root), LIMIT_LACZNY_USD);
+    const s = szacunek(wiersze, o.model); szac = s; const wydane = wydatki.suma(root); const limit = Math.min(wydatki.limit(root), LIMIT_LACZNY_USD);
     const zrodloSz = api ? 'count_tokens (wejście), wyjście z założeń' : 'przybliżenie (bez klucza), wyjście z założeń';
     wyp(`szacunek (${zrodloSz}, Batch −${RABAT_BATCH * 100}%): wejście ${s.tokeny_we}, wyjście ${s.tokeny_wy} tokenów; ${Object.entries(s.koszt_wg_modelu).map(([m, c]) => `${m} ≈ ${c.toFixed(2)} USD`).join(', ')}`);
     writeFileSync(join(wyj, 'szacunek.json'), JSON.stringify({ tryb, zrodlo: zrodloSz, model: o.model, effort: o.effort, zalozenia: tryb === 'przeklad' ? ZALOZENIA_PRZEKLADU : ZALOZENIA_PRZEGLADU, ...s, wydano_dotad_usd: wydane, limit_laczny_usd: limit, wiersze }, null, 1) + '\n');
@@ -309,7 +314,9 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   if (!api) { wyp('brak ANTHROPIC_API_KEY — przebieg płatny niemożliwy (użyj --szacuj)'); return 2; }
 
   let id = o.wznow;
-  if (!id) { const b = await api.utworz(zadania.map((z) => z.batch)); id = b.id; wyp(`wysłano batch ${id}`); }
+  if (!id) { const b = await api.utworz(zadania.map((z) => z.batch)); id = b.id; wyp(`wysłano batch ${id}`);
+    /* wpis do zaksięgowania zapisany od razu po wysłaniu (szacunek); po odbiorze wyników zastępuje go koszt rzeczywisty — batch opłacony, ale nieodebrany też da się zaksięgować */
+    writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: o.model, data: new Date().toISOString().slice(0, 10), tokeny_we: szac.tokeny_we, tokeny_wy: szac.tokeny_wy, koszt_usd: szac.koszt_usd }, null, 1) + '\n'); }
   const batch = await czekajNaBatch(api, id, { czekajMin: o.czekajMin, interwalS: INTERWAL_S, log: wyp, spij });
   const linie = (await api.wyniki(batch.results_url)).split('\n').filter((l) => l.trim());
   const odczyty = new Map(linie.map((l) => { const r = odczytajLinie(l, klucz); return [`${r.zrodlo}/${r.kod}`, r]; }));
@@ -317,9 +324,11 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   const raporty = zadania.map((z) => { const od = odczyty.get(`${z.zrodlo.id}/${z.kod}`) ?? { blad: 'brak wyniku w batchu', tekst: null }; const zad = { zrodlo: z.zrodlo, kod: z.kod, pozycje: z.pozycje }; return tryb === 'przeklad' ? raportPrzekladu(zad, od, meta, slowniki) : raportPrzegladu(zad, od, meta); });
   for (const r of raporty) { mkdirSync(join(wyj, r.zrodlo), { recursive: true }); writeFileSync(join(wyj, r.zrodlo, `${r.jezyk}.json`), JSON.stringify(r, null, 1) + '\n'); }
   writeFileSync(join(wyj, 'podsumowanie.md'), podsumowanieMd(tryb, raporty, meta));
-  const we = [...odczyty.values()].reduce((s, r) => s + (r.uzycie?.input_tokens ?? 0), 0); const wy = [...odczyty.values()].reduce((s, r) => s + (r.uzycie?.output_tokens ?? 0), 0);
-  const koszt = kosztUsd(we, wy, o.model);
-  writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: o.model, data: new Date().toISOString().slice(0, 10), tokeny_we: we, tokeny_wy: wy, koszt_usd: koszt }, null, 1) + '\n');
+  /* koszt wg modelu z wyniku batcha (przy --wznow argument --model nie może zaniżyć licznika); brak modelu w wyniku → model z argumentu */
+  const wiersz = [...odczyty.values()].map((r) => ({ model: CENY[r.model] ? r.model : o.model, we: r.uzycie?.input_tokens ?? 0, wy: r.uzycie?.output_tokens ?? 0 }));
+  const we = wiersz.reduce((s, r) => s + r.we, 0); const wy = wiersz.reduce((s, r) => s + r.wy, 0); const koszt = wiersz.reduce((s, r) => s + kosztUsd(r.we, r.wy, r.model), 0);
+  const modeleWyniku = [...new Set(wiersz.map((r) => r.model))]; const modelKsiegowany = modeleWyniku.length === 1 ? modeleWyniku[0] : (modeleWyniku.sort((a, b) => CENY[b].wy - CENY[a].wy)[0] ?? o.model);
+  writeFileSync(join(wyj, 'wydatek.json'), JSON.stringify({ przebieg: tryb, batch_id: id, model: modelKsiegowany, data: new Date().toISOString().slice(0, 10), tokeny_we: we, tokeny_wy: wy, koszt_usd: koszt }, null, 1) + '\n');
   wyp(`raport: ${o.wyjscie}/ (${raporty.length} żądań); koszt wg użycia ${koszt.toFixed(2)} USD — zaksięguj: node scripts/przeklad/${tryb}-api.mjs --zapisz-wydatek ${o.wyjscie}`);
   return raporty.some((r) => r.blad) ? 1 : 0;
 }

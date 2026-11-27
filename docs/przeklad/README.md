@@ -21,7 +21,7 @@ Wzorzec: repo aplikacji (`lkarwowski494/trening`, gałąź `main`): `.github/wor
 - **Źródła** (`docs/przeklad/zrodla.json`): `nazwy` (`docs/nazwy/pl.json`, 708 wpisów → `docs/nazwy/<kod>.json`), `szablony` (`src/szablony/{pl,en}.json` → `src/szablony/<kod>.json`), `prawne` (`docs/teksty/prawne/*.pl.md` + `*.en.md` → `<nazwa>.<kod>.md`), `ramka` (jeszcze bez plików, patrz „Otwarte”). Języki: `config.json` → `jezyki` bez `pl` i `en` (33).
 - **Przekład**: jedno żądanie Message Batches na parę (źródło, język). Wynik: artefakt `raport-przekladu/<źródło>/<język>.json` (`propozycje`, `odrzucone`), `podsumowanie.md`, `szacunek.json`, `wydatek.json`. Tłumaczenie bez zgodnych zmiennych `{…}`, puste albo z terminem zakazanym ze słownika trafia do `odrzucone`. Pliki w repo nie są zmieniane.
 - **Przegląd**: osobny przebieg (inny prompt, własny artefakt `raport-przegladu/…`), który czyta pliki celów z repo i zwraca listę `uwagi` (`poprawka`, `powod`, `waga`: krytyczna / średnia / niska) oraz `kontrola_lokalna` (brak tłumaczenia, zmienne). Sam niczego nie poprawia.
-- **Nałożenie**: lokalnie, po przeglądzie człowieka: `node scripts/przeklad/przeklad-api.mjs --zastosuj <katalog artefaktu>` (bez sieci i klucza).
+- **Nałożenie**: lokalnie, po przeglądzie człowieka: `node scripts/przeklad/przeklad-api.mjs --zastosuj <katalog artefaktu>` (bez sieci i klucza). Istniejące niepuste tłumaczenia (i istniejące pliki dokumentów) są pomijane z komunikatem; zastąpić je można tylko jawnie: `--nadpisz` (zero utraty ręcznych poprawek).
 - **Prompty**: zasady tekstów (bez nazw źródeł, firm i marek; język „jak trener albo kolega na siłowni”), rejestr języka, słownik terminów aplikacji (`.cache/dane/slownik-terminow.json`, kopiowany przez `npm run dane`) i słownik strony (`docs/slownik-strony.json`).
 
 ## Zabezpieczenia (decyzja koordynatora, analogia do wzorca)
@@ -34,7 +34,7 @@ Wzorzec: repo aplikacji (`lkarwowski494/trening`, gałąź `main`): `.github/wor
 
 ### Licznik wydatków: jak księgować
 
-Workflow ma tylko odczyt repo, więc nie dopisze wydatku sam. Po przebiegu płatnym pobierz artefakt i uruchom lokalnie `node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog artefaktu>` (to samo dla przeglądu), potem commit `docs/przeklad/wydatki.json`. Wpis jest idempotentny po `batch_id`; koszt liczy się z rzeczywistego użycia tokenów z wyników batcha (ceny × rabat batcha 50%).
+Workflow ma tylko odczyt repo, więc nie dopisze wydatku sam. Po przebiegu płatnym pobierz artefakt i uruchom lokalnie `node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog artefaktu>` (to samo dla przeglądu), potem commit `docs/przeklad/wydatki.json`. Wpis jest idempotentny po `batch_id` (ten sam batch zastępuje wpis, nie dubluje); koszt liczy się z rzeczywistego użycia tokenów z wyników batcha wg modelu z wyniku (nie z argumentu `--model`), ceny × rabat batcha 50%. Zaraz po wysłaniu batcha powstaje `wydatek.json` ze szacunkiem, więc nawet batch, którego odbiór przekroczył czas (kod 4), da się zaksięgować (po `--wznow` wpis zostanie zastąpiony kosztem rzeczywistym).
 **Ryzyko:** licznik zna tylko wpisy, które ktoś dopisał. Niezaksięgowany przebieg nie zmniejsza zapasu. Do ustalenia z właścicielem: czy wystarczy zwyczaj księgowania przed następnym przebiegiem, czy workflow ma dostać prawo zapisu (wtedy osobna decyzja, bo łamie „tylko odczyt”).
 
 ## Decyzje zapisane „do weta” (tryb analogii)

@@ -20,13 +20,14 @@ export function wczytaj(root) {
 export const limit = (root) => Math.min(Number.isFinite(wczytaj(root).limit_usd) ? wczytaj(root).limit_usd : LIMIT_LACZNY_USD, LIMIT_LACZNY_USD);
 export const suma = (root) => wczytaj(root).wpisy.reduce((s, w) => s + w.koszt_usd, 0);
 
-/** Wpis z artefaktu `wydatek.json` → dopisany do licznika; drugi raz ten sam batch_id nic nie zmienia. Zwraca { dopisano, suma }. */
+/** Wpis z artefaktu `wydatek.json` → dopisany do licznika; ten sam batch_id nie dubluje wpisu (zastępuje go). Zwraca { dopisano, suma }. */
 export function dopisz(root, wpis) {
   for (const k of POLA) if (wpis?.[k] === undefined || wpis[k] === null) throw new Error(`wydatek.json: brak pola „${k}”`);
   if (!['przeklad', 'przeglad'].includes(wpis.przebieg)) throw new Error('wydatek.json: pole „przebieg” = przeklad | przeglad');
   const d = wczytaj(root); d.limit_usd = LIMIT_LACZNY_USD;
-  const juz = d.wpisy.some((w) => w.batch_id === wpis.batch_id);
-  if (!juz) d.wpisy.push(Object.fromEntries(POLA.map((k) => [k, wpis[k]])));
+  const nowy = Object.fromEntries(POLA.map((k) => [k, wpis[k]])); const i = d.wpisy.findIndex((w) => w.batch_id === wpis.batch_id); const juz = i >= 0;
+  if (juz) d.wpisy[i] = nowy; /* ten sam batch: dokładniejszy koszt (rzeczywisty zamiast szacunku) zastępuje wpis, nie dubluje */
+  else d.wpisy.push(nowy);
   mkdirSync(dirname(join(root, PLIK)), { recursive: true });
   writeFileSync(join(root, PLIK), JSON.stringify(d, null, 1) + '\n');
   return { dopisano: !juz, suma: d.wpisy.reduce((s, w) => s + w.koszt_usd, 0) };
