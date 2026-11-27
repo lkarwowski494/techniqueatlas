@@ -1,7 +1,7 @@
 # Z-10: trzy kierunki wyglądu strony (makiety)
 
 27.11.2026 · rola 04-studio-projektowe (build, moduł strona-www) · sesja AX. Inwentarz AS IS: `../inwentarz-2026-11-27.md`.
-Status: **wybrano A „Arkusz” (Z-11)**. Słowa właściciela przekazane przez koordynatora: „A „Arkusz” (Rekomendowane)” (27.11.2026, 17:05 UTC). Odrzucone: B „Plansza”, C „Karta” (zostają jako rezerwa: legenda z B, litery A–Z z C). Decyzje 2–6 z PRZEKAZANIA przyjęte do weta (KO-132).
+Status: **wybrano A „Arkusz” (Z-11)**; system wyglądu: `../system/design-spec.md` (Z-12). Słowa właściciela przekazane przez koordynatora: „A „Arkusz” (Rekomendowane)” (27.11.2026, 17:05 UTC). Odrzucone: B „Plansza”, C „Karta” (zostają jako rezerwa: legenda z B, litery A–Z z C). Decyzje 2–6 z PRZEKAZANIA przyjęte do weta (KO-132).
 
 ## Co jest w katalogu
 
