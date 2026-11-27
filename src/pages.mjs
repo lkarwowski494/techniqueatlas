@@ -167,6 +167,7 @@ function figureBlock(ctx, lang, ex, fig, file) {
   const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
   const views = fig.views.map(name => ({ name, box: E.boxOf(lists, name) }));
   const label = fill(ui.figureLabel, { opis: ex.name });
+  const phases = f.phases.map(p => p.name === ctx.data[lang].labels.phases.Pauza || p.untimed ? p.name : `${p.name} ${Math.round(p.ms / 100) / 10} s`).join(' · '); /* podpis: kolejność faz; bez sekund przy pauzie i fazach untimed (BA, 27.11.2026) */
   const main = views[0], positions = poseIds(fig); /* jak staticPositions aplikacji: figura statyczna ma tylko pozycję skrajną (bez podpisu) */
   const caption = id => id === 'start' ? ui.startPose : ui.endPose;
   const poses = positions.map(id => `<div class="poz"><svg role="img" aria-label="${esc(positions.length > 1 ? `${label}, ${caption(id)}` : label)}" viewBox="${E.viewBox(main.box)}"><use href="${relUrl(file, `assets/poz/${ex.slug}.svg`)}#${id}"/></svg>${positions.length > 1 ? `<p class="podpis">${esc(caption(id))}</p>` : ''}</div>`).join('');
@@ -176,7 +177,7 @@ function figureBlock(ctx, lang, ex, fig, file) {
 ${wymiarHtml(lang, site, f.phases)}
 <div class="fig-ster"><button type="button" class="b-anim" data-pause aria-pressed="false" hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-pressed="false" hidden>${esc(ui.showError)}: ${esc(e.text)}</button>`).join('')}</div>
 <p class="podpis" data-error-text hidden aria-live="polite"></p>
-<figcaption class="podpis">${esc(ui.schematic)}</figcaption>
+<figcaption class="drobne">${esc(phases)} · ${esc(ui.schematic)}</figcaption>
 <script type="application/json" data-errors>${jsonForScript(f.errors)}</script>
 <script type="application/json" data-labels>${jsonForScript({ pause: ui.pause, resume: ui.resume, showError: ui.showError, hideError: ui.hideError, errorLine: ui.errorLine })}</script>
 </figure>`;
