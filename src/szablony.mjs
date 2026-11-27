@@ -42,7 +42,7 @@ function zdanieMiesni(d, t, e) {
  * Szablony strony ćwiczenia. `d` — atlas języka z eksportu, `ui` — src/ui/<język>.json, `nazwaLokalna` — po Z-24/Z-32 (zrecenzowana nazwa w języku strony; brak = sama angielska).
  * Zwraca { tytul, opis, odpowiedz, pytania, czesciOpisu, czesciOdpowiedzi } — części z polem `zrodlo` (ścieżka w danych), żeby test sprawdzał, że opis powstał z danych.
  */
-export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false, wspolneZdania = null, sprzetMimoPowtorzenia = false, rozrozniajaceMimoPowtorzenia = false } = {}) {
+export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false, wspolneZdania = null, sprzetMimoPowtorzenia = false, rozrozniajaceMimoPowtorzenia = false, krotkiMimoPowtorzenia = false } = {}) {
   const t = teksty[lang];
   /* Tytuł: nazwa (lokalna + angielska, gdy jest lokalna) i dopisek w języku strony: etykieta rodziny ruchu, a gdy powtarza słowa nazwy — mięśnie główne. Bez nazwy witryny (podaje ją WebSite JSON-LD na stronie /, A6 Z-06). */
   /* Nazwa lokalna (Z-32): różna od angielskiej (nie tylko wielkością liter) → „{lokalna} ({angielska})”; gdy to przekracza limit — sama lokalna
@@ -78,6 +78,12 @@ export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false,
       if (dl(nowy) > LIMITY.opis.max || (wspolne(lang, tytul, z.tekst).length && !(sprzetMimoPowtorzenia && z === sprzet) && !(rozrozniajaceMimoPowtorzenia && wspolneZdania && !wspolneZdania.has(z.tekst)))) continue;
       czesci.push(z);
       if (!pelny && dl(nowy) >= LIMITY.opis.min * 2) break; /* dość treści — nie dokładamy kolejnych zdań do granicy (pelny: dokładamy, gdy opis powtarza się z innym ćwiczeniem) */
+    }
+    /* opis krótszy niż minimum (strona indeksowana, dane bez powtórzeń wyczerpane): zdania z powtórzeniem słowa tytułu dochodzą w kolejności kolejki do minimum (06-tresci-007, SZ-5) */
+    if (krotkiMimoPowtorzenia) for (const z of kolejka) {
+      const teraz = czesci.map(x => x.tekst).join(' '), nowy = [...czesci, z].map(x => x.tekst).join(' ');
+      if (dl(teraz) >= LIMITY.opis.min) break;
+      if (!czesci.includes(z) && dl(nowy) <= LIMITY.opis.max) czesci.push(z);
     }
     czesci.sort((x, y) => kolejka0.indexOf(x) - kolejka0.indexOf(y)); /* wybrane zdania w zwykłej kolejności (ruch, mięśnie główne, sprzęt…) */
     const tekst = czesci.map(x => x.tekst).join(' ');
@@ -131,6 +137,13 @@ export function szablonyCwiczen(d, ui, lang, opcje = {}) {
   /* Gdy i to nie wystarcza (warianty różnią się tylko zdaniami ze słowem z nazwy, np. „kettlebell”, „dual”), wchodzi zdanie, którego nie ma u bliźniaka, mimo powtórzenia. */
   const ile3 = policz();
   rozdziel(ile3, { rozrozniajaceMimoPowtorzenia: true });
+  /* Opis strony indeksowanej krótszy niż minimum: zdanie z powtórzeniem słowa tytułu jest lepsze niż „Muscle group: other.” (06-tresci-007; wyjątek w polu `wyjatek`).
+     Opcje rozdzielania bliźniaków zostają, żeby opis nie wrócił do wspólnego. */
+  for (const e of idx) if (dl(wynik.get(e.slug).opis) < LIMITY.opis.min) {
+    const bliz = idx.filter(x => x !== e && wynik.get(x.slug).opis === wynik.get(e.slug).opis);
+    const inne = bliz.length ? new Set(bliz.flatMap(x => { const w = szablonyCwiczenia(d, ui, lang, x, { ...opcje[x.slug], pelny: true }); return [...w.czesciOpisu, ...w.pominiete].map(z => z.tekst); })) : null;
+    wynik.set(e.slug, szablonyCwiczenia(d, ui, lang, e, { ...opcje[e.slug], wspolneZdania: inne, krotkiMimoPowtorzenia: true }));
+  }
   return wynik;
 }
 
