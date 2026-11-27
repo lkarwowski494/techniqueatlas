@@ -13,7 +13,7 @@ const STRONY = [
   ['glowna', 'pl/'], ['lista', 'pl/exercises/'], ['lista-pusta', 'pl/exercises/?pusto'], ['404', 'nie-ma-takiej-strony/'], ['jezyki', ''],
 ];
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
-const MAX_H = 2400; /* strony z listą 708 pozycji: tylko początek (pliki repozytorium ≤ 300 KB) */
+const MAX_H = 1400; /* strony z listą 708 pozycji i długą stroną główną: tylko początek (pliki repozytorium ≤ 300 KB) */
 mkdirSync(out, { recursive: true });
 const srv = await serve(dist), b = await launch(), axe = axeSource(), wynik = [];
 try {
@@ -31,7 +31,7 @@ try {
       const naruszenia = await p.evaluate(tags => globalThis.axe.run(document, { runOnly: { type: 'tag', values: tags } }).then(r => r.violations.map(v => `${v.id}: ${v.nodes.length}`)), AXE_TAGS);
       const wysokosc = await p.evaluate(() => document.documentElement.scrollHeight);
       const tag = `${nazwa}-${szerokosc}-${motyw === 'light' ? 'jasny' : 'ciemny'}${kontrast === 'more' ? '-kontrast' : ''}`;
-      await p.screenshot({ path: join(out, `${tag}.png`), ...(wysokosc > MAX_H ? { clip: { x: 0, y: 0, width: szerokosc, height: MAX_H } } : { fullPage: true }) });
+      await p.screenshot({ path: join(out, `${tag}.png`), fullPage: true, ...(wysokosc > MAX_H ? { clip: { x: 0, y: 0, width: szerokosc, height: MAX_H } } : {}) });
       wynik.push({ tag, wysokosc, poziom, axe: naruszenia, bledy: [...bledy] }); bledy.length = 0;
     }
     await ctx.close();

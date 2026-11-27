@@ -4,7 +4,7 @@ Stan: 27.11.2026 · rola 07-jakosc (build) · gałąź `strona/z30-testy` od `st
 Wejście: `docs/design/system/design-spec.md` (Z-12, „Arkusz”), `docs/teksty/szablony-stron.md` + `src/szablony.mjs` (Z-22), `docs/teksty/prawne/` (Z-20), `docs/teksty/ramka-w-aplikacji.md` (Z-21), `docs/nazwy/pl.json` (Z-24, recenzja Z-25), `docs/badanie-zasiegu-2026-11-27.md` (Z-06, A1–A15, B1–B9, KO-130), `docs/55-plan-startu.md`.
 Zakres: tylko testy i ten dokument. `src/pages.mjs` i `assets/` bez zmian. Wdrożenie robią Z-31…Z-34.
 
-Oczekujące: Z-31 11, Z-32 6, Z-33 8, Z-34 15
+Oczekujące: Z-32 6, Z-33 8, Z-34 15
 
 (Wiersz wyżej sprawdza `tests/z30-oczekujace.test.mjs`. Przy zdjęciu oznaczenia zmniejsz liczbę w tym samym commicie.)
 

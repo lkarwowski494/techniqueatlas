@@ -1,0 +1,318 @@
+[
+ {
+  "tag": "cwiczenie-390-jasny",
+  "wysokosc": 3324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-wskazowki-ogolne-390-jasny",
+  "wysokosc": 2642,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-figury-390-jasny",
+  "wysokosc": 2127,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-wskazowek-390-jasny",
+  "wysokosc": 1324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "glowna-390-jasny",
+  "wysokosc": 23946,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-390-jasny",
+  "wysokosc": 51569,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-pusta-390-jasny",
+  "wysokosc": 995,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "404-390-jasny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "tag": "jezyki-390-jasny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-1440-jasny",
+  "wysokosc": 1899,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-wskazowki-ogolne-1440-jasny",
+  "wysokosc": 1637,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-figury-1440-jasny",
+  "wysokosc": 1474,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-wskazowek-1440-jasny",
+  "wysokosc": 1001,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "glowna-1440-jasny",
+  "wysokosc": 11820,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-1440-jasny",
+  "wysokosc": 32056,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-pusta-1440-jasny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "404-1440-jasny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "tag": "jezyki-1440-jasny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-390-jasny-kontrast",
+  "wysokosc": 3324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-390-jasny-kontrast",
+  "wysokosc": 51569,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-1440-jasny-kontrast",
+  "wysokosc": 1899,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-1440-jasny-kontrast",
+  "wysokosc": 32056,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-390-ciemny",
+  "wysokosc": 3324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-wskazowki-ogolne-390-ciemny",
+  "wysokosc": 2642,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-figury-390-ciemny",
+  "wysokosc": 2127,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-wskazowek-390-ciemny",
+  "wysokosc": 1324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "glowna-390-ciemny",
+  "wysokosc": 23946,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-390-ciemny",
+  "wysokosc": 51569,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-pusta-390-ciemny",
+  "wysokosc": 995,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "404-390-ciemny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "tag": "jezyki-390-ciemny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-1440-ciemny",
+  "wysokosc": 1899,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-wskazowki-ogolne-1440-ciemny",
+  "wysokosc": 1637,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-figury-1440-ciemny",
+  "wysokosc": 1474,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-bez-wskazowek-1440-ciemny",
+  "wysokosc": 1001,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "glowna-1440-ciemny",
+  "wysokosc": 11820,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-1440-ciemny",
+  "wysokosc": 32056,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-pusta-1440-ciemny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "404-1440-ciemny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "tag": "jezyki-1440-ciemny",
+  "wysokosc": 900,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-390-ciemny-kontrast",
+  "wysokosc": 3324,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-390-ciemny-kontrast",
+  "wysokosc": 51569,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "cwiczenie-1440-ciemny-kontrast",
+  "wysokosc": 1899,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ },
+ {
+  "tag": "lista-1440-ciemny-kontrast",
+  "wysokosc": 32056,
+  "poziom": 0,
+  "axe": [],
+  "bledy": []
+ }
+]
