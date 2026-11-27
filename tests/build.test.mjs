@@ -134,7 +134,7 @@ test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyj
     const uses = [...poses.matchAll(/<use href="\.\.\/\.\.\/\.\.\/assets\/poz\/([^"#]+)\.svg#(start|end)"\/>/g)].map(m => [m[1], m[2]]);
     assert.deepEqual(uses, fig.static ? [[e.slug, 'end']] : [[e.slug, 'start'], [e.slug, 'end']], e.slug);
     if (fig.static) { single++; assert.doesNotMatch(poses, /<p class="podpis">/); } else assert.deepEqual([...poses.matchAll(/<p class="podpis">([^<]*)<\/p>/g)].map(m => m[1]), ['Starting position', 'End position'], e.slug);
-    assert.match(poses, /<svg role="img" aria-label="Movement drawing: [^"]*"/); assert.doesNotMatch(h, /<path|<circle/); /* geometria poza HTML (budżet, wspólna dla języków) */
+    assert.match(poses, /<svg role="img" aria-label="Movement drawing: [^"]*"/); assert.doesNotMatch(h.replace(/<svg class="znak".*?<\/svg>/s, ''), /<path|<circle/); /* geometria poza HTML (budżet, wspólna dla języków) */
     assert.match(h, /<div class="widoki" data-views hidden>(<svg role="img"[^>]*data-view="[a-z]+"><g [^>]*data-g><\/g><\/svg>)+<\/div>/); assert.match(h, /data-pause/); assert.match(h, /assets\/figura-strona\.js/);
     const sheet = read(out, `assets/poz/${e.slug}.svg`); assert.equal([...sheet.matchAll(/<g id="(start|end)"/g)].map(m => m[1]).join(), fig.static ? 'end' : 'start,end'); assert.match(sheet, /var\(--f-skin/); assert.doesNotMatch(sheet, /#[0-9a-f]{6}/i);
     assert.ok(gzipSync(readFileSync(join(out, `assets/fig/${e.slug}.js`))).length <= 30 * 1024, `${e.slug}: moduł figury > 30 KB gz`); assert.ok(gzipSync(sheet).length <= 30 * 1024, `${e.slug}: arkusz pozycji > 30 KB gz`);
@@ -164,7 +164,7 @@ test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy ekspor
   const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
   const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
   assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
-  assert.ok(withRoles.indexOf('>Tips<') < withRoles.indexOf('Supporting muscles') && withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"'));
+  assert.ok(withRoles.indexOf('>Tips<') < withRoles.indexOf('<p>Main muscles') && withRoles.indexOf('<p>Main muscles') < withRoles.indexOf('class="role"'));
   for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
 });
 test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z pliku modułu; lista A–Z działa bez JS (pełna lista w HTML, filtry ukryte do uruchomienia skryptu)', async () => {
