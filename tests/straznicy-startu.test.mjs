@@ -61,11 +61,13 @@ test('S6 (02.11.2026): eksport bez pola „pelna” (PIN sprzed F-20) — przy i
   assert.deepEqual(checkIndexingRule({ pages: [], data: bez, indexing: true, startCondition: false }).errors, []);
   assert.equal(checkIndexingRule({ pages: [exPage('pl', 'a', true)], data: bez, indexing: true, startCondition: false }).errors.length, 1);
 });
-test('startGuards składa strażniki S3, S4, S8 z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
+test('startGuards składa strażniki S3, S4, S8, S11 z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
   const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, indeksowanieOd: '2027-01-15', wersjaWydania: '1.1.0' };
   const base = { cfg, pin: { ref: 'v1.1.0-b1' }, manifest: { app: { version: '1.1.0' } }, data: { pl: d('pl'), en: d('en') }, langs: ['pl', 'en'] };
-  const ok = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': OK } } }); assert.deepEqual([ok.errors, ok.warnings], [[], []]);
-  const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK } } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/);
+  /* S11 (Z-00, 27.11.2026): plan startu jest częścią startGuards; test podaje plan w całości „zrobiony”, żeby sprawdzać S3 niezależnie od stanu docs/55 */
+  const plan = '| ID | Zadanie | Rola | Model | Czas | Po | Stan | Data | Dowód |\n|---|---|---|---|---|---|---|---|---|\n| Z-00 | x | 08 | sonnet | 1 h | — | zrobione | 2026-11-28 | abc1234 |\n';
+  const ok = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': OK }, plan } }); assert.deepEqual([ok.errors, ok.warnings], [[], []]);
+  const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK }, plan } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/);
 });
 
 test('pliki ustawień mają znany kształt (trademark-check.json, config.json → wersjaWydania); start-wyjatki.json usunięty razem z warunkiem 709/709 (ZM-02, ZM-06, 02.11.2026)', () => {

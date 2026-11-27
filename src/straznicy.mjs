@@ -1,9 +1,10 @@
-// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw, S4 wersja danych, S6 reguła indeksowania ćwiczeń (ZM-06), S8 start indeksowania. Czyste funkcje: dane → { errors, warnings }.
+// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw, S4 wersja danych, S6 reguła indeksowania ćwiczeń (ZM-06, od 27.11.2026 P-1), S8 start indeksowania, S11 plan startu (docs/55). Czyste funkcje: dane → { errors, warnings }.
 // Zasada wspólna: przy config.indeksowanie=true każde naruszenie przerywa build (błąd); przy false to tylko ostrzeżenie — strona przed startem z wersją 1.1 ma być budowalna,
 // ale nie może zostać upubliczniona (włączenie indeksowania) z lukami. Bez zapytań sieciowych (sprawdzenie wersji w App Store po ID to osobny krok wydania, nie test).
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROOT } from './lib.mjs';
+import { parsePlan, checkPlanStartu } from './plan-startu.mjs';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const TAG = /^v(\d+\.\d+\.\d+)(?:-[0-9A-Za-z.]+)?$/;
@@ -63,12 +64,18 @@ export function checkIndexingStart({ indexing, from }) {
   return { errors, warnings: [] };
 }
 const optional = rel => existsSync(join(ROOT, rel)) ? JSON.parse(readFileSync(join(ROOT, rel), 'utf8')) : {};
-/** Strażniki przed budowaniem stron (S3, S4, S8): `data` per język, `langs` budowane języki. Pliki ustawień czytane stąd, chyba że podane (test). S6 działa na zbudowanych stronach (build.mjs). */
+/** S11 plan startu (Z-00): docs/55-plan-startu.md — przy indeksowanie=true wszystkie zadania etapów 0–6 „zrobione” z datą i dowodem; błędy formatu zawsze błędem. */
+export function checkPlan({ text, indexing }) {
+  const p = parsePlan(text), c = checkPlanStartu({ rows: p.rows, indexing });
+  return { errors: [...p.errors, ...c.errors], warnings: c.warnings };
+}
+const optionalText = rel => existsSync(join(ROOT, rel)) ? readFileSync(join(ROOT, rel), 'utf8') : '';
+/** Strażniki przed budowaniem stron (S3, S4, S8, S11): `data` per język, `langs` budowane języki. Pliki ustawień czytane stąd, chyba że podane (test). S6 działa na zbudowanych stronach (build.mjs). */
 export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
   const indexing = !!cfg.indeksowanie;
   const checked = files.trademark ?? optional('trademark-check.json').nazwy;
   const names = langs.flatMap(l => data[l].exercises.map(e => e.name));
   const parts = [checkTrademarks({ names, checked, indexing }), checkVersion({ manifestVersion: manifest.app.version, releaseVersion: cfg.wersjaWydania, pinRef: pin.ref, indexing }),
-    checkIndexingStart({ indexing, from: cfg.indeksowanieOd })];
+    checkIndexingStart({ indexing, from: cfg.indeksowanieOd }), checkPlan({ text: files.plan ?? optionalText('docs/55-plan-startu.md'), indexing })];
   return { errors: parts.flatMap(p => p.errors), warnings: parts.flatMap(p => p.warnings) };
 }
