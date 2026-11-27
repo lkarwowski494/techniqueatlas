@@ -9,9 +9,12 @@ import { exercisePage } from '../src/pages.mjs';
 import { readJson, CACHE } from '../src/lib.mjs';
 import { buildOnce, requireData, distFiles, tmpDist, BEZ_STARTU } from './pomoc.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
+import { effectiveSlugs } from '../src/slugi.mjs';
 
 requireData();
-const atlas = l => JSON.parse(readFileSync(join(CACHE, `dane/atlas-${l}.json`), 'utf8'));
+/* adresy jak w buildzie: surowy slug z eksportu + nadpisania ze slug-overrides.json (zamrożone adresy; od 27.11.2026, tag 1.1.1, 14 nadpisań) */
+const surowe = l => JSON.parse(readFileSync(join(CACHE, `dane/atlas-${l}.json`), 'utf8')), NADPISANIA = readJson('slug-overrides.json').nadpisania, EFF = effectiveSlugs(surowe('en').exercises, NADPISANIA).slugs;
+const atlas = l => { const d = surowe(l); return { ...d, exercises: d.exercises.map(e => ({ ...e, slug: EFF.get(e.id) ?? e.slug })) }; };
 const EN = atlas('en'), PL = atlas('pl');
 const read = (out, f) => readFileSync(join(out, f), 'utf8');
 const robots = html => html.match(/<meta name="robots" content="([^"]*)">/)?.[1] ?? null;

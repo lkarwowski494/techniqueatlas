@@ -1,6 +1,6 @@
 # Pomiar startowy: dane z tagu v1.1.1-b1042 (Z-02)
 
-Data pomiaru: 2026-11-27 · PIN.json → `lkarwowski494/trening`, ref `v1.1.1-b1042`, commit `d9382dbe5dde91e8b746d14193ed332ab889df62` · `manifest.app.version` = 1.1.1 · `config.json → wersjaWydania` = "1.1.1".
+Data pomiaru: 2026-11-27 · PIN.json → `lkarwowski494/trening`, ref `v1.1.1-b1042`, commit `d9382db` (pełny skrót w PIN.json) · `manifest.app.version` = 1.1.1 · `config.json → wersjaWydania` = "1.1.1".
 Metoda: `npm run dane`, potem odczyt `.cache/dane/atlas-pl.json` i `atlas-en.json` (pola `figure`, `pelna`, `cues.scope`, `cues.missing`). Liczby takie same w pl i en.
 
 | Wielkość | Wartość | Plan (27.11) |
