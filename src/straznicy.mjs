@@ -37,11 +37,11 @@ export function checkVersion({ manifestVersion, releaseVersion = '', pinRef = ''
   return { errors, warnings };
 }
 
-/** S6 warunek indeksowania (ZM-06, decyzja właściciela 02.11.2026, bramka E1 wariant A; zastępuje „figura v2 dla 709/709”, ZM-02): do indeksu idzie tylko ćwiczenie z pełną kartą
- *  (`pelna === true` z eksportu aplikacji, F-20) i własnymi wskazówkami kompletnymi w języku strony. Sprawdza ZBUDOWANE strony, niezależnie od reguły w pages.mjs: strona ćwiczenia jest
- *  indeksowana, gdy ma flagę `indexable` ALBO jej HTML nie ma `noindex` w meta robots. Naruszenie przy indeksowaniu przerywa build (bez trybu pominięcia — reguła musi trzymać na każdych danych).
- *  `startCondition` (domyślnie tak): eksport bez pola `pelna` w żadnym ćwiczeniu (PIN sprzed F-20) — błąd przy indeksowaniu, ostrzeżenie bez; testy na danych sprzed wydania mogą go wyłączyć. */
-export function checkIndexingRule({ pages, data, indexing, startCondition = true }) {
+/** S6 warunek indeksowania (ZM-08, decyzja właściciela 27.11.2026, P-1 „310: wszystkie z własnym tekstem”; odwraca ZM-06 z 02.11.2026): do indeksu idzie ćwiczenie z własnymi wskazówkami
+ *  kompletnymi w języku strony (`cues.scope === 'own'`, `cues.missing` = 0); pełna karta (`pelna`, F-20) nie jest wymagana. Sprawdza ZBUDOWANE strony, niezależnie od reguły w pages.mjs:
+ *  strona ćwiczenia jest indeksowana, gdy ma flagę `indexable` ALBO jej HTML nie ma `noindex` w meta robots. Naruszenie przy indeksowaniu przerywa build (bez trybu pominięcia —
+ *  reguła musi trzymać na każdych danych). */
+export function checkIndexingRule({ pages, data, indexing }) {
   const errors = [], warnings = [], bad = [];
   const robots = html => /<meta name="robots" content="([^"]*)">/.exec(html ?? '')?.[1] ?? '';
   let indexed = 0;
@@ -50,11 +50,9 @@ export function checkIndexingRule({ pages, data, indexing, startCondition = true
     if (!p.indexable && /(^|,)\s*noindex\s*(,|$)/.test(robots(p.html))) continue;
     indexed++;
     const ex = data[p.lang]?.exercises.find(e => e.slug === p.slug);
-    if (!(ex && ex.pelna === true && ex.cues?.scope === 'own' && !ex.cues.missing)) bad.push(`${p.lang}/${p.slug}`);
+    if (!(ex && ex.cues?.scope === 'own' && !ex.cues.missing)) bad.push(`${p.lang}/${p.slug}`);
   }
-  if (bad.length) verdict(indexing, errors, warnings, `S6 warunek indeksowania: ${bad.length} stron ćwiczeń indeksowanych bez pełnej karty (pelna === true) i własnych wskazówek (${sample(bad)})`);
-  const all = Object.values(data).flatMap(d => d.exercises);
-  if (startCondition && all.length && !all.some(e => Object.prototype.hasOwnProperty.call(e, 'pelna'))) verdict(indexing, errors, warnings, 'S6 warunek indeksowania: eksport bez pola „pelna” (PIN sprzed F-20) — żadne ćwiczenie nie trafi do indeksu; przepnij PIN na commit aplikacji z polem');
+  if (bad.length) verdict(indexing, errors, warnings, `S6 warunek indeksowania: ${bad.length} stron ćwiczeń indeksowanych bez własnych wskazówek kompletnych w języku (${sample(bad)})`);
   return { errors, warnings, info: `indeksowane ćwiczenia: ${indexed - bad.length}` };
 }
 

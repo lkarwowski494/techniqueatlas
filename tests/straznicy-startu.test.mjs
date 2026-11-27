@@ -1,4 +1,4 @@
-// Strażnicy warunków startu (docs/54 pkt 12): S3 znaki towarowe, S4 wersja, S6 reguła indeksowania (ZM-06: pełna karta i własne wskazówki). Przy indeksowanie=true naruszenie przerywa build, przy false jest ostrzeżeniem. Bez sieci.
+// Strażnicy warunków startu (docs/54 pkt 12): S3 znaki towarowe, S4 wersja, S6 reguła indeksowania (ZM-08, P-1: własne wskazówki kompletne w języku, bez wymogu pełnej karty). Przy indeksowanie=true naruszenie przerywa build, przy false jest ostrzeżeniem. Bez sieci.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { checkTrademarks, checkVersion, checkIndexingRule, checkIndexingStart, startGuards } from '../src/straznicy.mjs';
 import { build } from '../src/build.mjs';
 import { readJson, ROOT } from '../src/lib.mjs';
-import { requireData, tmpDist, bezPelna, tylkoPelna } from './pomoc.mjs';
+import { requireData, tmpDist } from './pomoc.mjs';
 
 const OK = { status: 'sprawdzone', data: '2026-10-26' };
 
@@ -31,35 +31,31 @@ test('S4: wersja danych = wersja wydania; puste wydanie, rozjazd wersji, ref nie
   const off = checkVersion({ ...ok, manifestVersion: '1.0.0', pinRef: 'main', indexing: false }); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
   assert.deepEqual(checkVersion({ ...ok, pinRef: 'main', indexing: false }), { errors: [], warnings: [] }); /* ref ma znaczenie dopiero przy publikacji */
 });
-/* S6 (ZM-06, decyzja właściciela 02.11.2026, bramka E1 wariant A): do indeksu tylko ćwiczenie z `pelna === true` z eksportu (F-20) i własnymi wskazówkami kompletnymi w języku.
-   Strażnik czyta zbudowane strony niezależnie od reguły w pages.mjs (flaga `indexable` ORAZ meta robots w HTML). Brak pola = noindex (fail-closed). */
+/* S6 (ZM-08, decyzja właściciela 27.11.2026, P-1; odwraca ZM-06): do indeksu tylko ćwiczenie z własnymi wskazówkami kompletnymi w języku (`cues.scope === 'own'`, `missing` = 0); pełna karta (`pelna`) nie jest wymagana.
+   Strażnik czyta zbudowane strony niezależnie od reguły w pages.mjs (flaga `indexable` ORAZ meta robots w HTML). */
 const exPage = (lang, slug, indexable, robots = indexable ? '' : 'noindex,follow') => ({ kind: 'exercise', lang, slug, indexable, file: `${lang}/exercises/${slug}/index.html`, html: robots ? `<meta name="robots" content="${robots}">` : '<title>x</title>' });
 const OWN = { scope: 'own', missing: 0 };
-test('S6 (02.11.2026): ćwiczenie indeksowane musi mieć pelna === true i własne wskazówki kompletne w języku — inaczej błąd przy indeksowaniu (próbka + liczba)', () => {
-  const data = { pl: { exercises: [{ id: 'A', slug: 'a', pelna: true, cues: OWN }, { id: 'B', slug: 'b', pelna: false, cues: OWN }, { id: 'C', slug: 'c', cues: OWN }, { id: 'D', slug: 'd', pelna: true, cues: { scope: 'none' } }, { id: 'E', slug: 'e', pelna: true, cues: { scope: 'own', missing: 2 } }, { id: 'F', slug: 'f', pelna: 'true', cues: OWN }] } };
-  const ok = checkIndexingRule({ pages: [exPage('pl', 'a', true), ...'bcdef'.split('').map(s => exPage('pl', s, false))], data, indexing: true });
-  assert.deepEqual(ok.errors, []); assert.match(ok.info, /indeksowane ćwiczenia: 1/);
-  for (const s of 'bcdef') {
+test('S6 (27.11.2026, P-1): ćwiczenie indeksowane musi mieć własne wskazówki kompletne w języku; pełna karta (pelna) nie ma znaczenia — inaczej błąd przy indeksowaniu (próbka + liczba)', () => {
+  const data = { pl: { exercises: [{ id: 'A', slug: 'a', pelna: true, cues: OWN }, { id: 'B', slug: 'b', pelna: false, cues: OWN }, { id: 'C', slug: 'c', cues: OWN }, { id: 'D', slug: 'd', pelna: true, cues: { scope: 'none' } }, { id: 'E', slug: 'e', pelna: true, cues: { scope: 'own', missing: 2 } }, { id: 'F', slug: 'f', pelna: true, cues: { scope: 'general' } }] } };
+  const ok = checkIndexingRule({ pages: ['a', 'b', 'c'].map(s => exPage('pl', s, true)).concat('def'.split('').map(s => exPage('pl', s, false))), data, indexing: true });
+  assert.deepEqual(ok.errors, []); assert.match(ok.info, /indeksowane ćwiczenia: 3/);
+  for (const s of 'def') {
     const r = checkIndexingRule({ pages: [exPage('pl', s, true)], data, indexing: true });
     assert.equal(r.errors.length, 1, s); assert.match(r.errors[0], /S6 warunek indeksowania/); assert.match(r.errors[0], new RegExp(`pl/${s}`));
   }
 });
 test('S6 (02.11.2026): strażnik nie ufa fladze — strona bez noindex w HTML liczy się jako indeksowana; strona ćwiczenia spoza danych to błąd', () => {
-  const data = { pl: { exercises: [{ id: 'B', slug: 'b', pelna: false, cues: OWN }] } };
+  const data = { pl: { exercises: [{ id: 'B', slug: 'b', pelna: true, cues: { scope: 'general' } }] } };
   assert.equal(checkIndexingRule({ pages: [exPage('pl', 'b', false, '')], data, indexing: true }).errors.length, 1); /* flaga false, ale HTML bez robots */
   assert.equal(checkIndexingRule({ pages: [exPage('pl', 'b', false, 'index,follow')], data, indexing: true }).errors.length, 1);
   assert.deepEqual(checkIndexingRule({ pages: [exPage('pl', 'b', false, 'noindex,follow')], data, indexing: true }).errors, []);
   assert.match(checkIndexingRule({ pages: [exPage('pl', 'zz', true)], data, indexing: true }).errors.join(), /pl\/zz/);
   assert.deepEqual(checkIndexingRule({ pages: [{ kind: 'list', lang: 'pl', indexable: true, html: '' }], data, indexing: true }).errors, []); /* tylko strony ćwiczeń */
 });
-test('S6 (02.11.2026): eksport bez pola „pelna” (PIN sprzed F-20) — przy indeksowaniu błąd startu, bez indeksowania ostrzeżenie; z polem choć w jednym ćwiczeniu — bez komunikatu', () => {
-  const bez = { pl: { exercises: [{ id: 'A', slug: 'a', cues: OWN }] } }, z = { pl: { exercises: [{ id: 'A', slug: 'a', pelna: false, cues: OWN }] } };
-  const on = checkIndexingRule({ pages: [], data: bez, indexing: true }); assert.equal(on.errors.length, 1); assert.match(on.errors[0], /bez pola „pelna”/);
-  const off = checkIndexingRule({ pages: [], data: bez, indexing: false }); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
-  assert.deepEqual(checkIndexingRule({ pages: [], data: z, indexing: true }), { errors: [], warnings: [], info: 'indeksowane ćwiczenia: 0' });
-  /* pominięcie warunków startu (testy na danych sprzed wydania) wyłącza tylko warunek „pole w eksporcie”, nie regułę stron */
-  assert.deepEqual(checkIndexingRule({ pages: [], data: bez, indexing: true, startCondition: false }).errors, []);
-  assert.equal(checkIndexingRule({ pages: [exPage('pl', 'a', true)], data: bez, indexing: true, startCondition: false }).errors.length, 1);
+test('S6 (27.11.2026, P-1): brak pola „pelna” w eksporcie nie jest naruszeniem — ćwiczenie z własnymi wskazówkami jest indeksowane, bez błędu i bez ostrzeżenia', () => {
+  const bez = { pl: { exercises: [{ id: 'A', slug: 'a', cues: OWN }] } };
+  for (const indexing of [true, false]) assert.deepEqual(checkIndexingRule({ pages: [exPage('pl', 'a', true)], data: bez, indexing }), { errors: [], warnings: [], info: 'indeksowane ćwiczenia: 1' });
+  assert.deepEqual(checkIndexingRule({ pages: [], data: bez, indexing: true }), { errors: [], warnings: [], info: 'indeksowane ćwiczenia: 0' });
 });
 test('startGuards składa strażniki S3, S4, S8, S11 z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
   const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, indeksowanieOd: '2027-01-15', wersjaWydania: '1.1.0' };
@@ -75,15 +71,17 @@ test('pliki ustawień mają znany kształt (trademark-check.json, config.json �
   assert.equal(typeof t.nazwy, 'object'); for (const [n, e] of Object.entries(t.nazwy)) { assert.ok(['sprawdzone', 'ryzyko', 'do-sprawdzenia'].includes(e.status), n); assert.match(e.data, /^\d{4}-\d{2}-\d{2}$/, n); }
   assert.equal(typeof c.wersjaWydania, 'string');
 });
-test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S6 pole „pelna”, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
+test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S11 plan startu, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
   requireData();
-  const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json (F-16 zamroził 709 adresów 02.11.2026) */
-  const w = await build({ out: tmpDist(), slugi: pusty, ...bezPelna() }); const joined = w.warnings.join('\n');
-  for (const re of [/S3 znaki towarowe/, /S4 wersja/, /S6 warunek indeksowania: eksport bez pola „pelna”/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
-  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: pusty, ...bezPelna() }), /slugs\.lock\.json jest pusty/);
+  const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json */
+  const stare = { wersjaWydania: '1.0.0' }; /* dane są z tagu 1.1.1: rozjazd wersji wywołuje S4 niezależnie od stanu config.json */
+  const w = await build({ out: tmpDist(), cfg: stare, slugi: pusty }); const joined = w.warnings.join('\n');
+  for (const re of [/S3 znaki towarowe/, /S4 wersja/, /plan startu: \d+ zadań etapów 0–6 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
+  assert.doesNotMatch(joined, /S6/); /* P-1: brak pola „pelna” ani pełnej karty nie jest naruszeniem */
+  await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
-  const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S6 */
-  await assert.rejects(build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } }, ...bezPelna() }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /S6 warunek indeksowania/.test(err.message));
+  const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S11 */
+  await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /plan startu/.test(err.message) && !/S6/.test(err.message));
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /pominStraznikowStartu/);
 });
 
@@ -94,10 +92,12 @@ test('S8 start indeksowania: indeksowanie=true bez daty indeksowanieOd to błąd
   assert.deepEqual(checkIndexingStart({ indexing: false, from: '' }), { errors: [], warnings: [] });
 });
 
-test('S6 (02.11.2026): strażnik jest podłączony do build() na zbudowanych stronach — raport liczy indeksowane ćwiczenia; testowe wejścia build() nie są w CLI', async () => {
+test('S6 (27.11.2026, P-1): strażnik jest podłączony do build() na zbudowanych stronach — raport liczy indeksowane ćwiczenia (własne wskazówki kompletne, w obu językach); testowe wejścia build() nie są w CLI', async () => {
   requireData();
-  const r = await build({ out: tmpDist(), cfg: { indeksowanie: true, jezyki: ['pl', 'en'], indeksujJezyki: ['pl', 'en'] }, pominStraznikowStartu: true, ...tylkoPelna('back-squat') });
-  assert.equal(r.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 2'); /* back-squat w pl i en (własne wskazówki kompletne) — przy odłączonym strażniku 0 */
-  const off = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en'] }, ...tylkoPelna('back-squat') }); assert.equal(off.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 0');
+  const r = await build({ out: tmpDist(), cfg: { indeksowanie: true, jezyki: ['pl', 'en'], indeksujJezyki: ['pl', 'en'] }, pominStraznikowStartu: true });
+  const man = readJson('.cache/dane/manifest.json'), own = l => JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(x => x.lang === l).file), 'utf8')).exercises.filter(e => e.cues.scope === 'own' && !e.cues.missing).length;
+  assert.equal(r.report.indeksowaneCwiczenia, `indeksowane ćwiczenia: ${own('pl') + own('en')}`); /* tag 1.1.1: 310 na język */
+  assert.equal(own('pl'), 310); assert.equal(own('en'), 310);
+  const off = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en'] } }); assert.equal(off.report.indeksowaneCwiczenia, 'indeksowane ćwiczenia: 0');
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /zmianaDanych/);
 });

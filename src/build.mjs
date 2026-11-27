@@ -54,7 +54,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
     report.languages[l] = { exercises: data[l].exercises.length, withoutFigure: data[l].exercises.filter(e => !e.figure).length, cuesWithoutText: data[l].meta.cuesWithoutText, missingFamilyLabels: [...new Set(data[l].exercises.map(e => e.family))].filter(f => !familyLabel(l, f)) };
   }
   for (const l of langs) for (const r of lockCheck.redirects) pages.push(redirectPage(ctx, l, r.from, r.to));
-  { const s6 = checkIndexingRule({ pages, data, indexing: !!cfg.indeksowanie, startCondition: !pominStraznikowStartu }); if (startErrors.length || s6.errors.length) throw new Error([...startErrors, ...s6.errors].join('\n')); warnings.push(...s6.warnings); report.indeksowaneCwiczenia = s6.info; }
+  { const s6 = checkIndexingRule({ pages, data, indexing: !!cfg.indeksowanie }); if (startErrors.length || s6.errors.length) throw new Error([...startErrors, ...s6.errors].join('\n')); warnings.push(...s6.warnings); report.indeksowaneCwiczenia = s6.info; }
   rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
   for (const p of pages) write(out, p.file, p.html);
   /* zasoby: własne pliki strony, silnik figur z aplikacji, dane figur i indeks nazw per język */

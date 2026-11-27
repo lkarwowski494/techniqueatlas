@@ -36,24 +36,26 @@ test('noindex do startu: każda strona ma robots noindex,nofollow, robots.txt NI
   assert.deepEqual(readdirSync(out).filter(f => /^sitemap/.test(f)), []);
 });
 
-test('indeksowanie włączone: S6/ZM-06 (02.11.2026) — indeksowane tylko ćwiczenia z pelna === true i własnymi wskazówkami (kompletnymi w języku), reszta noindex,follow; strony list i filtrów indeksowane; D3 — tylko języki z indeksujJezyki', async () => {
+test('indeksowanie włączone: S6/ZM-08 (27.11.2026, P-1) — indeksowane tylko ćwiczenia z własnymi wskazówkami kompletnymi w języku (pełna karta nie jest wymagana), reszta noindex,follow; strony list i filtrów indeksowane; D3 — tylko języki z indeksujJezyki', async () => {
   const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   for (const [l, d] of [['pl', PL], ['en', EN]]) for (const e of d.exercises) {
-    const r = robots(read(out, `${l}/exercises/${e.slug}/index.html`)); const ok = e.pelna === true && e.cues.scope === 'own' && !e.cues.missing;
+    const r = robots(read(out, `${l}/exercises/${e.slug}/index.html`)); const ok = e.cues.scope === 'own' && !e.cues.missing;
     assert.equal(r, ok ? null : 'noindex,follow', `${l} ${e.id} (${e.cues.scope}, pelna=${e.pelna})`);
   }
+  /* P-1: 310 stron ćwiczeń na język bez blokady (pomiar planu 27.11.2026, dane z tagu 1.1.1) — niezależnie od pola pelna */
+  for (const [l, d] of [['pl', PL], ['en', EN]]) assert.equal(d.exercises.filter(e => !robots(read(out, `${l}/exercises/${e.slug}/index.html`))).length, d.exercises.filter(e => e.cues.scope === 'own' && !e.cues.missing).length, l);
   for (const f of ['pl/index.html', 'pl/exercises/index.html', 'en/muscles/chest/index.html', 'index.html']) assert.equal(robots(read(out, f)), null, f);
   assert.equal(robots(read(out, '404.html')), 'noindex,nofollow');
   const only = await build({ out: tmpDist(), cfg: { ...INDEXING, indeksujJezyki: ['pl'] }, ...BEZ_STARTU });
   const plOk = PL.exercises.find(e => e.slug === 'back-squat'); assert.equal(robots(read(only.out, 'en/exercises/back-squat/index.html')), 'noindex,follow');
-  assert.equal(robots(read(only.out, 'pl/exercises/back-squat/index.html')), plOk.pelna === true && plOk.cues.scope === 'own' && !plOk.cues.missing ? null : 'noindex,follow');
+  assert.equal(robots(read(only.out, 'pl/exercises/back-squat/index.html')), plOk.cues.scope === 'own' && !plOk.cues.missing ? null : 'noindex,follow');
   assert.ok(!existsSync(join(only.out, 'sitemap-en.xml')) && existsSync(join(only.out, 'sitemap-pl.xml')));
 });
-test('S6/ZM-06 (02.11.2026): reguła sama zdejmuje noindex, gdy ćwiczenie ma pełną kartę i własne wskazówki; brak pola „pelna” albo inna wartość niż true = noindex,follow (fail-closed); bez własnych wskazówek pełna karta nie wystarcza', async () => {
+test('S6/ZM-08 (27.11.2026, P-1): reguła sama zdejmuje noindex, gdy ćwiczenie ma własne wskazówki kompletne w języku — pole „pelna” (brak, false, dowolna wartość) nie ma znaczenia; bez własnych wskazówek pełna karta nie wystarcza', async () => {
   const { ctx } = await buildOnce('idx', INDEXING, BEZ_STARTU);
   const own = ctx.data.en.exercises.find(e => e.cues.scope === 'own' && !e.cues.missing), general = ctx.data.en.exercises.find(e => e.cues.scope !== 'own' || e.cues.missing); assert.ok(own && general);
   const page = ex => exercisePage(ctx, 'en', ex), bez = { ...own }; delete bez.pelna;
-  for (const [ex, want] of [[bez, false], [{ ...own, pelna: false }, false], [{ ...own, pelna: 'true' }, false], [{ ...own, pelna: 1 }, false], [{ ...own, pelna: true }, true], [{ ...general, pelna: true }, false]]) {
+  for (const [ex, want] of [[bez, true], [{ ...own, pelna: false }, true], [{ ...own, pelna: 'true' }, true], [{ ...own, pelna: 1 }, true], [{ ...own, pelna: true }, true], [{ ...general, pelna: true }, false], [{ ...own, cues: { ...own.cues, missing: 1 } }, false]]) {
     const p = page(ex); assert.equal(p.indexable, want, `pelna=${JSON.stringify(ex.pelna)} scope=${ex.cues.scope}`); assert.equal(robots(p.html), want ? null : 'noindex,follow');
   }
   const off = await buildOnce(); assert.equal(robots(exercisePage(off.ctx, 'en', { ...own, pelna: true }).html), 'noindex,nofollow'); /* globalny wyłącznik ma pierwszeństwo */

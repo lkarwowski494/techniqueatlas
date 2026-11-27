@@ -30,9 +30,5 @@ const memo = new Map();
 export function buildOnce(name = 'domyslny', cfg = {}, opts = {}) { requireData(); if (!memo.has(name)) memo.set(name, build({ out: tmpDist(), cfg, ...opts })); return memo.get(name); }
 /** Opcje dla testów, które włączają indeksowanie na danych sprzed wydania: bez warunków startu S3/S4/S6 i zamrożenia adresów (mają własne testy), reszta bez zmian. */
 export const BEZ_STARTU = { pominStraznikowStartu: true };
-/** Dane z polem `pelna: true` dla podanych slugów (we wszystkich językach) — dopóki PIN wskazuje eksport bez pola (F-20), testy indeksowanych stron ćwiczeń (hreflang, mapy) podstawiają je jawnie. */
+/** Dane z polem `pelna: true` dla podanych slugów (we wszystkich językach). Od ZM-08 (P-1) pole nie wpływa na indeksowanie; helper zostaje w testach, które go już używają. */
 export const zPelna = (...slugs) => ({ zmianaDanych: data => Object.fromEntries(Object.entries(data).map(([l, d]) => [l, { ...d, exercises: d.exercises.map(e => slugs.includes(e.slug) ? { ...e, pelna: true } : e) }])) });
-/** Eksport bez pola `pelna` (jak PIN sprzed F-20): test ostrzeżenia/błędu S6 o braku pola nie zależy od tego, co mają aktualne dane. */
-export const bezPelna = () => ({ zmianaDanych: data => Object.fromEntries(Object.entries(data).map(([l, d]) => [l, { ...d, exercises: d.exercises.map(({ pelna, ...e }) => e) }])) });
-/** Dane, w których tylko podane slugi mają `pelna: true` (reszta false) — liczba indeksowanych stron nie zależy od stanu eksportu. */
-export const tylkoPelna = (...slugs) => ({ zmianaDanych: data => Object.fromEntries(Object.entries(data).map(([l, d]) => [l, { ...d, exercises: d.exercises.map(e => ({ ...e, pelna: slugs.includes(e.slug) })) }])) });

@@ -191,9 +191,9 @@ ${alts}
 <p class="drobne">${esc(ui.disclaimer)}</p>`;
   const group = { name: L.groups[ex.group], path: paths.muscle(lang, GROUP_ID[ex.group]) };
   const crumbs = [...crumbBase(ctx, lang), { name: site.library, path: paths.list(lang) }, group, { name: ex.name, path: file, lang: lang === 'pl' ? '' : 'en' }];
-  /* S6/ZM-06 (02.11.2026, bramka E1 wariant A): do indeksu tylko ćwiczenia z pełną kartą (`pelna === true` z eksportu aplikacji, F-20) i własnymi wskazówkami kompletnymi w tym języku (D1);
-     reszta noindex,follow. Brak pola albo inna wartość niż true = noindex (fail-closed). Reguła sama zdejmuje noindex, gdy ćwiczenie spełni oba warunki. Strażnik S6 sprawdza wynik niezależnie. */
-  const own = ex.pelna === true && ex.cues.scope === 'own' && !ex.cues.missing;
+  /* S6/ZM-08 (27.11.2026, P-1; odwraca ZM-06): do indeksu ćwiczenia z własnymi wskazówkami kompletnymi w tym języku (D1), bez wymogu pełnej karty (`pelna` nie ma znaczenia);
+     reszta noindex,follow. Reguła sama zdejmuje noindex, gdy ćwiczenie spełni warunek. Strażnik S6 sprawdza wynik niezależnie. */
+  const own = ex.cues.scope === 'own' && !ex.cues.missing;
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
   return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: `${ex.name} — ${site.siteName}`, description: `${ex.name}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
     alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs }, body) };

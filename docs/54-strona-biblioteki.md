@@ -391,6 +391,7 @@ Przy 709 ćwiczeniach i 35 językach jest 24 815 stron ćwiczeń, a do tego stro
   - `manifest.appVersion` równa się wersji w App Store — sprawdzane publicznym wyszukiwaniem po ID, [DO WYJAŚNIENIA, badacz: czy ta usługa jest stabilna];
   - zdania o funkcjach tylko z listy funkcji wydania.
 - **S5 liczby:** szablony nie zawierają liczb wpisanych na sztywno. Wszystkie liczby (ćwiczenia, języki, zamienniki) pochodzą z eksportu (test szuka cyfr w szablonach, z listą wyjątków z powodem).
+- **S6 — zmienione 27.11.2026 (ZM-08, P-1; odwraca ZM-06):** do indeksu idą ćwiczenia z własnymi wskazówkami kompletnymi w języku, bez wymogu pełnej karty (`pelna`); strażnik „eksport bez pola pelna” usunięty. Poniższy opis to stan do 27.11.2026.
 - **S6 warunek indeksowania (zmienione 02.11.2026, ZM-02, ZM-06):** do indeksu idzie tylko ćwiczenie z pełną kartą **i** własnymi wskazówkami (warunek `own` z `src/pages.mjs` zostaje, dochodzi pole „pełna” z eksportu, F-20); pozostałe `noindex,follow` albo niepublikowane. **Stan 02.11.2026: kod strony zrobiony** (gałąź `claude/s6-pelna`): reguła w `src/pages.mjs` (`exercisePage`), strażnik `checkIndexingRule` w `src/straznicy.mjs` czyta zbudowane strony niezależnie od reguły; testy w `tests/straznicy-startu.test.mjs` i `tests/build.test.mjs`. Otwarte: pole `pelna` w eksporcie aplikacji (F-20) i przepięcie PIN. Poprzednio: „każde ćwiczenie ma gotową rodzinę v2 (709/709) albo build pierwszej publikacji jest przerwany.”
 - **S7 SEO:**
   - hreflang wzajemny i kompletny, kody z dozwolonej listy;
