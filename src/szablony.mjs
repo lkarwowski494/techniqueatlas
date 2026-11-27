@@ -58,7 +58,8 @@ export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false,
   const warianty = [...dopiski.map(k => fill(t.tytulCwiczenia, { nazwa, dopisek: k })), nazwa];
 
   /* Opis: zdania z danych w kolejności ważności; zdanie, które powtarza słowo tytułu albo przekracza limit, wypada (bierze się następne). */
-  const c = e.cues, cue = (k, i) => wlasne(e) && c[k]?.[i] ? { zrodlo: `cues.${k}.${i}`, tekst: c[k][i] } : null;
+  const c = e.cues, cue = (k, i) => wlasne(e) && c[k]?.[i] ? { zrodlo: `cues.${k}.${i}`, tekst: k === 'mistakes' ? fill(t.blad, { zdanie: c[k][i] }) : c[k][i] } : null;
+  /* zdanie z listy błędów zawsze w ramce „Częsty błąd: …” (06-tresci-001): w opisie meta nie ma nagłówka sekcji, a bez ramki zdanie czyta się jak zalecenie */
   const sprzet = e.requires.length ? { zrodlo: 'requires', tekst: fill(t.sprzet, { lista: sprzetLista(d, t, e) }) } : null;
   const miesnie = zdanieMiesni(d, t, e);
   const wszystkie = k => (wlasne(e) ? c[k] ?? [] : []).map((_, i) => cue(k, i));
