@@ -1,5 +1,5 @@
 // Plan startu (Z-00, docs/55-plan-startu.md): wymuszone odhaczanie zadań. (a) format tabeli; (b) „zrobione” wymaga daty i dowodu; (c) nie „zrobione”, gdy zadanie z kolumny „Po” nie jest;
-// (d) przy indeksowanie=true wszystkie zadania etapów 0–5 „zrobione” albo „odpada”, inaczej błąd startu (build stop); przy false tylko ostrzeżenie. Bez sieci.
+// (d) przy indeksowanie=true wszystkie zadania etapów 0–5 „zrobione” albo „odpada” oraz Z-61 (zgoda właściciela) „zrobione”, inaczej błąd startu (build stop); przy false tylko ostrzeżenie. Bez sieci.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -38,14 +38,15 @@ test('zależności: „zrobione” nie może mieć w „Po” zadania niezrobion
   assert.deepEqual(r([DONE('Z-00'), DONE('Z-02', 'Z-00')]).errors, []);
   assert.deepEqual(r([row('Z-00', '—', 'w toku'), row('Z-02', 'Z-00')]).errors, []); /* niezrobione zadania nie są sprawdzane */
 });
-test('start: indeksowanie=true wymaga wszystkich zadań etapów 0–5 „zrobione” albo „odpada” (błąd); bez indeksowania ostrzeżenie; etap 6 (Z-6x, robione po włączeniu Google) i 7 nie blokują', () => {
+test('start: indeksowanie=true wymaga wszystkich zadań etapów 0–5 „zrobione” albo „odpada” (błąd); bez indeksowania ostrzeżenie; etap 6 (Z-62…Z-65, po włączeniu Google) i 7 nie blokują, ale Z-61 (zgoda właściciela) musi być „zrobione”', () => {
   const rows = [DONE('Z-00'), row('Z-02', 'Z-00', 'w toku'), row('Z-52'), row('Z-60'), row('Z-65'), row('Z-70')];
   const p = parsePlan(plan(...rows)).rows;
   const on = checkPlanStartu({ rows: p, indexing: true }), off = checkPlanStartu({ rows: p, indexing: false });
-  assert.equal(on.errors.length, 1); assert.match(on.errors[0], /plan startu: 2 zadań etapów 0–5 niezrobionych \(Z-02, Z-52\)/); assert.deepEqual(on.warnings, []);
-  assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
-  const all = parsePlan(plan(DONE('Z-00'), DONE('Z-02', 'Z-00'), row('Z-60'), row('Z-65'), row('Z-70'))).rows;
-  assert.deepEqual(checkPlanStartu({ rows: all, indexing: true }), { errors: [], warnings: [] }); /* Z-60…Z-65 otwarte: włączenie Google nie blokuje samo siebie */
+  assert.equal(on.errors.length, 2); assert.match(on.errors[0], /plan startu: 2 zadań etapów 0–5 niezrobionych \(Z-02, Z-52\)/); assert.match(on.errors[1], /Z-61.*zgod/); assert.deepEqual(on.warnings, []);
+  assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 2); /* etapy 0–5 i brak zgody Z-61 */
+  const zgoda = [DONE('Z-60'), row('Z-61', 'Z-60', 'zrobione', '2026-11-28', 'zgoda właściciela 28.11.2026: „Włączamy Google.”'), row('Z-65'), row('Z-70')];
+  const all = parsePlan(plan(DONE('Z-00'), DONE('Z-02', 'Z-00'), ...zgoda)).rows;
+  assert.deepEqual(checkPlanStartu({ rows: all, indexing: true }), { errors: [], warnings: [] }); /* Z-62…Z-65 otwarte: włączenie Google nie blokuje samo siebie, ale zgoda właściciela (Z-61) jest wymagana */
   assert.match(checkPlanStartu({ rows: [], indexing: true }).errors.join(), /pusty/);
 });
 test('stan „odpada” (decyzja właściciela, np. ZM-20): dozwolony; wymaga daty i powodu; liczy się jak załatwione dla S11 i dla „Po” następników; zadanie „odpada” nie sprawdza własnego „Po”', () => {
@@ -56,11 +57,25 @@ test('stan „odpada” (decyzja właściciela, np. ZM-20): dozwolony; wymaga da
   assert.deepEqual(r([row('Z-07', '—', 'w toku'), od('Z-08', 'Z-07'), DONE('Z-41', 'Z-08')]).errors, []); /* „odpada” z niezrobionym „Po” i następnik „zrobione” po „odpada” */
   assert.deepEqual(r([od('Z-08'), od('Z-28', 'Z-08, Z-25')], true).errors.filter(e => /niezrobionych/.test(e)), []);
 });
+test('S11 punkt 1: „odpada” wymaga w Dowodzie identyfikatora decyzji (ZM-nn albo KO-nn); dowolny tekst nie przechodzi', () => {
+  const r = dowod => checkPlanStartu({ rows: parsePlan(plan(row('Z-08', '—', 'odpada', '2026-11-27', dowod))).rows, indexing: false }).errors.join();
+  assert.match(r('x'), /Z-08.*odpada.*identyfikator/); assert.match(r('nie robimy'), /Z-08.*identyfikator/); assert.match(r('ZM-x'), /identyfikator/);
+  assert.equal(r('ZM-20 (decyzja właściciela)'), ''); assert.equal(r('wg KO-131'), '');
+});
+test('S11 punkt 2: indeksowanie=true wymaga Z-61 (zgoda właściciela) „zrobione” z cytatem słów właściciela w Dowodzie; bez indeksowania tylko ostrzeżenie', () => {
+  const baza = [DONE('Z-00'), DONE('Z-60', 'Z-00')];
+  const z = (...r) => parsePlan(plan(...baza, ...r)).rows, on = rows => checkPlanStartu({ rows, indexing: true }), off = rows => checkPlanStartu({ rows, indexing: false });
+  assert.match(on(z(row('Z-61', 'Z-60'))).errors.join(), /Z-61.*zgod/); assert.deepEqual(off(z(row('Z-61', 'Z-60'))).errors, []); assert.match(off(z(row('Z-61', 'Z-60'))).warnings.join(), /Z-61.*zgod/);
+  assert.match(on(z(row('Z-61', 'Z-60', 'w toku'))).errors.join(), /Z-61.*zgod/);
+  assert.match(on(z(row('Z-61', 'Z-60', 'zrobione', '2026-11-28', 'zgoda'))).errors.join(), /Z-61.*cytat/);
+  assert.deepEqual(on(z(row('Z-61', 'Z-60', 'zrobione', '2026-11-28', 'właściciel 28.11.2026: „Włączamy Google.”'))).errors, []);
+  assert.match(on(parsePlan(plan(...baza)).rows).errors.join(), /Z-61/); /* wiersza Z-61 brak w planie: też błąd */
+});
 test('startGuards składa S11 plan startu (przekazane pliki mają pierwszeństwo); build() je dostaje przez startGuards', () => {
   const base = { cfg: { indeksowanie: true, wersjaWydania: '1.1.1', indeksowanieOd: '2026-12-01' }, pin: { ref: 'v1.1.1-b1' }, manifest: { app: { version: '1.1.1' } }, data: { pl: { exercises: [{ name: 'A' }] } }, langs: ['pl'] };
   const tm = { 'A': { status: 'sprawdzone', data: '2026-11-28' } };
-  const ok = startGuards({ ...base, files: { trademark: tm, plan: plan(DONE('Z-00')) } }); assert.deepEqual(ok.errors, []);
-  const bad = startGuards({ ...base, files: { trademark: tm, plan: plan(row('Z-00')) } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /plan startu/);
+  const ok = startGuards({ ...base, files: { trademark: tm, plan: plan(DONE('Z-00'), DONE('Z-60', 'Z-00'), row('Z-61', 'Z-60', 'zrobione', '2026-11-28', 'właściciel: „Tak.”')) } }); assert.deepEqual(ok.errors, []);
+  const bad = startGuards({ ...base, files: { trademark: tm, plan: plan(row('Z-00')) } }); assert.equal(bad.errors.length, 2); assert.match(bad.errors.join(), /plan startu: 2 zadań|plan startu.*Z-61/);
 });
 test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”, zadania Z-00…Z-65 obecne, „w toku” zgodnie z poleceniem koordynatora, Z-08 i Z-28 „odpada” (ZM-20), Z-41 bez zależności od Z-28, S11 z progiem etapu 5', () => {
   const md = readFileSync(join(ROOT, 'docs/55-plan-startu.md'), 'utf8'), { rows, errors } = parsePlan(md);
@@ -75,7 +90,10 @@ test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”
   for (const r of rows.filter(x => odpada.includes(x.id))) { assert.equal(r.data, '2026-11-27', r.id); assert.match(r.dowod, /ZM-20/, r.id); }
   assert.deepEqual(rows.find(r => r.id === 'Z-41').po, ['Z-40']);
   /* włączenie Google (Z-60) nie blokuje samo siebie: gdy etapy 0–5 są zrobione albo odpadły, a Z-60…Z-65 otwarte, S11 przy indeksowanie=true przechodzi */
-  const gotowe = rows.map(r => etap(r.id) <= 5 && r.stan !== 'odpada' ? { ...r, stan: 'zrobione', data: '2026-11-28', dowod: 'abc1234', po: [] } : r);
-  assert.deepEqual(checkPlanStartu({ rows: gotowe, indexing: true }).errors, []);
-  assert.equal(gotowe.filter(r => etap(r.id) === 6 && r.stan !== 'otwarte').length, 0);
+  const zrobione = r => ({ ...r, stan: 'zrobione', data: '2026-11-28', dowod: 'abc1234', po: [] });
+  const gotowe = rows.map(r => etap(r.id) <= 5 && r.stan !== 'odpada' ? zrobione(r) : r);
+  assert.match(checkPlanStartu({ rows: gotowe, indexing: true }).errors.join(), /Z-61/); /* etapy 0–5 mało: potrzebna zgoda właściciela */
+  const zZgoda = gotowe.map(r => r.id === 'Z-60' ? zrobione(r) : r.id === 'Z-61' ? { ...zrobione(r), dowod: 'właściciel 28.11.2026: „Włączamy Google.”' } : r);
+  assert.deepEqual(checkPlanStartu({ rows: zZgoda, indexing: true }).errors, []); /* Z-60 i Z-61 odhaczone w commicie PR z indeksowanie=true; Z-62…Z-65 otwarte nie blokują */
+  assert.equal(zZgoda.filter(r => ['Z-62', 'Z-63', 'Z-64', 'Z-65'].includes(r.id) && r.stan !== 'otwarte').length, 0);
 });

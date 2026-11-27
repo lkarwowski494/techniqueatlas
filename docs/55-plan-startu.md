@@ -3,9 +3,9 @@
 Stan: 2026-11-27 · Źródło: plan zatwierdzony przez właściciela 27.11.2026 (repo trening, `docs/koordynacja/plan-strony-2026-11-27.md`, gałąź `koordynacja`; decyzje P-1…P-12 zapisane w `docs/54-strona-biblioteki.md`, ZM-08…ZM-19).
 
 Jak to działa:
-- Kolumna **Stan**: `otwarte` / `w toku` / `zrobione` / `odpada` (wycofane decyzją właściciela; wymaga Daty i powodu w Dowodzie, np. ID decyzji). Stan zmienia koordynator w tym samym commicie co scalenie pracy zadania.
+- Kolumna **Stan**: `otwarte` / `w toku` / `zrobione` / `odpada` (wycofane decyzją właściciela; wymaga Daty i identyfikatora decyzji w Dowodzie: `ZM-nn` albo `KO-nn`; test odrzuca wolny tekst). Stan zmienia koordynator w tym samym commicie co scalenie pracy zadania.
 - `zrobione` wymaga **Daty** (RRRR-MM-DD) i **Dowodu** (SHA commitu, przebieg `tests.yml`, ścieżka pliku). Zadanie nie może być `zrobione`, gdy zadanie z kolumny **Po** nie jest.
-- Test `tests/plan-startu.test.mjs` pilnuje formatu i tych reguł. Strażnik S11 (`src/plan-startu.mjs`, `src/straznicy.mjs`): przy `config.json → indeksowanie=true` build zatrzymuje się, dopóki wszystkie zadania etapów 0–5 (Z-00…Z-52) nie są `zrobione` albo `odpada`. Etap 6 (Z-60…Z-65) robi się po włączeniu indeksowania (Z-60 je włącza), więc nie blokuje. Bez indeksowania to ostrzeżenie.
+- Test `tests/plan-startu.test.mjs` pilnuje formatu i tych reguł. Strażnik S11 (`src/plan-startu.mjs`, `src/straznicy.mjs`): przy `config.json → indeksowanie=true` build zatrzymuje się, dopóki wszystkie zadania etapów 0–5 (Z-00…Z-52) nie są `zrobione` albo `odpada`. Etap 6 (Z-60…Z-65) robi się po włączeniu indeksowania (Z-60 je włącza), więc sam nie blokuje, **z jednym wyjątkiem: Z-61 (zgoda właściciela na włączenie Google) musi być `zrobione`**, z cytatem słów właściciela w Dowodzie („…”). Kolejność: PR Z-60 zmienia `indeksowanie` na true; w commicie tego PR koordynator odhacza Z-60 i Z-61 (data zgody, cytat), więc build z indeksowaniem bez zgody właściciela pada; Z-62…Z-65 zostają `otwarte` do publikacji. Bez indeksowania to ostrzeżenie.
 - Etap 7 (Z-70…Z-75, po starcie) idzie do `docs/zobowiazania.md` repo trening, nie do tej tabeli.
 - Dzień rozpoczęcia pracy nad zadaniem w kolumnie Data przy `w toku` jest informacją, nie dowodem.
 
@@ -43,7 +43,7 @@ Jak to działa:
 | Z-50 | WŁAŚCICIEL: zgoda na pierwszą publikację (z blokadą Google) | właściciel | — | 2 min | Z-41, Z-05 | otwarte | — | — |
 | Z-51 | Ręczne pages.yml; przebieg dowodowy na żywej stronie | 10-wydanie (build) | sonnet/medium | 1 h + pages.yml | Z-50 | otwarte | — | — |
 | Z-52 | Niezależne sprawdzenie żywej strony (20 stron × pl/en) | 07-jakosc (reaudit) | opus/high | 1 h | Z-51 | otwarte | — | — |
-| Z-60 | Jeden PR: indeksowanie true, indeksowanieOd, push w pages.yml; test planu wymaga etapów 0–5 | 08-programista (build) | sonnet/medium | 0,5 h | Z-52 | otwarte | — | — |
+| Z-60 | Jeden PR: indeksowanie true, indeksowanieOd, push w pages.yml; test planu wymaga etapów 0–5 i Z-61; Z-60 i Z-61 odhaczane w commicie tego PR | 08-programista (build) | sonnet/medium | 0,5 h | Z-52 | otwarte | — | — |
 | Z-61 | WŁAŚCICIEL: zgoda na włączenie Google | właściciel | — | 2 min | Z-60 | otwarte | — | — |
 | Z-62 | Publikacja + sprawdzenie na żywo | 10-wydanie (build) | sonnet/medium | 1 h | Z-61 | otwarte | — | — |
 | Z-63 | WŁAŚCICIEL: weryfikacja domeny i mapy w Google i drugiej wyszukiwarce | właściciel | — | 20 min | Z-62 | otwarte | — | — |
