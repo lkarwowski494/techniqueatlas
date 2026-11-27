@@ -9,6 +9,7 @@ To nie jest porada prawna. Kwestie niejednoznaczne mają **[DO KONSULTACJI]** z 
 | `regulamin.pl.md`, `regulamin.en.md` | regulamin strony (usługa drogą elektroniczną) |
 | `licencja-tresci.pl.md`, `licencja-tresci.en.md` | licencja treści (druk dla trenerów, docs/54:188) |
 | `dowody.md` | tabela twierdzenie → dowód (`plik:linia`, strona z cytatem) i lista `[DO KONSULTACJI]` |
+| `do-wlasciciela.md` | pytania do właściciela prostym językiem (PP, R, L, nieprzeczytane ustawy) z opcjami i rekomendacją; decyzje Z-23 do weta |
 
 ## Wstawki (wypełnia Z-33 z ustawień, nie z tego repo)
 

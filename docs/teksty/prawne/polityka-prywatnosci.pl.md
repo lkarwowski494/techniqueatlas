@@ -5,7 +5,7 @@ Obowiązuje od {{dataObowiazywania}} · wersja 1
 
 ## W skrócie
 
-Strona Technique Atlas nie zbiera Twoich danych osobowych. Nie ma kont, formularzy ani reklam. Nie używa ciasteczek, pamięci przeglądarki, analityki ani narzędzi śledzących. <!-- D-1, D-2, D-3, D-4 -->
+Sama strona Technique Atlas nie zbiera Twoich danych osobowych. Nie ma kont, formularzy ani reklam. Nie używa ciasteczek, pamięci przeglądarki, analityki ani narzędzi śledzących. <!-- D-1, D-2, D-3, D-4 -->
 Strona ładuje tylko własne pliki. Wyszukiwarka i filtry działają w Twojej przeglądarce. <!-- D-5, D-6 -->
 Stronę udostępnia serwis hostingowy, który przy każdej wizycie zapisuje adres IP w swoich logach ze względów bezpieczeństwa (szczegóły niżej). <!-- D-8 -->
 Pytania: {{kontakt}}.
@@ -19,7 +19,7 @@ Stronę prowadzi {{administrator}}, kontakt: {{kontakt}}.
 
 - Twoja przeglądarka pobiera pliki strony (HTML, CSS, skrypty, rysunki ćwiczeń) z serwera hostingu. Strona nie pobiera nic z innych serwisów: czcionek, skryptów, obrazów ani wtyczek. <!-- D-5 -->
 - Serwer hostingu zapisuje Twój adres IP przy każdej wizycie i przechowuje go ze względów bezpieczeństwa. Logi prowadzi dostawca hostingu, firma z siedzibą w USA, na własnych zasadach. Dane mogą być więc przetwarzane w USA. Dostawca deklaruje przestrzeganie Ram ochrony danych UE–USA (decyzja Komisji Europejskiej o odpowiednim stopniu ochrony). <!-- D-8, D-10; [DO KONSULTACJI] PP-3: nazwa dostawcy na stronie albo kategoria (art. 13 ust. 1 lit. e RODO: „odbiorcach lub kategoriach odbiorców”) -->
-- Nie widzimy tych logów i nie dostajemy z nich raportów. <!-- D-9 [DO USTALENIA] -->
+- Strona nie ma własnych statystyk odwiedzin. <!-- D-9 → D-4 (06-tresci-004: zdanie „nie widzimy tych logów” bez dowodu zastąpione zdaniem z dowodem D-4) -->
 
 ## Wyszukiwarka, filtry i rysunki
 
@@ -41,7 +41,7 @@ Strona nie ma formularza kontaktowego. <!-- D-3 --> Jeśli napiszesz e-mail na {
 ## Twoje prawa
 
 Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, sprzeciwu i przenoszenia. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych.
-Ponieważ strona nie zbiera danych osobowych, nie mamy danych, które moglibyśmy udostępnić albo usunąć, poza e-mailami, które nam wyślesz. W sprawie logów hostingu napisz do nas, a wskażemy dostawcę i sposób kontaktu z nim.
+Ponieważ sama strona nie zbiera danych osobowych, nie mamy danych, które moglibyśmy udostępnić albo usunąć, poza e-mailami, które nam wyślesz. W sprawie logów hostingu napisz do nas, a wskażemy dostawcę i sposób kontaktu z nim.
 <!-- [DO KONSULTACJI] PP-2: czy odesłanie do hostingu w sprawie logów jest wystarczające (zależy od PP-1). -->
 
 ## Czy musisz podać dane
@@ -54,7 +54,7 @@ Nie podejmujemy decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu, 
 
 ## Dzieci
 
-Strona nie zbiera danych od nikogo, także od dzieci.
+Sama strona nie zbiera danych od nikogo, także od dzieci.
 
 ## Zmiany
 
