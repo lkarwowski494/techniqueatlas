@@ -10,12 +10,13 @@
 /* --- podstawa --- */
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;font-size:var(--fs-baza)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kroj-tresc);font-size:var(--fs-tresc);line-height:var(--lh-tresc);overflow-wrap:anywhere;font-kerning:normal}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kroj-tresc);font-size:var(--fs-tresc);line-height:var(--lh-tresc);overflow-wrap:break-word;font-kerning:normal}
 img,svg{display:block}
 a{color:var(--accent);text-underline-offset:.18em}
 h1,h2,.marka-n,.wymiar-v,.tabliczka dt,.wykaz thead th,summary{font-family:var(--kroj-tytul)}
 h1{font-weight:var(--w-tytul);font-size:var(--fs-h1);line-height:var(--lh-tytul);margin:var(--o1) 0 0}
 h2{font-weight:var(--w-tytul);font-size:var(--fs-h2);line-height:1.2;margin:var(--o6) 0 var(--o2)}
+h1,h2{overflow-wrap:break-word;hyphens:auto} /* tytuły: przeniesienie zamiast łamania w dowolnym miejscu (duży tekst, wąski ekran) */
 ul{padding-left:var(--o5)}li{margin:var(--o1) 0}
 .n,.wymiar-v,.wynik strong{font-variant-numeric:tabular-nums}
 .skip{position:absolute;left:-999px}.skip:focus{left:var(--o2);top:var(--o2);padding:var(--o2);z-index:9;background:var(--sheet);color:var(--ink)}
@@ -24,10 +25,11 @@ ul{padding-left:var(--o5)}li{margin:var(--o1) 0}
 button,select,input,summary{font:inherit;min-height:var(--cel)}
 button,summary{cursor:pointer}
 
-/* --- nagłówek: znak + nazwa, menu w linii od 760 px; niżej „Menu” jako <details> (bez JS) --- */
+/* --- nagłówek: znak + nazwa, menu w linii od 960 px; niżej „Menu” jako <details> (bez JS) --- */
 .glowka{position:relative;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink)}
 .glowka-w,.tresc,.stopka-w{max-width:var(--szer-max);margin:0 auto;padding-left:var(--o4);padding-right:var(--o4)}
-.glowka-w{display:flex;align-items:center;gap:var(--o4);padding-top:var(--o1);padding-bottom:var(--o1)}
+.glowka-w{display:flex;flex-wrap:wrap;align-items:center;gap:var(--o1) var(--o4);padding-top:var(--o1);padding-bottom:var(--o1)}
+.marka-n,.marka-p{white-space:nowrap}
 .marka{display:flex;align-items:center;gap:var(--o2);text-decoration:none;color:inherit;min-height:var(--cel)}
 .znak{width:30px;height:30px;flex:none;color:var(--accent)}
 .marka-t{display:flex;flex-direction:column;line-height:1.15}
@@ -35,22 +37,25 @@ button,summary{cursor:pointer}
 .menu ul{list-style:none;margin:0;padding:0;display:flex;gap:0 var(--o5);flex-wrap:wrap}.menu li{margin:0}
 .menu a{display:inline-flex;align-items:center;min-height:var(--cel);text-decoration:none;color:var(--ink)}
 .menu a:hover,.menu a[aria-current]{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.35em}
-.glowka-n{margin-left:auto;display:flex;gap:var(--o2);align-items:center}
-.jezyk,.menu-d>summary{display:inline-flex;align-items:center;justify-content:center;min-width:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);text-decoration:none}
+.glowka-n{margin-left:auto;display:flex;flex-wrap:wrap;gap:var(--o2);align-items:center}
+.jezyk,.menu-d>summary{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-width:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);text-decoration:none}
 .menu-d>summary{list-style:none;font-weight:var(--w-pomocniczy);gap:var(--o2)}.menu-d>summary::-webkit-details-marker{display:none}
 .menu-d>summary::after{content:"";width:.5em;height:.5em;border-right:2px solid;border-bottom:2px solid;transform:translateY(-.15em) rotate(45deg)}
 .menu-d[open]>summary::after{transform:translateY(.1em) rotate(-135deg)}
 .menu-d[open]>summary{background:var(--ink);color:var(--sheet)}
+@media (max-width:359px){.menu-d>summary{padding:0 var(--o2)}.menu-d>summary::after{display:none}}
 .menu-d nav{position:absolute;left:0;right:0;top:100%;z-index:5;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink)}
 .menu-d ul{display:block;padding:var(--o2) var(--o4)}.menu-d li{border-top:var(--linia) solid var(--hair)}.menu-d li:first-child{border-top:0}
 .menu-d a{display:flex;width:100%}
-@media (min-width:760px){.menu-d{display:none}}
-@media (max-width:759px){.menu-w{display:none}.glowka-w{gap:var(--o2)}.marka-n{font-size:1rem}.marka-p{font-size:.75rem}.znak{width:26px;height:26px}}
+@media (min-width:960px){.menu-d{display:none}}
+@media (max-width:959px){.menu-w{display:none}}
+@media (max-width:759px){.glowka-w{gap:var(--o1) var(--o2)}.marka-n{font-size:1rem}.marka-p{font-size:.75rem}.znak{width:26px;height:26px}}
 
 /* --- arkusz: podwójna ramka (linia gruba tuszem + cienka zewnętrzna), jedyny „kontener” strony --- */
 .tresc{padding-top:var(--o4);padding-bottom:var(--o8)}
 .arkusz{background:var(--sheet);border:var(--linia-gruba) solid var(--ink);outline:var(--linia) solid var(--rule);outline-offset:var(--ramka-odstep);padding:var(--o4) var(--o5) var(--o6);margin:6px}
-@media (max-width:759px){.arkusz{margin:3px;padding:var(--o3) var(--o3) var(--o5);outline-offset:3px}.tresc{padding-left:var(--o2);padding-right:var(--o2)}}
+/* telefon: wcięcia w px, żeby przy dużym tekście nie zjadały szerokości wiersza */
+@media (max-width:759px){.arkusz{margin:3px;padding:12px 12px 20px;outline-offset:3px}.tresc{padding-left:6px;padding-right:6px}.fig{padding:8px}.uk-p ul,.miesnie ul,.ramka-l{padding-left:20px}.ramka{padding:0 10px 10px}.ramka h2{margin:0 -10px var(--o3);padding:var(--o2) 10px}}
 
 /* --- okruszki --- */
 .okruszki{font-size:.9rem;color:var(--muted)}
@@ -61,13 +66,16 @@ button,summary{cursor:pointer}
 
 /* --- głowa arkusza: nazwa (PL + EN) i tabliczka rysunkowa (klasyfikacja jako linki) --- */
 .arkusz-g{display:flex;flex-wrap:wrap;gap:var(--o4) var(--o8);align-items:flex-end;justify-content:space-between;border-bottom:var(--linia-gruba) solid var(--ink);padding-bottom:var(--o4)}
-.nazwa{margin:0}.nazwa-pl,.nazwa-en{display:block}
+.arkusz-g{container-type:inline-size;container-name:glowa}
+.nazwa{margin:0;min-width:0;max-width:100%}.nazwa-pl,.nazwa-en{display:block}
 .nazwa-en{font-family:var(--kroj-tytul);font-weight:var(--w-pomocniczy);font-size:.5em;color:var(--muted);margin-top:var(--o1)}
 .tabliczka{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:var(--linia-gruba) solid var(--ink);margin:0;min-width:min(100%,26rem)}
 .tabliczka div{padding:var(--o1) var(--o2) var(--o1) var(--o3);border-right:var(--linia) solid var(--rule);border-bottom:var(--linia) solid var(--rule)}
 .tabliczka div:nth-child(2n){border-right:0}.tabliczka div:nth-last-child(-n+2){border-bottom:0}
 .tabliczka dt{font-size:var(--fs-etykieta);color:var(--muted);font-weight:var(--w-pomocniczy)}.tabliczka dd{margin:0;font-weight:var(--w-pomocniczy)}
 .tabliczka a{display:inline-block;min-height:var(--o6)}
+/* wąsko albo duży tekst: jedna kolumna (rem w zapytaniu kontenera rośnie z rozmiarem tekstu) */
+@container glowa (max-width:18rem){.tabliczka{grid-template-columns:minmax(0,1fr);min-width:0;width:100%}.tabliczka div{border-right:0}.tabliczka div:nth-last-child(2){border-bottom:var(--linia) solid var(--rule)}}
 
 /* --- krótka odpowiedź (Z-22) i nota (wskazówki ogólne) --- */
 .odp{margin:var(--o5) 0;padding:var(--o3) var(--o4);background:var(--accent-bg);border-left:4px solid var(--accent);max-width:var(--szer-tekst)}
@@ -76,7 +84,7 @@ button,summary{cursor:pointer}
 .nota strong{font-weight:var(--w-pomocniczy)}
 
 /* --- układ strony ćwiczenia: komputer — figura i mięśnie w lewej kolumnie, tekst w prawej; telefon — figura, technika, mięśnie --- */
-.uk{display:grid;gap:0 var(--o12)}
+.uk{display:grid;grid-template-columns:minmax(0,1fr);gap:0 var(--o12)}
 @media (min-width:960px){
   .uk3{grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:auto 1fr;grid-template-areas:"f p" "m p";align-items:start}
   .uk3>.fig{grid-area:f}.uk3>.uk-p{grid-area:p}.uk3>.miesnie{grid-area:m}
@@ -88,7 +96,7 @@ button,summary{cursor:pointer}
 
 /* --- figura: rysunek schematyczny + linia wymiarowa tempa + sterowanie --- */
 .fig{margin:var(--o2) 0 0;border:var(--linia) solid var(--rule);padding:var(--o4)}
-.pozycje{display:flex;gap:var(--o4)}.poz{flex:1 1 0;min-width:0}.poz svg{width:100%;max-height:18rem}
+.pozycje{display:flex;flex-wrap:wrap;gap:var(--o4)}.poz{flex:1 1 7rem;min-width:0}.poz svg{width:100%;max-height:18rem}
 .podpis{font-size:var(--fs-drobne);color:var(--muted);margin:var(--o1) 0 0;text-align:center}
 .fig>.podpis{text-align:left}
 .fig-ster{display:flex;flex-wrap:wrap;gap:var(--o2);align-items:center;margin:var(--o3) 0}
@@ -112,6 +120,8 @@ button,summary{cursor:pointer}
   .wymiar-s.waski .jedn{display:none}
   .ma-waskie .wymiar-sek{display:block}
 }
+/* bardzo wąsko (duży tekst): wartości nie mieszczą się nad odcinkami — zostaje linia z proporcjami i pełna sekwencja tekstem */
+@container (max-width:15rem){.wymiar-v,.wymiar-n{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.wymiar-s{min-height:var(--o3)}.wymiar-sek{display:block}}
 
 /* --- przyciski, pola, wybór --- */
 .przycisk,.fig-ster button,.wyczysc{display:inline-flex;align-items:center;min-height:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);font-size:.95rem;text-align:left;text-decoration:none}
@@ -142,7 +152,7 @@ a .nazwa-pl{text-decoration:underline}a .nazwa-en,.wiersze .nazwa-en,.wykaz .naz
 .grupa-l{list-style:none;padding:0;margin:0;columns:2 12rem;column-gap:var(--o8)}
 .grupa-l li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair)}
 .grupa-l a{display:flex;justify-content:space-between;gap:var(--o4);padding:var(--o2) 0;text-decoration:none;min-height:var(--cel);align-items:center}
-.grupa-l .n{color:var(--muted);font-size:.9rem}
+.grupa-l .n{color:var(--muted);font-size:.9rem}.grupa-l a>span:first-child{min-width:0}
 #ruch .grupa-l{columns:4 13rem}
 .wiersze{list-style:none;padding:0;margin:0;columns:2 22rem;column-gap:var(--o8)}
 .wiersze li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}

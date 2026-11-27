@@ -77,9 +77,10 @@ ${lang === 'pl' ? `<p class="wsparcie">${esc(WSPARCIE)}</p>` : ''}
 `; };
 const crumbs = (lang, items) => `<nav class="okruszki" aria-label="${esc(UI[lang].breadcrumbs)}"><ol>${items.map(([t, h, l]) => `<li>${h ? `<a href="${h}">${esc(t)}</a>` : `<span aria-current="page"${l ? ` lang="${l}"` : ''}>${esc(t)}</span>`}</li>`).join('')}</ol></nav>`;
 const ulist = a => `<ul>${a.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
-const sec = (ms, lang) => new Intl.NumberFormat(lang, { style: 'unit', unit: 'second', unitDisplay: 'short' }).format(ms / 1000).replace(/\s/g, '\u00a0'); /* liczba i jednostka w języku strony, twarda spacja */
+const JEDN = { pl: 's', ru: 'с' }; /* symbol sekundy: tekst tłumaczenia (Z-31, słownik terminów); Intl daje formy niespójne między językami (pl „sek.”, en „2.5s”) */
 const num = (ms, lang) => new Intl.NumberFormat(lang).format(ms / 1000);
-const jedn = (ms, lang) => sec(ms, lang).replace(num(ms, lang), ''); /* np. „\u00a0s”, „\u00a0с” */
+const jedn = (ms, lang) => `\u00a0${JEDN[lang]}`; /* twarda spacja: liczba i jednostka w jednym wierszu */
+const sec = (ms, lang) => num(ms, lang) + jedn(ms, lang);
 
 function exercise(lang, slug, file, title) {
   const d = DATA[lang], L = d.labels, ui = UI[lang], t = T[lang], by = new Map(d.exercises.map(e => [e.slug, e])), E = by.get(slug);

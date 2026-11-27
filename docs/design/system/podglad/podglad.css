@@ -1,0 +1,4 @@
+/* Z-12 · obrazek podglądu (og:image, primaryImageOfPage): 1200×630, motyw jasny, bez tekstu (A9). Arkusz z podwójną ramką i dwie pozycje figury z aplikacji. */
+.og{margin:0;width:1200px;height:630px;background:var(--bg);display:flex;align-items:center;justify-content:center;color-scheme:light}
+.og-arkusz{width:1120px;height:550px;background:var(--sheet);border:3px solid var(--ink);outline:2px solid var(--rule);outline-offset:10px;display:flex;align-items:center;justify-content:center;gap:48px;padding:40px 64px}
+.og-arkusz svg{height:100%;width:auto;flex:0 1 auto}

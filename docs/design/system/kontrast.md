@@ -1,0 +1,73 @@
+# Kontrast tokenów systemu „Arkusz” (wygenerowane: node docs/design/system/kontrast.mjs)
+
+Wzór: WCAG 2.2, luminancja względna sRGB. Progi: 4,5 tekst (1.4.3 AA); 3 elementy interfejsu, fokus i grafika z informacją (1.4.11). Tekst ≥ 24 px albo ≥ 19 px pogrubiony mógłby mieć 3:1 — system tego nie wykorzystuje (każdy tekst ≥ 4,5).
+Separator wierszy jest dekoracyjny (wiersz ma też odstęp i tekst), więc nie ma progu; przy „Zwiększ kontrast” rośnie do ≥ 3:1.
+
+| Wariant | Para | Kolory | Kontrast | Próg | Spełnia |
+|---|---|---|---|---|---|
+| jasny | tekst treści na arkuszu | `--ink` `#18202b` na `--sheet` `#ffffff` | 16.40 | 4.5 | tak |
+| jasny | tekst drugorzędny (nazwa EN, podpisy, etykiety) | `--muted` `#4f5b6b` na `--sheet` `#ffffff` | 6.91 | 4.5 | tak |
+| jasny | link na arkuszu | `--accent` `#1d4ea3` na `--sheet` `#ffffff` | 7.86 | 4.5 | tak |
+| jasny | tekst krótkiej odpowiedzi | `--ink` `#18202b` na `--accent-bg` `#e8eef9` | 14.08 | 4.5 | tak |
+| jasny | link na tle odpowiedzi | `--accent` `#1d4ea3` na `--accent-bg` `#e8eef9` | 6.75 | 4.5 | tak |
+| jasny | tekst na tle strony (skip, poza arkuszem) | `--ink` `#18202b` na `--bg` `#eef1f4` | 14.47 | 4.5 | tak |
+| jasny | tekst drugorzędny na tle strony | `--muted` `#4f5b6b` na `--bg` `#eef1f4` | 6.09 | 4.5 | tak |
+| jasny | przycisk wciśnięty: tekst arkusza na tuszu | `--sheet` `#ffffff` na `--ink` `#18202b` | 16.40 | 4.5 | tak |
+| jasny | linia wymiarowa (grafika z danymi) | `--accent` `#1d4ea3` na `--sheet` `#ffffff` | 7.86 | 3 | tak |
+| jasny | fokus na arkuszu | `--accent` `#1d4ea3` na `--sheet` `#ffffff` | 7.86 | 3 | tak |
+| jasny | fokus na tle strony | `--accent` `#1d4ea3` na `--bg` `#eef1f4` | 6.94 | 3 | tak |
+| jasny | ramka pól (input, select) | `--rule` `#6b7686` na `--sheet` `#ffffff` | 4.60 | 3 | tak |
+| jasny | ramka przycisków częstych błędów | `--kontrola` `#5d6878` na `--sheet` `#ffffff` | 5.65 | 3 | tak |
+| jasny | ramka arkusza i przycisków | `--ink` `#18202b` na `--sheet` `#ffffff` | 16.40 | 3 | tak |
+| jasny | ramka zewnętrzna arkusza na tle | `--rule` `#6b7686` na `--bg` `#eef1f4` | 4.06 | 3 | tak |
+| jasny | separator wierszy (dekoracyjny) | `--hair` `#c9d0d9` na `--sheet` `#ffffff` | 1.55 | — | informacyjnie |
+| ciemny | tekst treści na arkuszu | `--ink` `#e3e9f0` na `--sheet` `#121922` | 14.46 | 4.5 | tak |
+| ciemny | tekst drugorzędny (nazwa EN, podpisy, etykiety) | `--muted` `#a3afbf` na `--sheet` `#121922` | 7.95 | 4.5 | tak |
+| ciemny | link na arkuszu | `--accent` `#8fb3ff` na `--sheet` `#121922` | 8.47 | 4.5 | tak |
+| ciemny | tekst krótkiej odpowiedzi | `--ink` `#e3e9f0` na `--accent-bg` `#1a2639` | 12.45 | 4.5 | tak |
+| ciemny | link na tle odpowiedzi | `--accent` `#8fb3ff` na `--accent-bg` `#1a2639` | 7.29 | 4.5 | tak |
+| ciemny | tekst na tle strony (skip, poza arkuszem) | `--ink` `#e3e9f0` na `--bg` `#0b1016` | 15.62 | 4.5 | tak |
+| ciemny | tekst drugorzędny na tle strony | `--muted` `#a3afbf` na `--bg` `#0b1016` | 8.58 | 4.5 | tak |
+| ciemny | przycisk wciśnięty: tekst arkusza na tuszu | `--sheet` `#121922` na `--ink` `#e3e9f0` | 14.46 | 4.5 | tak |
+| ciemny | linia wymiarowa (grafika z danymi) | `--accent` `#8fb3ff` na `--sheet` `#121922` | 8.47 | 3 | tak |
+| ciemny | fokus na arkuszu | `--accent` `#8fb3ff` na `--sheet` `#121922` | 8.47 | 3 | tak |
+| ciemny | fokus na tle strony | `--accent` `#8fb3ff` na `--bg` `#0b1016` | 9.15 | 3 | tak |
+| ciemny | ramka pól (input, select) | `--rule` `#7d8a9c` na `--sheet` `#121922` | 5.04 | 3 | tak |
+| ciemny | ramka przycisków częstych błędów | `--kontrola` `#7d8a9c` na `--sheet` `#121922` | 5.04 | 3 | tak |
+| ciemny | ramka arkusza i przycisków | `--ink` `#e3e9f0` na `--sheet` `#121922` | 14.46 | 3 | tak |
+| ciemny | ramka zewnętrzna arkusza na tle | `--rule` `#7d8a9c` na `--bg` `#0b1016` | 5.44 | 3 | tak |
+| ciemny | separator wierszy (dekoracyjny) | `--hair` `#2c3644` na `--sheet` `#121922` | 1.45 | — | informacyjnie |
+| jasny + zwiększony kontrast | tekst treści na arkuszu | `--ink` `#0b1118` na `--sheet` `#ffffff` | 18.96 | 4.5 | tak |
+| jasny + zwiększony kontrast | tekst drugorzędny (nazwa EN, podpisy, etykiety) | `--muted` `#333d4a` na `--sheet` `#ffffff` | 11.01 | 4.5 | tak |
+| jasny + zwiększony kontrast | link na arkuszu | `--accent` `#123b80` na `--sheet` `#ffffff` | 10.70 | 4.5 | tak |
+| jasny + zwiększony kontrast | tekst krótkiej odpowiedzi | `--ink` `#0b1118` na `--accent-bg` `#e8eef9` | 16.28 | 4.5 | tak |
+| jasny + zwiększony kontrast | link na tle odpowiedzi | `--accent` `#123b80` na `--accent-bg` `#e8eef9` | 9.18 | 4.5 | tak |
+| jasny + zwiększony kontrast | tekst na tle strony (skip, poza arkuszem) | `--ink` `#0b1118` na `--bg` `#eef1f4` | 16.72 | 4.5 | tak |
+| jasny + zwiększony kontrast | tekst drugorzędny na tle strony | `--muted` `#333d4a` na `--bg` `#eef1f4` | 9.71 | 4.5 | tak |
+| jasny + zwiększony kontrast | przycisk wciśnięty: tekst arkusza na tuszu | `--sheet` `#ffffff` na `--ink` `#0b1118` | 18.96 | 4.5 | tak |
+| jasny + zwiększony kontrast | linia wymiarowa (grafika z danymi) | `--accent` `#123b80` na `--sheet` `#ffffff` | 10.70 | 3 | tak |
+| jasny + zwiększony kontrast | fokus na arkuszu | `--accent` `#123b80` na `--sheet` `#ffffff` | 10.70 | 3 | tak |
+| jasny + zwiększony kontrast | fokus na tle strony | `--accent` `#123b80` na `--bg` `#eef1f4` | 9.44 | 3 | tak |
+| jasny + zwiększony kontrast | ramka pól (input, select) | `--rule` `#3f4957` na `--sheet` `#ffffff` | 9.12 | 3 | tak |
+| jasny + zwiększony kontrast | ramka przycisków częstych błędów | `--kontrola` `#3f4957` na `--sheet` `#ffffff` | 9.12 | 3 | tak |
+| jasny + zwiększony kontrast | ramka arkusza i przycisków | `--ink` `#0b1118` na `--sheet` `#ffffff` | 18.96 | 3 | tak |
+| jasny + zwiększony kontrast | ramka zewnętrzna arkusza na tle | `--rule` `#3f4957` na `--bg` `#eef1f4` | 8.05 | 3 | tak |
+| jasny + zwiększony kontrast | separator wierszy (dekoracyjny) | `--hair` `#6b7686` na `--sheet` `#ffffff` | 4.60 | — | informacyjnie |
+| ciemny + zwiększony kontrast | tekst treści na arkuszu | `--ink` `#f5f8fb` na `--sheet` `#0b1118` | 17.79 | 4.5 | tak |
+| ciemny + zwiększony kontrast | tekst drugorzędny (nazwa EN, podpisy, etykiety) | `--muted` `#d0d8e2` na `--sheet` `#0b1118` | 13.18 | 4.5 | tak |
+| ciemny + zwiększony kontrast | link na arkuszu | `--accent` `#b7cfff` na `--sheet` `#0b1118` | 12.08 | 4.5 | tak |
+| ciemny + zwiększony kontrast | tekst krótkiej odpowiedzi | `--ink` `#f5f8fb` na `--accent-bg` `#15233a` | 14.78 | 4.5 | tak |
+| ciemny + zwiększony kontrast | link na tle odpowiedzi | `--accent` `#b7cfff` na `--accent-bg` `#15233a` | 10.04 | 4.5 | tak |
+| ciemny + zwiększony kontrast | tekst na tle strony (skip, poza arkuszem) | `--ink` `#f5f8fb` na `--bg` `#05080c` | 18.83 | 4.5 | tak |
+| ciemny + zwiększony kontrast | tekst drugorzędny na tle strony | `--muted` `#d0d8e2` na `--bg` `#05080c` | 13.95 | 4.5 | tak |
+| ciemny + zwiększony kontrast | przycisk wciśnięty: tekst arkusza na tuszu | `--sheet` `#0b1118` na `--ink` `#f5f8fb` | 17.79 | 4.5 | tak |
+| ciemny + zwiększony kontrast | linia wymiarowa (grafika z danymi) | `--accent` `#b7cfff` na `--sheet` `#0b1118` | 12.08 | 3 | tak |
+| ciemny + zwiększony kontrast | fokus na arkuszu | `--accent` `#b7cfff` na `--sheet` `#0b1118` | 12.08 | 3 | tak |
+| ciemny + zwiększony kontrast | fokus na tle strony | `--accent` `#b7cfff` na `--bg` `#05080c` | 12.79 | 3 | tak |
+| ciemny + zwiększony kontrast | ramka pól (input, select) | `--rule` `#b0bccb` na `--sheet` `#0b1118` | 9.84 | 3 | tak |
+| ciemny + zwiększony kontrast | ramka przycisków częstych błędów | `--kontrola` `#b0bccb` na `--sheet` `#0b1118` | 9.84 | 3 | tak |
+| ciemny + zwiększony kontrast | ramka arkusza i przycisków | `--ink` `#f5f8fb` na `--sheet` `#0b1118` | 17.79 | 3 | tak |
+| ciemny + zwiększony kontrast | ramka zewnętrzna arkusza na tle | `--rule` `#b0bccb` na `--bg` `#05080c` | 10.42 | 3 | tak |
+| ciemny + zwiększony kontrast | separator wierszy (dekoracyjny) | `--hair` `#7d8a9c` na `--sheet` `#0b1118` | 5.41 | — | informacyjnie |
+
+Par poniżej progu: 0.
