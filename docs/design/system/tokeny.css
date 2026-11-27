@@ -1,0 +1,63 @@
+/* Z-12 · System „Arkusz” (kierunek A, wybór właściciela 27.11.2026) · tokeny jako zmienne CSS.
+   Jedno źródło kolorów, krojów, odstępów, linii i czasów dla assets/site.css (wdrożenie Z-31). Komponenty używają tylko tych zmiennych.
+   Motywy: jasny (domyślny), ciemny (prefers-color-scheme), zwiększony kontrast (prefers-contrast: more) w obu, wymuszone kolory systemu (forced-colors).
+   Kontrast par: kontrast.md (node docs/design/system/kontrast.mjs). Kolory figury (--f-*) i sylwetki (--mm-*) przychodzą z aplikacji i nie są tokenami strony. */
+:root{
+  color-scheme:light dark;
+  /* kolor: arkusz rysunku technicznego — szare tło stołu, biały arkusz, tusz, jeden akcent (niebieski tusz linii wymiarowej) */
+  --bg:#eef1f4;        /* stół kreślarski: tło strony poza arkuszem */
+  --sheet:#ffffff;     /* arkusz: tło treści, pól i przycisków */
+  --ink:#18202b;       /* tusz: tekst, ramka arkusza, linie główne */
+  --muted:#4f5b6b;     /* tekst drugorzędny: nazwa EN, podpisy, etykiety tabliczki */
+  --rule:#6b7686;      /* linia cienka: ramka zewnętrzna, ramki pól, podział tabliczki */
+  --hair:#c9d0d9;      /* linia pomocnicza: separatory wierszy (dekoracyjne, bez informacji) */
+  --accent:#1d4ea3;    /* akcent: linki, fokus, linia wymiarowa — jedyny kolor interfejsu */
+  --accent-bg:#e8eef9; /* tło krótkiej odpowiedzi */
+  --kontrola:#5d6878;  /* ramka przerywana przycisków częstych błędów (stan „do sprawdzenia”) */
+  --focus:var(--accent);
+
+  /* kroje: tytuły IBM Plex Sans Condensed (OFL, pliki lokalne); treść krojem systemowym */
+  --kroj-tytul:"Plex Cond",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --kroj-tresc:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --fs-baza:106.25%;                               /* 17 px przy domyślnych 16 px przeglądarki; skaluje się z ustawieniem użytkownika */
+  --fs-h1:clamp(1.9rem,1.45rem + 2.2vw,2.9rem);    /* nazwa ćwiczenia, tytuł strony */
+  --fs-h2:clamp(1.15rem,1.08rem + .35vw,1.3rem);   /* sekcje */
+  --fs-tresc:1rem;
+  --fs-drobne:.85rem;                              /* podpisy, nazwa EN w wierszach, etykiety pól */
+  --fs-etykieta:.8rem;                             /* etykiety tabliczki i nagłówki wykazu (najmniejszy tekst: 13,6 px) */
+  --fs-wymiar:1.05rem;                             /* wartości linii wymiarowej */
+  --lh-tresc:1.55;
+  --lh-tytul:1.1;
+  --w-tytul:600; --w-pomocniczy:500;               /* bez odmian cienkich (Warsztat: „avoid Ultralight, Thin, and Light”) */
+
+  /* odstępy: jednostka 4 px (.25rem), każdy odstęp jej wielokrotnością */
+  --o1:.25rem; --o2:.5rem; --o3:.75rem; --o4:1rem; --o5:1.25rem; --o6:1.5rem; --o8:2rem; --o12:3rem;
+  --szer-max:76rem;    /* szerokość arkusza */
+  --szer-tekst:44rem;  /* najdłuższy wiersz tekstu ciągłego (ok. 75 znaków) */
+  --cel:44px;          /* cel dotykowy (studio; WCAG 2.5.8 wymaga 24 px) */
+
+  /* linie i promienie: hierarchia grubości zamiast cieni; promień tylko na kontrolkach */
+  --linia-gruba:1.5px; --linia:1px; --linia-wymiar:2px; --znacznik:14px;
+  --ramka-odstep:5px;  /* podwójna ramka arkusza: odstęp linii zewnętrznej */
+  --r-0:0; --r-kontrolka:2px;
+  --fokus:3px;
+
+  /* ruch: interfejs bez animacji przejść; ruch ma tylko figura (dane) i respektuje „Ogranicz ruch” */
+  --czas-krotki:120ms;
+}
+/* Cyrylica, greka i pisma CJK: Plex Sans Condensed nie ma podstawowej cyrylicy (U+0400–045F) ani greki — tytuły krojem systemowym, bez mieszania znaków w jednym słowie */
+html:lang(ru),html:lang(uk),html:lang(bg),html:lang(sr),html:lang(el),html:lang(ja),html:lang(ko),html:lang(zh-Hant){--kroj-tytul:var(--kroj-tresc)}
+
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0b1016; --sheet:#121922; --ink:#e3e9f0; --muted:#a3afbf; --rule:#7d8a9c; --hair:#2c3644;
+  --accent:#8fb3ff; --accent-bg:#1a2639; --kontrola:#7d8a9c;
+}}
+/* zwiększony kontrast: ciemniejsze linie i tekst drugorzędny, separatory stają się widoczne (≥ 3:1), akcent mocniejszy */
+@media (prefers-contrast:more){:root{
+  --ink:#0b1118; --muted:#333d4a; --rule:#3f4957; --hair:#6b7686; --accent:#123b80; --kontrola:#3f4957; --linia:1.5px;
+}}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){:root{
+  --bg:#05080c; --sheet:#0b1118; --ink:#f5f8fb; --muted:#d0d8e2; --rule:#b0bccb; --hair:#7d8a9c;
+  --accent:#b7cfff; --accent-bg:#15233a; --kontrola:#b0bccb;
+}}
+@media (prefers-reduced-motion:reduce){:root{--czas-krotki:0ms}}
