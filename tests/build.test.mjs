@@ -106,10 +106,10 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
-  assert.match(h, /<h1 lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1>Back Squat<\/h1>/);
-  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', 'Main muscles', '>Tips<', '>What to avoid<', '>Equipment needed<', '>Substitutes<', 'medical advice']; let at = -1;
+  assert.match(h, /<h1 class="nazwa" lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1 class="nazwa">Back Squat<\/h1>/);
+  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', '>Tips<', '>What to avoid<', '>Equipment needed<', '>Substitutes<', '<p>Main muscles', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
-  for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/" lang="en">`));
+  for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/"><span class="nazwa-pl" lang="en">`));
   const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>What to avoid<|General tips/);
   const gen = EN.exercises.find(x => x.cues.scope === 'general' && x.cues.ok?.length); if (gen) assert.match(read(out, `en/exercises/${gen.slug}/index.html`), /General tips for this movement/); /* zakres „general” zniknął z eksportu (od fba531d) */
   else assert.ok(EN.exercises.every(x => x.cues.scope !== 'general'), 'brak ćwiczeń z zakresem general — nie ma czego sprawdzać');
@@ -133,7 +133,7 @@ test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyj
     const h = read(out, `en/exercises/${e.slug}/index.html`), fig = figs[e.slug], poses = h.match(/<div class="pozycje" data-poses>(.*?)<\/div><\/div>\n/s)[1];
     const uses = [...poses.matchAll(/<use href="\.\.\/\.\.\/\.\.\/assets\/poz\/([^"#]+)\.svg#(start|end)"\/>/g)].map(m => [m[1], m[2]]);
     assert.deepEqual(uses, fig.static ? [[e.slug, 'end']] : [[e.slug, 'start'], [e.slug, 'end']], e.slug);
-    if (fig.static) { single++; assert.doesNotMatch(poses, /<p class="drobne">/); } else assert.deepEqual([...poses.matchAll(/<p class="drobne">([^<]*)<\/p>/g)].map(m => m[1]), ['Starting position', 'End position'], e.slug);
+    if (fig.static) { single++; assert.doesNotMatch(poses, /<p class="podpis">/); } else assert.deepEqual([...poses.matchAll(/<p class="podpis">([^<]*)<\/p>/g)].map(m => m[1]), ['Starting position', 'End position'], e.slug);
     assert.match(poses, /<svg role="img" aria-label="Movement drawing: [^"]*"/); assert.doesNotMatch(h, /<path|<circle/); /* geometria poza HTML (budżet, wspólna dla języków) */
     assert.match(h, /<div class="widoki" data-views hidden>(<svg role="img"[^>]*data-view="[a-z]+"><g [^>]*data-g><\/g><\/svg>)+<\/div>/); assert.match(h, /data-pause/); assert.match(h, /assets\/figura-strona\.js/);
     const sheet = read(out, `assets/poz/${e.slug}.svg`); assert.equal([...sheet.matchAll(/<g id="(start|end)"/g)].map(m => m[1]).join(), fig.static ? 'end' : 'start,end'); assert.match(sheet, /var\(--f-skin/); assert.doesNotMatch(sheet, /#[0-9a-f]{6}/i);
@@ -153,7 +153,7 @@ test('sylwetka mięśni: arkusz assets/sylwetka.svg + klasy stopni partii (bez i
     assert.deepEqual(m[1].split(' ').sort(), lv.map((v, i) => v ? `s${i}-${v}` : '').filter(Boolean).sort(), e.id);
     assert.match(m[2], /<use href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.svg#front"\/>.*>(Front|Przód)<\/p>.*<use href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.svg#back"\/>.*>(Back|Tył)<\/p>/s);
     assert.match(h, /<link rel="stylesheet" href="\.\.\/\.\.\/\.\.\/assets\/sylwetka\.css">/); assert.doesNotMatch(h, /\sstyle="/);
-    if (l === 'en' && h.includes('Main muscles')) assert.ok(h.indexOf('class="sylwetki') < h.indexOf('Main muscles'), e.id); /* sylwetka przed listą mięśni */
+    if (l === 'en' && h.includes('Main muscles')) assert.ok(h.indexOf('class="sylwetki') < h.indexOf('<p>Main muscles'), e.id); /* sylwetka przed listą mięśni */
   }
   const sq = read(out, 'en/exercises/back-squat/index.html'); assert.match(sq, /class="sylwetki s5-4 s7-2 s11-2"/);
 });
@@ -164,27 +164,27 @@ test('role mięśni: sekcja pokazuje zdania o roli mięśnia dopiero, gdy ekspor
   const ex = ctx.data.en.exercises.find(e => e.slug === 'back-squat');
   const withRoles = exercisePage(ctx, 'en', { ...ex, roles: [{ id: 'quads', text: 'Straightens the knee <when> you stand up.' }, { id: 'glutes', text: 'Helps extend the hip.' }] }).html;
   assert.match(withRoles, /<ul class="role"><li><strong>quads<\/strong> — Straightens the knee &lt;when&gt; you stand up\.<\/li><li><strong>glutes<\/strong> — Helps extend the hip\.<\/li><\/ul>/);
-  assert.ok(withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"') && withRoles.indexOf('class="role"') < withRoles.indexOf('>Tips<'));
+  assert.ok(withRoles.indexOf('>Tips<') < withRoles.indexOf('Supporting muscles') && withRoles.indexOf('Supporting muscles') < withRoles.indexOf('class="role"'));
   for (const none of [undefined, []]) assert.doesNotMatch(exercisePage(ctx, 'en', { ...ex, roles: none }).html, /class="role"/);
 });
 test('lokalna wyszukiwarka (D11): indeks nazw per język ≤ 25 KB gz, działa z pliku modułu; lista A–Z działa bez JS (pełna lista w HTML, filtry ukryte do uruchomienia skryptu)', async () => {
   const { out } = await buildOnce();
   for (const l of ['pl', 'en']) { const raw = read(out, `assets/idx/${l}.js`); assert.ok(gzipSync(raw).length <= 25 * 1024); assert.equal(JSON.parse(raw.replace(/^export default /, '').replace(/;\s*$/, '')).length, EN.exercises.length); }
-  const h = read(out, 'en/exercises/index.html'); assert.equal((h.match(/<li data-muscle=/g) ?? []).length, EN.exercises.length); assert.match(h, /data-filtry hidden/); assert.match(h, /<p data-brak hidden>No exercises match these filters<\/p>/);
+  const h = read(out, 'en/exercises/index.html'); assert.equal((h.match(/<tr data-muscle=/g) ?? []).length, EN.exercises.length); assert.match(h, /data-filtry hidden/); assert.match(h, /<div class="pusto" data-pusto hidden><h2>No exercises match these filters<\/h2>/);
 });
 test('lista A–Z posortowana collatorem języka; strony filtrów zawierają dokładnie ćwiczenia o tej wartości; identyfikatory adresów pokrywają wszystkie wartości z danych', async () => {
   const { out } = await buildOnce();
   for (const [l, d] of [['pl', PL], ['en', EN]]) {
-    const names = [...read(out, `${l}/exercises/index.html`).matchAll(/<li data-muscle="[^"]*"[^>]*><a href="[^"]*"[^>]*>([^<]*)<\/a>/g)].map(m => m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'"));
+    const names = [...read(out, `${l}/exercises/index.html`).matchAll(/<tr data-muscle="[^"]*"[^>]*><th scope="row"><a href="[^"]*"[^>]*>([^<]*)<\/a>/g)].map(m => m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'"));
     const c = new Intl.Collator(l); assert.deepEqual(names, [...d.exercises.map(e => e.name)].sort((a, b) => c.compare(a, b)));
-    for (const g of new Set(d.exercises.map(e => e.group))) { assert.ok(g in GROUP_ID, g); const h = read(out, `${l}/muscles/${GROUP_ID[g]}/index.html`); assert.equal((h.match(/<li data-muscle=/g) ?? []).length, d.exercises.filter(e => e.group === g).length); }
-    for (const q of new Set(d.exercises.map(e => e.equipment))) { assert.ok(q in EQUIPMENT_ID, q); assert.equal((read(out, `${l}/equipment/${EQUIPMENT_ID[q]}/index.html`).match(/<li data-muscle=/g) ?? []).length, d.exercises.filter(e => e.equipment === q).length); }
+    for (const g of new Set(d.exercises.map(e => e.group))) { assert.ok(g in GROUP_ID, g); const h = read(out, `${l}/muscles/${GROUP_ID[g]}/index.html`); assert.equal((h.match(/<th scope="row">/g) ?? []).length, d.exercises.filter(e => e.group === g).length); }
+    for (const q of new Set(d.exercises.map(e => e.equipment))) { assert.ok(q in EQUIPMENT_ID, q); assert.equal((read(out, `${l}/equipment/${EQUIPMENT_ID[q]}/index.html`).match(/<th scope="row">/g) ?? []).length, d.exercises.filter(e => e.equipment === q).length); }
   }
-  for (const f of new Set(EN.exercises.map(e => e.family))) assert.equal((read(out, `en/movements/${familyId(f)}/index.html`).match(/<li data-muscle=/g) ?? []).length, EN.exercises.filter(e => e.family === f).length);
+  for (const f of new Set(EN.exercises.map(e => e.family))) assert.equal((read(out, `en/movements/${familyId(f)}/index.html`).match(/<th scope="row">/g) ?? []).length, EN.exercises.filter(e => e.family === f).length);
 });
 test('strona główna języka: liczba ćwiczeń z danych, wyszukiwarka, linki do wszystkich wartości filtrów, lista podstawowych = ćwiczenia nie-niszowe z eksportu; WebSite w JSON-LD', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/index.html');
-  assert.match(h, new RegExp(`${EN.exercises.length} exercises with technique notes`)); assert.match(h, /data-szukaj data-lang="en"/);
+  assert.match(h, new RegExp(`${EN.exercises.length} exercises — browse by muscle group`)); assert.match(h, /data-szukaj data-lang="en"/);
   const basics = [...h.slice(h.indexOf('Basic exercises')).matchAll(/<li><a href="exercises\/([^/]+)\/"/g)].map(m => m[1]).sort();
   assert.deepEqual(basics, EN.exercises.filter(e => !e.niche).map(e => e.slug).sort());
   for (const g of new Set(EN.exercises.map(e => e.group))) assert.ok(h.includes(`href="muscles/${GROUP_ID[g]}/"`));
