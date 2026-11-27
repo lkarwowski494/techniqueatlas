@@ -5,10 +5,10 @@
   "library": "Knihovna",
   "allExercises": "Všechny cviky",
   "countLine": {
-    "one": "{n} cvik s popisem techniky, svaly a alternativami.",
-    "few": "{n} cviky s popisem techniky, svaly a alternativami.",
-    "many": "{n} cviku s popisem techniky, svaly a alternativami.",
-    "other": "{n} cviků s popisem techniky, svaly a alternativami."
+    "one": "{n} cvik — procházejte podle svalové partie a vybavení.",
+    "few": "{n} cviky — procházejte podle svalové partie a vybavení.",
+    "many": "{n} cviku — procházejte podle svalové partie a vybavení.",
+    "other": "{n} cviků — procházejte podle svalové partie a vybavení."
   },
   "searchLabel": "Hledat cviky",
   "searchPlaceholder": "Název cviku",
@@ -34,6 +34,17 @@
   "pageNotFound": "Stránka nenalezena",
   "exercisesIn": "Cviky: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Menu",
+  "menuMain": "Hlavní menu",
+  "tempo": "Tempo opakování",
+  "tempoTotal": "celkem {t} na opakování",
+  "sec": "s",
+  "nameLabel": "Název",
+  "muscles": "Svaly",
+  "commonErrors": "Časté chyby:",
+  "emptyHint": "Změňte nebo zrušte filtry, abyste viděli cviky.",
+  "changeLanguage": "Jazyk: {nazwa}. Změnit jazyk",
+  "howTo": "Jak provést tento cvik?",
   "families": {
     "squat": "Dřepy",
     "bench_press": "Tlaky v lehu",

@@ -2,17 +2,17 @@
 // Indeks nazw danego języka (assets/idx/<język>.js) ładowany dopiero po wejściu w pole; zero połączeń poza własnymi plikami.
 const fold = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[łđøß]/g, c => ({ ł: 'l', đ: 'd', ø: 'o', ß: 'ss' })[c]).replace(/\s+/g, ' ').trim();
 
-/* lista z filtrami */
+/* lista z filtrami: wiersze wykazu (tr) chowane atrybutem hidden; przy zerze wyników tabela znika, a pojawia się stan pusty z przyciskiem wyjścia */
 const list = document.querySelector('[data-lista]');
 if (list) {
-  const bar = document.querySelector('[data-filtry]'), sel = [...bar.querySelectorAll('select')], empty = document.querySelector('[data-brak]'), clear = document.querySelector('[data-wyczysc]');
+  const bar = document.querySelector('[data-filtry]'), sel = [...bar.querySelectorAll('select')], empty = document.querySelector('[data-pusto]'), clearAll = [...document.querySelectorAll('[data-wyczysc]')], clear = bar.querySelector('[data-wyczysc]'), table = list.closest('table');
   const items = [...list.children]; bar.hidden = false;
   const apply = () => {
     const f = Object.fromEntries(sel.map(s => [s.dataset.filtr, s.value])); let n = 0;
     for (const li of items) { const ok = Object.entries(f).every(([k, v]) => !v || li.dataset[k] === v); li.hidden = !ok; if (ok) n++; }
-    empty.hidden = n > 0; clear.hidden = !Object.values(f).some(Boolean) && n > 0;
+    empty.hidden = n > 0; table.hidden = n === 0; clear.hidden = !Object.values(f).some(Boolean);
   };
-  sel.forEach(s => s.addEventListener('change', apply)); clear.addEventListener('click', () => { sel.forEach(s => { s.value = ''; }); apply(); }); apply();
+  sel.forEach(s => s.addEventListener('change', apply)); clearAll.forEach(b => b.addEventListener('click', () => { sel.forEach(s => { s.value = ''; }); apply(); })); apply();
 }
 
 /* wyszukiwarka nazw */

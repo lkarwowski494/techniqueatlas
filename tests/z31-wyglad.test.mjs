@@ -1,5 +1,5 @@
 // Z-30 → Z-31: testy akceptacyjne wyglądu „Arkusz” (docs/design/system/design-spec.md) na zbudowanej stronie pl + en. Wyrocznia: specyfikacja i pliki systemu (tokeny.css, fonty/,
-// szablony/*.html zatwierdzone przez właściciela 27.11.2026), dane eksportu (fazy ruchu, liczby) — nie kod generatora. Testy oznaczone CZEKA('Z-31') są czerwone do wdrożenia.
+// szablony/*.html zatwierdzone przez właściciela 27.11.2026), dane eksportu (fazy ruchu, liczby) — nie kod generatora. Wdrożone w Z-31: wszystkie testy zielone.
 // Strategia i lista: docs/55-strategia-testow-wdrozenia.md.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { buildOnce, requireData, distFiles, ROOT } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
-import { CZEKA, czytaj, plikiHtml, element, elementy, hrefy, rozwiaz, istnieje } from './strona-html.mjs';
+import { czytaj, plikiHtml, element, elementy, hrefy, rozwiaz, istnieje } from './strona-html.mjs';
 
 requireData();
 const { out, ctx } = await buildOnce('z31', { jezyki: ['pl', 'en'] });
@@ -18,14 +18,14 @@ const bezSpacji = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
 const PL = ctx.data.pl.exercises, EN = ctx.data.en.exercises;
 const strona = (l, slug) => czytaj(out, `${l}/exercises/${slug}/index.html`);
 
-test('Z-31 tokeny: każda deklaracja zmiennej z docs/design/system/tokeny.css (wszystkie motywy) jest w CSS zbudowanej strony z tą samą wartością', CZEKA('Z-31', 'assets/site.css bez tokenów Arkusza'), () => {
+test('Z-31 tokeny: każda deklaracja zmiennej z docs/design/system/tokeny.css (wszystkie motywy) jest w CSS zbudowanej strony z tą samą wartością', () => {
   const zrodlo = bezSpacji(readFileSync(join(DS, 'tokeny.css'), 'utf8')), strona = bezSpacji(css());
   const deklaracje = [...new Set(zrodlo.match(/--[\w-]+:[^;}]+/g))];
   assert.ok(deklaracje.length > 30, 'tokeny.css: za mało deklaracji — zmienił się format pliku?');
   assert.deepEqual(deklaracje.filter(d => !strona.includes(d)), []);
 });
 
-test('Z-31 kroje i budżet: 4 pliki IBM Plex Sans Condensed z docs/design/system/fonty są w dist bajt w bajt (budżet = suma tych plików), każdy url() z @font-face prowadzi do istniejącego pliku', CZEKA('Z-31', 'brak krojów w assets'), () => {
+test('Z-31 kroje i budżet: 4 pliki IBM Plex Sans Condensed z docs/design/system/fonty są w dist bajt w bajt (budżet = suma tych plików), każdy url() z @font-face prowadzi do istniejącego pliku', () => {
   const wzorce = readdirSync(join(DS, 'fonty')).filter(f => f.endsWith('.woff2'));
   const wDist = distFiles(join(out, 'assets')).filter(p => p.endsWith('.woff2'));
   assert.equal(wzorce.length, 4);
@@ -35,19 +35,20 @@ test('Z-31 kroje i budżet: 4 pliki IBM Plex Sans Condensed z docs/design/system
   for (const p of pliki) for (const m of readFileSync(p, 'utf8').matchAll(/url\(["']?([^"')]+\.woff2)["']?\)/g)) assert.ok(istnieje(out, rozwiaz(p.slice(out.length + 1), m[1])), `${p}: ${m[1]}`);
 });
 
-test('Z-31 kroje: tytuły krojem systemowym w 8 językach bez pokrycia znaków (ru, uk, bg, sr, el, ja, ko, zh-Hant) — selektor :lang() każdego z nich w CSS', CZEKA('Z-31', 'brak reguł :lang()'), () => {
+test('Z-31 kroje: tytuły krojem systemowym w 8 językach bez pokrycia znaków (ru, uk, bg, sr, el, ja, ko, zh-Hant) — selektor :lang() każdego z nich w CSS', () => {
   const c = css(); assert.deepEqual(['ru', 'uk', 'bg', 'sr', 'el', 'ja', 'ko', 'zh-Hant'].filter(l => !new RegExp(`:lang\\(${l}\\)`).test(c)), []);
 });
 
-test('Z-31 nagłówek: każda strona pl ma nagłówek systemu (header.glowka) z menu <details> „Menu” i nawigacją „Menu główne” (teksty §10.9)', CZEKA('Z-31', 'nagłówek bez menu'), () => {
-  const proba = [...plikiHtml(out).filter(f => f.startsWith('pl/') && !/exercises\/[^/]+\/index\.html$/.test(f)), 'pl/exercises/back-squat/index.html', 'index.html', '404.html'];
+test('Z-31 nagłówek: każda strona pl ma nagłówek systemu (header.glowka) z menu <details> „Menu” i nawigacją „Menu główne” (teksty §10.9); wybór języka i 404 mają nagłówek bez menu (szablony jezyki.html, 404.html: strony w języku domyślnym, bez nawigacji)', () => {
+  const proba = [...plikiHtml(out).filter(f => f.startsWith('pl/') && !/exercises\/[^/]+\/index\.html$/.test(f)), 'pl/exercises/back-squat/index.html'];
   const zle = proba.filter(f => {
     const h = czytaj(out, f), g = element(h, 'header', 'glowka'); return !g || !/<details class="menu-d"><summary>Menu<\/summary>/.test(g.wnetrze) || !/<nav class="menu[^"]*" aria-label="Menu główne">/.test(g.wnetrze);
   });
   assert.deepEqual(zle, []);
+  for (const f of ['index.html', '404.html']) assert.ok(element(czytaj(out, f), 'header', 'glowka'), `${f}: brak header.glowka`);
 });
 
-test('Z-31 nowe teksty interfejsu (§10.9) w 35 językach: pl ma „Menu”, „Menu główne”, „Tempo powtórzenia”, zdanie stanu pustego; każdy src/ui/<język>.json ma te same klucze co pl.json, bez pustych wartości', CZEKA('Z-31', 'src/ui bez nowych tekstów'), () => {
+test('Z-31 nowe teksty interfejsu (§10.9) w 35 językach: pl ma „Menu”, „Menu główne”, „Tempo powtórzenia”, zdanie stanu pustego; każdy src/ui/<język>.json ma te same klucze co pl.json, bez pustych wartości', () => {
   const pl = readJson('src/ui/pl.json'), wartosci = JSON.stringify(Object.values(pl));
   for (const t of ['"Menu"', '"Menu główne"', 'Tempo powtórzenia', 'Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.']) assert.ok(wartosci.includes(t), `src/ui/pl.json: brak ${t}`);
   const klucze = o => Object.keys(o).sort().join(','), pliki = readdirSync(join(ROOT, 'src/ui')).filter(f => f.endsWith('.json'));
@@ -57,7 +58,7 @@ test('Z-31 nowe teksty interfejsu (§10.9) w 35 językach: pl ma „Menu”, „
 
 /* Wyrocznia linii wymiarowej: §4 specyfikacji — fazy z czasem > 0 z eksportu, klasa t<ms/100>, opis dla czytnika z czasem łącznym (przykład z szablonu: „Tempo powtórzenia: Opuszczanie 2 s, Wstawanie 1 s, Pauza 0,5 s; razem 3,5 s na powtórzenie”). */
 const sek = ms => new Intl.NumberFormat('pl').format(ms / 1000);
-test('Z-31 linia wymiarowa tempa: każda strona pl z figurą ma role="img" z opisem faz i czasu łącznego z danych oraz odcinki .wymiar-s t<ms/100> w kolejności faz', CZEKA('Z-31', 'brak linii wymiarowej'), () => {
+test('Z-31 linia wymiarowa tempa: każda strona pl z figurą ma role="img" z opisem faz i czasu łącznego z danych oraz odcinki .wymiar-s t<ms/100> w kolejności faz', () => {
   const zle = [];
   for (const e of PL.filter(e => e.figure && ctx.figs[e.slug])) {
     const h = strona('pl', e.slug), fazy = e.figure.phases.filter(p => p.ms > 0), razem = fazy.reduce((s, p) => s + p.ms, 0);
@@ -68,7 +69,7 @@ test('Z-31 linia wymiarowa tempa: każda strona pl z figurą ma role="img" z opi
   assert.deepEqual(zle, []);
 });
 
-test('Z-31 stan bez figury (§4, §6): strona ćwiczenia bez figury nie ma linii wymiarowej ani pustego miejsca po figurze — układ .bez-fig, tabliczka zostaje (pl i en)', CZEKA('Z-31', 'brak układu bez figury'), () => {
+test('Z-31 stan bez figury (§4, §6): strona ćwiczenia bez figury nie ma linii wymiarowej ani pustego miejsca po figurze — układ .bez-fig, tabliczka zostaje (pl i en)', () => {
   const zle = [];
   for (const [l, lista] of [['pl', PL], ['en', EN]]) for (const e of lista.filter(e => !(e.figure && ctx.figs[e.slug]))) {
     const h = strona(l, e.slug); if (/class="wymiar[ "]/.test(h) || !/class="[^"]*\bbez-fig\b/.test(h) || !element(h, 'dl', 'tabliczka')) zle.push(`${l}/${e.slug}`);
@@ -76,7 +77,7 @@ test('Z-31 stan bez figury (§4, §6): strona ćwiczenia bez figury nie ma linii
   assert.deepEqual(zle, []);
 });
 
-test('Z-31 tabliczka rysunkowa: strona ćwiczenia ma dl.tabliczka z partią jako linkiem do strony tej partii (pl i en)', CZEKA('Z-31', 'brak tabliczki'), () => {
+test('Z-31 tabliczka rysunkowa: strona ćwiczenia ma dl.tabliczka z partią jako linkiem do strony tej partii (pl i en)', () => {
   const zle = [];
   for (const [l, lista] of [['pl', PL], ['en', EN]]) for (const e of lista) {
     const f = `${l}/exercises/${e.slug}/index.html`, t = element(czytaj(out, f), 'dl', 'tabliczka');
@@ -85,7 +86,7 @@ test('Z-31 tabliczka rysunkowa: strona ćwiczenia ma dl.tabliczka z partią jako
   assert.deepEqual(zle, []);
 });
 
-test('Z-31 lista (wykaz): strona „Wszystkie ćwiczenia” ma table.wykaz z jednym wierszem na ćwiczenie i ukryty stan pusty (tytuł, zdanie, przycisk wyjścia)', CZEKA('Z-31', 'lista jako ul, bez stanu pustego'), () => {
+test('Z-31 lista (wykaz): strona „Wszystkie ćwiczenia” ma table.wykaz z jednym wierszem na ćwiczenie i ukryty stan pusty (tytuł, zdanie, przycisk wyjścia)', () => {
   for (const [l, lista] of [['pl', PL], ['en', EN]]) {
     const h = czytaj(out, `${l}/exercises/index.html`), t = element(h, 'table', 'wykaz'); assert.ok(t, `${l}: brak table.wykaz`);
     assert.equal(elementy(element(t.wnetrze, 'tbody')?.wnetrze ?? '', 'tr').length, lista.length, l);
@@ -94,7 +95,7 @@ test('Z-31 lista (wykaz): strona „Wszystkie ćwiczenia” ma table.wykaz z jed
   assert.match(element(czytaj(out, 'pl/exercises/index.html'), 'div', 'pusto').wnetrze, /Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia\./);
 });
 
-test('Z-31 strona główna języka: każda partia, sprzęt i rodzaj ruchu ma licznik (span.n w linku grupy) równy liczbie ćwiczeń z eksportu', CZEKA('Z-31', 'chipy bez liczników'), () => {
+test('Z-31 strona główna języka: każda partia, sprzęt i rodzaj ruchu ma licznik (span.n w linku grupy) równy liczbie ćwiczeń z eksportu', () => {
   for (const [l, lista] of [['pl', PL], ['en', EN]]) {
     const f = `${l}/index.html`, h = czytaj(out, f), zle = [];
     for (const [rodzaj, id] of [['muscles', e => GROUP_ID[e.group]], ['equipment', e => EQUIPMENT_ID[e.equipment]], ['movements', e => familyId(e.family)]]) {
@@ -108,7 +109,7 @@ test('Z-31 strona główna języka: każda partia, sprzęt i rodzaj ruchu ma lic
   }
 });
 
-test('Z-31 (Z-06 A5) linki wewnętrzne na adres kanoniczny: żaden href w dist nie kończy się na index.html (poza /404.html)', CZEKA('Z-31', '4490 linków …/index.html'), () => {
+test('Z-31 (Z-06 A5) linki wewnętrzne na adres kanoniczny: żaden href w dist nie kończy się na index.html (poza /404.html)', () => {
   const zle = plikiHtml(out).flatMap(f => hrefy(czytaj(out, f)).filter(a => /(^|\/)index\.html$/.test(a.href.split('#')[0])).map(a => `${f} → ${a.href}`));
   assert.equal(zle.length, 0, `${zle.length} linków, np. ${zle.slice(0, 3).join('; ')}`);
 });

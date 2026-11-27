@@ -1,18 +1,270 @@
-:root{color-scheme:light dark;--mm-body:#d5d9e0;--mm-part:#cdd2dc;--mm-l1:#87a4d8;--mm-l2:#658dd5;--mm-l3:#4276d3;--mm-l4:#1f5fd1;--bg:#fff;--fg:#1a1d23;--muted:#5b6270;--line:#d5d9e0;--accent:#2b3a67;--link:#1a4fa0;
+/* assets/site.css — system „Arkusz” (docs/design/system/design-spec.md, kierunek A, wybór właściciela 27.11.2026).
+   Złożone z: fonty.css (adresy ../fonty/ → fonty/), tokeny.css, komponenty.css, uzupełnienia Z-31 na końcu. Źródło prawdy: docs/design/system/; test Z-31 pilnuje zgodności tokenów i krojów.
+   Odtworzenie: node src/css.mjs */
+/* IBM Plex Sans Condensed 500 i 600, latin + latin-ext (OFL, fonty/OFL-ibm-plex-sans-condensed.txt). Pliki lokalne: CSP font-src = default-src 'self'. */
+@font-face{font-family:"Plex Cond";font-style:normal;font-weight:500;font-display:swap;src:url(fonty/ibm-plex-sans-condensed-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Plex Cond";font-style:normal;font-weight:500;font-display:swap;src:url(fonty/ibm-plex-sans-condensed-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Plex Cond";font-style:normal;font-weight:600;font-display:swap;src:url(fonty/ibm-plex-sans-condensed-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Plex Cond";font-style:normal;font-weight:600;font-display:swap;src:url(fonty/ibm-plex-sans-condensed-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* Z-12 · System „Arkusz” (kierunek A, wybór właściciela 27.11.2026) · tokeny jako zmienne CSS.
+   Jedno źródło kolorów, krojów, odstępów, linii i czasów dla assets/site.css (wdrożenie Z-31). Komponenty używają tylko tych zmiennych.
+   Motywy: jasny (domyślny), ciemny (prefers-color-scheme), zwiększony kontrast (prefers-contrast: more) w obu, wymuszone kolory systemu (forced-colors).
+   Kontrast par: kontrast.md (node docs/design/system/kontrast.mjs). Kolory figury (--f-*) i sylwetki (--mm-*) przychodzą z aplikacji i nie są tokenami strony. */
+:root{
+  color-scheme:light dark;
+  /* kolor: arkusz rysunku technicznego — szare tło stołu, biały arkusz, tusz, jeden akcent (niebieski tusz linii wymiarowej) */
+  --bg:#eef1f4;        /* stół kreślarski: tło strony poza arkuszem */
+  --sheet:#ffffff;     /* arkusz: tło treści, pól i przycisków */
+  --ink:#18202b;       /* tusz: tekst, ramka arkusza, linie główne */
+  --muted:#4f5b6b;     /* tekst drugorzędny: nazwa EN, podpisy, etykiety tabliczki */
+  --rule:#6b7686;      /* linia cienka: ramka zewnętrzna, ramki pól, podział tabliczki */
+  --hair:#c9d0d9;      /* linia pomocnicza: separatory wierszy (dekoracyjne, bez informacji) */
+  --accent:#1d4ea3;    /* akcent: linki, fokus, linia wymiarowa — jedyny kolor interfejsu */
+  --accent-bg:#e8eef9; /* tło krótkiej odpowiedzi */
+  --kontrola:#5d6878;  /* ramka przerywana przycisków częstych błędów (stan „do sprawdzenia”) */
+  --focus:var(--accent);
+
+  /* kroje: tytuły IBM Plex Sans Condensed (OFL, pliki lokalne); treść krojem systemowym */
+  --kroj-tytul:"Plex Cond",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --kroj-tresc:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --fs-baza:106.25%;                               /* 17 px przy domyślnych 16 px przeglądarki; skaluje się z ustawieniem użytkownika */
+  --fs-h1:clamp(1.9rem,1.45rem + 2.2vw,2.9rem);    /* nazwa ćwiczenia, tytuł strony */
+  --fs-h2:clamp(1.15rem,1.08rem + .35vw,1.3rem);   /* sekcje */
+  --fs-tresc:1rem;
+  --fs-drobne:.85rem;                              /* podpisy, nazwa EN w wierszach, etykiety pól */
+  --fs-etykieta:.8rem;                             /* etykiety tabliczki i nagłówki wykazu (najmniejszy tekst: 13,6 px) */
+  --fs-wymiar:1.05rem;                             /* wartości linii wymiarowej */
+  --lh-tresc:1.55;
+  --lh-tytul:1.1;
+  --w-tytul:600; --w-pomocniczy:500;               /* bez odmian cienkich (Warsztat: „avoid Ultralight, Thin, and Light”) */
+
+  /* odstępy: jednostka 4 px (.25rem), każdy odstęp jej wielokrotnością */
+  --o1:.25rem; --o2:.5rem; --o3:.75rem; --o4:1rem; --o5:1.25rem; --o6:1.5rem; --o8:2rem; --o12:3rem;
+  --szer-max:76rem;    /* szerokość arkusza */
+  --szer-tekst:44rem;  /* najdłuższy wiersz tekstu ciągłego (ok. 75 znaków) */
+  --cel:44px;          /* cel dotykowy (studio; WCAG 2.5.8 wymaga 24 px) */
+
+  /* linie i promienie: hierarchia grubości zamiast cieni; promień tylko na kontrolkach */
+  --linia-gruba:1.5px; --linia:1px; --linia-wymiar:2px; --znacznik:14px;
+  --ramka-odstep:5px;  /* podwójna ramka arkusza: odstęp linii zewnętrznej */
+  --r-0:0; --r-kontrolka:2px;
+  --fokus:3px;
+
+  /* ruch: interfejs bez animacji przejść; ruch ma tylko figura (dane) i respektuje „Ogranicz ruch” */
+  --czas-krotki:120ms;
+}
+/* Cyrylica, greka i pisma CJK: Plex Sans Condensed nie ma podstawowej cyrylicy (U+0400–045F) ani greki — tytuły krojem systemowym, bez mieszania znaków w jednym słowie */
+html:lang(ru),html:lang(uk),html:lang(bg),html:lang(sr),html:lang(el),html:lang(ja),html:lang(ko),html:lang(zh-Hant){--kroj-tytul:var(--kroj-tresc)}
+
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0b1016; --sheet:#121922; --ink:#e3e9f0; --muted:#a3afbf; --rule:#7d8a9c; --hair:#2c3644;
+  --accent:#8fb3ff; --accent-bg:#1a2639; --kontrola:#7d8a9c;
+}}
+/* zwiększony kontrast: ciemniejsze linie i tekst drugorzędny, separatory stają się widoczne (≥ 3:1), akcent mocniejszy */
+@media (prefers-contrast:more){:root{
+  --ink:#0b1118; --muted:#333d4a; --rule:#3f4957; --hair:#6b7686; --accent:#123b80; --kontrola:#3f4957; --linia:1.5px;
+}}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){:root{
+  --bg:#05080c; --sheet:#0b1118; --ink:#f5f8fb; --muted:#d0d8e2; --rule:#b0bccb; --hair:#7d8a9c;
+  --accent:#b7cfff; --accent-bg:#15233a; --kontrola:#b0bccb;
+}}
+@media (prefers-reduced-motion:reduce){:root{--czas-krotki:0ms}}
+
+/* Z-12 · System „Arkusz” · komponenty. Tylko zmienne z tokeny.css; żadnych kolorów ani odstępów spoza tokenów (wyjątek: kolory figury i sylwetki z aplikacji niżej).
+   Bez stylów w atrybutach (CSP default-src 'self'), bez JS w komponentach (menu na telefonie: <details>). Katalog: szablony/komponenty.html. */
+
+/* --- kolory figury i sylwetki: z aplikacji (assets/site.css), bez zmian; nie są tokenami strony --- */
+:root{--mm-body:#d5d9e0;--mm-part:#cdd2dc;--mm-l1:#87a4d8;--mm-l2:#658dd5;--mm-l3:#4276d3;--mm-l4:#1f5fd1;
 --f-skinHi:#c9ccd1;--f-clothHi:#46557a;--f-error:#c0392b;--f-floor:#9aa0a8;--f-frame:#9aa0a8;--f-pad:#d9dce1;--f-steel:#6b7280;--f-plate:#0f766e;--f-load:#0f766e;--f-skin:#b8bcc3;--f-skinFar:#d6d9de;--f-cloth:#2b3a67;--f-clothFar:#7d88a8;--f-shoe:#1f2937;--f-hair:#1f2937;--f-guide:#2e7d32;--f-cable:#9aa0a8;--f-muscleMain:#e74c3c;--f-muscleAux:#f1a9a0}
-@media (prefers-color-scheme:dark){:root{--mm-body:#2a2f38;--mm-part:#3a404c;--mm-l1:#566a8e;--mm-l2:#637eae;--mm-l3:#7193cf;--mm-l4:#7fa8f0;--bg:#14171c;--fg:#e8eaee;--muted:#a3aab8;--line:#333945;--accent:#e8dcc0;--link:#9cc0ff;--f-skinHi:#6b7280;--f-clothHi:#e8dcc0;--f-skin:#8b919a;--f-skinFar:#5b616b;--f-cloth:#e8dcc0;--f-clothFar:#8a8270;--f-shoe:#e5e7eb;--f-hair:#e5e7eb;--f-pad:#2a2f38;--f-floor:#4b5563;--f-frame:#4b5563;--f-steel:#9ca3af;--f-cable:#4b5563}}
+@media (prefers-color-scheme:dark){:root{--mm-body:#2a2f38;--mm-part:#3a404c;--mm-l1:#566a8e;--mm-l2:#637eae;--mm-l3:#7193cf;--mm-l4:#7fa8f0;--f-skinHi:#6b7280;--f-clothHi:#e8dcc0;--f-skin:#8b919a;--f-skinFar:#5b616b;--f-cloth:#e8dcc0;--f-clothFar:#8a8270;--f-shoe:#e5e7eb;--f-hair:#e5e7eb;--f-pad:#2a2f38;--f-floor:#4b5563;--f-frame:#4b5563;--f-steel:#9ca3af;--f-cable:#4b5563}}
 @media (forced-colors:active){svg{forced-color-adjust:none}}
+
+/* --- podstawa --- */
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,sans-serif;overflow-wrap:anywhere;hyphens:auto}
-a{color:var(--link)}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--link);outline-offset:2px}
-.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--bg);padding:8px;z-index:9}
-header,main,footer{max-width:44rem;margin:0 auto;padding:.75rem 1rem}
-nav[aria-label] ol{list-style:none;display:flex;flex-wrap:wrap;gap:.25rem .5rem;padding:0;margin:.25rem 0}nav[aria-label] li+li::before{content:"›";margin-right:.5rem;color:var(--muted)}
-h1{font-size:1.6rem;line-height:1.25;margin:.5rem 0}h2{font-size:1.15rem;margin:1.5rem 0 .25rem}
-.widoki{display:flex;flex-wrap:wrap;gap:1rem}.widoki svg{flex:1 1 12rem;max-height:20rem;min-width:0}
-figure{margin:1rem 0}button,select,input{font:inherit;min-height:44px;padding:0 .75rem;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px}
-button{cursor:pointer}.drobne{font-size:.875rem;color:var(--muted)}
-.lista{list-style:none;padding:0}.lista li{padding:.4rem 0;border-bottom:1px solid var(--line)}.lista li[hidden]{display:none}.chipy{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0}.chipy a{display:inline-block;padding:.5rem .75rem;border:1px solid var(--line);border-radius:999px;text-decoration:none;min-height:44px}
-.filtry{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
-.pozycje{display:flex;flex-wrap:wrap;gap:1rem}.pozycje>div{flex:1 1 10rem;min-width:0;text-align:center}.pozycje svg{width:100%;max-height:16rem}[hidden]{display:none!important}
-.sylwetki{display:flex;gap:1rem;max-width:20rem;margin:.5rem 0}.sylwetki>div{flex:1 1 0;min-width:0;text-align:center}.sylwetki svg{width:100%;max-height:12rem}.sylwetki p{margin:0}.role{padding-left:1.25rem}
+html{-webkit-text-size-adjust:100%;font-size:var(--fs-baza)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kroj-tresc);font-size:var(--fs-tresc);line-height:var(--lh-tresc);overflow-wrap:break-word;font-kerning:normal}
+img,svg{display:block}
+a{color:var(--accent);text-underline-offset:.18em}
+h1,h2,.marka-n,.wymiar-v,.tabliczka dt,.wykaz thead th,summary{font-family:var(--kroj-tytul)}
+h1{font-weight:var(--w-tytul);font-size:var(--fs-h1);line-height:var(--lh-tytul);margin:var(--o1) 0 0}
+h2{font-weight:var(--w-tytul);font-size:var(--fs-h2);line-height:1.2;margin:var(--o6) 0 var(--o2)}
+h1,h2{overflow-wrap:break-word;hyphens:auto} /* tytuły: przeniesienie zamiast łamania w dowolnym miejscu (duży tekst, wąski ekran) */
+ul{padding-left:var(--o5)}li{margin:var(--o1) 0}
+.n,.wymiar-v,.wynik strong{font-variant-numeric:tabular-nums}
+.skip{position:absolute;left:-999px}.skip:focus{left:var(--o2);top:var(--o2);padding:var(--o2);z-index:9;background:var(--sheet);color:var(--ink)}
+.wizualnie-ukryte{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:var(--fokus) solid var(--focus);outline-offset:2px}
+button,select,input,summary{font:inherit;min-height:var(--cel)}
+button,summary{cursor:pointer}
+
+/* --- nagłówek: znak + nazwa, menu w linii od 960 px; niżej „Menu” jako <details> (bez JS) --- */
+.glowka{position:relative;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink)}
+.glowka-w,.tresc,.stopka-w{max-width:var(--szer-max);margin:0 auto;padding-left:var(--o4);padding-right:var(--o4)}
+.glowka-w{display:flex;flex-wrap:wrap;align-items:center;gap:var(--o1) var(--o4);padding-top:var(--o1);padding-bottom:var(--o1)}
+.marka-n,.marka-p{white-space:nowrap}
+.marka{display:flex;align-items:center;gap:var(--o2);text-decoration:none;color:inherit;min-height:var(--cel)}
+.znak{width:30px;height:30px;flex:none;color:var(--accent)}
+.marka-t{display:flex;flex-direction:column;line-height:1.15}
+.marka-n{font-weight:var(--w-tytul);font-size:1.15rem;color:var(--ink)}.marka-p{font-size:var(--fs-etykieta);color:var(--muted)}
+.menu ul{list-style:none;margin:0;padding:0;display:flex;gap:0 var(--o5);flex-wrap:wrap}.menu li{margin:0}
+.menu a{display:inline-flex;align-items:center;min-height:var(--cel);text-decoration:none;color:var(--ink)}
+.menu a:hover,.menu a[aria-current]{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.35em}
+.glowka-n{margin-left:auto;display:flex;flex-wrap:wrap;gap:var(--o2);align-items:center}
+.jezyk,.menu-d>summary{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-width:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);text-decoration:none}
+.menu-d>summary{list-style:none;font-weight:var(--w-pomocniczy);gap:var(--o2)}.menu-d>summary::-webkit-details-marker{display:none}
+.menu-d>summary::after{content:"";width:.5em;height:.5em;border-right:2px solid;border-bottom:2px solid;transform:translateY(-.15em) rotate(45deg)}
+.menu-d[open]>summary::after{transform:translateY(.1em) rotate(-135deg)}
+.menu-d[open]>summary{background:var(--ink);color:var(--sheet)}
+@media (max-width:359px){.menu-d>summary{padding:0 var(--o2)}.menu-d>summary::after{display:none}}
+.menu-d nav{position:absolute;left:0;right:0;top:100%;z-index:5;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink)}
+.menu-d ul{display:block;padding:var(--o2) var(--o4)}.menu-d li{border-top:var(--linia) solid var(--hair)}.menu-d li:first-child{border-top:0}
+.menu-d a{display:flex;width:100%}
+@media (min-width:960px){.menu-d{display:none}}
+@media (max-width:959px){.menu-w{display:none}}
+@media (max-width:759px){.glowka-w{gap:var(--o1) var(--o2)}.marka-n{font-size:1rem}.marka-p{font-size:.75rem}.znak{width:26px;height:26px}}
+
+/* --- arkusz: podwójna ramka (linia gruba tuszem + cienka zewnętrzna), jedyny „kontener” strony --- */
+.tresc{padding-top:var(--o4);padding-bottom:var(--o8)}
+.arkusz{background:var(--sheet);border:var(--linia-gruba) solid var(--ink);outline:var(--linia) solid var(--rule);outline-offset:var(--ramka-odstep);padding:var(--o4) var(--o5) var(--o6);margin:6px}
+/* telefon: wcięcia w px, żeby przy dużym tekście nie zjadały szerokości wiersza */
+@media (max-width:759px){.arkusz{margin:3px;padding:12px 12px 20px;outline-offset:3px}.tresc{padding-left:6px;padding-right:6px}.fig{padding:8px}.uk-p ul,.miesnie ul,.ramka-l{padding-left:20px}.ramka{padding:0 10px 10px}.ramka h2{margin:0 -10px var(--o3);padding:var(--o2) 10px}}
+
+/* --- okruszki --- */
+.okruszki{font-size:.9rem;color:var(--muted)}
+.okruszki ol{list-style:none;display:flex;flex-wrap:wrap;gap:0 var(--o2);padding:0;margin:0}.okruszki li{margin:0}
+.okruszki li+li::before{content:"›";margin-right:var(--o2)}
+.okruszki a,.okruszki span{display:inline-block;padding:.6rem 0}
+@media (max-width:759px){.okruszki li:last-child{display:none}}
+
+/* --- głowa arkusza: nazwa (PL + EN) i tabliczka rysunkowa (klasyfikacja jako linki) --- */
+.arkusz-g{display:flex;flex-wrap:wrap;gap:var(--o4) var(--o8);align-items:flex-end;justify-content:space-between;border-bottom:var(--linia-gruba) solid var(--ink);padding-bottom:var(--o4)}
+.arkusz-g{container-type:inline-size;container-name:glowa}
+.nazwa{margin:0;min-width:0;max-width:100%}.nazwa-pl,.nazwa-en{display:block}
+.nazwa-en{font-family:var(--kroj-tytul);font-weight:var(--w-pomocniczy);font-size:.5em;color:var(--muted);margin-top:var(--o1)}
+.tabliczka{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:var(--linia-gruba) solid var(--ink);margin:0;min-width:min(100%,26rem)}
+.tabliczka div{padding:var(--o1) var(--o2) var(--o1) var(--o3);border-right:var(--linia) solid var(--rule);border-bottom:var(--linia) solid var(--rule)}
+.tabliczka div:nth-child(2n){border-right:0}.tabliczka div:nth-last-child(-n+2){border-bottom:0}
+.tabliczka dt{font-size:var(--fs-etykieta);color:var(--muted);font-weight:var(--w-pomocniczy)}.tabliczka dd{margin:0;font-weight:var(--w-pomocniczy)}
+.tabliczka a{display:inline-block;min-height:var(--o6)}
+/* wąsko albo duży tekst: jedna kolumna (rem w zapytaniu kontenera rośnie z rozmiarem tekstu) */
+@container glowa (max-width:18rem){.tabliczka{grid-template-columns:minmax(0,1fr);min-width:0;width:100%}.tabliczka div{border-right:0}.tabliczka div:nth-last-child(2){border-bottom:var(--linia) solid var(--rule)}}
+
+/* --- krótka odpowiedź (Z-22) i nota (wskazówki ogólne) --- */
+.odp{margin:var(--o5) 0;padding:var(--o3) var(--o4);background:var(--accent-bg);border-left:4px solid var(--accent);max-width:var(--szer-tekst)}
+.odp h2{margin:0 0 var(--o1);font-size:1.15rem}.odp p{margin:0}
+.nota{margin:0 0 var(--o4);padding:var(--o2) var(--o3);border-left:4px solid var(--rule);color:var(--ink);max-width:var(--szer-tekst)}
+.nota strong{font-weight:var(--w-pomocniczy)}
+
+/* --- układ strony ćwiczenia: komputer — figura i mięśnie w lewej kolumnie, tekst w prawej; telefon — figura, technika, mięśnie --- */
+.uk{display:grid;grid-template-columns:minmax(0,1fr);gap:0 var(--o12)}
+@media (min-width:960px){
+  .uk3{grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:auto 1fr;grid-template-areas:"f p" "m p";align-items:start}
+  .uk3>.fig{grid-area:f}.uk3>.uk-p{grid-area:p}.uk3>.miesnie{grid-area:m}
+  .uk3.bez-fig{grid-template-rows:auto;grid-template-areas:"m p"}
+  .uk-p>section:first-child h2,.uk3>.miesnie>h2:first-child{margin-top:var(--o2)}
+  .uk-skrot{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.uk-p ul,.miesnie ul{padding-left:var(--o5)}
+
+/* --- figura: rysunek schematyczny + linia wymiarowa tempa + sterowanie --- */
+.fig{margin:var(--o2) 0 0;border:var(--linia) solid var(--rule);padding:var(--o4)}
+.pozycje{display:flex;flex-wrap:wrap;gap:var(--o4)}.poz{flex:1 1 7rem;min-width:0}.poz svg{width:100%;max-height:18rem}
+.podpis{font-size:var(--fs-drobne);color:var(--muted);margin:var(--o1) 0 0;text-align:center}
+.fig>.podpis{text-align:left}
+.fig-ster{display:flex;flex-wrap:wrap;gap:var(--o2);align-items:center;margin:var(--o3) 0}
+.fig-bledy-t{font-size:.9rem;color:var(--muted);margin-left:var(--o1)}
+
+/* --- ELEMENT FIRMOWY: linia wymiarowa tempa. Długość odcinka = czas fazy (klasy .t5…t40 = 0,5…4 s; bez stylu w atrybucie przez CSP).
+       Opis dla czytnika: role="img" + aria-label z pełną sekwencją. W wąskim kontenerze (< 26rem), gdy jakiś odcinek ma < 20% czasu, nazwy faz chowają się, a odcinki < 20% tracą jednostkę; pełna sekwencja jest w wierszu pod linią. --- */
+.wymiar{margin:var(--o4) 0 var(--o1);container-type:inline-size}
+.wymiar-l{display:flex}
+.wymiar-s{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:2px;border-top:var(--linia-wymiar) solid var(--accent);min-width:0}
+.wymiar-s::before,.wymiar-s::after{content:"";position:absolute;top:calc(var(--znacznik) / -2 - 1px);height:var(--znacznik);border-left:var(--linia-wymiar) solid var(--accent)}
+.wymiar-s::before{left:0}.wymiar-s:last-child::after{right:0}
+.t5{flex:5}.t10{flex:10}.t20{flex:20}.t25{flex:25}.t40{flex:40}
+.wymiar-v{font-weight:var(--w-tytul);font-size:var(--fs-wymiar);color:var(--ink);white-space:nowrap}
+.wymiar-n{font-size:var(--fs-etykieta);color:var(--muted);text-align:center;line-height:1.25;overflow-wrap:normal}
+.wymiar-r{margin:var(--o2) 0 0;font-size:var(--fs-drobne);color:var(--muted)}
+.wymiar-sek{display:none}
+@container (max-width:26rem){
+  .ma-waskie .wymiar-n{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .wymiar-s.waski .wymiar-v{font-size:var(--fs-drobne)}
+  .wymiar-s.waski .jedn{display:none}
+  .ma-waskie .wymiar-sek{display:block}
+}
+/* bardzo wąsko (duży tekst): wartości nie mieszczą się nad odcinkami — zostaje linia z proporcjami i pełna sekwencja tekstem */
+@container (max-width:15rem){.wymiar-v,.wymiar-n{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.wymiar-s{min-height:var(--o3)}.wymiar-sek{display:block}}
+
+/* --- przyciski, pola, wybór --- */
+.przycisk,.fig-ster button,.wyczysc{display:inline-flex;align-items:center;min-height:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);font-size:.95rem;text-align:left;text-decoration:none}
+.fig-ster button[aria-pressed=true]{background:var(--ink);color:var(--sheet)}
+.fig-ster .b-blad{border-color:var(--kontrola);border-style:dashed}
+.fig-ster .b-blad[aria-pressed=true]{background:var(--sheet);color:var(--ink);border-style:solid;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.wyczysc{color:var(--accent);border-color:var(--accent)}
+.szukaj{display:flex;flex-direction:column;gap:var(--o1);max-width:28rem}
+.szukaj label{font-weight:var(--w-pomocniczy)}
+.szukaj input,.pole select{width:100%;max-width:100%;background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--rule);border-radius:var(--r-kontrolka);padding:0 var(--o3)}
+.filtry{display:flex;flex-wrap:wrap;gap:var(--o3);align-items:flex-end;margin:var(--o4) 0 var(--o2)}
+.pole{display:flex;flex-direction:column;gap:2px;min-width:0;max-width:100%}
+.pole span{font-size:var(--fs-drobne);color:var(--muted)}
+
+/* --- listy: zamienniki, wykaz (tabela), grupy z licznikami, wiersze --- */
+.zam{list-style:none;padding:0!important}.zam li{margin:0;border-top:var(--linia) solid var(--hair)}
+.zam a{display:block;padding:var(--o2) 0;text-decoration:none}
+a .nazwa-pl{text-decoration:underline}a .nazwa-en,.wiersze .nazwa-en,.wykaz .nazwa-en{font-size:var(--fs-drobne);color:var(--muted);font-family:var(--kroj-tresc);font-weight:400;margin:0}
+.wynik{margin:var(--o3) 0;border-bottom:var(--linia-gruba) solid var(--ink);padding-bottom:var(--o2)}
+.wykaz{width:100%;border-collapse:collapse}
+.wykaz thead th{font-weight:var(--w-pomocniczy);font-size:var(--fs-etykieta);color:var(--muted);text-align:left;padding:var(--o1) var(--o2) var(--o1) 0;border-bottom:var(--linia) solid var(--rule)}
+.wykaz th[scope=row],.wykaz td{text-align:left;font-weight:400;padding:var(--o2) var(--o3) var(--o2) 0;border-bottom:var(--linia) solid var(--hair);vertical-align:top}
+.wykaz a{text-decoration:none}.wykaz td{color:var(--muted);font-size:.92rem}
+@media (max-width:640px){.wykaz thead{display:none}.wykaz tr{display:block;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}.wykaz th[scope=row],.wykaz td{display:inline;border:0;padding:0}.wykaz th[scope=row]{display:block}.wykaz td+td::before{content:" · "}}
+.wstep{border-bottom:var(--linia-gruba) solid var(--ink);padding-bottom:var(--o5)}
+.licznik{color:var(--muted);margin:var(--o1) 0 var(--o4)}
+.grupy{display:grid;gap:0 var(--o12)}@media (min-width:960px){.grupy{grid-template-columns:1fr 1fr}}
+.grupa-l{list-style:none;padding:0;margin:0;columns:2 12rem;column-gap:var(--o8)}
+.grupa-l li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair)}
+.grupa-l a{display:flex;justify-content:space-between;gap:var(--o4);padding:var(--o2) 0;text-decoration:none;min-height:var(--cel);align-items:center}
+.grupa-l .n{color:var(--muted);font-size:.9rem}.grupa-l a>span:first-child{min-width:0}
+#ruch .grupa-l{columns:4 13rem}
+.wiersze{list-style:none;padding:0;margin:0;columns:2 22rem;column-gap:var(--o8)}
+.wiersze li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}
+.wiersze a{text-decoration:none}.meta{display:block;font-size:var(--fs-drobne);color:var(--muted)}
+.dalej{font-weight:var(--w-tytul)}.dalej-w{color:var(--muted);font-size:.9rem}
+.jezyki-l{list-style:none;padding:0;margin:var(--o4) 0 0;columns:4 11rem;column-gap:var(--o8)}
+.jezyki-l li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair)}
+.jezyki-l a{display:flex;align-items:center;min-height:var(--cel);text-decoration:none}
+
+/* --- stan pusty (filtr bez wyników) i 404: linia wymiarowa „bez wymiaru” jako znak stanu, tekst niesie znaczenie --- */
+.pusto{margin:var(--o6) 0;padding:var(--o5) var(--o4);border:var(--linia-gruba) dashed var(--rule);max-width:var(--szer-tekst)}
+.pusto h2{margin:0 0 var(--o3)}.pusto p{margin:0 0 var(--o3)}
+.blad-kod{font-family:var(--kroj-tytul);font-weight:var(--w-tytul);color:var(--muted);margin:0}
+
+/* --- mięśnie (sylwetka z aplikacji) --- */
+.sylwetki{display:flex;gap:var(--o4);max-width:16rem}.sylwetki>div{flex:1 1 0;min-width:0;text-align:center}.sylwetki svg{width:100%;max-height:12rem}
+.role{padding-left:var(--o5)}
+
+/* --- ramka „w aplikacji” i plakietka App Store (grafika Apple po nadaniu appStoreId; tu miejsce) --- */
+.ramka{margin:var(--o8) 0 var(--o4);border:var(--linia-gruba) solid var(--ink);padding:0 var(--o4) var(--o4)}
+.ramka h2{margin:0 calc(-1 * var(--o4)) var(--o4);padding:var(--o2) var(--o4);border-bottom:var(--linia-gruba) solid var(--ink);font-size:1.15rem}
+.ramka-l{padding-left:var(--o5);margin:0 0 var(--o4);max-width:var(--szer-tekst)}
+.plakietka{display:inline-flex;flex-direction:column;justify-content:center;min-height:var(--cel);padding:var(--o1) var(--o3);border:var(--linia) dashed currentColor;border-radius:8px;font-size:var(--fs-etykieta);line-height:1.3}
+.zastrz{font-size:var(--fs-drobne);color:var(--muted);max-width:var(--szer-tekst)}
+
+/* --- stopka --- */
+.stopka{border-top:var(--linia-gruba) solid var(--ink);background:var(--sheet);margin-top:var(--o4)}
+.stopka-w{padding-top:var(--o4);padding-bottom:var(--o6);font-size:.9rem}
+.wsparcie{max-width:var(--szer-tekst)}.jezyki a,.prawne a{display:inline-block;padding:.6rem 0}.prawne{color:var(--muted)}
+
+/* --- katalog komponentów (tylko szablony/komponenty.html) --- */
+.kat h2{border-bottom:var(--linia) solid var(--rule);padding-bottom:var(--o1)}
+.kat-rzad{display:flex;flex-wrap:wrap;gap:var(--o3);align-items:center}
+.kat-wymiar{max-width:30rem}.kat-waski{max-width:20rem}
+.probki{display:grid;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));gap:var(--o3);list-style:none;padding:0}
+.probki li{margin:0;border:var(--linia) solid var(--rule);font-size:var(--fs-drobne)}.probki span{display:block;height:2.5rem;border-bottom:var(--linia) solid var(--rule)}.probki code{display:block;padding:var(--o1) var(--o2)}
+.p-bg{background:var(--bg)}.p-sheet{background:var(--sheet)}.p-ink{background:var(--ink)}.p-muted{background:var(--muted)}.p-rule{background:var(--rule)}.p-hair{background:var(--hair)}.p-accent{background:var(--accent)}.p-accent-bg{background:var(--accent-bg)}.p-kontrola{background:var(--kontrola)}
+
+/* --- Z-31: uzupełnienia spoza systemu (zgłoszone roli 04: [hidden] i widoki animacji figury nie mają komponentu w komponenty.css) --- */
+[hidden]{display:none!important}
+.widoki{display:flex;flex-wrap:wrap;gap:var(--o4)}.widoki svg{flex:1 1 12rem;max-height:20rem;min-width:0}
+.drobne{font-size:var(--fs-drobne);color:var(--muted)}

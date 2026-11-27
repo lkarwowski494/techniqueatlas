@@ -5,10 +5,10 @@
   "library": "Knjižnica",
   "allExercises": "Vse vaje",
   "countLine": {
-    "one": "{n} vaja z opisom tehnike, mišicami in alternativami.",
-    "two": "{n} vaji z opisom tehnike, mišicami in alternativami.",
-    "few": "{n} vaje z opisom tehnike, mišicami in alternativami.",
-    "other": "{n} vaj z opisom tehnike, mišicami in alternativami."
+    "one": "{n} vaja — brskajte po mišični skupini in opremi.",
+    "two": "{n} vaji — brskajte po mišični skupini in opremi.",
+    "few": "{n} vaje — brskajte po mišični skupini in opremi.",
+    "other": "{n} vaj — brskajte po mišični skupini in opremi."
   },
   "searchLabel": "Iskanje vaj",
   "searchPlaceholder": "Ime vaje",
@@ -34,6 +34,17 @@
   "pageNotFound": "Strani ni mogoče najti",
   "exercisesIn": "Vaje: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Meni",
+  "menuMain": "Glavni meni",
+  "tempo": "Tempo ponovitve",
+  "tempoTotal": "skupaj {t} na ponovitev",
+  "sec": "s",
+  "nameLabel": "Ime",
+  "muscles": "Mišice",
+  "commonErrors": "Pogoste napake:",
+  "emptyHint": "Spremenite ali počistite filtre, da vidite vaje.",
+  "changeLanguage": "Jezik: {nazwa}. Zamenjaj jezik",
+  "howTo": "Kako izvesti to vajo?",
   "families": {
     "squat": "Počepi",
     "bench_press": "Potisk s klopi",

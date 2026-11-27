@@ -5,10 +5,10 @@
   "library": "Biblioteka",
   "allExercises": "Wszystkie ćwiczenia",
   "countLine": {
-    "one": "{n} ćwiczenie z opisem techniki, mięśniami i zamiennikami.",
-    "few": "{n} ćwiczenia z opisem techniki, mięśniami i zamiennikami.",
-    "many": "{n} ćwiczeń z opisem techniki, mięśniami i zamiennikami.",
-    "other": "{n} ćwiczenia z opisem techniki, mięśniami i zamiennikami."
+    "one": "{n} ćwiczenie — przeglądaj według partii mięśniowej i sprzętu.",
+    "few": "{n} ćwiczenia — przeglądaj według partii mięśniowej i sprzętu.",
+    "many": "{n} ćwiczeń — przeglądaj według partii mięśniowej i sprzętu.",
+    "other": "{n} ćwiczenia — przeglądaj według partii mięśniowej i sprzętu."
   },
   "searchLabel": "Szukaj ćwiczenia",
   "searchPlaceholder": "Nazwa ćwiczenia",
@@ -34,6 +34,17 @@
   "pageNotFound": "Nie znaleziono strony",
   "exercisesIn": "Ćwiczenia: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Menu",
+  "menuMain": "Menu główne",
+  "tempo": "Tempo powtórzenia",
+  "tempoTotal": "razem {t} na powtórzenie",
+  "sec": "s",
+  "nameLabel": "Nazwa",
+  "muscles": "Mięśnie",
+  "commonErrors": "Częste błędy:",
+  "emptyHint": "Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.",
+  "changeLanguage": "Język: {nazwa}. Zmień język",
+  "howTo": "Jak zrobić to ćwiczenie?",
   "families": {
     "squat": "Przysiady",
     "bench_press": "Wyciskanie leżąc",

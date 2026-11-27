@@ -5,10 +5,10 @@
   "library": "Biblioteka",
   "allExercises": "Visi pratimai",
   "countLine": {
-    "one": "{n} pratimas su technikos aprašu, raumenimis ir pakaitalais.",
-    "few": "{n} pratimai su technikos aprašu, raumenimis ir pakaitalais.",
-    "many": "{n} pratimo su technikos aprašu, raumenimis ir pakaitalais.",
-    "other": "{n} pratimų su technikos aprašu, raumenimis ir pakaitalais."
+    "one": "{n} pratimas — naršykite pagal raumenų grupę ir įrangą.",
+    "few": "{n} pratimai — naršykite pagal raumenų grupę ir įrangą.",
+    "many": "{n} pratimo — naršykite pagal raumenų grupę ir įrangą.",
+    "other": "{n} pratimų — naršykite pagal raumenų grupę ir įrangą."
   },
   "searchLabel": "Ieškoti pratimų",
   "searchPlaceholder": "Pratimo pavadinimas",
@@ -34,6 +34,17 @@
   "pageNotFound": "Puslapis nerastas",
   "exercisesIn": "Pratimai: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Meniu",
+  "menuMain": "Pagrindinis meniu",
+  "tempo": "Pakartojimo tempas",
+  "tempoTotal": "iš viso {t} vienam pakartojimui",
+  "sec": "s",
+  "nameLabel": "Pavadinimas",
+  "muscles": "Raumenys",
+  "commonErrors": "Dažnos klaidos:",
+  "emptyHint": "Pakeiskite arba išvalykite filtrus, kad pamatytumėte pratimus.",
+  "changeLanguage": "Kalba: {nazwa}. Keisti kalbą",
+  "howTo": "Kaip atlikti šį pratimą?",
   "families": {
     "squat": "Pritūpimai",
     "bench_press": "Spaudimai gulint",

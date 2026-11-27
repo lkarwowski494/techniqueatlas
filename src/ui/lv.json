@@ -5,9 +5,9 @@
   "library": "Bibliotēka",
   "allExercises": "Visi vingrinājumi",
   "countLine": {
-    "zero": "{n} vingrinājumu ar tehnikas aprakstu, muskuļiem un alternatīvām.",
-    "one": "{n} vingrinājums ar tehnikas aprakstu, muskuļiem un alternatīvām.",
-    "other": "{n} vingrinājumi ar tehnikas aprakstu, muskuļiem un alternatīvām."
+    "zero": "{n} vingrinājumu — pārlūkojiet pēc muskuļu grupas un aprīkojuma.",
+    "one": "{n} vingrinājums — pārlūkojiet pēc muskuļu grupas un aprīkojuma.",
+    "other": "{n} vingrinājumi — pārlūkojiet pēc muskuļu grupas un aprīkojuma."
   },
   "searchLabel": "Meklēt vingrinājumus",
   "searchPlaceholder": "Vingrinājuma nosaukums",
@@ -33,6 +33,17 @@
   "pageNotFound": "Lapa nav atrasta",
   "exercisesIn": "Vingrinājumi: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Izvēlne",
+  "menuMain": "Galvenā izvēlne",
+  "tempo": "Atkārtojuma temps",
+  "tempoTotal": "kopā {t} vienam atkārtojumam",
+  "sec": "s",
+  "nameLabel": "Nosaukums",
+  "muscles": "Muskuļi",
+  "commonErrors": "Biežākās kļūdas:",
+  "emptyHint": "Mainiet vai notīriet filtrus, lai redzētu vingrinājumus.",
+  "changeLanguage": "Valoda: {nazwa}. Mainīt valodu",
+  "howTo": "Kā veikt šo vingrinājumu?",
   "families": {
     "squat": "Pietupieni",
     "bench_press": "Spiešana guļus",

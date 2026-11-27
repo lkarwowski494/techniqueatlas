@@ -5,9 +5,9 @@
   "library": "Biblioteka",
   "allExercises": "Sve vježbe",
   "countLine": {
-    "one": "{n} vježba s opisom tehnike, mišićima i alternativama.",
-    "few": "{n} vježbe s opisom tehnike, mišićima i alternativama.",
-    "other": "{n} vježbi s opisom tehnike, mišićima i alternativama."
+    "one": "{n} vježba — pregledavaj po mišićnoj skupini i opremi.",
+    "few": "{n} vježbe — pregledavaj po mišićnoj skupini i opremi.",
+    "other": "{n} vježbi — pregledavaj po mišićnoj skupini i opremi."
   },
   "searchLabel": "Traži vježbe",
   "searchPlaceholder": "Naziv vježbe",
@@ -33,6 +33,17 @@
   "pageNotFound": "Stranica nije pronađena",
   "exercisesIn": "Vježbe: {nazwa}",
   "anyOf": "{lista}",
+  "menu": "Izbornik",
+  "menuMain": "Glavni izbornik",
+  "tempo": "Tempo ponavljanja",
+  "tempoTotal": "ukupno {t} po ponavljanju",
+  "sec": "s",
+  "nameLabel": "Naziv",
+  "muscles": "Mišići",
+  "commonErrors": "Česte pogreške:",
+  "emptyHint": "Promijeni ili očisti filtre da vidiš vježbe.",
+  "changeLanguage": "Jezik: {nazwa}. Promijeni jezik",
+  "howTo": "Kako izvesti ovu vježbu?",
   "families": {
     "squat": "Čučnjevi",
     "bench_press": "Potisak s klupe",
