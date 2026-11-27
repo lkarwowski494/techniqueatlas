@@ -176,5 +176,5 @@ Mapę witryny, jeśli nie przejdzie z importu, zgłasza się w module „Sitemap
 | Zadanie | Stan | Plik |
 |---|---|---|
 | Z-04 | zrobione (ten plik) | `docs/strona-kroki-wlasciciela.md` |
-| Z-07 | w toku | `docs/znaki-towarowe-metoda.md` |
-| Z-20 | otwarte | `docs/teksty/prawne/` |
+| Z-07 | zrobione; czeka na Z-08 (pytanie u koordynatora) | `docs/znaki-towarowe-metoda.md` |
+| Z-20 | zrobione (projekty do recenzji Z-23) | `docs/teksty/prawne/` |
