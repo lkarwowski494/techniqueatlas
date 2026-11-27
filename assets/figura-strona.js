@@ -1,7 +1,8 @@
 // Animacja figury na stronie ćwiczenia (przeglądarka, moduł ES, bez zależności i bez połączeń sieciowych poza własnym plikiem danych figury).
 // Dane figury (próbki klatek, wspólne dla języków) ładuje dynamiczny import ./fig/<slug>.js; kształty liczy silnik figur v2 z aplikacji (./silnik/figura.js).
 // Zasady: bez autostartu przy „Ogranicz ruch” (prefers-reduced-motion) — zostają dwie pozycje statyczne z podpisami z HTML (animowane widoki odsłania dopiero „Wznów” albo wybór błędu); przycisk wstrzymania (WCAG 2.2.2); przyciski działają z klawiatury (button).
-import { innerAt, uAt, TEMPO } from './silnik/figura.js';
+import { innerAt, TEMPO } from './silnik/figura.js';
+import { uOf } from './figura-czas.js';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmt = (tpl, v) => tpl.split('{opis}').join(v);
@@ -19,7 +20,7 @@ async function init(root) {
   const draw = u => gs.forEach((g, k) => { g.innerHTML = innerAt(frames(), u, names[k]); });
   const tick = now => {
     raf = 0; if (paused) return;
-    const u = data.static ? 1 : uAt(now - t0, data.lowerFirst, tempo());
+    const u = uOf(data, now - t0, tempo());
     if (u !== last) { last = u; draw(u); }
     raf = requestAnimationFrame(tick);
   };

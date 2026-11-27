@@ -61,7 +61,10 @@ const sek = ms => new Intl.NumberFormat('pl').format(ms / 1000);
 test('Z-31 linia wymiarowa tempa: każda strona pl z figurą ma role="img" z opisem faz i czasu łącznego z danych oraz odcinki .wymiar-s t<ms/100> w kolejności faz', () => {
   const zle = [];
   for (const e of PL.filter(e => e.figure && ctx.figs[e.slug])) {
-    const h = strona('pl', e.slug), fazy = e.figure.phases.filter(p => p.ms > 0), razem = fazy.reduce((s, p) => s + p.ms, 0);
+    const h = strona('pl', e.slug);
+    /* fazy z `untimed` (dane od 27.11.2026, integracja-start): czas jest zastępczy — strona nie rysuje linii ani nie podaje sekund (poprawka testu Z-31, powód w PRZEKAZANIU) */
+    if (e.figure.phases.some(p => p.untimed)) { if (/class="wymiar[ "]/.test(h) || /Tempo powtórzenia/.test(h)) zle.push(`${e.slug} (untimed)`); continue; }
+    const fazy = e.figure.phases.filter(p => p.ms > 0), razem = fazy.reduce((s, p) => s + p.ms, 0);
     const opis = `Tempo powtórzenia: ${fazy.map(p => `${p.name} ${sek(p.ms)} s`).join(', ')}; razem ${sek(razem)} s na powtórzenie`;
     const klasy = [...h.matchAll(/class="wymiar-s (t\d+)/g)].map(m => m[1]);
     if (!h.includes(`role="img" aria-label="${opis}"`) || klasy.join() !== fazy.map(p => `t${p.ms / 100}`).join()) zle.push(e.slug);

@@ -150,6 +150,8 @@ export function poseSheet(ctx, fig) {
 
 /** Linia wymiarowa tempa (element firmowy, design-spec §4): odcinek = faza z czasem > 0, długość z klas t<ms/100> (bez stylu w atrybucie, CSP); opis dla czytnika i sekwencja tekstem pod linią. Czysta funkcja: dane faz → HTML. */
 export function wymiarHtml(lang, ui, phases) {
+  /* fazy `untimed` (ćwiczenia balistyczne, chód: czas w danych jest zastępczy, nie opisuje ruchu) — bez linii: nie podajemy czasu, którego ćwiczenie nie ma */
+  if (phases.some(p => p.untimed)) return '';
   const fazy = phases.filter(p => p.ms > 0); if (!fazy.length) return '';
   const sek = ms => new Intl.NumberFormat(hreflang(lang)).format(ms / 1000), razem = fazy.reduce((s, p) => s + p.ms, 0), czas = ms => `${sek(ms)} ${ui.sec}`;
   const opis = `${ui.tempo}: ${fazy.map(p => `${p.name} ${czas(p.ms)}`).join(', ')}; ${fill(ui.tempoTotal, { t: czas(razem) })}`;
@@ -192,7 +194,7 @@ export function silhouetteBlock(ctx, lang, ex, file) {
 /** Plik danych figury (moduł ES, wspólny dla języków): próbki klatek, błędy, tempo i kadr widoków. */
 export function figureModule(ctx, slug, fig) {
   const E = ctx.engine; const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
-  const data = { views: fig.views.map(name => ({ name, box: E.boxOf(lists, name) })), static: fig.static, lowerFirst: fig.lowerFirst, tempo: fig.tempo, frames: fig.frames,
+  const data = { views: fig.views.map(name => ({ name, box: E.boxOf(lists, name) })), static: fig.static, lowerFirst: fig.lowerFirst, ...(fig.loop ? { loop: fig.loop } : {}), ...(fig.loop === 'jednokierunkowa' && fig.pose?.cwiczenie ? { key: fig.pose.cwiczenie } : {}), tempo: fig.tempo, frames: fig.frames,
     errors: fig.errors.map(e => ({ id: e.id, kind: e.kind, ...(e.kind === 'tempo' ? { tempo: e.tempo } : {}) })), errorFrames: fig.errors.map(e => e.frames ?? null) };
   return `export default ${JSON.stringify(data)};\n`;
 }

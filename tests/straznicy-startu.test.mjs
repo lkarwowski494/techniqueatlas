@@ -62,8 +62,8 @@ test('S6 (27.11.2026, P-1): brak pola „pelna” w eksporcie nie jest naruszeni
 test('startGuards składa strażniki S3, S4, S8, S11 z plikami ustawień (nazwy ze wszystkich budowanych języków); przekazane pliki mają pierwszeństwo', () => {
   const d = l => ({ exercises: [{ id: 'A', name: `A-${l}`, figure: {} }] }), cfg = { indeksowanie: true, indeksowanieOd: '2027-01-15', wersjaWydania: '1.1.0' };
   const base = { cfg, pin: { ref: 'v1.1.0-b1' }, manifest: { app: { version: '1.1.0' } }, data: { pl: d('pl'), en: d('en') }, langs: ['pl', 'en'] };
-  /* S11 (Z-00, 27.11.2026): plan startu jest częścią startGuards; test podaje plan w całości „zrobiony”, żeby sprawdzać S3 niezależnie od stanu docs/55 */
-  const plan = '| ID | Zadanie | Rola | Model | Czas | Po | Stan | Data | Dowód |\n|---|---|---|---|---|---|---|---|---|\n| Z-00 | x | 08 | sonnet | 1 h | — | zrobione | 2026-11-28 | abc1234 |\n';
+  /* S11 (Z-00, 27.11.2026): plan startu jest częścią startGuards; test podaje plan w całości „zrobiony” (z Z-60 i Z-61: zgoda właściciela jest wymagana przy indeksowaniu), żeby sprawdzać S3 niezależnie od stanu docs/55 */
+  const plan = '| ID | Zadanie | Rola | Model | Czas | Po | Stan | Data | Dowód |\n|---|---|---|---|---|---|---|---|---|\n| Z-00 | x | 08 | sonnet | 1 h | — | zrobione | 2026-11-28 | abc1234 |\n| Z-60 | x | 08 | sonnet | 1 h | Z-00 | zrobione | 2026-11-28 | abc1234 |\n| Z-61 | x | właściciel | — | 2 min | Z-60 | zrobione | 2026-11-28 | właściciel: „Tak.” |\n';
   const ok = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': OK }, plan } }); assert.deepEqual([ok.errors, ok.warnings], [[], []]);
   const brak = startGuards({ ...base, files: { trademark: { 'A-pl': OK }, plan } }); assert.deepEqual([brak.errors, brak.warnings], [[], []]); /* ZM-20: brak wpisu nie blokuje */
   const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': { status: 'ryzyko', data: '2026-11-27' } }, plan } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/); /* wpisane „ryzyko” (nazwy ze wszystkich języków) blokuje */
@@ -79,7 +79,7 @@ test('build: bez indeksowania luki to ostrzeżenia (S4, S11 plan startu, zamroż
   const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json */
   const stare = { wersjaWydania: '1.0.0' }; /* dane są z tagu 1.1.1: rozjazd wersji wywołuje S4 niezależnie od stanu config.json */
   const w = await build({ out: tmpDist(), cfg: stare, slugi: pusty }); const joined = w.warnings.join('\n');
-  for (const re of [/S4 wersja/, /plan startu: \d+ zadań etapów 0–6 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
+  for (const re of [/S4 wersja/, /plan startu: \d+ zadań etapów 0–5 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
   assert.doesNotMatch(joined, /S3|S6/); /* S3 wyłączony: ZM-20 */ /* P-1: brak pola „pelna” ani pełnej karty nie jest naruszeniem */
   await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
