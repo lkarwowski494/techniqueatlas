@@ -1,10 +1,10 @@
 // Plan startu (Z-00, docs/55-plan-startu.md): wymuszone odhaczanie zadań. (a) format tabeli; (b) „zrobione” wymaga daty i dowodu; (c) nie „zrobione”, gdy zadanie z kolumny „Po” nie jest;
-// (d) przy indeksowanie=true wszystkie zadania etapów 0–6 „zrobione”, inaczej błąd startu (build stop); przy false tylko ostrzeżenie. Bez sieci.
+// (d) przy indeksowanie=true wszystkie zadania etapów 0–5 „zrobione” albo „odpada”, inaczej błąd startu (build stop); przy false tylko ostrzeżenie. Bez sieci.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { parsePlan, checkPlanStartu, KOLUMNY } from '../src/plan-startu.mjs';
+import { parsePlan, checkPlanStartu, etap, KOLUMNY } from '../src/plan-startu.mjs';
 import { startGuards } from '../src/straznicy.mjs';
 import { ROOT } from '../src/lib.mjs';
 
@@ -38,15 +38,23 @@ test('zależności: „zrobione” nie może mieć w „Po” zadania niezrobion
   assert.deepEqual(r([DONE('Z-00'), DONE('Z-02', 'Z-00')]).errors, []);
   assert.deepEqual(r([row('Z-00', '—', 'w toku'), row('Z-02', 'Z-00')]).errors, []); /* niezrobione zadania nie są sprawdzane */
 });
-test('start: indeksowanie=true wymaga wszystkich zadań etapów 0–6 „zrobione” (błąd); bez indeksowania ostrzeżenie; etap 7 (Z-7x) nie blokuje', () => {
-  const rows = [DONE('Z-00'), row('Z-02', 'Z-00', 'w toku'), row('Z-65'), row('Z-70')];
+test('start: indeksowanie=true wymaga wszystkich zadań etapów 0–5 „zrobione” albo „odpada” (błąd); bez indeksowania ostrzeżenie; etap 6 (Z-6x, robione po włączeniu Google) i 7 nie blokują', () => {
+  const rows = [DONE('Z-00'), row('Z-02', 'Z-00', 'w toku'), row('Z-52'), row('Z-60'), row('Z-65'), row('Z-70')];
   const p = parsePlan(plan(...rows)).rows;
   const on = checkPlanStartu({ rows: p, indexing: true }), off = checkPlanStartu({ rows: p, indexing: false });
-  assert.equal(on.errors.length, 1); assert.match(on.errors[0], /plan startu: 2 zadań etapów 0–6 niezrobionych \(Z-02, Z-65\)/); assert.deepEqual(on.warnings, []);
+  assert.equal(on.errors.length, 1); assert.match(on.errors[0], /plan startu: 2 zadań etapów 0–5 niezrobionych \(Z-02, Z-52\)/); assert.deepEqual(on.warnings, []);
   assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
-  const all = parsePlan(plan(DONE('Z-00'), DONE('Z-02', 'Z-00'), row('Z-70'))).rows;
-  assert.deepEqual(checkPlanStartu({ rows: all, indexing: true }), { errors: [], warnings: [] });
+  const all = parsePlan(plan(DONE('Z-00'), DONE('Z-02', 'Z-00'), row('Z-60'), row('Z-65'), row('Z-70'))).rows;
+  assert.deepEqual(checkPlanStartu({ rows: all, indexing: true }), { errors: [], warnings: [] }); /* Z-60…Z-65 otwarte: włączenie Google nie blokuje samo siebie */
   assert.match(checkPlanStartu({ rows: [], indexing: true }).errors.join(), /pusty/);
+});
+test('stan „odpada” (decyzja właściciela, np. ZM-20): dozwolony; wymaga daty i powodu; liczy się jak załatwione dla S11 i dla „Po” następników; zadanie „odpada” nie sprawdza własnego „Po”', () => {
+  const od = (id, po = '—', data = '2026-11-27', dowod = 'ZM-20') => row(id, po, 'odpada', data, dowod);
+  assert.deepEqual(parsePlan(plan(od('Z-08'))).errors, []);
+  const r = (rows, indexing = false) => checkPlanStartu({ rows: parsePlan(plan(...rows)).rows, indexing });
+  assert.match(r([od('Z-08', '—', '—')]).errors.join(), /Z-08.*dat/i); assert.match(r([od('Z-08', '—', '2026-11-27', '—')]).errors.join(), /Z-08.*powod|Z-08.*dowod/i);
+  assert.deepEqual(r([row('Z-07', '—', 'w toku'), od('Z-08', 'Z-07'), DONE('Z-41', 'Z-08')]).errors, []); /* „odpada” z niezrobionym „Po” i następnik „zrobione” po „odpada” */
+  assert.deepEqual(r([od('Z-08'), od('Z-28', 'Z-08, Z-25')], true).errors.filter(e => /niezrobionych/.test(e)), []);
 });
 test('startGuards składa S11 plan startu (przekazane pliki mają pierwszeństwo); build() je dostaje przez startGuards', () => {
   const base = { cfg: { indeksowanie: true, wersjaWydania: '1.1.1', indeksowanieOd: '2026-12-01' }, pin: { ref: 'v1.1.1-b1' }, manifest: { app: { version: '1.1.1' } }, data: { pl: { exercises: [{ name: 'A' }] } }, langs: ['pl'] };
@@ -54,7 +62,7 @@ test('startGuards składa S11 plan startu (przekazane pliki mają pierwszeństwo
   const ok = startGuards({ ...base, files: { trademark: tm, plan: plan(DONE('Z-00')) } }); assert.deepEqual(ok.errors, []);
   const bad = startGuards({ ...base, files: { trademark: tm, plan: plan(row('Z-00')) } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /plan startu/);
 });
-test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”, zadania Z-00…Z-65 obecne, „w toku” zgodnie z poleceniem koordynatora', () => {
+test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”, zadania Z-00…Z-65 obecne, „w toku” zgodnie z poleceniem koordynatora, Z-08 i Z-28 „odpada” (ZM-20), Z-41 bez zależności od Z-28, S11 z progiem etapu 5', () => {
   const md = readFileSync(join(ROOT, 'docs/55-plan-startu.md'), 'utf8'), { rows, errors } = parsePlan(md);
   assert.deepEqual(errors, []); assert.deepEqual(checkPlanStartu({ rows, indexing: false }).errors, []);
   const ids = rows.map(r => r.id);
@@ -62,5 +70,12 @@ test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”
     'Z-30', 'Z-31', 'Z-32', 'Z-33', 'Z-34', 'Z-35', 'Z-40', 'Z-41', 'Z-50', 'Z-51', 'Z-52', 'Z-60', 'Z-61', 'Z-62', 'Z-63', 'Z-64', 'Z-65'];
   assert.deepEqual(ids, expected);
   const wToku = ['Z-00', 'Z-01', 'Z-02', 'Z-03', 'Z-04', 'Z-06', 'Z-07', 'Z-20', 'Z-21', 'Z-24'];
-  for (const r of rows) assert.equal(r.stan, wToku.includes(r.id) ? 'w toku' : 'otwarte', r.id);
+  const odpada = ['Z-08', 'Z-28'];
+  for (const r of rows) assert.equal(r.stan, wToku.includes(r.id) ? 'w toku' : odpada.includes(r.id) ? 'odpada' : 'otwarte', r.id);
+  for (const r of rows.filter(x => odpada.includes(x.id))) { assert.equal(r.data, '2026-11-27', r.id); assert.match(r.dowod, /ZM-20/, r.id); }
+  assert.deepEqual(rows.find(r => r.id === 'Z-41').po, ['Z-40']);
+  /* włączenie Google (Z-60) nie blokuje samo siebie: gdy etapy 0–5 są zrobione albo odpadły, a Z-60…Z-65 otwarte, S11 przy indeksowanie=true przechodzi */
+  const gotowe = rows.map(r => etap(r.id) <= 5 && r.stan !== 'odpada' ? { ...r, stan: 'zrobione', data: '2026-11-28', dowod: 'abc1234', po: [] } : r);
+  assert.deepEqual(checkPlanStartu({ rows: gotowe, indexing: true }).errors, []);
+  assert.equal(gotowe.filter(r => etap(r.id) === 6 && r.stan !== 'otwarte').length, 0);
 });

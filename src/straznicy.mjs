@@ -58,7 +58,7 @@ export function checkIndexingStart({ indexing, from }) {
   return { errors, warnings: [] };
 }
 const optional = rel => existsSync(join(ROOT, rel)) ? JSON.parse(readFileSync(join(ROOT, rel), 'utf8')) : {};
-/** S11 plan startu (Z-00): docs/55-plan-startu.md — przy indeksowanie=true wszystkie zadania etapów 0–6 „zrobione” z datą i dowodem; błędy formatu zawsze błędem. */
+/** S11 plan startu (Z-00): docs/55-plan-startu.md — przy indeksowanie=true wszystkie zadania etapów 0–5 „zrobione” albo „odpada” z datą i dowodem (etap 6 po włączeniu Google nie blokuje); błędy formatu zawsze błędem. */
 export function checkPlan({ text, indexing }) {
   const p = parsePlan(text), c = checkPlanStartu({ rows: p.rows, indexing });
   return { errors: [...p.errors, ...c.errors], warnings: c.warnings };

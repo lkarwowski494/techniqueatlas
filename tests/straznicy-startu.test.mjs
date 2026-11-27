@@ -79,7 +79,7 @@ test('build: bez indeksowania luki to ostrzeżenia (S4, S11 plan startu, zamroż
   const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json */
   const stare = { wersjaWydania: '1.0.0' }; /* dane są z tagu 1.1.1: rozjazd wersji wywołuje S4 niezależnie od stanu config.json */
   const w = await build({ out: tmpDist(), cfg: stare, slugi: pusty }); const joined = w.warnings.join('\n');
-  for (const re of [/S4 wersja/, /plan startu: \d+ zadań etapów 0–6 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
+  for (const re of [/S4 wersja/, /plan startu: \d+ zadań etapów 0–5 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
   assert.doesNotMatch(joined, /S3|S6/); /* S3 wyłączony: ZM-20 */ /* P-1: brak pola „pelna” ani pełnej karty nie jest naruszeniem */
   await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
