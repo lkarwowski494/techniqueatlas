@@ -1,4 +1,4 @@
-// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw, S4 wersja danych, S6 reguła indeksowania ćwiczeń (ZM-06, od 27.11.2026 P-1), S8 start indeksowania, S11 plan startu (docs/55). Czyste funkcje: dane → { errors, warnings }.
+// Strażnicy warunków startu strony (docs/54 pkt 12): S3 znaki towarowe nazw (od 27.11.2026 tylko status „ryzyko”, ZM-20), S4 wersja danych, S6 reguła indeksowania ćwiczeń (ZM-06, od 27.11.2026 P-1), S8 start indeksowania, S11 plan startu (docs/55). Czyste funkcje: dane → { errors, warnings }.
 // Zasada wspólna: przy config.indeksowanie=true każde naruszenie przerywa build (błąd); przy false to tylko ostrzeżenie — strona przed startem z wersją 1.1 ma być budowalna,
 // ale nie może zostać upubliczniona (włączenie indeksowania) z lukami. Bez zapytań sieciowych (sprawdzenie wersji w App Store po ID to osobny krok wydania, nie test).
 import { readFileSync, existsSync } from 'node:fs';
@@ -12,18 +12,14 @@ const sample = (xs, n = 5) => xs.slice(0, n).join(', ') + (xs.length > n ? `, �
 const verdict = (indexing, errors, warnings, msg) => (indexing ? errors : warnings).push(msg);
 
 /**
- * S3 znaki towarowe (R-016): każda nazwa ćwiczenia widoczna na stronie ma w trademark-check.json wpis { status: "sprawdzone", data: "RRRR-MM-DD" }.
- * Statusy: "sprawdzone" (zamknięte), "ryzyko" (znalezione kolidujące zgłoszenie — nazwa do zmiany), "do-sprawdzenia" (jak brak).
+ * S3 znaki towarowe (R-016) — WYŁĄCZONY przez właściciela 27.11.2026 (KO-128, ZM-20): o sprawdzaniu znaków towarowych nazw ćwiczeń właściciel powiedział „Nie robimy tego.”
+ * Brak wpisu w trademark-check.json (ani status „do-sprawdzenia”, zła data) nie blokuje indeksowania i nie daje ostrzeżenia. Zostaje jedna blokada: wpisany status „ryzyko”
+ * (ktoś znalazł kolidujące zgłoszenie — nazwa do zmiany); zapis „przez analogię do weta”, do cofnięcia słowami właściciela. Poprzednio: każda nazwa wymagała wpisu „sprawdzone” z datą.
  */
 export function checkTrademarks({ names, checked = {}, indexing }) {
-  const errors = [], warnings = [], bad = new Set(), risky = new Set();
-  for (const n of new Set(names)) {
-    const e = checked[n];
-    if (e?.status === 'ryzyko') risky.add(n);
-    else if (e?.status !== 'sprawdzone' || !ISO_DATE.test(e?.data ?? '')) bad.add(n);
-  }
+  const errors = [], warnings = [], risky = new Set();
+  for (const n of new Set(names)) if (checked[n]?.status === 'ryzyko') risky.add(n);
   if (risky.size) verdict(indexing, errors, warnings, `S3 znaki towarowe: ${risky.size} nazw ze statusem „ryzyko” (${sample([...risky])}) — zmień nazwę albo zamknij ryzyko`);
-  if (bad.size) verdict(indexing, errors, warnings, `S3 znaki towarowe: ${bad.size} nazw bez statusu „sprawdzone” z datą w trademark-check.json (${sample([...bad])})`);
   return { errors, warnings };
 }
 

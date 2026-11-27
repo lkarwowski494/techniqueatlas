@@ -10,17 +10,19 @@ import { requireData, tmpDist } from './pomoc.mjs';
 
 const OK = { status: 'sprawdzone', data: '2026-10-26' };
 
-test('S3: wszystkie nazwy ze statusem „sprawdzone” i datą → zielone; brak wpisu, zły status, zła data i „do-sprawdzenia” → błąd przy indeksowaniu, ostrzeżenie bez', () => {
+/* S3 (KO-128, decyzja właściciela 27.11.2026, ZM-20): „Nie robimy tego.” — nazwy ćwiczeń nie są sprawdzane pod kątem znaków towarowych, brak wpisu w trademark-check.json nie blokuje indeksowania.
+   Zostaje blokada wpisanego statusu „ryzyko” (jeśli ktoś ją wpisze, nazwa do zmiany). Zapis „przez analogię do weta”. */
+test('S3 (27.11.2026, ZM-20): brak wpisu, zły status, zła data i „do-sprawdzenia” nie blokują ani nie ostrzegają — także przy indeksowaniu; wpisane „ryzyko” blokuje przy indeksowaniu (ostrzeżenie bez)', () => {
   const names = ['A', 'B', 'A'];
-  assert.deepEqual(checkTrademarks({ names, checked: { A: OK, B: OK }, indexing: true }), { errors: [], warnings: [] });
-  for (const bad of [{}, { A: OK }, { A: OK, B: { status: 'sprawdzone' } }, { A: OK, B: { status: 'sprawdzone', data: '26.10.2026' } }, { A: OK, B: { status: 'do-sprawdzenia', data: '2026-10-26' } }]) {
-    const on = checkTrademarks({ names, checked: bad, indexing: true }), off = checkTrademarks({ names, checked: bad, indexing: false });
-    assert.equal(on.errors.length, 1, JSON.stringify(bad)); assert.deepEqual(on.warnings, []); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
-  }
+  for (const bad of [{}, { A: OK }, { A: OK, B: { status: 'sprawdzone' } }, { A: OK, B: { status: 'sprawdzone', data: '26.10.2026' } }, { A: OK, B: { status: 'do-sprawdzenia', data: '2026-10-26' } }, { A: OK, B: OK }])
+    for (const indexing of [true, false]) assert.deepEqual(checkTrademarks({ names, checked: bad, indexing }), { errors: [], warnings: [] }, JSON.stringify(bad));
+  const risk = { A: OK, B: { status: 'ryzyko', data: '2026-10-26' } };
+  const on = checkTrademarks({ names, checked: risk, indexing: true }), off = checkTrademarks({ names, checked: risk, indexing: false });
+  assert.equal(on.errors.length, 1); assert.match(on.errors[0], /1 nazw ze statusem „ryzyko” \(B\)/); assert.deepEqual(on.warnings, []); assert.deepEqual(off.errors, []); assert.equal(off.warnings.length, 1);
 });
-test('S3: status „ryzyko” to osobny komunikat (nazwa do zmiany); komunikat nie wypisuje setek nazw (próbka + liczba)', () => {
-  const r = checkTrademarks({ names: ['A'], checked: { A: { status: 'ryzyko', data: '2026-10-26' } }, indexing: true }); assert.match(r.errors[0], /1 nazw ze statusem „ryzyko” \(A\)/);
-  const many = Array.from({ length: 300 }, (_, i) => `N${i}`), m = checkTrademarks({ names: many, checked: {}, indexing: true }).errors[0]; assert.match(m, /300 nazw/); assert.match(m, /\+295\)/); assert.ok(m.length < 300);
+test('S3 (27.11.2026, ZM-20): komunikat „ryzyko” nie wypisuje setek nazw (próbka + liczba)', () => {
+  const many = Array.from({ length: 300 }, (_, i) => `N${i}`), checked = Object.fromEntries(many.map(n => [n, { status: 'ryzyko', data: '2026-11-27' }]));
+  const m = checkTrademarks({ names: many, checked, indexing: true }).errors[0]; assert.match(m, /300 nazw/); assert.match(m, /\+295\)/); assert.ok(m.length < 300);
 });
 test('S4: wersja danych = wersja wydania; puste wydanie, rozjazd wersji, ref nie będący tagiem v<wersja> → błąd przy indeksowaniu, ostrzeżenie (poza tagiem) bez', () => {
   const ok = { manifestVersion: '1.1.0', releaseVersion: '1.1.0', pinRef: 'v1.1.0-b1030' };
@@ -63,7 +65,8 @@ test('startGuards składa strażniki S3, S4, S8, S11 z plikami ustawień (nazwy 
   /* S11 (Z-00, 27.11.2026): plan startu jest częścią startGuards; test podaje plan w całości „zrobiony”, żeby sprawdzać S3 niezależnie od stanu docs/55 */
   const plan = '| ID | Zadanie | Rola | Model | Czas | Po | Stan | Data | Dowód |\n|---|---|---|---|---|---|---|---|---|\n| Z-00 | x | 08 | sonnet | 1 h | — | zrobione | 2026-11-28 | abc1234 |\n';
   const ok = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': OK }, plan } }); assert.deepEqual([ok.errors, ok.warnings], [[], []]);
-  const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK }, plan } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/);
+  const brak = startGuards({ ...base, files: { trademark: { 'A-pl': OK }, plan } }); assert.deepEqual([brak.errors, brak.warnings], [[], []]); /* ZM-20: brak wpisu nie blokuje */
+  const bad = startGuards({ ...base, files: { trademark: { 'A-pl': OK, 'A-en': { status: 'ryzyko', data: '2026-11-27' } }, plan } }); assert.equal(bad.errors.length, 1); assert.match(bad.errors[0], /A-en/); /* wpisane „ryzyko” (nazwy ze wszystkich języków) blokuje */
 });
 
 test('pliki ustawień mają znany kształt (trademark-check.json, config.json → wersjaWydania); start-wyjatki.json usunięty razem z warunkiem 709/709 (ZM-02, ZM-06, 02.11.2026)', () => {
@@ -71,17 +74,17 @@ test('pliki ustawień mają znany kształt (trademark-check.json, config.json �
   assert.equal(typeof t.nazwy, 'object'); for (const [n, e] of Object.entries(t.nazwy)) { assert.ok(['sprawdzone', 'ryzyko', 'do-sprawdzenia'].includes(e.status), n); assert.match(e.data, /^\d{4}-\d{2}-\d{2}$/, n); }
   assert.equal(typeof c.wersjaWydania, 'string');
 });
-test('build: bez indeksowania luki to ostrzeżenia (S3, S4, S11 plan startu, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
+test('build: bez indeksowania luki to ostrzeżenia (S4, S11 plan startu, zamrożenie adresów), z indeksowaniem — błąd ze wszystkimi naruszeniami; CLI nie omija strażników', async () => {
   requireData();
   const pusty = { lock: {}, overrides: { nadpisania: {}, przekierowania: {} } }; /* zamrożenie podane jawnie: test nie zależy od stanu slugs.lock.json */
   const stare = { wersjaWydania: '1.0.0' }; /* dane są z tagu 1.1.1: rozjazd wersji wywołuje S4 niezależnie od stanu config.json */
   const w = await build({ out: tmpDist(), cfg: stare, slugi: pusty }); const joined = w.warnings.join('\n');
-  for (const re of [/S3 znaki towarowe/, /S4 wersja/, /plan startu: \d+ zadań etapów 0–6 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
-  assert.doesNotMatch(joined, /S6/); /* P-1: brak pola „pelna” ani pełnej karty nie jest naruszeniem */
+  for (const re of [/S4 wersja/, /plan startu: \d+ zadań etapów 0–6 niezrobionych/, /slugs\.lock\.json jest pusty/]) assert.match(joined, re);
+  assert.doesNotMatch(joined, /S3|S6/); /* S3 wyłączony: ZM-20 */ /* P-1: brak pola „pelna” ani pełnej karty nie jest naruszeniem */
   await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: pusty }), /slugs\.lock\.json jest pusty/);
   const man = readJson('.cache/dane/manifest.json'), en = JSON.parse(readFileSync(join(ROOT, '.cache/dane', man.languages.find(l => l.lang === 'en').file), 'utf8'));
-  const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S3/S4/S11 */
-  await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S3 znaki towarowe/.test(err.message) && /S4 wersja/.test(err.message) && /plan startu/.test(err.message) && !/S6/.test(err.message));
+  const lock = Object.fromEntries(en.exercises.map(e => [e.id, e.slug])); /* adresy zamrożone — zostają same warunki S4/S11 */
+  await assert.rejects(build({ out: tmpDist(), cfg: { ...stare, indeksowanie: true }, slugi: { lock, overrides: { nadpisania: {}, przekierowania: {} } } }), err => /S4 wersja/.test(err.message) && /plan startu/.test(err.message) && !/S3|S6/.test(err.message));
   assert.doesNotMatch(readFileSync(join(ROOT, 'src/build.mjs'), 'utf8').split('if (process.argv[1]')[1], /pominStraznikowStartu/);
 });
 
