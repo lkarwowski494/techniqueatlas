@@ -14,7 +14,8 @@ import { effectiveSlugs } from '../src/slugi.mjs';
 requireData();
 /* adresy jak w buildzie: surowy slug z eksportu + nadpisania ze slug-overrides.json (zamrożone adresy; od 27.11.2026, tag 1.1.1, 14 nadpisań) */
 const surowe = l => JSON.parse(readFileSync(join(CACHE, `dane/atlas-${l}.json`), 'utf8')), NADPISANIA = readJson('slug-overrides.json').nadpisania, EFF = effectiveSlugs(surowe('en').exercises, NADPISANIA).slugs;
-const atlas = l => { const d = surowe(l); return { ...d, exercises: d.exercises.map(e => ({ ...e, slug: EFF.get(e.id) ?? e.slug })) }; };
+const MAP = new Map(surowe('en').exercises.map(e => [e.slug, EFF.get(e.id) ?? e.slug])), m = s => MAP.get(s) ?? s, rekey = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [m(k), v]));
+const atlas = l => { const d = surowe(l); return { ...d, exercises: d.exercises.map(e => ({ ...e, slug: m(e.slug), alternatives: e.alternatives.map(m) })) }; };
 const EN = atlas('en'), PL = atlas('pl');
 const read = (out, f) => readFileSync(join(out, f), 'utf8');
 const robots = html => html.match(/<meta name="robots" content="([^"]*)">/)?.[1] ?? null;
@@ -124,7 +125,7 @@ test('wszystkie linki wewnętrzne (href i src, względne) we wszystkich zbudowan
   assert.deepEqual(bad.slice(0, 5), []);
 });
 test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyjściowa, skrajna; figura statyczna — tylko skrajna, bez podpisu) z arkusza assets/poz/, ukryte animowane widoki, przyciski, moduł danych i skrypt; bez figury — brak figury; budżety', async () => {
-  const { out } = await buildOnce(); const withFig = EN.exercises.filter(e => e.figure); const figs = JSON.parse(readFileSync(join(CACHE, 'dane/figury.json'), 'utf8')).figures;
+  const { out } = await buildOnce(); const withFig = EN.exercises.filter(e => e.figure); const figs = rekey(JSON.parse(readFileSync(join(CACHE, 'dane/figury.json'), 'utf8')).figures);
   const dirN = d => existsSync(join(out, d)) ? readdirSync(join(out, d)).length : 0; /* eksport bez gotowych figur (rodziny czekają na recenzję) → brak katalogów */
   assert.equal(withFig.length, Object.keys(figs).filter(s => EN.exercises.some(e => e.slug === s)).length); assert.equal(withFig.length, dirN('assets/fig')); assert.equal(withFig.length, dirN('assets/poz'));
   let single = 0;
@@ -143,7 +144,7 @@ test('figura: ćwiczenia z figurą mają dwie pozycje statyczne z podpisami (wyj
   const big = htmlFiles(out).filter(f => /exercises\/[^/]+\/index\.html$/.test(f)).filter(f => statSync(join(out, f)).size > 20 * 1024); assert.deepEqual(big, []);
 });
 test('sylwetka mięśni: arkusz assets/sylwetka.svg + klasy stopni partii (bez inline style — CSP), przód i tył z podpisami, dekoracyjna (aria-hidden); zgodna z danymi eksportu; arkusz klas CSS dla wszystkich partii i stopni', async () => {
-  const { out } = await buildOnce(); const sil = JSON.parse(readFileSync(join(CACHE, 'dane/sylwetka.json'), 'utf8'));
+  const { out } = await buildOnce(); const sil0 = JSON.parse(readFileSync(join(CACHE, 'dane/sylwetka.json'), 'utf8')), sil = { ...sil0, levels: rekey(sil0.levels) };
   assert.equal(read(out, 'assets/sylwetka.svg'), sil.sprite);
   const css = read(out, 'assets/sylwetka.css'); for (let i = 0; i < sil.muscles.length; i++) for (const l of [1, 2, 3, 4]) assert.ok(css.includes(`.sylwetki.s${i}-${l}{--mm-${i}:var(--mm-l${l})}`), `${i}-${l}`);
   for (const [l, d] of [['pl', PL], ['en', EN]]) for (const e of d.exercises) {

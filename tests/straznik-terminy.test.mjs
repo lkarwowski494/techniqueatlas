@@ -20,11 +20,11 @@ const WYJATKI = {
   'en/nozyce: Lunges and step-ups': 'nazwa grupy ćwiczeń — wykroki to wykroki; zakaz „lunge” dotyczy pozycji nożyc w opisie techniki',
   'pl/nozyce: Wykroki i wejścia na skrzynię': 'nazwa grupy ćwiczeń — zakaz „wykrok” dotyczy pozycji nożyc w opisie techniki, nie nazwy grupy',
   /* analogia do wyjątków z 09.11.2026 (zapis „do weta”, 27.11.2026, dane z tagu 1.1.1): nazwy grup ćwiczeń z aplikacji, w których zakaz innego pojęcia trafia na poprawny termin */
-  'es/pozycja_pompki: „Flexiones y planchas” ~ plancha': 'nazwa grupy ćwiczeń — „plancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
-  'pt-BR/pozycja_pompki: „Flexões e pranchas” ~ prancha': 'nazwa grupy ćwiczeń — „prancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
-  'pt/pozycja_pompki: „Flexões e pranchas” ~ prancha': 'nazwa grupy ćwiczeń — „prancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
-  'zh-Hant/pozycja_pompki: „雙槓撐體” ~ 撐體': 'nazwa grupy ćwiczeń — „雙槓撐體” = dipy na poręczach; zakaz dotyczy pozycji pompki w opisie techniki',
-  'ja/sanki_treningowe: „ソリとスロー” ~ そり|ソリ': 'nazwa grupy ćwiczeń — „ソリとスロー” = sanie i rzuty (grupa ćwiczeń); zakaz dotyczy sanek treningowych jako sprzętu w opisie techniki',
+  'es/pozycja_pompki: Flexiones y planchas': 'nazwa grupy ćwiczeń — „plancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
+  'pt-BR/pozycja_pompki: Flexões e pranchas': 'nazwa grupy ćwiczeń — „prancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
+  'pt/pozycja_pompki: Flexões e pranchas': 'nazwa grupy ćwiczeń — „prancha” = deska (plank) w grupie „pompki i deski”; zakaz dotyczy pozycji pompki w opisie techniki',
+  'zh-Hant/pozycja_pompki: 雙槓撐體': 'nazwa grupy ćwiczeń — „雙槓撐體” = dipy na poręczach; zakaz dotyczy pozycji pompki w opisie techniki',
+  'ja/sanki_treningowe: ソリとスロー': 'nazwa grupy ćwiczeń — „ソリとスロー” = sanie i rzuty (grupa ćwiczeń); zakaz dotyczy sanek treningowych jako sprzętu w opisie techniki',
   'uk/biodra: Відведення й приведення стегна': 'nazwa grupy — „стегно” = udo (odwodzenie/przywodzenie uda), poprawnie; zakaz dotyczy stawu biodrowego',
 };
 test('słownik aplikacji: wzorce zakazane nie występują w tekstach strony (wszystkie języki)', () => {
