@@ -89,4 +89,20 @@ Zadanie docelowe: **Z-02** (to samo przepięcie PIN; „gotowe, gdy” rozszerzy
 2. `figury/petla-jednokierunkowa` → Z-02/Z-02a, z dopełnieniem `oneWayRepMs` i `cykl_lustro`. Analogia: BR-BIB-007 (trening `docs/brd/wymagania.md:715`) i P-9 „nie ma miejsca na błąd”.
 3. `claude/amazing-cori-vqo0qi` → nowe małe zadanie etapu 0. Analogia: ZB-050 wariant A (trening `docs/18-przekazanie.md:321`, zatwierdzone `:324`).
 
-Rola: prompt 07-jakosc (audit) nie został złożony — `add_repo` biblioteki odrzucone przez uprawnienia sesji; pytanie do koordynatora wysłane 27.11.2026. Przegląd zgodny z poleceniem AR.md (tylko odczyt, jeden plik raportu).
+## Komendy (każda osobno, 27.11.2026)
+| Komenda | Kod wyjścia | Wynik |
+|---|---|---|
+| `git rev-parse HEAD` (start) | 0 | `21e056c0` = oczekiwany; `git status --porcelain` pusty |
+| `git ls-remote --heads origin` | 0 | 13 wpisów = `main` + 12 gałęzi |
+| `git fetch origin --depth=200 <12 gałęzi> main` | 0 | historia wystarczyła do `git merge-base` dla 12/12 |
+| `git log`/`git diff`/`git cherry`/`git merge-base --is-ancestor` × 12 | 0 | tabela „Wynik zbiorczy” |
+| `git clone --depth 1 --branch v1.1.1-b1042 …/trening` | 0 | HEAD `d9382dbe` |
+| `npm ci` | 0 | — |
+| `npm run dane` | 0 | dane 1.0.1 @ `ab59dd5` (PIN main) |
+| `node --test tests/straznik-sekrety.test.mjs tests/straznik-zrodla.test.mjs tests/straznik-terminy.test.mjs` | 0 | 13/13 (po skróceniu pełnego SHA w raporcie — strażnik sekretów odrzuca 40 znaków szesnastkowych) |
+
+Pełnego `npm test` lokalnie nie uruchamiałem (zmiana to tylko ten plik w `docs/`); wynik pełnego zestawu daje `tests.yml` na końcowym SHA (podany w przekazaniu do koordynatora).
+
+## Uwagi
+- Liczba gałęzi: **12** (jak w poleceniu). Moje „13” w pierwszej wiadomości do koordynatora liczyło `main` — błąd, poprawiony tu.
+- Rola: prompt 07-jakosc (audit) otrzymany od koordynatora w 3 wiadomościach (`add_repo` biblioteki odrzucone przez uprawnienia sesji). Treść przyszła z encjami HTML (`&lt;`, `&gt;`, `&amp;`), więc suma bajtów/sha256 nie jest porównywalna 1:1 z 76418 B / `869d32a97801149c` [DO USTALENIA]; akapity kompletne (zasady wspólne 1–22, kontrakt roli, JAK-01…19, moduły, szablony). Szablon raportu roli (`audit/07-jakosc-*.md`, werdykt wydania) nie dotyczy Z-01 — polecenie AR.md wyznacza ten plik i zakres; z roli stosuję: dowód `plik:linia`, `[DO USTALENIA]`, tożsamość commitu, komendy z kodami wyjścia, pliki śledzone poza tym raportem nietknięte.
