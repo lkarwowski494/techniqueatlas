@@ -7,7 +7,7 @@ Aktualizacja: 27.11.2026 · zadanie Z-24 (plan strony 27.11.2026, decyzja P-7: �
 - Do tej pory eksport `pl` niósł angielską nazwę (pole `name`), więc strona pokazywałaby je po angielsku. Plik nie jest jeszcze podłączony do stron (to Z-32; `src/` nietknięte).
 
 ## Metoda i wersja źródła
-- Eksport z tagu `v1.1.1-b1042` repo `lkarwowski494/trening` (commit `d9382dbe5dde91e8b746d14193ed332ab889df62`, katalog `06090b70a69c`): `node scripts/strona/eksport.mjs --out <katalog> --langs pl,en`. Lista identyfikatorów i nazwy angielskie (`atlas-en.json`) pochodzą z tego samego uruchomienia.
+- Eksport z tagu `v1.1.1-b1042` repo `lkarwowski494/trening` (commit `d9382db`, katalog `06090b70a69c`): `node scripts/strona/eksport.mjs --out <katalog> --langs pl,en`. Lista identyfikatorów i nazwy angielskie (`atlas-en.json`) pochodzą z tego samego uruchomienia.
 - Instalacja pomocnicza: `typescript@6.0.3` (wersja z `package.json` tagu) w klonie tagu, `--no-save`, poza repo strony.
 - Tłumaczenie własne, ręczne, bez zewnętrznego researchu nazw (P-7). Nazwa angielska i sprzęt z identyfikatora służą jako kontekst. Zachowane terminy wg słownika `docs/lokalizacja/slownik-terminow.json` i nazw grup / sprzętu z aplikacji: „hantle”, „sztanga”, „wyciąg” (zamiast „linki”), „masa ciała”, „kettlebell”, „ślizgacze”, „taśmy do podwieszania”, „piłka gimnastyczna”, „podwijanie miednicy”.
 - Kryterium naturalności (25.10.2026): „czy tak powiedziałby trener albo kolega na siłowni”. Stąd:
