@@ -1,0 +1,27 @@
+{
+  "_opis": "Z-22: fixed texts for title, description, question headings and short answer templates (en). See docs/teksty/szablony-stron.md.",
+  "tytulCwiczenia": "{nazwa} — {dopisek}",
+  "nazwaPodwojna": "{lokalna} ({angielska})",
+  "miesnieGlowne": "Main muscles: {lista}.",
+  "miesniePomocnicze": "Secondary muscles: {lista}.",
+  "partia": "Muscle group: {grupa}.",
+  "sprzet": "Equipment needed: {lista}.",
+  "rodzaj": "Movement type: {rodzaj}.",
+  "albo": " or ",
+  "pytania": {
+    "setup": "How do you set up?",
+    "move": "How do you perform the movement?",
+    "miesnie": "Which muscles does it work?",
+    "tips": "What helps your technique?",
+    "mistakes": "Which mistakes should you avoid?",
+    "sprzet": "What equipment do you need?",
+    "zamienniki": "What can you do instead?"
+  },
+  "opisGlownej": "{n} {opisow}: movement drawing for {f}, technique cues for {c}, substitutes for {z}.",
+  "opisow": { "one": "entry", "other": "entries" },
+  "opisListy": "{n} {pozycji} from A to Z, filterable by muscle group, equipment and movement type.",
+  "pozycji": { "one": "entry", "other": "entries" },
+  "opisKategorii": "{n} {pozycji}, including {lista}.",
+  "opisKategoriiJedna": "One entry: {lista}.",
+  "opisKategoriiBezPrzykladow": "{n} {pozycji}; movement drawing for {f}, technique cues for {c}."
+}

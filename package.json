@@ -13,7 +13,8 @@
     "dane": "node src/sync-dane.mjs",
     "przypnij": "node src/przypnij.mjs",
     "pomiary": "node pomiary/mierz.mjs",
-    "slugi": "node src/slugi.mjs"
+    "slugi": "node src/slugi.mjs",
+    "szablony": "node src/szablony.mjs"
   },
   "devDependencies": {
     "axe-core": "4.13.0",

@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { requireData, read } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
-import { LIMITY, WZORCE, JEZYKI, rdzenie, wspolne, szablonyCwiczenia, szablonyGlownej, szablonyListy, szablonyKategorii, tabelaWzorcow } from '../src/szablony.mjs';
+import { LIMITY, WZORCE, JEZYKI, rdzenie, wspolne, szablonyCwiczenia, szablonyCwiczen, szablonyGlownej, szablonyListy, szablonyKategorii, tabelaWzorcow } from '../src/szablony.mjs';
 
 requireData();
 const dane = Object.fromEntries(JEZYKI.map(l => [l, readJson(`.cache/dane/atlas-${l}.json`)]));
@@ -21,14 +21,18 @@ test('rdzenie: wielkość liter, odmiana (5 pierwszych liter), słowa krótkie i
 });
 
 for (const lang of JEZYKI) {
-  const d = dane[lang], wyniki = d.exercises.map(e => ({ e, s: szablonyCwiczenia(d, ui[lang], lang, e) }));
+  const d = dane[lang], mapa = szablonyCwiczen(d, ui[lang], lang), wyniki = d.exercises.map(e => ({ e, s: mapa.get(e.slug) }));
 
   test(`${lang}: tytuł ćwiczenia — niepusty, w limicie, unikalny, bez słów powtórzonych w opisie`, () => {
     const zle = wyniki.filter(({ s }) => !s.tytul || dl(s.tytul) > LIMITY.tytul.max).map(({ e, s }) => `${e.slug}: ${s.tytul}`);
     assert.deepEqual(zle, []);
     const t = wyniki.map(({ s }) => s.tytul); assert.equal(new Set(t).size, t.length, 'tytuły nieunikalne');
-    const powt = wyniki.map(({ e, s }) => [e.slug, wspolne(lang, s.tytul, s.opis)]).filter(([, w]) => w.length);
-    assert.deepEqual(powt, []);
+    /* powtórzenie dozwolone tylko w zdaniach nazwanych w `wyjatek` (rozdzielenie opisów, które bez nich byłyby identyczne — tylko strony indeksowane) */
+    for (const { e, s } of wyniki) {
+      const bez = s.czesciOpisu.filter(z => !s.wyjatek.includes(z.zrodlo)).map(z => z.tekst).join(' ');
+      assert.deepEqual(wspolne(lang, s.tytul, bez), [], `${e.slug}: ${s.tytul} | ${s.opis}`);
+      if (s.wyjatek.length) assert.ok(wlasne(e), `${e.slug}: wyjątek od zakazu powtórzeń poza stroną indeksowaną`);
+    }
   });
 
   test(`${lang}: opis ćwiczenia indeksowanego — długość ${LIMITY.opis.min}–${LIMITY.opis.max}, unikalny; każdy opis ≤ max`, () => {
@@ -36,9 +40,17 @@ for (const lang of JEZYKI) {
     assert.deepEqual(zaDlugie, []);
     const idx = wyniki.filter(({ e }) => wlasne(e));
     assert.equal(idx.length, 310, 'liczba ćwiczeń z własnymi wskazówkami (P-1) — zmiana danych wymaga przeglądu szablonów');
-    const krotkie = idx.filter(({ s }) => dl(s.opis) < LIMITY.opis.min).map(({ e, s }) => `${e.slug}: ${s.opis}`);
-    assert.deepEqual(krotkie, []);
-    const o = idx.map(({ s }) => s.opis); assert.equal(new Set(o).size, o.length, 'opisy indeksowanych nieunikalne');
+    /* krótszy niż minimum tylko wtedy, gdy dane się wyczerpały: każde pominięte zdanie powtarza słowo tytułu albo przekracza limit (nie dopisujemy tekstu spoza danych) */
+    const krotkie = idx.filter(({ s }) => dl(s.opis) < LIMITY.opis.min);
+    for (const { e, s } of krotkie) for (const z of s.pominiete) assert.ok(z.powod === 'powtórzenie' ? wspolne(lang, s.tytul, z.tekst).length : dl(`${s.opis} ${z.tekst}`) > LIMITY.opis.max, `${e.slug}: ${z.zrodlo}`);
+    assert.ok(krotkie.length <= 15, `opisów krótszych niż ${LIMITY.opis.min} znaków przy wyczerpanych danych: ${krotkie.length} (próg przeglądu 15) — ${krotkie.map(({ e }) => e.slug).join(', ')}`);
+    for (const { e, s } of krotkie) assert.ok(s.opis.length, `${e.slug}: pusty opis`);
+    /* powtórzony opis dozwolony tylko, gdy ćwiczenia mają identyczne dane (mięśnie, sprzęt, wskazówki) — różnią się wyłącznie nazwą */
+    const po = new Map(); for (const { e, s } of idx) po.set(s.opis, [...(po.get(s.opis) ?? []), e]);
+    for (const grupa of [...po.values()].filter(g => g.length > 1)) {
+      const klucz = e => JSON.stringify([e.regions, e.requires, e.cues]);
+      assert.ok(grupa.every(e => klucz(e) === klucz(grupa[0])), `opis powtórzony przy różnych danych: ${grupa.map(e => e.slug).join(', ')}`);
+    }
   });
 
   test(`${lang}: tylko dane — wskazówki w opisie i krótkiej odpowiedzi to dosłowne zdania eksportu, wskazówki ogólne nigdy`, () => {

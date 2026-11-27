@@ -1,0 +1,27 @@
+{
+  "_opis": "Z-22: teksty stałe szablonów tytułu, opisu, nagłówków-pytań i krótkiej odpowiedzi (pl). Zasady i uzasadnienie: docs/teksty/szablony-stron.md. Do tłumaczenia w Z-26 (33 języki) razem z tym plikiem; {klucze} zostają bez zmian.",
+  "tytulCwiczenia": "{nazwa} — {dopisek}",
+  "nazwaPodwojna": "{lokalna} ({angielska})",
+  "miesnieGlowne": "Mięśnie główne: {lista}.",
+  "miesniePomocnicze": "Mięśnie pomocnicze: {lista}.",
+  "partia": "Partia mięśniowa: {grupa}.",
+  "sprzet": "Potrzebny sprzęt: {lista}.",
+  "rodzaj": "Rodzaj ruchu: {rodzaj}.",
+  "albo": " albo ",
+  "pytania": {
+    "setup": "Jak się ustawić?",
+    "move": "Jak wykonać ruch?",
+    "miesnie": "Które mięśnie pracują?",
+    "tips": "Co pomaga w technice?",
+    "mistakes": "Jakich błędów unikać?",
+    "sprzet": "Jaki sprzęt jest potrzebny?",
+    "zamienniki": "Czym można je zastąpić?"
+  },
+  "opisGlownej": "{n} {opisow}: rysunek ruchu przy {f}, wskazówki techniki przy {c}, zamienniki przy {z}.",
+  "opisow": { "one": "opis", "few": "opisy", "many": "opisów", "other": "opisu" },
+  "opisListy": "{n} {pozycji} od A do Z z filtrem partii mięśniowej, sprzętu i rodzaju ruchu.",
+  "pozycji": { "one": "pozycja", "few": "pozycje", "many": "pozycji", "other": "pozycji" },
+  "opisKategorii": "{n} {pozycji}, w tym {lista}.",
+  "opisKategoriiJedna": "Jedna pozycja: {lista}.",
+  "opisKategoriiBezPrzykladow": "{n} {pozycji} z rysunkiem ruchu przy {f} i wskazówkami techniki przy {c}."
+}
