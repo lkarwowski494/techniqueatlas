@@ -42,6 +42,20 @@ Wzorzec: repo aplikacji (`lkarwowski494/trening`, gałąź `main`): `.github/wor
 Workflow ma tylko odczyt repo, więc nie dopisze wydatku sam. Po przebiegu płatnym pobierz artefakt i uruchom lokalnie `node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog artefaktu>` (to samo dla przeglądu), potem commit `docs/przeklad/wydatki.json`. Wpis jest idempotentny po `batch_id` (ten sam batch zastępuje wpis, nie dubluje); koszt liczy się z rzeczywistego użycia tokenów z wyników batcha wg modelu z wyniku (nie z argumentu `--model`), ceny × rabat batcha 50%. Zaraz po wysłaniu batcha powstaje `wydatek.json` ze szacunkiem, więc nawet batch, którego odbiór przekroczył czas (kod 4), da się zaksięgować (po `--wznow` wpis zostanie zastąpiony kosztem rzeczywistym).
 **Ryzyko:** licznik zna tylko wpisy, które ktoś dopisał. Niezaksięgowany przebieg nie zmniejsza zapasu. Do ustalenia z właścicielem: czy wystarczy zwyczaj księgowania przed następnym przebiegiem, czy workflow ma dostać prawo zapisu (wtedy osobna decyzja, bo łamie „tylko odczyt”).
 
+## Zmiany 28.11.2026 (sesja BO, po pełnym przebiegu)
+
+Powód: raport `pelny-przebieg-2026-11-28.md` (gałąź `strona/przeklad-api`): `nazwy/el` ucięte, „albo” bez spacji w 29 językach, brak wyboru języków do ponowienia.
+
+1. **Wybór języków**: wejście workflowów `jezyki` i opcja `--jezyki cs,pt-BR` (oba skrypty). Wzorzec w powłoce `^[A-Za-z0-9,-]*$`, w skrypcie kody muszą być z `config.json` (bez `pl`, `en`); `--limit` liczony po wyborze; limity 6 i 80 USD liczone dla wybranych żądań.
+2. **max_tokens**: grecki dostał własny współczynnik 2,6 (cyrylica 1,6 bez zmian); źródło, którego szacowane wyjście przekracza 16 000 tokenów (przegląd: 30 000), jest dzielone na części, czyli osobne żądania `pr-<źródło>-p<N>-<język>` (bez podziału identyfikator jak dotąd). Raporty części są scalane w jeden plik `<źródło>/<język>.json`; obcięta część zostaje błędem w polu `blad`, propozycje pozostałych części nie przepadają. Górna granica kosztu nadal = suma `max_tokens` żądań i nadal sprawdzana wobec 6 i 80 USD (podział dodaje tylko ok. 0,03 USD „myślenia” na część). **Uwaga przy `--wznow`**: pliki celów muszą być w takim stanie jak przy wysłaniu (podział i pomijanie istniejących zależą od nich).
+3. **Spacje**: przyczyna to parser (`parsujOdpowiedz` robił `v.trim()`), nie model: źródło `albo` to `" albo "` (spacje są częścią tekstu), a obcięcie zrobił skrypt przy odbiorze. Teraz spacje i znaki nowej linii z początku i końca źródła są odtwarzane w tłumaczeniu (`zachowajSpacje`), także w poprawkach przeglądu; oba prompty dostały zdanie o spacjach.
+4. **Istniejące tłumaczenia**: przekład domyślnie wysyła tylko pozycje bez tłumaczenia w pliku celu (cały język z kompletem jest pomijany z komunikatem; gdy nic do zrobienia: kod 0 bez żądań). `--nadpisz` (workflow: wejście `nadpisz`) przywraca wszystkie pozycje. Przegląd bez zmian (ocenia istniejące).
+5. **Licznik z gałęzi tekstów**: gdy podano `galaz_tekstow` i ma ona `docs/przeklad/wydatki.json`, workflow zapisuje go (tylko odczyt) do `wydatki-galaz.json` i przekazuje `--wydatki-galaz`. Skrypt **scala** wpisy z plikiem z main po `batch_id`: nowy wpis się dopisuje, rzeczywisty zastępuje szacunek, poza tym zostaje wyższy koszt, więc suma nigdy nie spada; `limit_usd` z pliku z gałęzi jest ignorowany (limit 80 USD tylko ze stałej w kodzie), a niezaksięgowany szacunek z gałęzi blokuje przebieg (kod 6) jak z main. `szacunek.json` ma pole `wydatki_z_galezi`. Zapis (`--zapisz-wydatek`) dalej tylko do pliku w repo.
+
+### Ponowienie nazw greckich (`nazwy/el`)
+
+Workflow „Przekład tekstów strony” z `main`: `galaz_tekstow` = gałąź z tekstami i wydatkami, `zrodlo` `nazwy`, `jezyki` `el`, `nadpisz` nie (istniejący `el` ma tylko szablony i prawne, więc `nazwy/el` jest brakujące), najpierw `tylko_szacuj` tak, potem nie. Szacunek ok. 0,5 USD. Pozostałe języki dla `nazwy` nie ucięły (32 komplety), więc `jezyki` ogranicza przebieg do `el`.
+
 ## Decyzje zapisane „do weta” (tryb analogii)
 
 | Data | Decyzja | Odrzucone | Zależy od |
@@ -51,6 +65,9 @@ Workflow ma tylko odczyt repo, więc nie dopisze wydatku sam. Po przebiegu płat
 | 27.11.2026 | Jedno żądanie na parę (źródło, język) | Jedno żądanie na język ze wszystkimi źródłami (mieszanie nazw i tekstów prawnych w jednym prompcie, limit `max_tokens`) | `MAX_TOKENS` 64000; guard wyjścia > 64000 daje błąd z poleceniem podziału źródła |
 | 27.11.2026 | Licznik wydatków w pliku repo, księgowany lokalnie | Zapis do repo z workflowu (łamie `contents: read`); licznik w sekrecie lub zmiennej Actions (wymaga zapisu i jest niewidoczny w repo) | zasada 12: brak działań zewnętrznych bez zgody |
 | 27.11.2026 | `--zgoda-koszt` zdejmuje tylko limit 6 USD, nigdy 80 USD | Wspólna zgoda na oba limity | słowa właściciela „Do 80 USD” |
+| 28.11.2026 | Spacje źródła odtwarzane po stronie skryptu (deterministycznie), prompt tylko wspiera | Poleganie wyłącznie na prompcie (model może je znów obciąć) | przyczyna: `trim()` w parserze |
+| 28.11.2026 | Przy zbyt dużym wyjściu źródło dzielone na części (próg 16 000 tokenów) i wyższy współczynnik dla greki, zamiast samego podnoszenia mnożnika `max_tokens` | Mnożnik 3× dla wszystkich (zawyża górną granicę kosztu dla każdego języka); limit 64000 na żądanie | brak pomiaru rzeczywistego zapotrzebowania greki [DO USTALENIA po przebiegu `el`] |
+| 28.11.2026 | Licznik z gałęzi tekstów scalany z main (nigdy nie obniża sumy), nie zastępuje pliku z main | Podmiana pliku z main plikiem z gałęzi (gałąź starsza lub błędna mogłaby obniżyć sumę) | limit 80 USD tylko z kodu |
 | 27.11.2026 | Rejestr zwracania się per język taki jak w aplikacji (`REJESTR`) także dla tekstów strony | Osobna tabela rejestrów strony | brak decyzji studia dla rejestru strony [DO USTALENIA] |
 
 ## Szacunek kosztu całości (przybliżenie bez klucza, 27.11.2026)
