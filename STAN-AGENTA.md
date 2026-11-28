@@ -1,3 +1,17 @@
+# Stan agenta — BQ3: scalenie z integracją, przekład kluczy UI w 33 językach (09-lokalizacja, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start 190f564; scalone `strona/scalenie-prawne` 6885fd1 i `main` e97094e) · polecenie: docs/koordynacja/polecenia/BQ3.md (repo trening, gałąź koordynacja)
+
+- a) Scalenie: konflikty tylko STAN-AGENTA.md (oba stany) i docs/przeklad/wydatki.json (suma wpisów obu stron). `main` scalił się bez konfliktów; źródło „ui”, enOther i test zrodlo-ui (linia src/ui w workflowach) zostają. Testy celowane 340/340.
+- b) Test `tests/ui-bez-zapasu-en.test.mjs` (czerwony przed: 627 braków = 33×19). Przekład: run 46150028188 (szacunek 1,69 USD, rzeczywiście 0,89), nałożono 627 tłumaczeń. Przegląd całych plików src/ui w dwóch przebiegach (run 46150551150, 46150558592; 1,87 USD), 287 poprawek nałożonych: docs/przeklad/przeglad-ui-2026-11-28.md.
+- c) Formy `countLine` (18 języków) objęte tym samym przeglądem (19 uwag, nałożone); osobny przebieg niepotrzebny.
+- Koszt: wydatki.json = 32,47 z 80 USD (start sesji: 29,72 wg pliku po scaleniu; koordynator podał ok. 28,9 — rozbieżność 0,8 USD do wyjaśnienia).
+- Zmiany istniejących testów (opis): z34-przeklad-ui — fixtura `kopia()` przywraca stan „czeka na przekład” dla de i ja (asercje bez zmian); z40-poprawki 002 — fallback angielski sprawdzany warunkowo, bo de ma już „wynik”.
+- Przegląd człowieka nie odbył się (tylko przegląd modelu). Lokalnie `build.test`/`jezyki-podglad` kończą SIGKILL (pamięć), sprawdza CI.
+- Propozycje: zatwierdzić 24 krytyczne poprawki u rodzimych użytkowników najpierw dla sl, lv, ru, zh-Hant.
+
+---
+
 # Stan agenta — BQ2: domknięcie przeglądów tłumaczeń i licznika (09-lokalizacja, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start bb10f4d; scalone `strona/integracja-start` b5d8db4 i `main` dbf4233) · polecenie: docs/koordynacja/polecenia/BQ2.md (repo trening, gałąź koordynacja)
