@@ -9,11 +9,11 @@ import { buildOnce, requireData, ROOT } from './pomoc.mjs';
 import { czytaj, plikiHtml, element, tekst, hrefy, rozwiaz, jsonld, nazwyLokalne, nazwaLokalna } from './strona-html.mjs';
 
 requireData();
-// KO-140: język bez pliku docs/nazwy/<kod>.json nie może być wpisany na stałe (po przekładzie API de, a później el dostają nazwy); bierzemy pierwszy język z config.json,
-// który ma wyeksportowane dane i teksty stałe, a nie ma pliku nazw. Gdy takiego nie ma, test gałęzi „bez nazw lokalnych” jest pomijany z jawnym komunikatem.
-const JEZYKI_CFG = JSON.parse(readFileSync(join(ROOT, 'config.json'), 'utf8')).jezyki, WYEKSPORTOWANE = new Set(JSON.parse(readFileSync(join(ROOT, '.cache/dane/manifest.json'), 'utf8')).languages.map(x => x.lang));
-const BEZ_NAZW = JEZYKI_CFG.find(l => !['pl', 'en'].includes(l) && WYEKSPORTOWANE.has(l) && existsSync(join(ROOT, `src/ui/${l}.json`)) && !existsSync(join(ROOT, `docs/nazwy/${l}.json`)));
-const { out, ctx } = await buildOnce('z32', { jezyki: ['pl', 'en', ...(BEZ_NAZW ? [BEZ_NAZW] : [])] });
+// KO-141: gałąź „język bez pliku nazw” nie zależy od danych repo (po przekładzie API każdy język z config.json ma docs/nazwy/<kod>.json, więc dobór „pierwszego języka bez nazw” kończył się pominięciem testu).
+// Fixture: build z opcją `bezNazw` ignoruje plik nazw wskazanego języka (src/build.mjs:44) — ten sam kod, który obsługuje język bez pliku. Testy bez skip.
+const FIXTURE = 'de', Z_NAZWAMI = ['de', 'ja'];
+const { out, ctx } = await buildOnce('z32', { jezyki: ['pl', 'en', ...Z_NAZWAMI] });
+const { out: outBez, ctx: ctxBez } = await buildOnce('z32-bez-nazw', { jezyki: ['en', FIXTURE] }, { bezNazw: [FIXTURE] });
 const N = nazwyLokalne('pl'), PL = ctx.data.pl.exercises;
 const strona = (l, slug) => czytaj(out, `${l}/exercises/${slug}/index.html`);
 const lok = e => nazwaLokalna('pl', N, e);
@@ -40,11 +40,33 @@ test('Z-32 przypadek brzegowy: ćwiczenia, których nazwa polska różni się od
   assert.ok(PL.filter(e => !lok(e)).length > 0);
 });
 
-test('Z-32 h1 en i język bez nazw lokalnych (wybrany dynamicznie): sama nazwa angielska, bez span.nazwa-pl (strażnik, że nazwa pl nie wycieka do innych języków)', { skip: BEZ_NAZW ? false : 'każdy język z config.json ma już docs/nazwy/<kod>.json — nie ma języka bez nazw do sprawdzenia (KO-140)' }, () => {
+test('Z-32 h1 en: sama nazwa angielska z lang="en", bez nazwy lokalnej (span.nazwa-pl) — bez pominięcia', () => {
   const zle = [];
-  for (const l of ['en', BEZ_NAZW]) for (const e of ctx.data[l].exercises) { const h = element(strona(l, e.slug), 'h1'); if (/nazwa-pl/.test(h.wnetrze) || tekst(h.wnetrze) !== e.name) zle.push(`${l}/${e.slug}`); }
+  assert.ok(ctx.data.en.exercises.length > 0);
+  for (const e of ctx.data.en.exercises) { const h = element(strona('en', e.slug), 'h1'); if (/nazwa-pl|nazwa-en/.test(h.wnetrze) || tekst(h.wnetrze) !== e.name || !/lang="en"/.test(h.otwarcie + h.wnetrze)) zle.push(`en/${e.slug}`); }
   assert.deepEqual(zle, []);
-  for (const e of ctx.data[BEZ_NAZW].exercises.slice(0, 50)) assert.match(element(strona(BEZ_NAZW, e.slug), 'h1').otwarcie + element(strona(BEZ_NAZW, e.slug), 'h1').wnetrze, /lang="en"/, e.slug);
+});
+
+test('Z-32 język bez pliku nazw (fixture bezNazw, src/build.mjs:44): sama nazwa angielska z lang="en", bez nazwy lokalnej, choć docs/nazwy/de.json istnieje', () => {
+  assert.ok(existsSync(join(ROOT, `docs/nazwy/${FIXTURE}.json`)), 'fixture ma sens tylko dla języka, który zwykle ma nazwy');
+  assert.equal(ctxBez.nazwy[FIXTURE], undefined);
+  const zle = [];
+  for (const e of ctxBez.data[FIXTURE].exercises) { const h = element(czytaj(outBez, `${FIXTURE}/exercises/${e.slug}/index.html`), 'h1'); if (/nazwa-pl|nazwa-en/.test(h.wnetrze) || tekst(h.wnetrze) !== e.name || !/lang="en"/.test(h.otwarcie + h.wnetrze)) zle.push(e.slug); }
+  assert.deepEqual(zle, []);
+});
+
+test('Z-32 języki z plikiem nazw (de, ja): h1 pokazuje nazwę lokalną (span.nazwa-pl) i angielską (span.nazwa-en lang="en"), gdy lokalna różni się od angielskiej; inaczej sama angielska', () => {
+  for (const l of Z_NAZWAMI) {
+    const NL = nazwyLokalne(l), zle = []; let z_lokalna = 0;
+    assert.ok(NL, l);
+    for (const e of ctx.data[l].exercises) {
+      const h = element(strona(l, e.slug), 'h1'), lk = nazwaLokalna(l, NL, e);
+      if (lk) { z_lokalna++; if (!new RegExp(`<span class="nazwa-pl">${esc(lk)}</span> <span class="nazwa-en" lang="en">${esc(e.name)}</span>`).test(h.wnetrze)) zle.push(`${l}/${e.slug}`); }
+      else if (/nazwa-pl/.test(h.wnetrze) || tekst(h.wnetrze) !== e.name) zle.push(`${l}/${e.slug}`);
+    }
+    assert.ok(z_lokalna > 100, `${l}: za mało ćwiczeń z nazwą lokalną (${z_lokalna})`);
+    assert.deepEqual(zle, [], l);
+  }
 });
 
 test('Z-32 każda strona pl: link do ćwiczenia (lista A–Z, filtry, strona główna, zamienniki) pokazuje nazwę polską', () => {

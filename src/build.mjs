@@ -30,8 +30,8 @@ export function dataWydania() {
 export const UCZENIE_MODELI = ['GPTBot', 'ClaudeBot', 'CCBot', 'Applebot-Extended', '__usage_ai-training'];
 const write = (out, file, text) => { const p = join(out, file); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); };
 
-/** `slugi`, `zmianaDanych` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, `zmianaDanych` (data → data) podstawia pola eksportu (np. `pelna` przed PIN z F-20), ostatnie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
-export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, zmianaDanych, pominStraznikowStartu = false } = {}) {
+/** `slugi`, `zmianaDanych` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, `bezNazw` (lista języków) pomija pliki nazw lokalnych tych języków (test gałęzi „język bez pliku nazw”, KO-141), `zmianaDanych` (data → data) podstawia pola eksportu (np. `pelna` przed PIN z F-20), ostatnie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
+export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, zmianaDanych, pominStraznikowStartu = false, bezNazw = [] } = {}) {
   const cfg = { ...readJson('config.json'), ...over };
   if (!hasData()) throw new Error('brak danych z aplikacji — uruchom: npm run dane');
   checkPin();
@@ -41,7 +41,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   for (const l of langs) {
     const m = man.languages.find(x => x.lang === l); if (!m) throw new Error(`język ${l} nie został wyeksportowany (manifest)`);
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
-    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); if (existsSync(join(ROOT, `docs/nazwy/${l}.json`))) nazwy[l] = readJson(`docs/nazwy/${l}.json`); /* Z-32: zrecenzowane nazwy lokalne; język bez pliku pokazuje nazwę angielską */ collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
+    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); if (!bezNazw.includes(l) && existsSync(join(ROOT, `docs/nazwy/${l}.json`))) nazwy[l] = readJson(`docs/nazwy/${l}.json`); /* Z-32: zrecenzowane nazwy lokalne; język bez pliku pokazuje nazwę angielską */ collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
   if (zmianaDanych) { data = zmianaDanych(data); for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e])); }
   /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S8 (S6 — po zbudowaniu stron) */
