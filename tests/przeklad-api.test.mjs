@@ -256,7 +256,7 @@ test('workflowy: pliki przeklad-tlumaczen.yml i przeglad-tlumaczen.yml nie są u
   const pages = readFileSync(join(ROOT, '.github/workflows/pages.yml'), 'utf8'); assert.doesNotMatch(pages, /przeklad|przeglad/);
 });
 test('repo strony: docs/przeklad/zrodla.json istnieje, jest poprawny i wskazuje cele zgodne z ustaleniami (nazwy 33 języków, szablony, teksty prawne)', () => {
-  const k = czytaj(join(ROOT, 'docs/przeklad/zrodla.json')); assert.deepEqual(k.zrodla.map((z) => z.id), ['nazwy', 'szablony', 'prawne', 'ramka']);
+  const k = czytaj(join(ROOT, 'docs/przeklad/zrodla.json')); assert.deepEqual(k.zrodla.map((z) => z.id), ['nazwy', 'szablony', 'prawne', 'ui']);
   const w = czytaj(join(ROOT, 'docs/przeklad/wydatki.json')); assert.equal(w.limit_usd, 80); assert.ok(Array.isArray(w.wpisy));
 });
 

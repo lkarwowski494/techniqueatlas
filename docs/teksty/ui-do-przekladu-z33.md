@@ -16,7 +16,9 @@ Napisane przez agenta, tylko pl i en (`src/ui/pl.json`, `src/ui/en.json`). W poz
 
 Klucze są **osobnymi tekstami**, nie tablicami, bo mechanizm przekładu (`scripts/przeklad/zrodla.mjs`, `liscie()`) pomija tablice.
 
-## Wpis do `docs/przeklad/zrodla.json` (na `main`)
+## Wpis do `docs/przeklad/zrodla.json` (wpisany 28.11.2026, Z-34; test `tests/z34-przeklad-ui.test.mjs`)
+
+Uwaga z testu: `countLine` ma w pl cztery formy liczby mnogiej, a en, de i ja — jeden napis. Mechanizm traktuje napis na wyższym poziomie jako istniejące tłumaczenie całego węzła (nie prosi o przekład form few/many i nie zastępuje napisu drzewem). Nałożenie zachowuje wcięcie istniejącego pliku (2 spacje w `src/ui/`).
 
 Mechanizm pozwala na to bez zmian w workflowach (rodzaj „mapa”, wynik do istniejących plików `src/ui/<kod>.json`, istniejące niepuste tłumaczenia są pomijane). Zastępuje nieużywane źródło `ramka` (`docs/teksty/ramka/*.json`, `oczekuje: true`): teksty ramki leżą w `src/ui/`, bo test Z-33 „liczba dni nie jest przepisana” wymaga wstawki `{dni}` w `src/`.
 

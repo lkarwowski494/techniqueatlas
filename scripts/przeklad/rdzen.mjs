@@ -10,7 +10,7 @@ import {
   MODELE, CENY, RABAT_BATCH, DOMYSLNY_MODEL, DOMYSLNY_EFFORT, EFFORTY, LIMIT_PRZEBIEGU_USD, LIMIT_LACZNY_USD, MAX_TOKENS, CZEKAJ_MIN_DOMYSLNIE, INTERWAL_S,
   ZALOZENIA_PRZEKLADU, ZALOZENIA_PRZEGLADU, WSPOLCZYNNIK, REJESTR, nazwaJezyka, zmienne, typografia, maskuj, przyblizTokeny, tekstZadania, kosztUsd, klient, czekajNaBatch,
 } from './wspolne.mjs';
-import { wczytajZrodla, sciezkaCelu, pobierz, ustaw } from './zrodla.mjs';
+import { wczytajZrodla, sciezkaCelu, pobierz, ustaw, tekstNaSciezce } from './zrodla.mjs';
 import * as slownik from './slownik.mjs';
 import * as wydatki from './wydatki.mjs';
 
@@ -208,7 +208,7 @@ export function zTlumaczeniem(root, zrodlo, kod) {
   let jest = false; let pozycje;
   if (zrodlo.rodzaj === 'mapa') {
     const p = join(root, sciezkaCelu(zrodlo, kod)); const d = existsSync(p) ? czytaj(p) : null; jest = d !== null;
-    pozycje = zrodlo.pozycje.map((x) => ({ ...x, tlumaczenie: d ? pobierz(d, x.sciezka) ?? null : null }));
+    pozycje = zrodlo.pozycje.map((x) => ({ ...x, tlumaczenie: d ? tekstNaSciezce(d, x.sciezka) ?? null : null }));
   } else {
     pozycje = zrodlo.pozycje.map((x) => { const p = join(root, sciezkaCelu(zrodlo, kod, x.klucz)); const e = existsSync(p); jest ||= e; return { ...x, tlumaczenie: e ? readFileSync(p, 'utf8') : null }; });
   }
@@ -222,17 +222,18 @@ export function zastosuj(root, katalog, { nadpisz = false } = {}) {
     const f = join(katalog, z.id, `${kod}.json`); if (!existsSync(f)) continue;
     const r = czytaj(f); const wg = new Map(z.pozycje.map((x) => [x.klucz, x])); const cel = join(root, sciezkaCelu(z, kod));
     let d = z.rodzaj === 'mapa' ? (existsSync(cel) ? czytaj(cel) : {}) : null; let zmienione = 0;
+    const wciecie = z.rodzaj === 'mapa' && existsSync(cel) ? (/^\{\n( +)"/.exec(readFileSync(cel, 'utf8'))?.[1].length ?? 1) : 1; /* istniejący plik zachowuje wcięcie (src/ui/*.json: 2 spacje), nowy — 1 spację jak dotąd */
     for (const [klucz, tl] of Object.entries(r.propozycje ?? {})) {
       const poz = wg.get(klucz);
       if (!poz) { wynik.pominietych.push(`${z.id}/${kod}: klucz spoza źródła „${klucz.slice(0, 40)}”`); continue; }
       if (typeof tl !== 'string' || !tl.trim() || zmienne(poz.pl).join('') !== zmienne(tl).join('')) { wynik.pominietych.push(`${z.id}/${kod}: zmienne „${klucz.slice(0, 40)}”`); continue; }
-      const istnieje = z.rodzaj === 'mapa' ? (typeof pobierz(d, poz.sciezka) === 'string' && pobierz(d, poz.sciezka).trim() !== '') : existsSync(join(root, sciezkaCelu(z, kod, klucz)));
+      const istnieje = z.rodzaj === 'mapa' ? (typeof tekstNaSciezce(d, poz.sciezka) === 'string' && tekstNaSciezce(d, poz.sciezka).trim() !== '') : existsSync(join(root, sciezkaCelu(z, kod, klucz)));
       if (istnieje && !nadpisz) { wynik.pominietych.push(`${z.id}/${kod}: „${klucz.slice(0, 40)}” istnieje (użyj --nadpisz, żeby zastąpić)`); continue; }
       if (z.rodzaj === 'mapa') ustaw(d, poz.sciezka, typografia(kod, tl));
       else { const p = join(root, sciezkaCelu(z, kod, klucz)); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, tl.endsWith('\n') ? tl : `${tl}\n`); wynik.plikow++; }
       zmienione++; wynik.zapisanych++;
     }
-    if (z.rodzaj === 'mapa' && zmienione) { mkdirSync(dirname(cel), { recursive: true }); writeFileSync(cel, JSON.stringify(d, null, 1) + '\n'); wynik.plikow++; }
+    if (z.rodzaj === 'mapa' && zmienione) { mkdirSync(dirname(cel), { recursive: true }); writeFileSync(cel, JSON.stringify(d, null, wciecie) + '\n'); wynik.plikow++; }
   }
   return wynik;
 }
