@@ -4,7 +4,10 @@
   "home": "Home",
   "library": "Library",
   "allExercises": "All exercises",
-  "countLine": "{n} exercises — browse by muscle group and equipment.",
+  "countLine": {
+    "one": "{n} exercise — browse by muscle group and equipment.",
+    "other": "{n} exercises — browse by muscle group and equipment."
+  },
   "searchLabel": "Search exercises",
   "searchPlaceholder": "Exercise name",
   "noResults": "No exercises match these filters",
