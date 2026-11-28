@@ -1,7 +1,7 @@
 # Teksty prawne strony: twierdzenie → dowód (Z-20)
 
 Stan kodu: `main` @ 21e056c (ta gałąź nie zmienia `src/`, `assets/` ani `tests/`). Pomiary i odczyty: 27.11.2026.
-Każde twierdzenie z polityki, regulaminu i licencji o tym, co robi strona, ma tu dowód. Recenzent Z-23 sprawdza każdy wiersz na kodzie z dnia recenzji. **Gdy Z-31…Z-34 zmienią kod, ta tabela wymaga ponownego sprawdzenia przed Z-33** (zasada roli M8 nr 2: dokument opisuje stronę, jaka jest).
+Każde twierdzenie z tekstów prawnych (od 28.11.2026: „Prywatność” i „Warunki”) o tym, co robi strona, ma tu dowód. Recenzent Z-23 sprawdza każdy wiersz na kodzie z dnia recenzji. **Gdy Z-31…Z-34 zmienią kod, ta tabela wymaga ponownego sprawdzenia przed Z-33** (zasada roli M8 nr 2: dokument opisuje stronę, jaka jest).
 
 | ID | Twierdzenie | Dowód | Uwagi |
 |---|---|---|---|
@@ -21,25 +21,12 @@ Każde twierdzenie z polityki, regulaminu i licencji o tym, co robi strona, ma t
 | D-14 | Kod strony i historia zmian są publiczne | repozytorium `lkarwowski494/techniqueatlas`: `private: false` (API GitHub, 27.11.2026) | — |
 | D-15 | Zakres usługi: biblioteka (opis, mięśnie, wskazówki, błędy, zamienniki, rysunek), lista z filtrami, wyszukiwarka, wiele języków; bezpłatnie, bez rejestracji | README wiersz 3; plan, „JUŻ ZROBIONE”; brak płatności i kont: D-1; liczby z eksportu 1.1.1 (708 ćwiczeń: rysunek 528, wskazówki 567, częste błędy 440, zamienniki 609) | recenzja Z-23 (06-tresci-006): opis i mięśnie przy każdym, reszta „przy większości” |
 
-## [DO KONSULTACJI] (pytania do prawnika, bezpieczniejsza opcja, decyzja właściciela)
+## Pozycje zamknięte decyzją właściciela (28.11.2026)
 
-| ID | Pytanie | Bezpieczniejsza opcja (w projekcie) |
-|---|---|---|
-| PP-1 | Czy prowadzący stronę jest administratorem danych z logów hostingu, skoro ich nie zbiera i (T-4) nie ma do nich dostępu? | podać dane prowadzącego i kontakt, opisać logi hostingu |
-| PP-2 | Czy odesłanie do dostawcy hostingu w sprawie logów wystarcza wobec praw z art. 15–22 RODO? | prowadzący przyjmuje żądanie i wskazuje dostawcę |
-| PP-3 | Czy w polityce trzeba podać nazwę dostawcy hostingu, czy wystarcza kategoria? Art. 13 ust. 1 lit. e RODO mówi o „odbiorcach lub kategoriach odbiorców” (sformułowanie z FOR-02 roli M8; tekst aktu nieczytany dziś). Konflikt z zasadą właściciela „bez nazw innych firm” na stronie. | w projekcie kategoria; nazwa do decyzji właściciela, jeśli prawnik uzna ją za konieczną |
-| R-1 | Czy bezpłatna strona z treściami, bez kont i formularzy, wymaga regulaminu z art. 8 UŚUDE? | krótki regulamin (projekt) |
-| R-2 | Termin odpowiedzi na reklamację (ustawa go nie podaje) | 14 dni |
-| R-3 | Zakres wyłączenia odpowiedzialności wobec konsumentów | zapis informacyjny bez wyłączenia odpowiedzialności za szkody |
-| L-1 | Interpretacja „bez kopiowania grafik” (docs/54:188): rysunek na wydruku całej strony dozwolony, osobno nie | jak w projekcie; do weta właściciela |
-| L-2 | Klauzula bazy danych (dyrektywa 96/9/WE, ustawa o ochronie baz danych) przeniesiona z LICENSE aplikacji; akty nieczytane dziś | brzmienie zgodne z LICENSE aplikacji |
-
-## [DO USTALENIA]
-
-T-1 źródło wartości `{{administrator}}` dla Z-33 · T-2 baner aplikacji a połączenia przeglądarki · T-3 czas przechowywania logów hostingu · T-4 dostęp prowadzącego do logów hostingu.
+Pytania PP-1…3, R-1…3, L-1…4 i U-1…2 (`do-wlasciciela.md`) zostały rozstrzygnięte uproszczeniem tekstów do dwóch krótkich stron (Prywatność, Warunki; wzór apps4brew.com). Nie ma już w tekstach znaczników `[DO KONSULTACJI]` ani wstawek `{{administrator}}`/`{{kontakt}}`. W tekście „Prywatność” zostają twierdzenia D-1…D-6 i D-8 (bez ciasteczek, kont, formularzy, analityki; hosting GitHub Pages zapisuje IP); D-7, D-9…D-15 dotyczyły usuniętych fragmentów i zostają jako zapis dowodów.
 
 ## Nie sprawdzono
 
 - Żywa strona: nagłówki serwera (ciasteczka, `Referrer-Policy`) przed publikacją nie istnieją. Sprawdzenie w Z-52.
-- Teksty aktów (RODO, UŚUDE, ustawa o ochronie baz danych) nie były dziś czytane u źródła. Odwołania do artykułów pochodzą z listy formalności roli M8 (źródła przeczytane 20.10.2026) i z LICENSE aplikacji. Recenzja Z-23 albo konsultacja może wymagać odczytu u źródła.
+- Teksty aktów (RODO, UŚUDE, ustawa o ochronie baz danych) nie były czytane u źródła; teksty prawne od 28.11.2026 ich nie cytują (decyzja właściciela). Dawne odwołania pochodziły z listy formalności roli M8 (źródła przeczytane 20.10.2026) i z LICENSE aplikacji. Recenzja Z-23 albo konsultacja może wymagać odczytu u źródła.
 - Inne funkcje strony z fali 1 (plan w adresie F-05, CSV F-04, druk F-17) jeszcze nie istnieją. Ich dodanie wymaga zmiany polityki przed publikacją.
