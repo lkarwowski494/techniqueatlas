@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Glavne mišice: {lista}.",
+ "miesniePomocnicze": "Pomožne mišice: {lista}.",
+ "partia": "Mišična skupina: {grupa}.",
+ "sprzet": "Potrebna oprema: {lista}.",
+ "rodzaj": "Vrsta gibanja: {rodzaj}.",
+ "blad": "Pogosta napaka: {zdanie}",
+ "albo": " ali ",
+ "pytania": {
+  "setup": "Kako se postavite?",
+  "move": "Kako izvedete gib?",
+  "miesnie": "Katere mišice delajo?",
+  "tips": "Kaj pomaga pri tehniki?",
+  "mistakes": "Katerim napakam se izogibati?",
+  "sprzet": "Katero opremo potrebujete?",
+  "zamienniki": "S čim jo lahko nadomestite?"
+ },
+ "opisGlownej": "{n} {opisow}: risba gibanja: {f}, nasveti za tehniko: {c}, nadomestki: {z}.",
+ "opisow": {
+  "one": "opis",
+  "few": "opisi",
+  "many": "opisov",
+  "other": "opisov"
+ },
+ "opisListy": "{n} {pozycji} od A do Ž s filtrom po mišični skupini, opremi in vrsti gibanja.",
+ "pozycji": {
+  "one": "vnos",
+  "few": "vnosi",
+  "many": "vnosov",
+  "other": "vnosov"
+ },
+ "opisKategorii": "{n} {pozycji}, med drugim {lista}.",
+ "opisKategoriiJedna": "En vnos: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; risba gibanja: {f}, nasveti za tehniko: {c}."
+}

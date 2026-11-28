@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Galvenie muskuļi: {lista}.",
+ "miesniePomocnicze": "Palīgmuskuļi: {lista}.",
+ "partia": "Muskuļu grupa: {grupa}.",
+ "sprzet": "Nepieciešamais aprīkojums: {lista}.",
+ "rodzaj": "Kustības veids: {rodzaj}.",
+ "blad": "Bieža kļūda: {zdanie}",
+ "albo": " vai ",
+ "pytania": {
+  "setup": "Kā ieņemt sākuma pozīciju?",
+  "move": "Kā izpildīt kustību?",
+  "miesnie": "Kuri muskuļi strādā?",
+  "tips": "Kas palīdz uzlabot tehniku?",
+  "mistakes": "No kādām kļūdām izvairīties?",
+  "sprzet": "Kāds aprīkojums ir nepieciešams?",
+  "zamienniki": "Ar ko to var aizstāt?"
+ },
+ "opisGlownej": "{n} {opisow}: kustības zīmējums — {f}, tehnikas padomi — {c}, aizstājēji — {z}.",
+ "opisow": {
+  "one": "apraksts",
+  "few": "apraksti",
+  "many": "apraksti",
+  "other": "apraksta"
+ },
+ "opisListy": "{n} {pozycji} no A līdz Z ar filtru pēc muskuļu grupas, aprīkojuma un kustības veida.",
+ "pozycji": {
+  "one": "vingrinājums",
+  "few": "vingrinājumi",
+  "many": "vingrinājumi",
+  "other": "vingrinājuma"
+ },
+ "opisKategorii": "{n} {pozycji}, tostarp {lista}.",
+ "opisKategoriiJedna": "Viens vingrinājums: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; kustības zīmējums — {f}, tehnikas padomi — {c}."
+}

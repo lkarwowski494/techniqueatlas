@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Otot utama: {lista}.",
+ "miesniePomocnicze": "Otot sokongan: {lista}.",
+ "partia": "Kumpulan otot: {grupa}.",
+ "sprzet": "Peralatan diperlukan: {lista}.",
+ "rodzaj": "Jenis pergerakan: {rodzaj}.",
+ "blad": "Kesilapan biasa: {zdanie}",
+ "albo": " atau ",
+ "pytania": {
+  "setup": "Bagaimana untuk mengambil kedudukan permulaan?",
+  "move": "Bagaimana untuk melakukan pergerakan?",
+  "miesnie": "Otot mana yang bekerja?",
+  "tips": "Apa yang membantu teknik anda?",
+  "mistakes": "Kesilapan apa yang perlu dielakkan?",
+  "sprzet": "Peralatan apa yang diperlukan?",
+  "zamienniki": "Apa penggantinya?"
+ },
+ "opisGlownej": "{n} {opisow}: animasi pergerakan untuk {f}, petua teknik untuk {c}, pengganti untuk {z}.",
+ "opisow": {
+  "one": "entri",
+  "few": "entri",
+  "many": "entri",
+  "other": "entri"
+ },
+ "opisListy": "{n} {pozycji} dari A hingga Z, boleh ditapis mengikut kumpulan otot, peralatan dan jenis pergerakan.",
+ "pozycji": {
+  "one": "entri",
+  "few": "entri",
+  "many": "entri",
+  "other": "entri"
+ },
+ "opisKategorii": "{n} {pozycji}, termasuk {lista}.",
+ "opisKategoriiJedna": "Satu entri: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} dengan animasi pergerakan untuk {f} dan petua teknik untuk {c}."
+}
