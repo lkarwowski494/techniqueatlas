@@ -16,4 +16,4 @@ Tekeningen van oefeningen mogen alleen worden afgedrukt als onderdeel van de hel
 
 Zonder onze schriftelijke toestemming mag je de oefeningendatabase niet geheel of voor een substantieel deel opvragen of beschikbaar stellen, ook niet in gewijzigde vorm, onder meer om andere apps, databases of datasets voor het trainen van modellen te maken. Dit geldt ook voor het herhaaldelijk opvragen van kleine delen als die samen een substantieel deel vormen.
 
-Een uitzondering geldt voor crawlers die het robots.txt-bestand van deze website uitdrukkelijk toegang geeft.
+Een uitzondering geldt voor crawlers waaraan het robots.txt-bestand van deze website uitdrukkelijk toegang verleent.

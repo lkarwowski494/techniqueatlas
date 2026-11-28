@@ -9,9 +9,17 @@ Aktualizacja: 2026-11-28 · gałąź `strona/prawne-proste` (od `strona/integrac
 - Testy: `tests/prawne-proste.test.mjs` (nowy), zmienione z powodu decyzji: z33-prawne-ramka, z33-moduly, z34-przeklad-ui, straznik-sekrety (mailto/e-mail), figura-przegladarka (404 dopuszcza mailto:).
 - Lokalnie `npm test`: 246/253 zielone; czerwone: build.test i jezyki-podglad (SIGKILL — też przed zmianami), z30 (todo bez CZEKA — naprawione), 404 (naprawione).
 
-## Nie zrobione / w toku
-- Przekład 33 języków: workflow z main zna źródła nazwy, szablony, prawne, ramka (nie `ui`) → tłumaczone tylko dokumenty `prawne`; klucze UI (prawne.nav/privacy/terms, wsparcie.w2) zostają na angielskim zapasie z lang="en". Szacunek w kolejce Actions (run 46139931580), koszt jeszcze nieznany; wydatki.json bez zmian (ok. 25,68 USD).
-- Po przekładzie: nałożenie `--zastosuj`, test BR-f (33 języków), księgowanie wydatku, zielony tests.yml.
+## Przekład i przegląd API (zrobione)
+- Przekład 33 języków (tylko dokumenty `prawne`: `prywatnosc`, `warunki`): run 46141591575, batch msgbatch_01Xppxh9kvx55HxRaDi9fLpM, 0,89 USD rzeczywiste, 66/66 przyjęte; nałożone `--zastosuj`.
+- Przegląd API: run 46143719757, batch msgbatch_01BE4Z6eN2JurtfnzQwNaAqS, 0,70 USD; uwagi: 2 krytyczne (warunki et, zh-Hant: zawężenie zakazu bazy), 3 średnie (warunki nl, sk; prywatnosc sr), 9 niskich. Nałożone poprawki krytyczne i średnie (5 plików); niskie (el prywatnosc; es-419, fi, id, it, lt, ms, pt-BR, sl warunki) NIE nałożone — do przeglądu człowieka/natywnego (artefakt run-u wygasa 05.12.2026).
+- wydatki.json: łącznie 27,26 z 80 USD (poprzednio 25,68 + 0,89 + 0,70).
+- Teksty prawne nie były czytane przez prawnika (decyzja właściciela 13: nie zlecamy).
+- Klucze UI (prawne.nav/privacy/terms, wsparcie.w2) w 33 językach: angielski zapas z lang="en"; przekład źródła `ui` robi BQ2 po dodaniu źródła na main (KO-148).
+
+## Propozycje / otwarte
+- Nieużywany klucz `ui.rights` (stopka bierze dane z config.json) — usunąć w BQ2.
+- Na main zostały stare tłumaczenia regulamin/licencja-tresci/polityka-prywatnosci; ta gałąź je usuwa (scalenie przenosi usunięcie).
+- Lokalnie `build.test` i `jezyki-podglad` kończą SIGKILL (pamięć kontenera, występowało też przed zmianami); w CI zielone.
 
 ---
 ## Wcześniej
