@@ -1,0 +1,16 @@
+$ node -e "import(./src/css.mjs) → assets/site.css === zlozCss()"
+site.css zgodny ze zlozCss: true
+kod wyjścia: 0
+$ git rev-parse HEAD
+7a227e3
+$ npm ci && npm run dane && npm run build
+kod wyjścia: 0
+> node src/build.mjs
+
+build: 27092 stron → /home/user/techniqueatlas/dist (indeksowanie: false; języki: 35; wersja aplikacji 1.1.1)
+UWAGA: plan startu: 30 zadań etapów 0–5 niezrobionych (Z-00, Z-01, Z-02, Z-03, Z-04, Z-05, … (+24)) — indeksowanie=true wymaga wszystkich „zrobione” albo „odpada” z datą i dowodem
+UWAGA: plan startu: Z-61 (zgoda właściciela na włączenie Google) nie jest „zrobione” — indeksowanie=true wymaga zgody z cytatem jego słów w Dowodzie
+UWAGA: S12 strony prawne: brak wartości wstawek {{administrator}}, {{kontakt}}, {{dataObowiazywania}} (administrator i kontakt: zmienne środowiska TA_ADMINISTRATOR, TA_KONTAKT; data: config.json → dataObowiazywania)
+Linux vm 6.18.44-fc-v880 #1 SMP PREEMPT_DYNAMIC @0 x86_64 x86_64 x86_64 GNU/Linux
+v22.23.5
+Version 1.63.0

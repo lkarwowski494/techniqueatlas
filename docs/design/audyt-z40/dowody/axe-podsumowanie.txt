@@ -1,0 +1,4 @@
+$ node -e "...axe: zestawienie z sprawdzenie.json"
+klucz widoki 210 axe naruszenia 0 błędy konsoli/sieci 0 przewijanie 100% 0 przewijanie 200% cw-ru-320-jasny lista-pl-768-jasny lista-en-768-jasny cw-ru-320-ciemny lista-pl-768-ciemny lista-en-768-ciemny
+kontrast widoki 126 axe naruszenia 0 błędy konsoli/sieci 0 przewijanie 100% 0 przewijanie 200% cw-ru-320-jasny-kontrast cw-ru-320-ciemny-kontrast
+kod wyjścia: 0

@@ -1,0 +1,81 @@
+$ NODE_PATH=$(npm root -g) node zrzuty-dist.cjs z/klucz 320,390,768,1024,1440 @strony.txt light,dark no-preference 2 1 6000
+kod wyjścia: 0
+strony (strony.txt):
+cw-fig-wlasne-pl=/pl/exercises/back-squat/
+cw-ogolne-pl=/pl/exercises/decline-bench-press/
+cw-bez-fig-pl=/pl/exercises/bench-dip/
+cw-bez-wsk-pl=/pl/exercises/sissy-squat/
+glowna-pl=/pl/
+lista-pl=/pl/exercises/
+filtr-pl=/pl/muscles/legs/
+404=/404.html
+jezyki=/
+prawne-prywatnosc-pl=/pl/privacy-policy/
+prawne-regulamin-pl=/pl/terms/
+prawne-licencja-pl=/pl/content-license/
+cw-fig-wlasne-en=/en/exercises/back-squat/
+cw-ogolne-en=/en/exercises/decline-bench-press/
+cw-bez-fig-en=/en/exercises/bench-dip/
+cw-bez-wsk-en=/en/exercises/sissy-squat/
+glowna-en=/en/
+lista-en=/en/exercises/
+filtr-en=/en/muscles/legs/
+prawne-prywatnosc-en=/en/privacy-policy/
+cw-ru=/ru/exercises/back-squat/
+widoki: 210; z uwagami: 6
+{"tag":"cw-ru-320-jasny","url":"/ru/exercises/back-squat/","poziom":0,"poziom200":66,"szersze":["a.marka 386","span.marka-t 386","span.marka-n 386","span.marka-p 386","use 481"],"wysokosc":5605,"axe":[],"bledy":[]}
+{"tag":"lista-pl-768-jasny","url":"/pl/exercises/","poziom":0,"poziom200":147,"szersze":["table.wykaz 915","thead 915","tr 915","th 915","tbody 915"],"wysokosc":51366,"axe":[],"bledy":[]}
+{"tag":"lista-en-768-jasny","url":"/en/exercises/","poziom":0,"poziom200":142,"szersze":["table.wykaz 910","thead 910","tr 910","th 910","tbody 910"],"wysokosc":38232,"axe":[],"bledy":[]}
+{"tag":"cw-ru-320-ciemny","url":"/ru/exercises/back-squat/","poziom":0,"poziom200":66,"szersze":["a.marka 386","span.marka-t 386","span.marka-n 386","span.marka-p 386","use 481"],"wysokosc":5605,"axe":[],"bledy":[]}
+{"tag":"lista-pl-768-ciemny","url":"/pl/exercises/","poziom":0,"poziom200":147,"szersze":["table.wykaz 915","thead 915","tr 915","th 915","tbody 915"],"wysokosc":51366,"axe":[],"bledy":[]}
+{"tag":"lista-en-768-ciemny","url":"/en/exercises/","poziom":0,"poziom200":142,"szersze":["table.wykaz 910","thead 910","tr 910","th 910","tbody 910"],"wysokosc":38232,"axe":[],"bledy":[]}
+
+$ ... z/kontrast 320,390,1440 @strony.txt light,dark more 2 1 6000
+kod wyjścia: 0
+widoki: 126; z uwagami: 2
+{"tag":"cw-ru-320-jasny-kontrast","url":"/ru/exercises/back-squat/","poziom":0,"poziom200":66,"szersze":["a.marka 386","span.marka-t 386","span.marka-n 386","span.marka-p 386","use 481"],"wysokosc":5605,"axe":[],"bledy":[]}
+{"tag":"cw-ru-320-ciemny-kontrast","url":"/ru/exercises/back-squat/","poziom":0,"poziom200":66,"szersze":["a.marka 386","span.marka-t 386","span.marka-n 386","span.marka-p 386","use 481"],"wysokosc":5605,"axe":[],"bledy":[]}
+
+Skrypt:
+// Z-40 · zrzuty zbudowanej strony (dist) + axe + przewijanie poziome (także tekst 200%).
+// node zrzuty-dist.cjs <out> <szer> <@plik stron klucz=ścieżka> <motywy> <kontrast> [skala=2] [axe=1] [maxH=6000]
+const { chromium } = require('playwright');
+const fs = require('fs'), path = require('path');
+const [out, w, strony, motywy, kontrast, skala = '2', axeOn = '1', maxH = '6000'] = process.argv.slice(2);
+const AXE = fs.readFileSync('/home/user/techniqueatlas/node_modules/axe-core/axe.min.js', 'utf8');
+const lista = fs.readFileSync(strony.slice(1), 'utf8').trim().split('\n').map(s => s.split('='));
+(async () => {
+  fs.mkdirSync(out, { recursive: true });
+  const b = await chromium.launch(); const wynik = [];
+  for (const theme of motywy.split(',')) for (const width of w.split(',').map(Number)) {
+    const ctx = await b.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: Number(skala), colorScheme: theme, reducedMotion: 'reduce', contrast: kontrast });
+    const p = await ctx.newPage(); const bledy = [];
+    p.on('console', m => m.type() === 'error' && bledy.push(m.text()));
+    p.on('requestfailed', r => bledy.push('nieudane: ' + r.url()));
+    p.on('response', r => r.status() >= 400 && bledy.push(r.status() + ' ' + r.url()));
+    for (const [name, url] of lista) {
+      await p.goto('http://localhost:8124' + url); await p.evaluate(() => document.fonts.ready);
+      const poziom = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      let axe = [];
+      if (axeOn === '1') {
+        await p.evaluate(AXE);
+        axe = await p.evaluate(async () => (await axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice'] })).violations.map(v => `${v.id}: ${v.nodes.length} [${v.nodes.slice(0, 3).map(n => n.target.join(' ')).join(' | ')}]`));
+      }
+      const tag = `${name}-${width}-${theme === 'light' ? 'jasny' : 'ciemny'}${kontrast === 'more' ? '-kontrast' : ''}`;
+      const h = await p.evaluate(() => document.documentElement.scrollHeight);
+      const opt = { path: path.join(out, `${tag}.png`), fullPage: true };
+      if (h > Number(maxH)) opt.clip = { x: 0, y: 0, width, height: Number(maxH) };
+      await p.screenshot(opt);
+      // tekst 200%: domyślny rozmiar czcionki 32 px (jak ustawienie przeglądarki), baza strony 106,25% — nazwane uproszczenie
+      await p.evaluate(() => document.documentElement.style.setProperty('font-size', 'calc(106.25% * 2)', 'important'));
+      const poziom200 = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      const szersze = poziom200 > 0 ? await p.evaluate(() => { const W = document.documentElement.clientWidth; return [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > W + 1).slice(0, 5).map(e => e.tagName.toLowerCase() + (e.className && typeof e.className === 'string' ? '.' + e.className.split(' ').join('.') : '') + ' ' + Math.round(e.getBoundingClientRect().right)); }) : [];
+      wynik.push({ tag, url, poziom, poziom200, szersze, wysokosc: h, axe, bledy: [...bledy] }); bledy.length = 0;
+    }
+    await ctx.close();
+  }
+  await b.close();
+  fs.writeFileSync(path.join(out, 'sprawdzenie.json'), JSON.stringify(wynik, null, 1));
+  const zle = wynik.filter(x => x.poziom > 0 || x.poziom200 > 0 || x.axe.length || x.bledy.length);
+  console.log(`widoki: ${wynik.length}; z uwagami: ${zle.length}`); for (const x of zle) console.log(JSON.stringify(x));
+})();

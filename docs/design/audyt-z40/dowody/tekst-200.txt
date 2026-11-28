@@ -1,0 +1,44 @@
+$ NODE_PATH=$(npm root -g) node t200.cjs ; node t200b.cjs
+wzor-ru {"poziom":66,"marka":"Библиотека упражнений"}
+dist-ru {"poziom":66,"marka":"Библиотека упражнений"}
+dist-uk {"poziom":21,"marka":"Бібліотека вправ"}
+dist-de {"poziom":0,"marka":"Übungsbibliothek"}
+dist-pl {"poziom":0,"marka":"Biblioteka ćwiczeń"}
+dist-lista-768 {"poziom":147,"marka":"Biblioteka ćwiczeń"}
+wzor-lista-768 {"poziom":0,"marka":"Biblioteka ćwiczeń"}
+320 px, tekst 200%, przewijanie >0: bg:86 el:28 es:35 es-419:35 et:46 fr:52 hu:13 it:14 ja:21 ko:21 lv:39 nl:29 pt:42 pt-br:42 ro:13 ru:66 sr:21 tr:14 uk:21 zh-hant:21 / języki: 35
+{"kolumny":[291,149,158,233],"najszersze":[[291,"Around the world z hantlami Around the World"],[291,"Balans na piłce gimnastycznej leżąc przodem Downwa"],[291,"Bayesian curl na wyciągu Bayesian Curl"]]}
+600 0
+641 212
+700 153
+900 15
+1024 0
+kod wyjścia: 0
+Skrypty:
+const { chromium } = require('playwright'); const fs=require('fs'), path=require('path');
+const SYS='/home/user/techniqueatlas/docs/design/system';
+(async()=>{ const b=await chromium.launch();
+ const ctx=await b.newContext({viewport:{width:320,height:900},deviceScaleFactor:2,reducedMotion:'reduce'});
+ await ctx.route('http://wzor.local/**', r=>{const f=path.join(SYS,new URL(r.request().url()).pathname); fs.existsSync(f)?r.fulfill({status:200,body:fs.readFileSync(f),contentType:f.endsWith('.css')?'text/css':f.endsWith('.html')?'text/html':f.endsWith('.woff2')?'font/woff2':f.endsWith('.svg')?'image/svg+xml':'application/octet-stream'}):r.fulfill({status:404,body:''})});
+ const p=await ctx.newPage();
+ for (const [k,u,w] of [['wzor-ru','http://wzor.local/szablony/cwiczenie-ru.html',320],['dist-ru','http://localhost:8124/ru/exercises/back-squat/',320],['dist-uk','http://localhost:8124/uk/exercises/back-squat/',320],['dist-de','http://localhost:8124/de/exercises/back-squat/',320],['dist-pl','http://localhost:8124/pl/exercises/back-squat/',320],['dist-lista-768','http://localhost:8124/pl/exercises/',768],['wzor-lista-768','http://wzor.local/szablony/lista.html',768]]) {
+  await p.setViewportSize({width:w,height:900}); await p.goto(u); await p.evaluate(()=>document.fonts.ready);
+  await p.evaluate(()=>document.documentElement.style.setProperty('font-size','calc(106.25% * 2)','important'));
+  const r=await p.evaluate(()=>({poziom:document.documentElement.scrollWidth-document.documentElement.clientWidth, marka:document.querySelector('.marka-p')?.textContent}));
+  console.log(k, JSON.stringify(r));
+  await p.screenshot({path:`z/t200-${k}.png`, clip:{x:0,y:0,width:w,height:500}});
+ }
+ await b.close();})();
+const { chromium } = require('playwright');
+(async()=>{ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:320,height:900}});
+ const langs=require('fs').readdirSync('/home/user/techniqueatlas/dist').filter(x=>/^[a-z]{2}(-[a-z0-9]+)?$/.test(x));
+ const zle=[];
+ for (const l of langs){ await p.goto(`http://localhost:8124/${l}/exercises/back-squat/`); await p.evaluate(()=>document.fonts.ready);
+  await p.evaluate(()=>document.documentElement.style.setProperty('font-size','calc(106.25% * 2)','important'));
+  const r=await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth); if(r>0) zle.push(l+':'+r); }
+ console.log('320 px, tekst 200%, przewijanie >0:', zle.join(' ')||'brak', '/ języki:', langs.length);
+ await p.setViewportSize({width:768,height:900}); await p.goto('http://localhost:8124/pl/exercises/');
+ await p.evaluate(()=>document.documentElement.style.setProperty('font-size','calc(106.25% * 2)','important'));
+ console.log(JSON.stringify(await p.evaluate(()=>{const c=[...document.querySelectorAll('.wykaz th[scope=row], .wykaz td')]; const s=[...document.querySelectorAll('.wykaz thead th')].map(x=>Math.round(x.getBoundingClientRect().width)); const w=c.map(x=>[x.scrollWidth,x.textContent.trim().slice(0,50)]).sort((a,b)=>b[0]-a[0]).slice(0,3); return {kolumny:s,najszersze:w};})));
+ for (const w of [600,641,700,900,1024]) { await p.setViewportSize({width:w,height:900}); console.log(w, await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)); }
+ await b.close();})();

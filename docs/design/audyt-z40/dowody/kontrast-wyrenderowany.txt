@@ -1,0 +1,71 @@
+$ NODE_PATH=$(npm root -g) node kontrast-dist.cjs
+kod wyjścia: 0
+elementy tekstowe: 23686; poniżej progu: 0
+najniższy kontrast w wariancie: {
+ "jasny": {
+  "t": "Biblioteka ćwiczeń",
+  "k": 6.91,
+  "prog": 4.5,
+  "el": "span.marka-p",
+  "u": "/pl/exercises/back-squat/"
+ },
+ "ciemny": {
+  "t": "Biblioteka ćwiczeń",
+  "k": 7.95,
+  "prog": 4.5,
+  "el": "span.marka-p",
+  "u": "/pl/exercises/back-squat/"
+ },
+ "jasny+kontrast": {
+  "t": "Przejdź do treści",
+  "k": 9.44,
+  "prog": 4.5,
+  "el": "a.skip",
+  "u": "/pl/exercises/back-squat/"
+ },
+ "ciemny+kontrast": {
+  "t": "Strona główna",
+  "k": 12.08,
+  "prog": 4.5,
+  "el": "a.",
+  "u": "/pl/exercises/back-squat/"
+ }
+}
+
+Skrypt:
+// Z-40 · kontrast wyrenderowanego tekstu na stronach dist: kolor tekstu vs pierwsze nieprzezroczyste tło przodka; 4 warianty.
+// Próg 4,5; 3 dla tekstu ≥ 24 px albo ≥ 18,66 px pogrubionego. Kod wyjścia 1 przy elemencie poniżej progu.
+const { chromium } = require('playwright');
+const stron = ['/pl/exercises/back-squat/', '/pl/exercises/decline-bench-press/', '/pl/exercises/bench-dip/', '/pl/exercises/sissy-squat/', '/pl/', '/pl/exercises/', '/pl/muscles/legs/', '/404.html', '/', '/pl/privacy-policy/', '/en/exercises/back-squat/', '/ru/exercises/back-squat/'];
+(async () => {
+  const b = await chromium.launch(); let zle = 0, lacznie = 0; const min = {};
+  for (const [nazwa, scheme, contrast] of [['jasny', 'light', 'no-preference'], ['ciemny', 'dark', 'no-preference'], ['jasny+kontrast', 'light', 'more'], ['ciemny+kontrast', 'dark', 'more']]) {
+    const ctx = await b.newContext({ viewport: { width: 390, height: 900 }, colorScheme: scheme, contrast, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    for (const u of stron) {
+      await p.goto('http://localhost:8124' + u);
+      const r = await p.evaluate(() => {
+        const rgb = s => (s.match(/[\d.]+/g) || []).map(Number);
+        const lum = c => { const v = c.slice(0, 3).map(x => x / 255).map(x => x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+        const tlo = e => { for (let x = e; x; x = x.parentElement) { const c = rgb(getComputedStyle(x).backgroundColor); if (c.length === 3 || c[3] > 0.9) return c; } return [255, 255, 255]; };
+        const out = [];
+        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        const seen = new Set();
+        for (let n; (n = w.nextNode());) {
+          const e = n.parentElement; if (!n.textContent.trim() || seen.has(e)) continue; seen.add(e);
+          const r = e.getBoundingClientRect(); if (!r.width || e.closest('[hidden], .wizualnie-ukryte, svg, script')) continue;
+          const cs = getComputedStyle(e); if (cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+          const a = lum(rgb(cs.color)), bb = lum(tlo(e)); const k = (Math.max(a, bb) + 0.05) / (Math.min(a, bb) + 0.05);
+          const fs = parseFloat(cs.fontSize), duzy = fs >= 24 || (fs >= 18.66 && +cs.fontWeight >= 700);
+          out.push({ t: n.textContent.trim().slice(0, 30), k: Math.round(k * 100) / 100, prog: duzy ? 3 : 4.5, el: e.tagName.toLowerCase() + '.' + e.className });
+        }
+        return out;
+      });
+      for (const x of r) { lacznie++; const key = nazwa; if (!min[key] || x.k < min[key].k) min[key] = { ...x, u }; if (x.k < x.prog) { zle++; console.log('PONIŻEJ', nazwa, u, JSON.stringify(x)); } }
+    }
+    await ctx.close();
+  }
+  await b.close();
+  console.log(`elementy tekstowe: ${lacznie}; poniżej progu: ${zle}`); console.log('najniższy kontrast w wariancie:', JSON.stringify(min, null, 1));
+  process.exit(zle ? 1 : 0);
+})();

@@ -1,0 +1,473 @@
+$ NODE_PATH=$(npm root -g) node interakcje.cjs z/inter
+kod wyjścia: 0
+{
+ "przyciski-light-reduce": [
+  {
+   "k": "pozycje",
+   "hidden": false,
+   "pressed": null,
+   "t": "Pozycja wyjściowaPozycja końcowa",
+   "w": 310,
+   "h": 333
+  },
+  {
+   "k": "widoki",
+   "hidden": true,
+   "pressed": null,
+   "t": "",
+   "w": 0,
+   "h": 0
+  },
+  {
+   "k": "b-anim",
+   "hidden": false,
+   "pressed": "true",
+   "t": "Wznów animację",
+   "w": 157,
+   "h": 44
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Kolana zapadające się do środka",
+   "w": 310,
+   "h": 52
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Odrywanie pięt od podłogi.",
+   "w": 310,
+   "h": 52
+  }
+ ],
+ "przyciski-light-no-preference": [
+  {
+   "k": "pozycje",
+   "hidden": true,
+   "pressed": null,
+   "t": "Pozycja wyjściowaPozycja końcowa",
+   "w": 0,
+   "h": 0
+  },
+  {
+   "k": "widoki",
+   "hidden": false,
+   "pressed": null,
+   "t": "",
+   "w": 310,
+   "h": 598
+  },
+  {
+   "k": "b-anim",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Zatrzymaj animację",
+   "w": 176,
+   "h": 44
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Kolana zapadające się do środka",
+   "w": 310,
+   "h": 52
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Odrywanie pięt od podłogi.",
+   "w": 310,
+   "h": 52
+  }
+ ],
+ "przyciski-dark-reduce": [
+  {
+   "k": "pozycje",
+   "hidden": false,
+   "pressed": null,
+   "t": "Pozycja wyjściowaPozycja końcowa",
+   "w": 310,
+   "h": 333
+  },
+  {
+   "k": "widoki",
+   "hidden": true,
+   "pressed": null,
+   "t": "",
+   "w": 0,
+   "h": 0
+  },
+  {
+   "k": "b-anim",
+   "hidden": false,
+   "pressed": "true",
+   "t": "Wznów animację",
+   "w": 157,
+   "h": 44
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Kolana zapadające się do środka",
+   "w": 310,
+   "h": 52
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Odrywanie pięt od podłogi.",
+   "w": 310,
+   "h": 52
+  }
+ ],
+ "przyciski-dark-no-preference": [
+  {
+   "k": "pozycje",
+   "hidden": true,
+   "pressed": null,
+   "t": "Pozycja wyjściowaPozycja końcowa",
+   "w": 0,
+   "h": 0
+  },
+  {
+   "k": "widoki",
+   "hidden": false,
+   "pressed": null,
+   "t": "",
+   "w": 310,
+   "h": 598
+  },
+  {
+   "k": "b-anim",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Zatrzymaj animację",
+   "w": 176,
+   "h": 44
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Kolana zapadające się do środka",
+   "w": 310,
+   "h": 52
+  },
+  {
+   "k": "b-blad",
+   "hidden": false,
+   "pressed": "false",
+   "t": "Pokaż częsty błąd: Odrywanie pięt od podłogi.",
+   "w": 310,
+   "h": 52
+  }
+ ],
+ "cele /pl/exercises/back-squat/": {
+  "lacznie": 57,
+  "ponizej44": [
+   "a.skip „Przejdź do treści” 135×26",
+   "a.jezyk „PL” 48×28",
+   "a. „nogi” 35×26",
+   "a. „sztanga” 65×26",
+   "a. „Przysiady” 80×26"
+  ],
+  "ponizej24": []
+ },
+ "fokus /pl/exercises/back-squat/": [
+  "a.skip „Przejdź do treści” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasBiblioteka” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a.jezyk „PL” outline solid 3px rgb(29, 78, 163) y=12 widoczny=true",
+  "summary. „Menu” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a. „Strona główna” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „Biblioteka” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „nogi” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „nogi” outline solid 3px rgb(29, 78, 163) y=270 widoczny=true",
+  "a. „sztanga” outline solid 3px rgb(29, 78, 163) y=326 widoczny=true",
+  "a. „Przysiady” outline solid 3px rgb(29, 78, 163) y=326 widoczny=true",
+  "button.b-anim „Wznów animację” outline solid 3px rgb(29, 78, 163) y=428 widoczny=true",
+  "button.b-blad „Pokaż częsty błąd: Kolana” outline solid 3px rgb(29, 78, 163) y=480 widoczny=true",
+  "button.b-blad „Pokaż częsty błąd: Odrywa” outline solid 3px rgb(29, 78, 163) y=541 widoczny=true",
+  "a. „Wypychanie na suwnicy Leg” outline solid 3px rgb(29, 78, 163) y=417 widoczny=true"
+ ],
+ "cele /pl/exercises/": {
+  "lacznie": 758,
+  "ponizej44": [
+   "a.skip „Przejdź do treści” 135×26",
+   "a.jezyk „PL” 48×28"
+  ],
+  "ponizej24": [
+   "a. „Bent Press” 86×20",
+   "a. „Bird Dog” 69×20",
+   "a. „Body-Up” 72×20",
+   "a. „Circus Bell” 85×20",
+   "a. „Clamshell” 78×20",
+   "a. „Cuban Press” 102×20",
+   "a. „Dead Bug” 79×20",
+   "a. „Donkey Kick” 100×20",
+   "a. „Drag Curl” 77×20",
+   "a. „Dragon Flag” 98×20",
+   "a. „Face Pull” 73×20",
+   "a. „Fire Hydrant” 99×20"
+  ]
+ },
+ "fokus /pl/exercises/": [
+  "a.skip „Przejdź do treści” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasBiblioteka” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a.jezyk „PL” outline solid 3px rgb(29, 78, 163) y=12 widoczny=true",
+  "summary. „Menu” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a. „Strona główna” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "input. „” outline solid 3px rgb(29, 78, 163) y=202 widoczny=true",
+  "select. „Wszystkiebarkibicepscardi” outline solid 3px rgb(29, 78, 163) y=291 widoczny=true",
+  "select. „Wszystkiehantleinnelinkim” outline solid 3px rgb(29, 78, 163) y=291 widoczny=true",
+  "select. „WszystkieBrzuch na podłod” outline solid 3px rgb(29, 78, 163) y=376 widoczny=true",
+  "a. „Around the world z hantla” outline solid 3px rgb(29, 78, 163) y=437 widoczny=true",
+  "a. „Balans na piłce gimnastyc” outline solid 3px rgb(29, 78, 163) y=530 widoczny=true",
+  "a. „Bayesian curl na wyciągu ” outline solid 3px rgb(29, 78, 163) y=650 widoczny=true",
+  "a. „Belt squat na maszynie Ma” outline solid 3px rgb(29, 78, 163) y=743 widoczny=true",
+  "a. „Belt squat na wyciągu Cab” outline solid 3px rgb(29, 78, 163) y=836 widoczny=true"
+ ],
+ "cele /pl/": {
+  "lacznie": 412,
+  "ponizej44": [
+   "a.skip „Przejdź do treści” 135×26",
+   "a.jezyk „PL” 48×28"
+  ],
+  "ponizej24": [
+   "a. „Bird Dog” 69×20 (w tekście)",
+   "a. „Clamshell” 78×20 (w tekście)",
+   "a. „Dead Bug” 79×20 (w tekście)",
+   "a. „Donkey Kick” 100×20 (w tekście)",
+   "a. „Face Pull” 73×20 (w tekście)",
+   "a. „Fire Hydrant” 99×20 (w tekście)",
+   "a. „Glute Ham Raise” 132×20 (w tekście)",
+   "a. „Good Morning” 115×20 (w tekście)",
+   "a. „Hip Thrust” 84×20 (w tekście)",
+   "a. „Hollow Hold” 97×20 (w tekście)",
+   "a. „Inchworm” 80×20 (w tekście)",
+   "a. „JM Press” 75×20 (w tekście)"
+  ]
+ },
+ "fokus /pl/": [
+  "a.skip „Przejdź do treści” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasBiblioteka” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a.jezyk „PL” outline solid 3px rgb(29, 78, 163) y=12 widoczny=true",
+  "summary. „Menu” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "input. „” outline solid 3px rgb(29, 78, 163) y=232 widoczny=true",
+  "a. „barki 89” outline solid 3px rgb(29, 78, 163) y=356 widoczny=true",
+  "a. „biceps 49” outline solid 3px rgb(29, 78, 163) y=401 widoczny=true",
+  "a. „cardio 20” outline solid 3px rgb(29, 78, 163) y=446 widoczny=true",
+  "a. „core 90” outline solid 3px rgb(29, 78, 163) y=491 widoczny=true",
+  "a. „inne 105” outline solid 3px rgb(29, 78, 163) y=536 widoczny=true",
+  "a. „klatka 65” outline solid 3px rgb(29, 78, 163) y=581 widoczny=true",
+  "a. „łydki 14” outline solid 3px rgb(29, 78, 163) y=626 widoczny=true",
+  "a. „nogi 103” outline solid 3px rgb(29, 78, 163) y=671 widoczny=true",
+  "a. „plecy 96” outline solid 3px rgb(29, 78, 163) y=716 widoczny=true"
+ ],
+ "cele /pl/muscles/legs/": {
+  "lacznie": 151,
+  "ponizej44": [
+   "a.skip „Przejdź do treści” 135×26",
+   "a.jezyk „PL” 48×28"
+  ],
+  "ponizej24": [
+   "a. „Glute Ham Raise” 132×20",
+   "a. „Nordic Curl” 91×20",
+   "a. „Reverse Nordic” 123×20",
+   "a.dalej „Wszystkie ćwiczenia” 172×20 (w tekście)"
+  ]
+ },
+ "fokus /pl/muscles/legs/": [
+  "a.skip „Przejdź do treści” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasBiblioteka” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a.jezyk „PL” outline solid 3px rgb(29, 78, 163) y=12 widoczny=true",
+  "summary. „Menu” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a. „Strona główna” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „Partie mięśniowe” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „Belt squat na maszynie Ma” outline solid 3px rgb(29, 78, 163) y=180 widoczny=true",
+  "a. „Belt squat na wyciągu Cab” outline solid 3px rgb(29, 78, 163) y=273 widoczny=true",
+  "a. „Ciągnięcie sanek tyłem Ba” outline solid 3px rgb(29, 78, 163) y=366 widoczny=true",
+  "a. „Ciągnięcie sanek w pełzan” outline solid 3px rgb(29, 78, 163) y=459 widoczny=true",
+  "a. „Ciągnięcie sanek w szelka” outline solid 3px rgb(29, 78, 163) y=552 widoczny=true",
+  "a. „Glute Ham Raise” outline solid 3px rgb(29, 78, 163) y=648 widoczny=true",
+  "a. „Krzesełko przy ścianie Wa” outline solid 3px rgb(29, 78, 163) y=716 widoczny=true",
+  "a. „Naprzemienny skok po prze” outline solid 3px rgb(29, 78, 163) y=809 widoczny=true"
+ ],
+ "cele /404.html": {
+  "lacznie": 40,
+  "ponizej44": [
+   "a.skip „Skip to content” 121×26"
+  ],
+  "ponizej24": []
+ },
+ "fokus /404.html": [
+  "a.skip „Skip to content” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasExercise l” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a. „Polski” outline solid 3px rgb(29, 78, 163) y=220 widoczny=true",
+  "a. „English” outline solid 3px rgb(29, 78, 163) y=265 widoczny=true",
+  "a. „Čeština” outline solid 3px rgb(29, 78, 163) y=310 widoczny=true",
+  "a. „Slovenčina” outline solid 3px rgb(29, 78, 163) y=355 widoczny=true",
+  "a. „Magyar” outline solid 3px rgb(29, 78, 163) y=400 widoczny=true",
+  "a. „Română” outline solid 3px rgb(29, 78, 163) y=445 widoczny=true",
+  "a. „Български” outline solid 3px rgb(29, 78, 163) y=490 widoczny=true",
+  "a. „Hrvatski” outline solid 3px rgb(29, 78, 163) y=535 widoczny=true",
+  "a. „Slovenščina” outline solid 3px rgb(29, 78, 163) y=580 widoczny=true",
+  "a. „Српски” outline solid 3px rgb(29, 78, 163) y=625 widoczny=true",
+  "a. „Lietuvių” outline solid 3px rgb(29, 78, 163) y=670 widoczny=true",
+  "a. „Latviešu” outline solid 3px rgb(29, 78, 163) y=715 widoczny=true"
+ ],
+ "cele /": {
+  "lacznie": 39,
+  "ponizej44": [
+   "a.skip „Skip to content” 121×26"
+  ],
+  "ponizej24": []
+ },
+ "fokus /": [
+  "a.skip „Skip to content” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a. „Polski” outline solid 3px rgb(29, 78, 163) y=193 widoczny=true",
+  "a. „English” outline solid 3px rgb(29, 78, 163) y=238 widoczny=true",
+  "a. „Čeština” outline solid 3px rgb(29, 78, 163) y=283 widoczny=true",
+  "a. „Slovenčina” outline solid 3px rgb(29, 78, 163) y=328 widoczny=true",
+  "a. „Magyar” outline solid 3px rgb(29, 78, 163) y=373 widoczny=true",
+  "a. „Română” outline solid 3px rgb(29, 78, 163) y=418 widoczny=true",
+  "a. „Български” outline solid 3px rgb(29, 78, 163) y=463 widoczny=true",
+  "a. „Hrvatski” outline solid 3px rgb(29, 78, 163) y=508 widoczny=true",
+  "a. „Slovenščina” outline solid 3px rgb(29, 78, 163) y=553 widoczny=true",
+  "a. „Српски” outline solid 3px rgb(29, 78, 163) y=598 widoczny=true",
+  "a. „Lietuvių” outline solid 3px rgb(29, 78, 163) y=643 widoczny=true",
+  "a. „Latviešu” outline solid 3px rgb(29, 78, 163) y=688 widoczny=true",
+  "a. „Eesti” outline solid 3px rgb(29, 78, 163) y=733 widoczny=true"
+ ],
+ "cele /pl/privacy-policy/": {
+  "lacznie": 46,
+  "ponizej44": [
+   "a.skip „Przejdź do treści” 135×26",
+   "a.jezyk „PL” 48×28"
+  ],
+  "ponizej24": []
+ },
+ "fokus /pl/privacy-policy/": [
+  "a.skip „Przejdź do treści” outline solid 3px rgb(29, 78, 163) y=9 widoczny=true",
+  "a.marka „Technique AtlasBiblioteka” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a.jezyk „PL” outline solid 3px rgb(29, 78, 163) y=12 widoczny=true",
+  "summary. „Menu” outline solid 3px rgb(29, 78, 163) y=4 widoczny=true",
+  "a. „Strona główna” outline solid 3px rgb(29, 78, 163) y=87 widoczny=true",
+  "a. „English” outline solid 3px rgb(29, 78, 163) y=428 widoczny=true",
+  "a. „Čeština” outline solid 3px rgb(29, 78, 163) y=428 widoczny=true",
+  "a. „Slovenčina” outline solid 3px rgb(29, 78, 163) y=428 widoczny=true",
+  "a. „Magyar” outline solid 3px rgb(29, 78, 163) y=472 widoczny=true",
+  "a. „Română” outline solid 3px rgb(29, 78, 163) y=472 widoczny=true",
+  "a. „Български” outline solid 3px rgb(29, 78, 163) y=472 widoczny=true",
+  "a. „Hrvatski” outline solid 3px rgb(29, 78, 163) y=472 widoczny=true",
+  "a. „Slovenščina” outline solid 3px rgb(29, 78, 163) y=516 widoczny=true",
+  "a. „Српски” outline solid 3px rgb(29, 78, 163) y=516 widoczny=true"
+ ],
+ "filtr-nogi-390-jasny": {
+  "widoczne": 103,
+  "wynik": null,
+  "wyczysc": true
+ },
+ "pusty-390-jasny": {
+  "pustyWidoczny": true,
+  "tekst": "Brak ćwiczeń dla tych filtrów\n\nZmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.\n\nWyczyść filtry",
+  "tabelaUkryta": true
+ },
+ "filtr-nogi-390-ciemny": {
+  "widoczne": 103,
+  "wynik": null,
+  "wyczysc": true
+ },
+ "pusty-390-ciemny": {
+  "pustyWidoczny": true,
+  "tekst": "Brak ćwiczeń dla tych filtrów\n\nZmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.\n\nWyczyść filtry",
+  "tabelaUkryta": true
+ },
+ "filtr-nogi-1440-jasny": {
+  "widoczne": 103,
+  "wynik": null,
+  "wyczysc": true
+ },
+ "pusty-1440-jasny": {
+  "pustyWidoczny": true,
+  "tekst": "Brak ćwiczeń dla tych filtrów\n\nZmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.\n\nWyczyść filtry",
+  "tabelaUkryta": true
+ },
+ "filtr-nogi-1440-ciemny": {
+  "widoczne": 103,
+  "wynik": null,
+  "wyczysc": true
+ },
+ "pusty-1440-ciemny": {
+  "pustyWidoczny": true,
+  "tekst": "Brak ćwiczeń dla tych filtrów\n\nZmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.\n\nWyczyść filtry",
+  "tabelaUkryta": true
+ }
+}
+Skrypt:
+// Z-40 · interakcje: stan przycisków figury, cele, fokus klawiaturą, pusty filtr, menu otwarte. Zrzuty w skali 2.
+const { chromium } = require('playwright');
+const fs = require('fs'), path = require('path');
+const out = process.argv[2]; fs.mkdirSync(out, { recursive: true });
+const B = 'http://localhost:8124';
+const wyn = {};
+(async () => {
+  const b = await chromium.launch();
+  for (const theme of ['light', 'dark']) for (const rm of ['reduce', 'no-preference']) {
+    const ctx = await b.newContext({ viewport: { width: 390, height: 900 }, deviceScaleFactor: 2, colorScheme: theme, reducedMotion: rm });
+    const p = await ctx.newPage();
+    await p.goto(B + '/pl/exercises/back-squat/'); await p.waitForTimeout(400);
+    wyn[`przyciski-${theme}-${rm}`] = await p.$$eval('.fig-ster button, .pozycje, .widoki', es => es.map(e => ({ k: e.className, hidden: e.hidden, pressed: e.getAttribute('aria-pressed'), t: e.textContent.trim().slice(0, 50), w: Math.round(e.getBoundingClientRect().width), h: Math.round(e.getBoundingClientRect().height) })));
+    if (theme === 'light') await p.locator('.fig').screenshot({ path: path.join(out, `figura-390-${rm}.png`) });
+    await ctx.close();
+  }
+  // cele interaktywne < 44 i < 24 px (390, jasny), fokus klawiaturą (Tab) z widocznością obrysu
+  const ctx = await b.newContext({ viewport: { width: 390, height: 900 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
+  const p = await ctx.newPage();
+  for (const url of ['/pl/exercises/back-squat/', '/pl/exercises/', '/pl/', '/pl/muscles/legs/', '/404.html', '/', '/pl/privacy-policy/']) {
+    await p.goto(B + url); await p.waitForTimeout(300);
+    wyn['cele ' + url] = await p.$$eval('a, button, summary, select, input', es => {
+      const r = { lacznie: 0, ponizej44: [], ponizej24: [] };
+      for (const e of es) { const b = e.getBoundingClientRect(); if (!b.width || e.closest('[hidden]')) continue; r.lacznie++;
+        const inline = getComputedStyle(e).display === 'inline' && e.closest('p, li, dd, td');
+        const opis = `${e.tagName.toLowerCase()}.${e.className} „${(e.textContent || e.value || '').trim().slice(0, 30)}” ${Math.round(b.width)}×${Math.round(b.height)}${inline ? ' (w tekście)' : ''}`;
+        if (b.height < 24 || b.width < 24) r.ponizej24.push(opis); else if (b.height < 44) r.ponizej44.push(opis); }
+      r.ponizej44 = [...new Set(r.ponizej44)].slice(0, 12); r.ponizej24 = [...new Set(r.ponizej24)].slice(0, 12); return r; });
+    const fok = [];
+    for (let i = 0; i < 14; i++) { await p.keyboard.press('Tab'); fok.push(await p.evaluate(() => { const e = document.activeElement; const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); return `${e.tagName.toLowerCase()}.${e.className} „${e.textContent.trim().slice(0, 25)}” outline ${cs.outlineStyle} ${cs.outlineWidth} ${cs.outlineColor} y=${Math.round(b.y)} widoczny=${b.bottom > 0 && b.top < innerHeight}`; })); }
+    wyn['fokus ' + url] = fok;
+  }
+  // zrzut fokusu na pierwszym linku treści
+  await p.goto(B + '/pl/exercises/back-squat/'); for (let i = 0; i < 2; i++) await p.keyboard.press('Tab');
+  await p.screenshot({ path: path.join(out, 'fokus-390-jasny.png') });
+  await ctx.close();
+  // pusty filtr i licznik wyniku: lista pl, 390 i 1440
+  for (const width of [390, 1440]) for (const theme of ['light', 'dark']) {
+    const c = await b.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 2, colorScheme: theme, reducedMotion: 'reduce' });
+    const q = await c.newPage(); await q.goto(B + '/pl/exercises/');
+    await q.selectOption('#f-muscle', 'legs');
+    const t = theme === 'light' ? 'jasny' : 'ciemny';
+    wyn[`filtr-nogi-${width}-${t}`] = await q.evaluate(() => ({ widoczne: [...document.querySelectorAll('[data-lista] > *')].filter(x => !x.hidden).length, wynik: document.querySelector('.wynik, [aria-live]:not([data-wyniki]):not([data-error-text])')?.textContent || null, wyczysc: !document.querySelector('[data-filtry] [data-wyczysc]').hidden }));
+    await q.screenshot({ path: path.join(out, `filtr-nogi-${width}-${t}.png`), clip: { x: 0, y: 0, width, height: 1400 }, fullPage: true });
+    await q.selectOption('#f-muscle', 'calves'); await q.selectOption('#f-equipment', 'cable'); await q.selectOption('#f-movement', 'squat');
+    wyn[`pusty-${width}-${t}`] = await q.evaluate(() => { const e = document.querySelector('[data-pusto]'); return { pustyWidoczny: !e.hidden, tekst: e.innerText, tabelaUkryta: document.querySelector('table.wykaz').hidden }; });
+    await q.screenshot({ path: path.join(out, `lista-pusta-${width}-${t}.png`), fullPage: true });
+    await c.close();
+  }
+  // menu otwarte na telefonie
+  for (const theme of ['light', 'dark']) {
+    const c = await b.newContext({ viewport: { width: 390, height: 900 }, deviceScaleFactor: 2, colorScheme: theme, reducedMotion: 'reduce' });
+    const q = await c.newPage(); await q.goto(B + '/pl/exercises/back-squat/'); await q.click('.menu-d summary');
+    await q.screenshot({ path: path.join(out, `menu-otwarte-390-${theme === 'light' ? 'jasny' : 'ciemny'}.png`) });
+    await c.close();
+  }
+  await b.close();
+  fs.writeFileSync(path.join(out, 'interakcje.json'), JSON.stringify(wyn, null, 1));
+  console.log(JSON.stringify(wyn, null, 1));
+})();

@@ -1,0 +1,666 @@
+$ node porownaj.cjs z/para 320,390,768,1024,1440 light,dark no-preference <9 par> ; node analiza.mjs z/para/odcisk.json
+kod wyjścia: 0
+
+## cwiczenie-320-jasny wys. 5470→5912
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-wskazowki-ogolne-320-jasny wys. 4684→5218
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-bez-figury-320-jasny wys. 3833→4245
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-320-jasny wys. 2820→3262
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-320-jasny wys. 3888→5605
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## glowna-320-jasny wys. 4685→33159
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: 
+
+## lista-320-jasny wys. 3734→11998
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | span | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-320-jasny wys. 1852→2188
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-320-jasny wys. 1825→2162
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-390-jasny wys. 4482→4794
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-wskazowki-ogolne-390-jasny wys. 3751→4148
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-bez-figury-390-jasny wys. 3263→3560
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-390-jasny wys. 2407→2735
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-390-jasny wys. 3210→4627
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## glowna-390-jasny wys. 4611→31349
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: 
+
+## lista-390-jasny wys. 3257→10684
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | span | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-390-jasny wys. 1853→2122
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-390-jasny wys. 1826→2095
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-768-jasny wys. 3639→3818
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-wskazowki-ogolne-768-jasny wys. 3233→3385
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-bez-figury-768-jasny wys. 2691→2794
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-768-jasny wys. 2013→2121
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-768-jasny wys. 2758→3575
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## glowna-768-jasny wys. 3196→29126
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span border-left-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+
+## lista-768-jasny wys. 2507→7679
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-768-jasny wys. 900→1043
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-768-jasny wys. 900→1017
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-1024-jasny wys. 2620→2612
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-wskazowki-ogolne-1024-jasny wys. 2369→2477
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-bez-figury-1024-jasny wys. 2153→2212
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-1024-jasny wys. 1587→1673
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-1024-jasny wys. 1813→2523
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## glowna-1024-jasny wys. 2476→15534
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span border-left-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+
+## lista-1024-jasny wys. 2430→7548
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-1024-jasny wys. 900→915
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-1024-jasny wys. 900→900
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-1440-jasny wys. 2463→2501
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-wskazowki-ogolne-1440-jasny wys. 2277→2341
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## cwiczenie-bez-figury-1440-jasny wys. 2127→2142
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-1440-jasny wys. 1561→1602
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-1440-jasny wys. 1755→2280
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(24, 32, 43) → rgb(255, 255, 255)
+   fig-ster>button.b-anim background-color: rgb(255, 255, 255) → rgb(24, 32, 43)
+   fig-ster>button.b-anim outline-color: rgb(24, 32, 43) → rgb(255, 255, 255)
+
+## glowna-1440-jasny wys. 2074→15061
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span border-left-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(29, 78, 163) → rgb(79, 91, 107)
+
+## lista-1440-jasny wys. 2433→7506
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-1440-jasny wys. 900→918
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-1440-jasny wys. 900→900
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-320-ciemny wys. 5470→5912
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-wskazowki-ogolne-320-ciemny wys. 4684→5218
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-bez-figury-320-ciemny wys. 3833→4245
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-320-ciemny wys. 2820→3262
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-320-ciemny wys. 3888→5382
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## glowna-320-ciemny wys. 4685→33159
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: 
+
+## lista-320-ciemny wys. 3734→11998
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | span | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-320-ciemny wys. 1852→2188
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-320-ciemny wys. 1825→2162
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-390-ciemny wys. 4482→4794
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-wskazowki-ogolne-390-ciemny wys. 3751→4148
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-bez-figury-390-ciemny wys. 3263→3560
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-390-ciemny wys. 2407→2735
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-390-ciemny wys. 3210→4627
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## glowna-390-ciemny wys. 4611→31349
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: 
+
+## lista-390-ciemny wys. 3257→10684
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | span | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-390-ciemny wys. 1853→2122
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-390-ciemny wys. 1826→2095
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-768-ciemny wys. 3639→3818
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-wskazowki-ogolne-768-ciemny wys. 3233→3385
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-bez-figury-768-ciemny wys. 2691→2794
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-768-ciemny wys. 2013→2121
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-768-ciemny wys. 2758→3575
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## glowna-768-ciemny wys. 3196→29126
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span border-left-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+
+## lista-768-ciemny wys. 2507→7679
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-768-ciemny wys. 900→1043
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-768-ciemny wys. 900→1017
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-1024-ciemny wys. 2620→2612
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-wskazowki-ogolne-1024-ciemny wys. 2369→2477
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-bez-figury-1024-ciemny wys. 2153→2212
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-1024-ciemny wys. 1587→1673
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-1024-ciemny wys. 1813→2523
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## glowna-1024-ciemny wys. 2476→15534
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span border-left-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+
+## lista-1024-ciemny wys. 2430→7548
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-1024-ciemny wys. 900→915
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-1024-ciemny wys. 900→900
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## cwiczenie-1440-ciemny wys. 2463→2501
+ tylko wzór: odp>p | fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp | fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-wskazowki-ogolne-1440-ciemny wys. 2277→2341
+ tylko wzór: fig>p.podpis | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: fig>figcaption.drobne
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## cwiczenie-bez-figury-1440-ciemny wys. 2127→2142
+ tylko wzór: odp>p | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: odp>p.odp
+ style: 
+
+## cwiczenie-bez-wskazowek-1440-ciemny wys. 1561→1602
+ tylko wzór: arkusz>div.uk.uk-skrot | ramka>div.plakietka | plakietka>br | plakietka>span
+ tylko dist: arkusz>div.bez-fig.uk.uk-skrot
+ style: 
+
+## cwiczenie-ru-1440-ciemny wys. 1755→2405
+ tylko wzór: nazwa>span.nazwa-pl | fig>p.podpis
+ tylko dist: fig>figcaption.drobne | arkusz>aside.ramka | ramka>h2 | ramka>ul.ramka-l | ramka-l>li | stopka-w>p.wsparcie
+ style: fig-ster>button.b-anim color: rgb(227, 233, 240) → rgb(18, 25, 34)
+   fig-ster>button.b-anim background-color: rgb(18, 25, 34) → rgb(227, 233, 240)
+   fig-ster>button.b-anim outline-color: rgb(227, 233, 240) → rgb(18, 25, 34)
+
+## glowna-1440-ciemny wys. 2074→15061
+ tylko wzór: 
+ tylko dist: arkusz>nav.okruszki | okruszki>ol | wstep>ul.wiersze
+ style: span color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span font-size: 17px → 15.3px
+   span line-height: 26.35px → 23.715px
+   span border-top-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span border-left-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+   span padding-top: 0px → 10.2px
+   span display: block → inline-block
+   span outline-color: rgb(143, 179, 255) → rgb(163, 175, 191)
+
+## lista-1440-ciemny wys. 2433→7506
+ tylko wzór: arkusz>div.szukaj | szukaj>label | szukaj>input | arkusz>div.filtry | filtry>div.pole | pole>label | pole>select | filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>p | a.dalej
+ style: 
+
+## 404-1440-ciemny wys. 900→918
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+## jezyki-1440-ciemny wys. 900→900
+ tylko wzór: 
+ tylko dist: footer.stopka | stopka>div.stopka-w | stopka-w>p.wsparcie | stopka-w>p.prawne | prawne>a
+ style: 
+
+$ node porownaj.cjs z/para2 390,1440 light,dark no-preference "lista=/pl/exercises/;lista-pusta=/pl/exercises/"
+
+## lista-390-jasny wys. 3257→69433
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>ul.wiersze
+ style: 
+
+## lista-pusta-390-jasny wys. 1224→69433
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>div.pusto | pusto>h2 | pusto>p | pusto>button.wyczysc
+ tylko dist: arkusz>ul.wiersze | arkusz>table.wykaz | wykaz>caption.wizualnie-ukryte | wykaz>tbody | tr | th | span.nazwa-pl | span.nazwa-en | td
+ style: 
+
+## lista-1440-jasny wys. 2433→47052
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>ul.wiersze
+ style: 
+
+## lista-pusta-1440-jasny wys. 951→47052
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>div.pusto | pusto>h2 | pusto>p | pusto>button.wyczysc
+ tylko dist: arkusz>ul.wiersze | arkusz>table.wykaz | wykaz>caption.wizualnie-ukryte | wykaz>thead | tr | th | wykaz>tbody | span.nazwa-pl | span.nazwa-en | td
+ style: 
+
+## lista-390-ciemny wys. 3257→69433
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>ul.wiersze
+ style: 
+
+## lista-pusta-390-ciemny wys. 1224→69433
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>div.pusto | pusto>h2 | pusto>p | pusto>button.wyczysc
+ tylko dist: arkusz>ul.wiersze | arkusz>table.wykaz | wykaz>caption.wizualnie-ukryte | wykaz>tbody | tr | th | span.nazwa-pl | span.nazwa-en | td
+ style: 
+
+## lista-1440-ciemny wys. 2433→47052
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>p.dalej-w
+ tylko dist: arkusz>ul.wiersze
+ style: 
+
+## lista-pusta-1440-ciemny wys. 951→47052
+ tylko wzór: filtry>button.wyczysc | arkusz>p.wynik | wynik>strong | arkusz>div.pusto | pusto>h2 | pusto>p | pusto>button.wyczysc
+ tylko dist: arkusz>ul.wiersze | arkusz>table.wykaz | wykaz>caption.wizualnie-ukryte | wykaz>thead | tr | th | wykaz>tbody | span.nazwa-pl | span.nazwa-en | td
+ style: 
+kod wyjścia: 0
+Skrypty:
+// Z-40 · para: szablon wzorcowy (docs/design/system/szablony, podany przez page.route) i strona zbudowana (dist, serwer 8124).
+// Zrzuty obu w skali 2 i „odcisk systemu”: dla każdego klucza tag.klasy (pierwsze wystąpienie) styl obliczony i położenie.
+// node porownaj.cjs <out> <szer> <motywy> <kontrast> <para:szablon=ścieżka;...>
+const { chromium } = require('playwright');
+const fs = require('fs'), path = require('path');
+const SYS = '/home/user/techniqueatlas/docs/design/system';
+const [out, w, motywy, kontrast, pary] = process.argv.slice(2);
+const P = ['color', 'background-color', 'font-family', 'font-size', 'font-weight', 'line-height', 'border-top-width', 'border-top-style', 'border-top-color', 'border-left-width', 'border-left-style', 'border-left-color', 'border-radius', 'padding-top', 'padding-left', 'margin-top', 'display', 'text-transform', 'letter-spacing', 'outline-color', 'max-width', 'grid-template-columns'];
+const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png', '.json': 'application/json' };
+async function odcisk(p) {
+  return p.evaluate((P) => {
+    const res = {};
+    for (const e of document.querySelectorAll('body *')) {
+      if (['SCRIPT', 'STYLE', 'path', 'use', 'g', 'circle', 'line', 'rect', 'polyline', 'ellipse', 'symbol', 'defs'].includes(e.tagName)) continue;
+      const r = e.getBoundingClientRect(); if (!r.width && !r.height) continue;
+      const cls = typeof e.className === 'string' ? e.className.trim().split(/\s+/).filter(Boolean).sort().join('.') : '';
+      const par = e.parentElement; const pc = par && typeof par.className === 'string' ? par.className.trim().split(/\s+/)[0] || '' : '';
+      const k = `${pc ? pc + '>' : ''}${e.tagName.toLowerCase()}${cls ? '.' + cls : ''}`;
+      if (res[k]) { res[k].n++; continue; }
+      const cs = getComputedStyle(e); const s = {}; for (const x of P) s[x] = cs.getPropertyValue(x);
+      res[k] = { n: 1, x: Math.round(r.x), y: Math.round(r.y + scrollY), w: Math.round(r.width), h: Math.round(r.height), s, t: (e.innerText || '').slice(0, 40) };
+    }
+    return res;
+  }, P);
+}
+(async () => {
+  fs.mkdirSync(out, { recursive: true });
+  const b = await chromium.launch(); const wynik = {};
+  for (const theme of motywy.split(',')) for (const width of w.split(',').map(Number)) {
+    const ctx = await b.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 2, colorScheme: theme, reducedMotion: 'reduce', contrast: kontrast });
+    await ctx.route('http://wzor.local/**', async r => {
+      const u = new URL(r.request().url()); const f = path.join(SYS, decodeURIComponent(u.pathname));
+      if (!f.startsWith(SYS) || !fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
+      r.fulfill({ status: 200, contentType: MIME[path.extname(f)] || 'application/octet-stream', body: fs.readFileSync(f) });
+    });
+    const p = await ctx.newPage();
+    for (const [sz, url] of pary.split(';').map(s => s.split('='))) {
+      const tag = `${sz}-${width}-${theme === 'light' ? 'jasny' : 'ciemny'}${kontrast === 'more' ? '-kontrast' : ''}`;
+      const o = {};
+      for (const [kto, adres] of [['wzor', `http://wzor.local/szablony/${sz}.html`], ['dist', 'http://localhost:8124' + url]]) {
+        await p.goto(adres); await p.evaluate(() => document.fonts.ready);
+        const h = await p.evaluate(() => document.documentElement.scrollHeight);
+        const opt = { path: path.join(out, `${tag}-${kto}.png`), fullPage: true }; if (h > 6000) opt.clip = { x: 0, y: 0, width, height: 6000 };
+        await p.screenshot(opt);
+        o[kto] = await odcisk(p); o[kto + 'H'] = h;
+      }
+      wynik[tag] = o;
+    }
+    await ctx.close();
+  }
+  await b.close();
+  fs.writeFileSync(path.join(out, 'odcisk.json'), JSON.stringify(wynik));
+  console.log('pary:', Object.keys(wynik).length);
+})();
+import fs from 'node:fs';
+const d = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const filtr = process.argv[3] || '';
+for (const [tag, o] of Object.entries(d)) {
+  if (!tag.includes(filtr)) continue;
+  const W = o.wzor, D = o.dist;
+  const tylkoW = Object.keys(W).filter(k => !D[k]), tylkoD = Object.keys(D).filter(k => !W[k]);
+  const roz = [];
+  for (const k of Object.keys(W)) if (D[k]) for (const p of Object.keys(W[k].s)) if (W[k].s[p] !== D[k].s[p]) roz.push(`${k} ${p}: ${W[k].s[p]} → ${D[k].s[p]}`);
+  console.log(`\n## ${tag} wys. ${o.wzorH}→${o.distH}`);
+  console.log(' tylko wzór:', tylkoW.join(' | '));
+  console.log(' tylko dist:', tylkoD.join(' | '));
+  console.log(' style:', roz.join('\n   '));
+}

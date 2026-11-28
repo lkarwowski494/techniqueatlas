@@ -1,0 +1,10 @@
+$ node -e "<head: og, description, tytuły, lang> dla dist/pl, dist/en, /, 404"
+kod wyjścia: 0
+stron 1550
+brak og:image 494 pl/content-license/index.html pl/equipment/barbell/index.html pl/equipment/bodyweight/index.html pl/equipment/cable/index.html pl/equipment/dumbbell/index.html pl/equipment/machine/index.html | ćwiczenia: 362
+brak description 29 dist/pl/content-license/index.html dist/pl/privacy-policy/index.html dist/pl/terms/index.html dist/en/content-license/index.html dist/en/privacy-policy/index.html dist/en/terms/index.html | ćwiczenia: 22
+brak og:title 3 404.html | ćwiczenia: 2
+brak og:type 3 404.html | ćwiczenia: 2
+brak og:url 3 404.html | ćwiczenia: 2
+zduplikowane tytuły 10 Body-Up x2 ; Circus Bell — Strongman x2 ; Frog Pump x2
+lang: pl,en
