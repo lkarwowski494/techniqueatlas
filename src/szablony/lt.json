@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Pagrindiniai raumenys: {lista}.",
+ "miesniePomocnicze": "Pagalbiniai raumenys: {lista}.",
+ "partia": "Kūno dalis: {grupa}.",
+ "sprzet": "Reikalinga įranga: {lista}.",
+ "rodzaj": "Judesio tipas: {rodzaj}.",
+ "blad": "Dažna klaida: {zdanie}",
+ "albo": " arba ",
+ "pytania": {
+  "setup": "Kaip pasiruošti?",
+  "move": "Kaip atlikti judesį?",
+  "miesnie": "Kurie raumenys dirba?",
+  "tips": "Kas padeda išlaikyti techniką?",
+  "mistakes": "Kokių klaidų vengti?",
+  "sprzet": "Kokios įrangos reikia?",
+  "zamienniki": "Kuo galima pakeisti?"
+ },
+ "opisGlownej": "{n} {opisow}: {f} su judesio piešiniu, {c} su technikos patarimais, {z} su pakaitalais.",
+ "opisow": {
+  "one": "aprašas",
+  "few": "aprašai",
+  "many": "aprašo",
+  "other": "aprašų"
+ },
+ "opisListy": "{n} {pozycji} nuo A iki Ž, su filtrais pagal kūno dalį, įrangą ir judesio tipą.",
+ "pozycji": {
+  "one": "įrašas",
+  "few": "įrašai",
+  "many": "įrašo",
+  "other": "įrašų"
+ },
+ "opisKategorii": "{n} {pozycji}, tarp jų {lista}.",
+ "opisKategoriiJedna": "Vienas įrašas: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}: {f} su judesio piešiniu, {c} su technikos patarimais."
+}

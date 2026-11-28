@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Κύριοι μύες: {lista}.",
+ "miesniePomocnicze": "Βοηθητικοί μύες: {lista}.",
+ "partia": "Μέρος σώματος: {grupa}.",
+ "sprzet": "Απαιτούμενος εξοπλισμός: {lista}.",
+ "rodzaj": "Είδος κίνησης: {rodzaj}.",
+ "blad": "Συνηθισμένο λάθος: {zdanie}",
+ "albo": " ή ",
+ "pytania": {
+  "setup": "Πώς παίρνετε θέση;",
+  "move": "Πώς εκτελείτε την κίνηση;",
+  "miesnie": "Ποιους μύες δουλεύει;",
+  "tips": "Τι βοηθά στην τεχνική;",
+  "mistakes": "Ποια λάθη να αποφύγετε;",
+  "sprzet": "Τι εξοπλισμό χρειάζεστε;",
+  "zamienniki": "Με τι μπορείτε να την αντικαταστήσετε;"
+ },
+ "opisGlownej": "{n} {opisow}: σχέδιο της κίνησης σε {f}, συμβουλές τεχνικής σε {c}, υποκατάστατα σε {z}.",
+ "opisow": {
+  "one": "περιγραφή",
+  "few": "περιγραφές",
+  "many": "περιγραφές",
+  "other": "περιγραφές"
+ },
+ "opisListy": "{n} {pozycji} από το Α έως το Ω, με φίλτρο ανά μέρος σώματος, εξοπλισμό και είδος κίνησης.",
+ "pozycji": {
+  "one": "καταχώριση",
+  "few": "καταχωρίσεις",
+  "many": "καταχωρίσεις",
+  "other": "καταχωρίσεις"
+ },
+ "opisKategorii": "{n} {pozycji}, μεταξύ των οποίων {lista}.",
+ "opisKategoriiJedna": "Μία καταχώριση: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} με σχέδιο της κίνησης σε {f} και συμβουλές τεχνικής σε {c}."
+}

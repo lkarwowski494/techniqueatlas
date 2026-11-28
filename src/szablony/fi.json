@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Päälihakset: {lista}.",
+ "miesniePomocnicze": "Avustavat lihakset: {lista}.",
+ "partia": "Lihasryhmä: {grupa}.",
+ "sprzet": "Tarvittavat välineet: {lista}.",
+ "rodzaj": "Liiketyyppi: {rodzaj}.",
+ "blad": "Yleinen virhe: {zdanie}",
+ "albo": " tai ",
+ "pytania": {
+  "setup": "Miten asetut alkuasentoon?",
+  "move": "Miten teet liikkeen?",
+  "miesnie": "Mitkä lihakset työskentelevät?",
+  "tips": "Mikä auttaa tekniikassa?",
+  "mistakes": "Mitä virheitä kannattaa välttää?",
+  "sprzet": "Mitä välineitä tarvitset?",
+  "zamienniki": "Millä liikkeen voi korvata?"
+ },
+ "opisGlownej": "{n} {opisow}: liikepiirros {f} liikkeessä, tekniikkavinkit {c} liikkeessä ja korvaavat liikkeet {z} liikkeessä.",
+ "opisow": {
+  "one": "kuvaus",
+  "few": "kuvausta",
+  "many": "kuvausta",
+  "other": "kuvausta"
+ },
+ "opisListy": "{n} {pozycji} aakkosjärjestyksessä, suodata lihasryhmän, välineiden ja liiketyypin mukaan.",
+ "pozycji": {
+  "one": "liike",
+  "few": "liikettä",
+  "many": "liikettä",
+  "other": "liikettä"
+ },
+ "opisKategorii": "{n} {pozycji}, mukana muun muassa {lista}.",
+ "opisKategoriiJedna": "Yksi liike: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}: liikepiirros {f} liikkeessä ja tekniikkavinkit {c} liikkeessä."
+}

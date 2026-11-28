@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Hlavné svaly: {lista}.",
+ "miesniePomocnicze": "Pomocné svaly: {lista}.",
+ "partia": "Svalová partia: {grupa}.",
+ "sprzet": "Potrebné vybavenie: {lista}.",
+ "rodzaj": "Typ pohybu: {rodzaj}.",
+ "blad": "Častá chyba: {zdanie}",
+ "albo": " alebo ",
+ "pytania": {
+  "setup": "Ako zaujať východiskovú polohu?",
+  "move": "Ako vykonať pohyb?",
+  "miesnie": "Ktoré svaly pracujú?",
+  "tips": "Čo pomáha pri technike vykonania?",
+  "mistakes": "Akým chybám sa vyhnúť?",
+  "sprzet": "Aké vybavenie je potrebné?",
+  "zamienniki": "Čím ho možno nahradiť?"
+ },
+ "opisGlownej": "{n} {opisow}: kresba pohybu pri {f}, tipy k technike vykonania pri {c}, náhrady pri {z}.",
+ "opisow": {
+  "one": "popis",
+  "few": "popisy",
+  "many": "popisu",
+  "other": "popisov"
+ },
+ "opisListy": "{n} {pozycji} od A po Z s filtrom podľa svalovej partie, vybavenia a typu pohybu.",
+ "pozycji": {
+  "one": "položka",
+  "few": "položky",
+  "many": "položky",
+  "other": "položiek"
+ },
+ "opisKategorii": "{n} {pozycji}, okrem iného {lista}.",
+ "opisKategoriiJedna": "Jedna položka: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} s kresbou pohybu pri {f} a tipmi k technike vykonania pri {c}."
+}
