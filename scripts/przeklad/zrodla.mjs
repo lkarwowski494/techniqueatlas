@@ -21,6 +21,14 @@ export function liscie(obj, sciezka = []) {
   return out;
 }
 export const pobierz = (obj, sciezka) => sciezka.reduce((o, k) => (o && typeof o === 'object' ? o[k] : undefined), obj);
+/** Tekst na ścieżce; gdy plik ma na niej albo wyżej zwykły napis zamiast drzewa, to ten napis. Przykład: pl ma `countLine` jako formy liczby mnogiej (one, few, many, other), a en, de i ja — jeden napis;
+ *  napis na wyższym poziomie oznacza, że język ma już tłumaczenie całego węzła (nie wolno go zastępować drzewem ani prosić o przekład jego form). */
+export function tekstNaSciezce(obj, sciezka) {
+  let o = obj; for (const k of sciezka) { if (typeof o === 'string') return o; if (!o || typeof o !== 'object') return undefined; o = o[k]; }
+  return typeof o === 'string' ? o : undefined;
+}
+/** Forma angielska dla kategorii, której angielski nie ma (pl few/many → en other): zapas CLDR `other` w tej samej frazie liczby mnogiej; poza frazą liczby mnogiej null. */
+const enOther = (en, sciezka) => (['zero', 'one', 'two', 'few', 'many'].includes(sciezka.at(-1)) ? tekstNaSciezce(en, [...sciezka.slice(0, -1), 'other']) : undefined);
 /** Ustawia liść na ścieżce (tworzy pośrednie obiekty). */
 export function ustaw(obj, sciezka, wartosc) {
   let o = obj; for (const k of sciezka.slice(0, -1)) { if (!o[k] || typeof o[k] !== 'object') o[k] = {}; o = o[k]; }
@@ -31,7 +39,7 @@ function plikiZrodla(root, z) {
   const wymagany = (p) => { if (!existsSync(join(root, p))) throw new Error(`źródło „${z.id}”: brak pliku ${p}`); return join(root, p); };
   if (z.rodzaj === 'mapa') {
     const pl = czytaj(wymagany(z.pl)); const en = z.en ? czytaj(wymagany(z.en)) : null;
-    return liscie(pl).map((l, i) => ({ id: i + 1, klucz: l.sciezka.join('.'), sciezka: l.sciezka, pl: l.tekst, en: z.en_z_klucza ? l.sciezka.at(-1) : (en ? pobierz(en, l.sciezka) ?? null : null) }));
+    return liscie(pl).map((l, i) => ({ id: i + 1, klucz: l.sciezka.join('.'), sciezka: l.sciezka, pl: l.tekst, en: z.en_z_klucza ? l.sciezka.at(-1) : (en ? tekstNaSciezce(en, l.sciezka) ?? enOther(en, l.sciezka) ?? null : null) }));
   }
   if (z.rodzaj === 'dokumenty') {
     const dir = join(root, z.katalog); if (!existsSync(dir)) throw new Error(`źródło „${z.id}”: brak katalogu ${z.katalog}`);

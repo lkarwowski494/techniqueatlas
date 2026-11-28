@@ -30,14 +30,13 @@
    "wskazowka": "Każda pozycja to cały dokument Markdown. Wstawki {{…}} zostaw bez zmian. To projekt, nie porada prawna."
   },
   {
-   "id": "ramka",
+   "id": "ui",
    "rodzaj": "mapa",
-   "pl": "docs/teksty/ramka/pl.json",
-   "en": "docs/teksty/ramka/en.json",
-   "cel": "docs/teksty/ramka/{kod}.json",
-   "oczekuje": true,
-   "opis": "ramka „w aplikacji” i akapit o wsparciu (Z-21)",
-   "wskazowka": "Zdania o funkcjach aplikacji: bez superlatyw, bez obietnic, bez nazw innych firm."
+   "pl": "src/ui/pl.json",
+   "en": "src/ui/en.json",
+   "cel": "src/ui/{kod}.json",
+   "opis": "teksty stałe strony (stopka, strony prawne, ramka „w aplikacji”, akapit o wsparciu)",
+   "wskazowka": "Zmienne {…} (np. {dni}, {nazwa}) zostaw bez zmian. Przy aplikacji nie używaj odpowiednika słowa „darmowy”. Klucze z nazwami ekranów aplikacji (Postępy, Poprzednio, Propozycje) tłumacz tak jak w aplikacji w tym języku."
   }
  ]
 }
