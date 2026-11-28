@@ -26,6 +26,24 @@ const WYJATKI = {
   'zh-Hant/pozycja_pompki: 雙槓撐體': 'nazwa grupy ćwiczeń — „雙槓撐體” = dipy na poręczach; zakaz dotyczy pozycji pompki w opisie techniki',
   'ja/sanki_treningowe: ソリとスロー': 'nazwa grupy ćwiczeń — „ソリとスロー” = sanie i rzuty (grupa ćwiczeń); zakaz dotyczy sanek treningowych jako sprzętu w opisie techniki',
   'uk/biodra: Відведення й приведення стегна': 'nazwa grupy — „стегно” = udo (odwodzenie/przywodzenie uda), poprawnie; zakaz dotyczy stawu biodrowego',
+  /* analogia do wyjątków z 09.11.2026 (KO-151, zapis „do weta”, 28.11.2026): zdania ramki opisujące aplikację, w których zakaz innego pojęcia trafia w termin zalecany */
+  'cs/dzien_wolny: Po odškrtnutí série se spustí odpočet pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy dnia wolnego (dzien_wolny)',
+  'sk/dzien_wolny: Po odškrtnutí série sa spustí odpočítavanie pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy dnia wolnego (dzien_wolny)',
+  'ro/dzien_wolny: După ce bifați o serie, pornește cronometrul pentru pauză.': 'ramka opisuje aplikację — „Pauză” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy dnia wolnego (dzien_wolny)',
+  'cs/pauza_treningu: Po odškrtnutí série se spustí odpočet pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy wstrzymania treningu (pauza_treningu)',
+  'sk/pauza_treningu: Po odškrtnutí série sa spustí odpočítavanie pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy wstrzymania treningu (pauza_treningu)',
+  'ro/pauza_treningu: După ce bifați o serie, pornește cronometrul pentru pauză.': 'ramka opisuje aplikację — „Pauză” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy wstrzymania treningu (pauza_treningu)',
+  'de/pauza_treningu: Sobald du einen Satz abhakst, läuft der Timer für die Pause.': 'ramka opisuje aplikację — „Pause” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy wstrzymania treningu (pauza_treningu)',
+  'et/pauza_treningu: Kui märgid seeria tehtuks, algab pausi loendus.': 'ramka opisuje aplikację — „Paus” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy wstrzymania treningu (pauza_treningu)',
+  'cs/faza_pauza: Po odškrtnutí série se spustí odpočet pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy fazy pauzy w ćwiczeniu (faza_pauza)',
+  'sk/faza_pauza: Po odškrtnutí série sa spustí odpočítavanie pauzy.': 'ramka opisuje aplikację — „Pauza” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy fazy pauzy w ćwiczeniu (faza_pauza)',
+  'ro/faza_pauza: După ce bifați o serie, pornește cronometrul pentru pauză.': 'ramka opisuje aplikację — „Pauză” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy fazy pauzy w ćwiczeniu (faza_pauza)',
+  'de/faza_pauza: Sobald du einen Satz abhakst, läuft der Timer für die Pause.': 'ramka opisuje aplikację — „Pause” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy fazy pauzy w ćwiczeniu (faza_pauza)',
+  'et/faza_pauza: Kui märgid seeria tehtuks, algab pausi loendus.': 'ramka opisuje aplikację — „Paus” to termin zalecany pojęcia przerwa (przerwa między seriami); zakaz dotyczy fazy pauzy w ćwiczeniu (faza_pauza)',
+  'el/plan_subskrypcji: Από τα πρότυπα φτιάχνεις το εβδομαδιαίο πρόγραμμα ή δημιουργείς πρότυπα και πρόγραμμα με βάση λίγες επιλογές.': 'ramka opisuje aplikację — „πρόγραμμα” to termin zalecany pojęcia plan (plan tygodnia); zakaz dotyczy planu subskrypcji (plan_subskrypcji)',
+  'et/plan_subskrypcji: Mallidest saad koostada nädalaplaani või lasta mõne valiku põhjal luua mallid ja plaani.': 'ramka opisuje aplikację — „plaan” to termin zalecany pojęcia plan (plan tygodnia); zakaz dotyczy planu subskrypcji (plan_subskrypcji)',
+  'ko/plan_subskrypcji: 루틴으로 주간 플랜을 짜거나, 몇 가지 조건만 정해 루틴과 플랜을 자동으로 만들 수 있습니다.': 'ramka opisuje aplikację — „플랜” to termin zalecany pojęcia plan (plan tygodnia); zakaz dotyczy planu subskrypcji (plan_subskrypcji)',
+  'sl/plan_subskrypcji: Iz predlog sestavite tedenski načrt ali pa predloge in načrt ustvarite na podlagi nekaj izbir.': 'ramka opisuje aplikację — „načrt” to termin zalecany pojęcia plan (plan tygodnia); zakaz dotyczy planu subskrypcji (plan_subskrypcji)',
 };
 test('słownik aplikacji: wzorce zakazane nie występują w tekstach strony (wszystkie języki)', () => {
   const bad = []; const uzyte = new Set();
