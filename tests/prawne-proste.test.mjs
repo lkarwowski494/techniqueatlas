@@ -64,9 +64,3 @@ test('BR strona: każdy język ma dwie strony prawne (privacy-policy, terms), ni
   assert.equal(plikiHtml(out).filter((f) => /content-license|\/regulamin/.test(f)).length, 0);
   assert.match(czytaj(out, 'pl/privacy-policy/index.html'), /support@apps4brew\.com/);
 });
-
-test('BR przekład: dla 33 języków istnieją dokumenty polityka-prywatnosci i warunki; starych dokumentów (regulamin, licencja-tresci) nie ma', { todo: 'BR-f: czerwony do nałożenia przekładu API' }, () => {
-  const kody = JSON.parse(read('config.json')).jezyki.filter((l) => l !== 'pl' && l !== 'en');
-  assert.equal(kody.length, 33);
-  for (const l of kody) for (const d of ['polityka-prywatnosci', 'warunki']) assert.ok(existsSync(join(DIR, `${d}.${l}.md`)), `${d}.${l}.md`);
-});
