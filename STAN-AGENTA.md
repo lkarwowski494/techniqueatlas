@@ -1,3 +1,30 @@
+# Stan agenta — BQ2: domknięcie przeglądów tłumaczeń i licznika (09-lokalizacja, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start bb10f4d; scalone `strona/integracja-start` b5d8db4 i `main` dbf4233) · polecenie: docs/koordynacja/polecenia/BQ2.md (repo trening, gałąź koordynacja)
+
+## Zrobione
+- a) Przegląd ramki (33 języki): batch msgbatch_01JtRNeh2fxFNEB65r9MyED7, run 46137398803, 0 krytycznych; 12 poprawek nałożonych skryptem (docs/przeklad/przeglad-ramka-2026-11-28.md); koszt rzeczywisty 0,57 USD (szacunek zlecenia 3,80 był zawyżony); testy ramki zielone.
+- b) Przegląd szablonów cs, hr, sl, lv: msgbatch_016a8sMRukZNoccnuZsPmU7p, run 46141711071, 0,09 USD; 1 poprawka niska (sl) nałożona; tests/liczba-mnoga.test.mjs zielony dla 35 języków.
+- c) KO-147 P3: `ui.countLine` z formami wg Intl.PluralRules w 18 językach (+ en). Test tests/liczba-mnoga-napisy.test.mjs czerwony (18 języków) → zielony. Przekład: msgbatch_01R3pxmosuVwH3q6UinC2Vj6 (run 46140513113), 0,23 USD. Opis i obejście (workflow nie czyta src/ui): docs/przeklad/przeglad-szablony-liczba-mnoga-2026-11-28.md.
+- Scalono `main` (PR #8, pozycjeDlaJezyka) do gałęzi: bez niego źródło „ui” prosiło o formy few/many dla języków, które ich nie mają (test z34 „dokładnie klucze czekające”). Konflikt w rdzen.mjs rozwiązany (oba importy).
+- tests/z34-przeklad-ui.test.mjs: w dwóch testach „napis zamiast drzewa” fixtura de → ja (de ma już formy; mechanizm i asercje bez zmian).
+
+## Koszt API (docs/przeklad/wydatki.json): 28,13 z 80 USD (start sesji 27,24; ta sesja 0,89)
+
+## Decyzje (analogia, do weta)
+1. Wszystkie 12 poprawek ramki i 1 poprawka sl nałożone (nie tylko średnie).
+2. Przekład countLine tylko dla 18 języków z >1 kategorią CLDR; ja, ko, zh-Hant, vi, id, ms zostają z jednym napisem.
+3. Dwa pośrednie pushe z `[skip ci]` (workflow czyta teksty tylko z gałęzi zdalnej); końcowy push bez znacznika.
+4. Bez przeglądu API form countLine (~0,1 USD) — do decyzji koordynatora.
+
+## Otwarte
+- Brak przeglądu człowieka dla jakiegokolwiek języka (przegląd modelu go nie zastępuje); w lv „ieraksts” i el „Lower Back Curl” bez zmian.
+- Kolejka współbieżności `przeklad-api` ma jeden slot oczekujący: kolejne zlecenie wypiera poprzednie (mój pierwszy przegląd szablonów został tak anulowany; ponowiony).
+- `{dni}` (5, stała z aplikacji) i `{m}` w „wynik” zakładają liczbę ≥ 2; zmiana wartości w aplikacji wymaga formy liczby mnogiej (teoretyczne).
+
+---
+## Wcześniej (BQ)
+
 # Stan agenta — BQ: liczba mnoga w 4 językach, test nazw, nazwy greckie, ramka (09-lokalizacja, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (od `strona/integracja-start` @ 074e3f8) · polecenie: docs/koordynacja/polecenia/BQ.md (repo trening, gałąź koordynacja)
