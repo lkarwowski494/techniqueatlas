@@ -79,7 +79,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
   for (const p of pages) write(out, p.file, p.html);
   /* zasoby: własne pliki strony, silnik figur z aplikacji, dane figur i indeks nazw per język */
-  cpSync(join(ROOT, 'assets'), join(out, 'assets'), { recursive: true }); cpSync(join(CACHE, 'silnik'), join(out, 'assets/silnik'), { recursive: true }); rmSync(join(out, 'assets/silnik/MANIFEST.json'), { force: true });
+  cpSync(join(ROOT, 'assets'), join(out, 'assets'), { recursive: true }); cpSync(join(CACHE, 'silnik'), join(out, 'assets/silnik'), { recursive: true }); rmSync(join(out, 'assets/silnik/MANIFEST.json'), { force: true }); rmSync(join(out, 'assets/plakietka/ZRODLA.json'), { force: true }); /* źródło pochodzenia plakietek zostaje w repo, nie w dist (strażnik: brak plików danych JSON) */
   write(out, 'assets/sylwetka.svg', sil.sprite);
   /* klasy stopni sylwetki (s<partia>-<stopień>) → zmienne CSS arkusza; kolory zmiennych --mm-* są w site.css (jasny/ciemny wygląd) */
   write(out, 'assets/sylwetka.css', sil.vars.muscle.flatMap((v, i) => [1, 2, 3, 4].map(l => `.sylwetki.s${i}-${l}{${v}:var(--mm-l${l})}`)).join('\n') + '\n');

@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { build } from '../src/build.mjs';
-import { requireData, tmpDist, tmpDir, ROOT } from './pomoc.mjs';
+import { requireData, tmpDist, tmpDir, ROOT, distFiles } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
 import { czytaj, element, elementy } from './strona-html.mjs';
 
@@ -56,4 +56,11 @@ test('Z-40 009: bez appStoreId (stan config.json): bez plakietki, bez linku do s
   assert.equal(readJson('config.json').appStoreId, '', 'config.json: appStoreId zostaje puste do publikacji');
   const r = await build({ out: tmpDist(), cfg: { appStoreId: '', jezyki: ['pl', 'en'] } });
   for (const l of ['pl', 'en']) { assert.doesNotMatch(ramka(r.out, l).wnetrze, /<img|apps\.apple\.com/, l); assert.doesNotMatch(stopka(r.out, l), /class="zastrz"|apps\.apple\.com/, l); }
+});
+
+test('Z-40 009 (CI113-2): ZRODLA.json (źródło pochodzenia, tylko w repo) nie trafia do dist; pliki SVG plakietek trafiają', async () => {
+  const r = await build({ out: tmpDist(), cfg: { appStoreId: APP, jezyki: ['pl', 'en'] } });
+  const pliki = distFiles(r.out).map(p => p.slice(r.out.length + 1));
+  assert.deepEqual(pliki.filter(f => /plakietka\/ZRODLA\.json$/.test(f)), [], 'ZRODLA.json w dist');
+  assert.deepEqual(pliki.filter(f => /^assets\/plakietka\//.test(f)).sort(), KODY.map(k => `assets/plakietka/${k}.svg`).sort(), 'SVG w dist');
 });

@@ -1,3 +1,19 @@
+# Stan agenta — BP: naprawa 2 czerwonych testów tests.yml #113 (08-programista, fix)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od 59eedd6)
+
+## Zrobione
+- CI113-1: `tests/z40-plakietka.test.mjs` używa `tmpDir()` z `tests/pomoc.mjs` zamiast `mkdtempSync`; asercje bez zmian. Przed: sprzatanie.test 5/6 (czerwony); po: z40-plakietka + sprzatanie 12/12.
+- CI113-2: `src/build.mjs` usuwa `assets/plakietka/ZRODLA.json` z dist po kopiowaniu `assets/` (plik zostaje w repo). Nowy test w z40-plakietka: brak ZRODLA.json w dist, SVG są (czerwony przed poprawką). Po: z40-plakietka + straznik-dane 14/14. Strażnik bez zmian.
+- Pełny `npm test`: NIE uruchomiony lokalnie (ciężki); weryfikacja przez tests.yml na SHA z gałęzi — wynik w raporcie PRZEKAZANIE.
+
+## Decyzje (analogia, do weta)
+1. Wykluczenie ZRODLA.json przez `rmSync` po `cpSync` (wzorzec jak MANIFEST.json silnika w tej samej linii), nie filtr `cpSync` ani przeniesienie pliku — najmniejszy diff, istniejący wzorzec.
+2. Decyzja BN nr 3 (ZRODLA.json w dist) zastąpiona: nie trafia do dist.
+
+---
+## Wcześniej (BN)
+
 # Stan agenta — BN: oficjalne plakietki App Store (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od `strona/integracja-start`)
