@@ -5,8 +5,8 @@
   "library": "Bibliothek",
   "allExercises": "Alle Übungen",
   "countLine": {
-    "one": "{n} Übung – stöbere nach Muskelgruppe und Equipment.",
-    "other": "{n} Übungen – stöbere nach Muskelgruppe und Equipment."
+    "one": "{n} Übung – stöbere nach Muskelgruppe und Ausrüstung.",
+    "other": "{n} Übungen – stöbere nach Muskelgruppe und Ausrüstung."
   },
   "searchLabel": "Übungen suchen",
   "searchPlaceholder": "Name der Übung",
@@ -66,7 +66,7 @@
     "triceps": "Trizepsstrecken",
     "delt_raise": "Seit- und Frontheben",
     "chest_fly": "Fliegende",
-    "shrug": "Shrugs (Schulterheben)",
+    "shrug": "Shrugs",
     "rotator_cuff": "Rotatorenmanschette",
     "core_floor": "Bauch am Boden",
     "core_hang": "Bauch im Hang",
@@ -82,9 +82,9 @@
     "mobility_floor": "Mobility am Boden",
     "foam_roll": "Faszienrolle",
     "neck": "Nacken",
-    "forearm": "Unterarme",
+    "forearm": "Unterarme und Griff",
     "thruster": "Thrusters",
-    "chest_press_machine": "Brustpressen-Geräte",
+    "chest_press_machine": "Drückmaschinen",
     "cable_press": "Kabeldrücken",
     "kneeling_hinge": "Hip Hinge kniend und sitzend"
   },

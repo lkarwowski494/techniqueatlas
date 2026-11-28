@@ -37,7 +37,7 @@
   "nameLabel": "이름",
   "muscles": "근육",
   "commonErrors": "흔한 실수:",
-  "emptyHint": "필터를 바꾸거나 지우면 종목이 보입니다.",
+  "emptyHint": "종목을 보려면 필터를 변경하거나 지우세요.",
   "changeLanguage": "언어: {nazwa}. 언어 변경",
   "howTo": "이 종목은 어떻게 하나요?",
   "families": {
@@ -79,11 +79,11 @@
     "mobility_floor": "바닥 가동성 운동",
     "foam_roll": "폼롤링",
     "neck": "목",
-    "forearm": "전완",
+    "forearm": "전완과 그립",
     "thruster": "스러스터",
-    "chest_press_machine": "체스트 프레스 머신",
+    "chest_press_machine": "프레스 머신",
     "cable_press": "케이블 프레스",
-    "kneeling_hinge": "무릎 꿇고 하는 힙 힌지"
+    "kneeling_hinge": "무릎 꿇고 하거나 앉아서 하는 힙 힌지"
   },
   "wynik": "{m}개 종목 중 {n}개",
   "wszystkieJezyki": "모든 언어 ({n})",

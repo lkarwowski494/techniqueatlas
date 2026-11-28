@@ -31,8 +31,8 @@
   "anyOf": "{lista}",
   "menu": "選單",
   "menuMain": "主選單",
-  "tempo": "每次反覆的節奏",
-  "tempoTotal": "每次反覆共 {t}",
+  "tempo": "每次的節奏",
+  "tempoTotal": "每次共 {t}",
   "sec": "秒",
   "nameLabel": "名稱",
   "muscles": "肌肉",
@@ -52,7 +52,7 @@
     "pull_up": "引體向上與懸吊",
     "pulldown": "滑輪下拉",
     "lunge": "弓箭步與登階",
-    "leg_machine": "腿部器械",
+    "leg_machine": "腿部機器",
     "leg_isolation": "腿彎舉與腿伸展",
     "calf_raise": "提踵",
     "hip_bridge": "臀推與橋式",
@@ -61,7 +61,7 @@
     "back_extension": "背部伸展",
     "curl": "彎舉",
     "triceps": "三頭肌伸展",
-    "delt_raise": "肩部側舉",
+    "delt_raise": "肩部平舉",
     "chest_fly": "飛鳥",
     "shrug": "聳肩",
     "rotator_cuff": "旋轉肌群",
@@ -79,11 +79,11 @@
     "mobility_floor": "地板活動度訓練",
     "foam_roll": "滾筒放鬆",
     "neck": "頸部",
-    "forearm": "前臂",
+    "forearm": "前臂與握力",
     "thruster": "推舉蹲（Thruster）",
-    "chest_press_machine": "胸推機",
+    "chest_press_machine": "推舉機器",
     "cable_press": "滑輪推舉",
-    "kneeling_hinge": "跪姿髖關節鉸鏈"
+    "kneeling_hinge": "跪姿與坐姿髖關節鉸鏈"
   },
   "wynik": "{n} / {m} 個動作",
   "wszystkieJezyki": "所有語言（{n}）",
@@ -98,7 +98,7 @@
   },
   "wsparcie": {
     "w1": "本網站可免費使用。",
-    "w2": "不訂閱的話，App 每月提供 {dni} 天的訓練天數。完整版需要付費：訂閱或永久使用權。",
+    "w2": "不訂閱的話，App 每月提供 {dni} 個訓練日。完整版需要付費：訂閱或永久使用權。",
     "w3": "購買 App 也能支持這個網站的發展。"
   },
   "ramka": {

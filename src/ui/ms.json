@@ -31,7 +31,7 @@
   "anyOf": "{lista}",
   "menu": "Menu",
   "menuMain": "Menu utama",
-  "tempo": "Rentak ulangan",
+  "tempo": "Tempo ulangan",
   "tempoTotal": "jumlah {t} setiap ulangan",
   "sec": "s",
   "nameLabel": "Nama",
@@ -79,11 +79,11 @@
     "mobility_floor": "Mobiliti di lantai",
     "foam_roll": "Foam rolling",
     "neck": "Leher",
-    "forearm": "Lengan bawah",
+    "forearm": "Lengan bawah dan genggaman",
     "thruster": "Thruster",
-    "chest_press_machine": "Mesin chest press",
+    "chest_press_machine": "Mesin press (dada dan bahu)",
     "cable_press": "Cable press",
-    "kneeling_hinge": "Hip hinge sambil melutut"
+    "kneeling_hinge": "Hip hinge sambil melutut dan duduk"
   },
   "wynik": "{n} daripada {m} senaman",
   "wszystkieJezyki": "semua bahasa ({n})",

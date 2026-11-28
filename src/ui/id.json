@@ -31,8 +31,8 @@
   "anyOf": "{lista}",
   "menu": "Menu",
   "menuMain": "Menu utama",
-  "tempo": "Tempo pengulangan",
-  "tempoTotal": "total {t} per pengulangan",
+  "tempo": "Tempo repetisi",
+  "tempoTotal": "total {t} per repetisi",
   "sec": "dtk",
   "nameLabel": "Nama",
   "muscles": "Otot",
@@ -79,11 +79,11 @@
     "mobility_floor": "Mobilitas di lantai",
     "foam_roll": "Foam rolling",
     "neck": "Leher",
-    "forearm": "Lengan bawah",
+    "forearm": "Lengan bawah dan genggaman",
     "thruster": "Thruster",
-    "chest_press_machine": "Mesin chest press",
+    "chest_press_machine": "Mesin press",
     "cable_press": "Cable press",
-    "kneeling_hinge": "Hip hinge sambil berlutut"
+    "kneeling_hinge": "Hip hinge sambil berlutut dan duduk"
   },
   "wynik": "{n} dari {m} gerakan",
   "wszystkieJezyki": "semua bahasa ({n})",
@@ -110,6 +110,6 @@
     "z5": "Setelah Anda memilih tempat latihan, daftar menampilkan gerakan yang bisa dilakukan di sana.",
     "z6": "Di layar gerakan, Anda melihat latihan terakhir Anda dengan gerakan itu, dan di \"Progres\" ada grafik serta rekor Anda.",
     "z7": "Dari templat, Anda bisa menyusun rencana mingguan, atau membuat templat dan rencana dari beberapa pilihan.",
-    "z8": "Riwayat, progres, templat, dan cadangan selalu tersedia, juga tanpa versi berbayar."
+    "z8": "Riwayat, progres, templat, dan cadangan selalu tersedia, bahkan tanpa versi berbayar."
   }
 }

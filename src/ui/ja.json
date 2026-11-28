@@ -71,7 +71,7 @@
     "carry": "キャリー",
     "cardio": "有酸素運動",
     "plyo": "ジャンプとプライオメトリクス",
-    "sled_throw": "ソリとスロー",
+    "sled_throw": "スレッドとスロー",
     "strongman": "ストロングマン",
     "glute_floor": "床での臀筋",
     "hip_abd_add": "股関節の外転・内転",
@@ -79,11 +79,11 @@
     "mobility_floor": "床でのモビリティ",
     "foam_roll": "フォームローリング",
     "neck": "首",
-    "forearm": "前腕",
+    "forearm": "前腕とグリップ",
     "thruster": "スラスター",
-    "chest_press_machine": "チェストプレスマシン",
+    "chest_press_machine": "プレスマシン（胸・肩）",
     "cable_press": "ケーブルプレス",
-    "kneeling_hinge": "膝立ちのヒップヒンジ"
+    "kneeling_hinge": "膝立ち・座位のヒップヒンジ"
   },
   "wynik": "{m}種目中 {n}種目",
   "wszystkieJezyki": "すべての言語（{n}）",

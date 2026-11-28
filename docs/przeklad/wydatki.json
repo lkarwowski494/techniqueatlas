@@ -151,6 +151,26 @@
    "tokeny_we": 220945,
    "tokeny_wy": 44661,
    "koszt_usd": 0.8884999999999998
+  },
+  {
+   "przebieg": "przeglad",
+   "batch_id": "msgbatch_01EZ6mLfn1t6YPcaHceZWvo1",
+   "model": "claude-opus-5-5",
+   "data": "2026-11-28",
+   "rodzaj_kosztu": "rzeczywisty",
+   "tokeny_we": 204200,
+   "tokeny_wy": 54927,
+   "koszt_usd": 0.9576699999999999
+  },
+  {
+   "przebieg": "przeglad",
+   "batch_id": "msgbatch_01ATbK3tBifD1ZTKKxPNcqYk",
+   "model": "claude-opus-5-5",
+   "data": "2026-11-28",
+   "rodzaj_kosztu": "rzeczywisty",
+   "tokeny_we": 190849,
+   "tokeny_wy": 52489,
+   "koszt_usd": 0.906588
   }
  ]
 }

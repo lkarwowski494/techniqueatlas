@@ -5,9 +5,9 @@
   "library": "Bibliothèque",
   "allExercises": "Tous les exercices",
   "countLine": {
-    "one": "{n} exercice — parcourez la bibliothèque par groupe musculaire et par équipement.",
-    "many": "{n} exercices — parcourez-les par groupe musculaire et par équipement.",
-    "other": "{n} exercices — parcourez-les par groupe musculaire et par équipement."
+    "one": "{n} exercice — parcourez la bibliothèque par groupe musculaire et par matériel.",
+    "many": "{n} exercices — parcourez-les par groupe musculaire et par matériel.",
+    "other": "{n} exercices — parcourez-les par groupe musculaire et par matériel."
   },
   "searchLabel": "Rechercher un exercice",
   "searchPlaceholder": "Nom de l'exercice",
@@ -35,7 +35,7 @@
   "anyOf": "{lista}",
   "menu": "Menu",
   "menuMain": "Menu principal",
-  "tempo": "Rythme de la répétition",
+  "tempo": "Tempo de la répétition",
   "tempoTotal": "{t} au total par répétition",
   "sec": "s",
   "nameLabel": "Nom",
@@ -55,7 +55,7 @@
     "cable_row": "Tirage horizontal à la poulie",
     "pull_up": "Tractions et suspensions",
     "pulldown": "Tirage vertical",
-    "lunge": "Fentes et montées sur banc",
+    "lunge": "Fentes et montées sur box",
     "leg_machine": "Machines pour les jambes",
     "leg_isolation": "Leg curl et leg extension",
     "calf_raise": "Extensions mollets",
@@ -81,13 +81,13 @@
     "hip_abd_add": "Abduction et adduction de hanche",
     "mobility_stand": "Mobilité debout",
     "mobility_floor": "Mobilité au sol",
-    "foam_roll": "Rouleau de massage",
+    "foam_roll": "Auto-massage au rouleau",
     "neck": "Cou",
-    "forearm": "Avant-bras",
+    "forearm": "Avant-bras et prise",
     "thruster": "Thrusters",
-    "chest_press_machine": "Machines de développé pectoral",
+    "chest_press_machine": "Machines de développé (pectoraux et épaules)",
     "cable_press": "Développés à la poulie",
-    "kneeling_hinge": "Charnière de hanche à genoux"
+    "kneeling_hinge": "Charnière de hanche à genoux et assis"
   },
   "wynik": "{n} sur {m} exercices",
   "wszystkieJezyki": "toutes les langues ({n})",

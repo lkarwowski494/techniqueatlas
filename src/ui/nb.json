@@ -12,11 +12,11 @@
   "searchPlaceholder": "Navn på øvelsen",
   "noResults": "Ingen øvelser for disse filtrene",
   "clearFilters": "Fjern filtre",
-  "byMuscle": "Muskelgrupper",
+  "byMuscle": "Kroppsdeler",
   "byEquipment": "Utstyr",
   "byMovement": "Bevegelsestype",
   "basics": "Grunnøvelser",
-  "filterMuscle": "Muskelgruppe",
+  "filterMuscle": "Kroppsdel",
   "filterEquipment": "Utstyr",
   "filterMovement": "Bevegelsestype",
   "filterAll": "Alle",
@@ -42,7 +42,7 @@
   "commonErrors": "Vanlige feil:",
   "emptyHint": "Endre eller fjern filtrene for å se øvelser.",
   "changeLanguage": "Språk: {nazwa}. Bytt språk",
-  "howTo": "Hvordan utfører man denne øvelsen?",
+  "howTo": "Hvordan gjør du denne øvelsen?",
   "families": {
     "squat": "Knebøy",
     "bench_press": "Benkpress",
@@ -59,7 +59,7 @@
     "leg_isolation": "Beincurl og beinstrekk",
     "calf_raise": "Tåhev",
     "hip_bridge": "Hip thrusts og broer",
-    "kb_ballistic": "Kettlebell-svinger og snatches",
+    "kb_ballistic": "Kettlebell: swing og snatch",
     "olympic": "Olympiske løft",
     "back_extension": "Ryggstrekk",
     "curl": "Curl",
@@ -82,11 +82,11 @@
     "mobility_floor": "Mobilitet på gulvet",
     "foam_roll": "Foamrolling",
     "neck": "Nakke",
-    "forearm": "Underarmer",
+    "forearm": "Underarmer og grep",
     "thruster": "Thrusters",
-    "chest_press_machine": "Brystpressmaskiner",
+    "chest_press_machine": "Pressmaskiner",
     "cable_press": "Kabelpress",
-    "kneeling_hinge": "Hoftehengsel på knær"
+    "kneeling_hinge": "Hoftehengsel knestående og sittende"
   },
   "wynik": "{n} av {m} øvelser",
   "wszystkieJezyki": "alle språk ({n})",
@@ -113,6 +113,6 @@
     "z5": "Når du har valgt hvor du trener, viser listen øvelsene du kan gjøre der.",
     "z6": "På øvelsesskjermen ser du de siste øktene dine med den, og under «Fremgang» finner du graf og rekorder.",
     "z7": "Med malene kan du sette opp en ukeplan, eller generere maler og en plan ut fra noen få valg.",
-    "z8": "Historikk, fremgang, maler og sikkerhetskopi er alltid tilgjengelig, også uten betalt versjon."
+    "z8": "Historikk, fremgang, maler og sikkerhetskopi er alltid tilgjengelige, også uten betalt versjon."
   }
 }

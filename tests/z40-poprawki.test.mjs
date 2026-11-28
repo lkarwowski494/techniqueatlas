@@ -85,7 +85,9 @@ test('Z-40 002: strona filtra (partia, sprzęt, rodzaj ruchu) pokazuje „N z M�
 });
 
 test('Z-40 002: język bez własnego tekstu „wynik” (de) dostaje wersję angielską z lang="en" na akapicie, bez „undefined”', () => {
-  const p = element(czytaj(out, 'de/exercises/index.html'), 'p', 'wynik'); assert.ok(p); assert.match(p.otwarcie, /lang="en"/); assert.doesNotMatch(p.wnetrze, /undefined|\{n\}|\{m\}/);
+  /* BQ3: po przekładzie src/ui (BQ3 b) de ma własny „wynik”, więc zastępczy angielski jest sprawdzany tylko, gdy język go jeszcze nie ma; w obu stanach brak „undefined” i parametrów */
+  const p = element(czytaj(out, 'de/exercises/index.html'), 'p', 'wynik'); assert.ok(p); assert.doesNotMatch(p.wnetrze, /undefined|\{n\}|\{m\}/);
+  if (readJson('src/ui/de.json').wynik) assert.doesNotMatch(p.otwarcie, /lang="en"/); else assert.match(p.otwarcie, /lang="en"/);
 });
 
 test('Z-40 002 (przeglądarka): wybór filtra zmienia element p.wynik[aria-live] na liczbę widocznych wierszy; „wyczyść” przywraca pełną liczbę; zero wyników = „0 z M”', async () => {
