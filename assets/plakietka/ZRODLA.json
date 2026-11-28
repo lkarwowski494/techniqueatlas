@@ -1,0 +1,215 @@
+{
+  "_opis": "Oficjalne pliki Apple, bez zmian. Źródło: Apple Marketing Tools (https://toolbox.marketingtools.apple.com/app-store/), kolor czarny, SVG. Test tests/z40-plakietka.test.mjs sprawdza sumy.",
+  "zrodla": {
+    "pl": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/pl-pl",
+      "jezykApple": "pl-pl",
+      "data": "2026-11-28",
+      "sha256": "da8b2cc13afd456e9000a8d2d061eee9c505bd6c8e66de1b40c02c2570fb1442"
+    },
+    "en": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us",
+      "jezykApple": "en-us",
+      "data": "2026-11-28",
+      "sha256": "a26fc5b38380272c92e9019a2eb8b45542a66814b3e2b203772db8904b9fb99f"
+    },
+    "cs": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/cs-cz",
+      "jezykApple": "cs-cz",
+      "data": "2026-11-28",
+      "sha256": "770c4db141fd7d88ebae5212193a1758e63c442617d8ed42b43b00ea31f83cc8"
+    },
+    "sk": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/sk-sk",
+      "jezykApple": "sk-sk",
+      "data": "2026-11-28",
+      "sha256": "fcfe01bb767b8088980ba9817b16c1f999e5ae10d878a5beecaa2a253d826faf"
+    },
+    "hu": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/hu-hu",
+      "jezykApple": "hu-hu",
+      "data": "2026-11-28",
+      "sha256": "d3701bda03d86a02f98f953ce4a37303a68a1e0d70a0ed225e7d85229e9447af"
+    },
+    "ro": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ro-ro",
+      "jezykApple": "ro-ro",
+      "data": "2026-11-28",
+      "sha256": "18b0e4aa1e8678befe4e7db06e054447b9f96684d817b6424a6b8824042a45fb"
+    },
+    "bg": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/bg-bg",
+      "jezykApple": "bg-bg",
+      "data": "2026-11-28",
+      "sha256": "91f329445875c308762b4dce851099906f662e0951f0d43b31e438b43fde57ef"
+    },
+    "hr": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/hr-hr",
+      "jezykApple": "hr-hr",
+      "data": "2026-11-28",
+      "sha256": "9595d830640684d825349244ed04aae8538d7c6c5db0db139a15c12f1a7a78bd"
+    },
+    "sl": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/sl-si",
+      "jezykApple": "sl-si",
+      "data": "2026-11-28",
+      "sha256": "16aa6861a12c9086e77d57a852aabbb400f6a0a93998c8812580218b343e38dd"
+    },
+    "sr": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us",
+      "jezykApple": "en-us",
+      "data": "2026-11-28",
+      "sha256": "a26fc5b38380272c92e9019a2eb8b45542a66814b3e2b203772db8904b9fb99f"
+    },
+    "lt": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/lt-lt",
+      "jezykApple": "lt-lt",
+      "data": "2026-11-28",
+      "sha256": "2f7dda2e98912fd78254b17d79a3044543765e3a3f29a5b7550b2038c34cae4d"
+    },
+    "lv": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/lv-lv",
+      "jezykApple": "lv-lv",
+      "data": "2026-11-28",
+      "sha256": "f8f2ada82dfab3ba83f3618490b55a6e661fbcc7a5282a0d4de6eade6c70ea6f"
+    },
+    "et": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/et-ee",
+      "jezykApple": "et-ee",
+      "data": "2026-11-28",
+      "sha256": "8a33a50254a5919c4d8c7b6a154a28c39b32b7af7e421164a88a0300ff4b6caa"
+    },
+    "uk": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/uk-ua",
+      "jezykApple": "uk-ua",
+      "data": "2026-11-28",
+      "sha256": "8d61d7a9071d060f63e6391e033e47e7347ff6e93d144f1b90dff856d6dc9c57"
+    },
+    "es": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/es-es",
+      "jezykApple": "es-es",
+      "data": "2026-11-28",
+      "sha256": "e4d7c2c1606454536482735c96b933b04ea86a2e72701b3319ae1f3a369b0479"
+    },
+    "es-419": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/es-mx",
+      "jezykApple": "es-mx",
+      "data": "2026-11-28",
+      "sha256": "f5c911a6fb1861e0ba1007be5aa84162e8bc13ab6eebf953723ea3b282817be9"
+    },
+    "pt": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/pt-pt",
+      "jezykApple": "pt-pt",
+      "data": "2026-11-28",
+      "sha256": "d23b8044168dc3fda1e5c468281cd8c746b528bb3a6039ff40ec81a30823a9d9"
+    },
+    "pt-BR": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/pt-br",
+      "jezykApple": "pt-br",
+      "data": "2026-11-28",
+      "sha256": "0e9291a9c654e479762b75b51dd94a150af6fab76390a79cb2218cdc8f6cc893"
+    },
+    "de": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/de-de",
+      "jezykApple": "de-de",
+      "data": "2026-11-28",
+      "sha256": "4f2967e1f642dd16eec36ac4022f07b7a881cab6301a13be3a4ccfcd3206a614"
+    },
+    "fr": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/fr-fr",
+      "jezykApple": "fr-fr",
+      "data": "2026-11-28",
+      "sha256": "86b6a05f6c8ac9e9a0637edf4f15420d06c8c7bc69662792a46793c1f948b023"
+    },
+    "it": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/it-it",
+      "jezykApple": "it-it",
+      "data": "2026-11-28",
+      "sha256": "ec8e9566058da3382fc0c8b8a8532a342e3587be801fee42e110f8fd707cee0b"
+    },
+    "nl": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/nl-nl",
+      "jezykApple": "nl-nl",
+      "data": "2026-11-28",
+      "sha256": "cfe2cffb05c5bd5112d46f175c3abfd5e4d1f70b104c8cd8ff4b55f97ad1838a"
+    },
+    "sv": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/sv-se",
+      "jezykApple": "sv-se",
+      "data": "2026-11-28",
+      "sha256": "eb249aaddc515873d683ea85d695896cfd7c54dbdce9b39679ed0e40f00e0158"
+    },
+    "da": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/da-dk",
+      "jezykApple": "da-dk",
+      "data": "2026-11-28",
+      "sha256": "c8e421bfb125a5b63ad44b8cfe64c36e6faa738a60320ee53ae47f94565b92a1"
+    },
+    "nb": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/no-no",
+      "jezykApple": "no-no",
+      "data": "2026-11-28",
+      "sha256": "3fb09d42eae9d61618bdef86c6fce9e5820a45394fa2021c7fa720c1abe479d7"
+    },
+    "fi": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/fi-fi",
+      "jezykApple": "fi-fi",
+      "data": "2026-11-28",
+      "sha256": "a596995c9a85fa68a6a8e2e0a48dd855abc81a6a0a1ac31e089f933ca411474d"
+    },
+    "tr": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/tr-tr",
+      "jezykApple": "tr-tr",
+      "data": "2026-11-28",
+      "sha256": "b85100fb20198a13c50a056f49ba2889d0510ac4a40e54cd3e19a578299e0170"
+    },
+    "el": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/el-gr",
+      "jezykApple": "el-gr",
+      "data": "2026-11-28",
+      "sha256": "de805cd2e28173421684a382644d5f624f7db7dfccc89058ae03aa401a0bb926"
+    },
+    "id": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/id-id",
+      "jezykApple": "id-id",
+      "data": "2026-11-28",
+      "sha256": "0f5069399be948e78b0d3087c9399fea9db4634182ac9dbf9fb88cf49c9c5d42"
+    },
+    "ms": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ms-my",
+      "jezykApple": "ms-my",
+      "data": "2026-11-28",
+      "sha256": "b514bd30c4297cf1fce3425272e334f40332bd0d0cffdb9ed7eeb6f59e31d35e"
+    },
+    "vi": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/vi-vn",
+      "jezykApple": "vi-vn",
+      "data": "2026-11-28",
+      "sha256": "2389eefe10dfd8fbe777ef22814458620e88d23a25696159272aca23c70ebbc3"
+    },
+    "ru": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ru-ru",
+      "jezykApple": "ru-ru",
+      "data": "2026-11-28",
+      "sha256": "27f35c64f2a984ecb4546982889d5514a46666b7aba55909d052e4036862e725"
+    },
+    "ja": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ja-jp",
+      "jezykApple": "ja-jp",
+      "data": "2026-11-28",
+      "sha256": "988fe0a48015c5a56dac88172487a1f5cda96340b34d80fd94312d02e9f67865"
+    },
+    "ko": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ko-kr",
+      "jezykApple": "ko-kr",
+      "data": "2026-11-28",
+      "sha256": "fc82d5344d0f2919a7ae697e677fc9c62872f1ee47bd70e24a581245423de9c1"
+    },
+    "zh-Hant": {
+      "url": "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/zh-tw",
+      "jezykApple": "zh-tw",
+      "data": "2026-11-28",
+      "sha256": "0371becc5be192db830e225aabc55ee94d270c0810e453fd40842a12f24d8e80"
+    }
+  }
+}
