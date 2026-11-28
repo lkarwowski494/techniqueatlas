@@ -77,16 +77,15 @@ test('startGuards składa S11 plan startu (przekazane pliki mają pierwszeństwo
   const ok = startGuards({ ...base, files: { trademark: tm, plan: plan(DONE('Z-00'), DONE('Z-60', 'Z-00'), row('Z-61', 'Z-60', 'zrobione', '2026-11-28', 'właściciel: „Tak.”')) } }); assert.deepEqual(ok.errors, []);
   const bad = startGuards({ ...base, files: { trademark: tm, plan: plan(row('Z-00')) } }); assert.equal(bad.errors.length, 2); assert.match(bad.errors.join(), /plan startu: 2 zadań|plan startu.*Z-61/);
 });
-test('stan startowy docs/55-plan-startu.md: format poprawny, brak „zrobione”, zadania Z-00…Z-65 obecne, „w toku” zgodnie z poleceniem koordynatora, Z-08 i Z-28 „odpada” (ZM-20), Z-41 bez zależności od Z-28, S11 z progiem etapu 5', () => {
+test('docs/55-plan-startu.md: format poprawny, reguły odhaczania spełnione, zadania Z-00…Z-65 obecne, Z-08 i Z-28 „odpada” (ZM-20), Z-41 bez zależności od Z-28, S11 z progiem etapu 5 (bez zamrażania stanu — decyzja właściciela 28.11.2026: „Test pilnuje reguł”)', () => {
   const md = readFileSync(join(ROOT, 'docs/55-plan-startu.md'), 'utf8'), { rows, errors } = parsePlan(md);
   assert.deepEqual(errors, []); assert.deepEqual(checkPlanStartu({ rows, indexing: false }).errors, []);
   const ids = rows.map(r => r.id);
   const expected = ['Z-00', 'Z-01', 'Z-02', 'Z-03', 'Z-04', 'Z-05', 'Z-06', 'Z-07', 'Z-08', 'Z-10', 'Z-11', 'Z-12', 'Z-20', 'Z-21', 'Z-22', 'Z-23', 'Z-24', 'Z-25', 'Z-26', 'Z-27', 'Z-28',
     'Z-30', 'Z-31', 'Z-32', 'Z-33', 'Z-34', 'Z-35', 'Z-40', 'Z-41', 'Z-50', 'Z-51', 'Z-52', 'Z-60', 'Z-61', 'Z-62', 'Z-63', 'Z-64', 'Z-65'];
   assert.deepEqual(ids, expected);
-  const wToku = ['Z-00', 'Z-01', 'Z-02', 'Z-03', 'Z-04', 'Z-06', 'Z-07', 'Z-20', 'Z-21', 'Z-24'];
   const odpada = ['Z-08', 'Z-28'];
-  for (const r of rows) assert.equal(r.stan, wToku.includes(r.id) ? 'w toku' : odpada.includes(r.id) ? 'odpada' : 'otwarte', r.id);
+  for (const r of rows) assert.equal(r.stan === 'odpada', odpada.includes(r.id), r.id);
   for (const r of rows.filter(x => odpada.includes(x.id))) { assert.equal(r.data, '2026-11-27', r.id); assert.match(r.dowod, /ZM-20/, r.id); }
   assert.deepEqual(rows.find(r => r.id === 'Z-41').po, ['Z-40']);
   /* włączenie Google (Z-60) nie blokuje samo siebie: gdy etapy 0–5 są zrobione albo odpadły, a Z-60…Z-65 otwarte, S11 przy indeksowanie=true przechodzi */
