@@ -43,15 +43,15 @@ test('Z-34 źródło „ui”: nałożenie propozycji (lokalnie, bez sieci) dopi
   assert.deepEqual(w.pominietych.map(s => s.replace(/„.*”/, '„…”')).sort(), ['ui/de: zmienne „…”', 'ui/de: „…” istnieje (użyj --nadpisz, żeby zastąpić)']);
 });
 
-test('Z-34 źródło „ui”: język z jednym napisem zamiast form liczby mnogiej (countLine w de, ja) nie dostaje próśb o przekład form few/many i nie traci napisu przy nałożeniu', () => {
-  const root = kopia(), [z] = wczytajZrodla(root, ['ui']), de = JSON.parse(readFileSync(join(root, 'src/ui/de.json'), 'utf8'));
-  assert.equal(typeof de.countLine, 'string'); assert.ok(z.pozycje.some(p => p.klucz === 'countLine.few'), 'pl ma formy liczby mnogiej');
-  const wyj = join(root, 'raport'); mkdirSync(join(wyj, 'ui'), { recursive: true }); writeFileSync(join(wyj, 'ui/de.json'), JSON.stringify({ propozycje: { 'countLine.few': '{n} Übungen (few)', 'countLine.one': '{n} Übung' } }));
-  const w = zastosuj(root, wyj); assert.equal(w.zapisanych, 0); assert.equal(JSON.parse(readFileSync(join(root, 'src/ui/de.json'), 'utf8')).countLine, de.countLine);
+test('Z-34 źródło „ui”: język z jednym napisem zamiast form liczby mnogiej (countLine w ja) nie dostaje próśb o przekład form few/many i nie traci napisu przy nałożeniu', () => {
+  const root = kopia(), [z] = wczytajZrodla(root, ['ui']), ja = JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8'));
+  assert.equal(typeof ja.countLine, 'string'); assert.ok(z.pozycje.some(p => p.klucz === 'countLine.few'), 'pl ma formy liczby mnogiej');
+  const wyj = join(root, 'raport'); mkdirSync(join(wyj, 'ui'), { recursive: true }); writeFileSync(join(wyj, 'ui/ja.json'), JSON.stringify({ propozycje: { 'countLine.few': '{n} Übungen (few)', 'countLine.one': '{n} Übung' } }));
+  const w = zastosuj(root, wyj); assert.equal(w.zapisanych, 0); assert.equal(JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8')).countLine, ja.countLine);
 });
 
-test('Z-34 źródło „ui”: także z --nadpisz napis zamiast drzewa (countLine w de) zostaje nietknięty (przegląd KO-137)', () => {
-  const root = kopia(), de = JSON.parse(readFileSync(join(root, 'src/ui/de.json'), 'utf8')), wyj = join(root, 'raport'); mkdirSync(join(wyj, 'ui'), { recursive: true });
-  writeFileSync(join(wyj, 'ui/de.json'), JSON.stringify({ propozycje: { 'countLine.few': '{n} Übungen (few)' } }));
-  const w = zastosuj(root, wyj, { nadpisz: true }); assert.equal(w.zapisanych, 0); assert.equal(JSON.parse(readFileSync(join(root, 'src/ui/de.json'), 'utf8')).countLine, de.countLine); assert.match(w.pominietych[0], /napis zamiast drzewa/);
+test('Z-34 źródło „ui”: także z --nadpisz napis zamiast drzewa (countLine w ja) zostaje nietknięty (przegląd KO-137)', () => {
+  const root = kopia(), ja = JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8')), wyj = join(root, 'raport'); mkdirSync(join(wyj, 'ui'), { recursive: true });
+  writeFileSync(join(wyj, 'ui/ja.json'), JSON.stringify({ propozycje: { 'countLine.few': '{n} Übungen (few)' } }));
+  const w = zastosuj(root, wyj, { nadpisz: true }); assert.equal(w.zapisanych, 0); assert.equal(JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8')).countLine, ja.countLine); assert.match(w.pominietych[0], /napis zamiast drzewa/);
 });
