@@ -64,3 +64,13 @@ test('BR strona: każdy język ma dwie strony prawne (privacy-policy, terms), ni
   assert.equal(plikiHtml(out).filter((f) => /content-license|\/regulamin/.test(f)).length, 0);
   assert.match(czytaj(out, 'pl/privacy-policy/index.html'), /support@apps4brew\.com/);
 });
+
+test('BR przekład: dla 33 języków istnieją dokumenty prywatnosc i warunki, każdy z nagłówkiem h1, wstawką {{dataObowiazywania}}, adresem support@apps4brew.com i bez starych wstawek', () => {
+  const kody = JSON.parse(read('config.json')).jezyki.filter((l) => l !== 'pl' && l !== 'en');
+  assert.equal(kody.length, 33);
+  for (const l of kody) for (const d of ['prywatnosc', 'warunki']) {
+    const f = `docs/teksty/prawne/${d}.${l}.md`; assert.ok(existsSync(join(ROOT, f)), f);
+    const t = read(f); assert.match(t, /^# .+/m, f); assert.match(t, /\{\{dataObowiazywania\}\}/, f); assert.match(t, /support@apps4brew\.com/, f);
+    assert.doesNotMatch(t, /\{\{(administrator|kontakt|adresStrony|politykaAplikacji)\}\}|DO KONSULTACJI/, f);
+  }
+});
