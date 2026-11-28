@@ -9,29 +9,29 @@
  "blad": "Častá chyba: {zdanie}",
  "albo": " nebo ",
  "pytania": {
-  "setup": "Jak se připravit?",
+  "setup": "Jak zaujmout výchozí polohu?",
   "move": "Jak provést pohyb?",
   "miesnie": "Které svaly pracují?",
-  "tips": "Co pomůže s technikou provedení?",
+  "tips": "Co pomáhá s technikou provedení?",
   "mistakes": "Jakým chybám se vyhnout?",
-  "sprzet": "Jaké vybavení potřebujete?",
+  "sprzet": "Jaké vybavení je potřeba?",
   "zamienniki": "Čím ho lze nahradit?"
  },
- "opisGlownej": "{n} {opisow}: kresba pohybu u {f}, tipy k technice u {c}, náhrady u {z}.",
+ "opisGlownej": "{n} {opisow}: kresba pohybu u {f}, tipy k technice provedení u {c}, náhrady u {z}.",
  "opisow": {
   "one": "popis",
   "few": "popisy",
-  "many": "popisů",
-  "other": "popisu"
+  "many": "popisu",
+  "other": "popisů"
  },
  "opisListy": "{n} {pozycji} od A do Z s filtrem podle partie, vybavení a typu pohybu.",
  "pozycji": {
   "one": "položka",
   "few": "položky",
-  "many": "položek",
-  "other": "položky"
+  "many": "položky",
+  "other": "položek"
  },
- "opisKategorii": "{n} {pozycji}, včetně {lista}.",
+ "opisKategorii": "{n} {pozycji}, mimo jiné {lista}.",
  "opisKategoriiJedna": "Jedna položka: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji} s kresbou pohybu u {f} a tipy k technice u {c}."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} s kresbou pohybu u {f} a tipy k technice provedení u {c}."
 }

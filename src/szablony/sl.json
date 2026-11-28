@@ -13,25 +13,25 @@
   "move": "Kako izvedete gib?",
   "miesnie": "Katere mišice delajo?",
   "tips": "Kaj pomaga pri tehniki?",
-  "mistakes": "Katerim napakam se izogibati?",
-  "sprzet": "Katero opremo potrebujete?",
+  "mistakes": "Katerim napakam se izogibajte?",
+  "sprzet": "Kakšno opremo potrebujete?",
   "zamienniki": "S čim jo lahko nadomestite?"
  },
- "opisGlownej": "{n} {opisow}: risba gibanja: {f}, nasveti za tehniko: {c}, nadomestki: {z}.",
+ "opisGlownej": "{n} {opisow}: risba gibanja pri {f}, nasveti za tehniko pri {c}, nadomestki pri {z}.",
  "opisow": {
   "one": "opis",
-  "few": "opisi",
-  "many": "opisov",
+  "few": "opisa",
+  "many": "opisi",
   "other": "opisov"
  },
  "opisListy": "{n} {pozycji} od A do Ž s filtrom po mišični skupini, opremi in vrsti gibanja.",
  "pozycji": {
   "one": "vnos",
-  "few": "vnosi",
-  "many": "vnosov",
+  "few": "vnosa",
+  "many": "vnosi",
   "other": "vnosov"
  },
- "opisKategorii": "{n} {pozycji}, med drugim {lista}.",
+ "opisKategorii": "{n} {pozycji}, med njimi {lista}.",
  "opisKategoriiJedna": "En vnos: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}; risba gibanja: {f}, nasveti za tehniko: {c}."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} z risbo gibanja pri {f} in nasveti za tehniko pri {c}."
 }

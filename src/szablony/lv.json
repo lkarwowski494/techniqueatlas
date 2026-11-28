@@ -17,21 +17,21 @@
   "sprzet": "Kāds aprīkojums ir nepieciešams?",
   "zamienniki": "Ar ko to var aizstāt?"
  },
- "opisGlownej": "{n} {opisow}: kustības zīmējums — {f}, tehnikas padomi — {c}, aizstājēji — {z}.",
+ "opisGlownej": "{n} {opisow}: kustības zīmējums — {f}, tehnikas norādes — {c}, aizstājēji — {z}.",
  "opisow": {
   "one": "apraksts",
   "few": "apraksti",
   "many": "apraksti",
-  "other": "apraksta"
+  "other": "apraksti"
  },
  "opisListy": "{n} {pozycji} no A līdz Z ar filtru pēc muskuļu grupas, aprīkojuma un kustības veida.",
  "pozycji": {
-  "one": "vingrinājums",
-  "few": "vingrinājumi",
-  "many": "vingrinājumi",
-  "other": "vingrinājuma"
+  "one": "ieraksts",
+  "few": "ieraksti",
+  "many": "ieraksti",
+  "other": "ieraksti"
  },
  "opisKategorii": "{n} {pozycji}, tostarp {lista}.",
- "opisKategoriiJedna": "Viens vingrinājums: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}; kustības zīmējums — {f}, tehnikas padomi — {c}."
+ "opisKategoriiJedna": "Viens ieraksts: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; kustības zīmējums — {f}, tehnikas norādes — {c}."
 }
