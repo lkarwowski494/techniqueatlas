@@ -31,7 +31,7 @@ export const UCZENIE_MODELI = ['GPTBot', 'ClaudeBot', 'CCBot', 'Applebot-Extende
 const write = (out, file, text) => { const p = join(out, file); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); };
 
 /** `slugi`, `zmianaDanych` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, `zmianaDanych` (data → data) podstawia pola eksportu (np. `pelna` przed PIN z F-20), ostatnie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
-export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, zmianaDanych, pominStraznikowStartu = false } = {}) {
+export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, zmianaDanych, pominStraznikowStartu = false, plakietkaDir = join(ROOT, 'assets/plakietka') } = {}) {
   const cfg = { ...readJson('config.json'), ...over };
   if (!hasData()) throw new Error('brak danych z aplikacji — uruchom: npm run dane');
   checkPin();
@@ -61,7 +61,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
   /* Z-34 (A10): tytuły i opisy stron ćwiczeń z szablonów Z-22 (pl, en); pozostałe języki — dotychczasowe zachowanie do czasu przekładu szablonów przez API */
   const sz = Object.fromEntries(langs.filter(l => JEZYKI_SZABLONOW.includes(l)).map(l => [l, szablonyCwiczen(data[l], ui[l], l, Object.fromEntries(data[l].exercises.map(e => [e.slug, { nazwaLokalna: nazwy[l]?.[e.id] }])))]));
-  const plakietki = new Set(langs.filter(l => existsSync(join(ROOT, 'assets/plakietka', `${l}.svg`)))); /* grafiki Apple dostarcza właściciel (docs/teksty/plakietka-app-store.md) */
+  const plakietki = new Set(langs.filter(l => existsSync(join(plakietkaDir, `${l}.svg`)))); /* grafiki Apple dostarcza właściciel (docs/teksty/plakietka-app-store.md) */
   if (cfg.appStoreId && plakietki.size < langs.length) warnings.push(`plakietka App Store: brak assets/plakietka/<język>.svg dla ${langs.length - plakietki.size} z ${langs.length} języków (link tekstowy bez grafiki): ${langs.filter(l => !plakietki.has(l)).join(', ')}`);
   const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel, sz, plakietki };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];

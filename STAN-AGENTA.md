@@ -1,3 +1,21 @@
+# Stan agenta — BN: oficjalne plakietki App Store (08-programista, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od `strona/integracja-start`)
+
+## Zrobione
+- 35 oficjalnych czarnych plakietek SVG z Apple Marketing Tools w `assets/plakietka/<kod>.svg`, bajt w bajt; źródło, data i SHA-256 w `assets/plakietka/ZRODLA.json`; skrypt `scripts/plakietka-pobierz.mjs`. Opis i odwzorowania języków: `docs/teksty/plakietka-app-store.md`.
+- `build()` dostał opcję `plakietkaDir` (test wariantu bez pliku). Generator bez zmian zachowania.
+- `tests/z40-plakietka.test.mjs` (6 testów): komplet 35 plików, sumy niezmienione, SVG Apple, `<img alt height≥40>` + linia znaków tylko przy pliku, link tekstowy bez pliku, puste `appStoreId` = bez niczego. Czerwony przed (bez plików: padło na odczycie ZRODLA.json), zielony po.
+- Zrzuty i kontrast: `pomiary/plakietka/` (pl, en; jasny, ciemny).
+
+## Decyzje (analogia, do weta)
+1. `sr` → plakietka angielska; `es-419` → es-mx; `nb` → no-no; `zh-Hant` → zh-tw.
+2. `appStoreId` zostaje puste (ustawia właściciel przy publikacji).
+3. `ZRODLA.json` trafia też do dist (cały katalog assets/ jest kopiowany) — nieszkodliwe, do ewentualnego wykluczenia.
+
+---
+## Wcześniej (BL)
+
 # Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)

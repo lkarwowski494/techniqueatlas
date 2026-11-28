@@ -14,8 +14,12 @@ Stan: 28.11.2026 · 08-programista. Źródło zasad: https://developer.apple.com
 - `appStoreId` ustawione i jest plik `assets/plakietka/<język>.svg`: w ramce „w aplikacji” link z `<img alt="Pobierz w App Store" height="44">`; w stopce linia `appleZnaki`.
 - `appStoreId` ustawione, brak pliku dla języka: zwykły link tekstowy bez stylów (wariant b); budowanie wypisuje UWAGA z listą języków bez pliku.
 
+## Pliki plakietek (Z-40 009, KO-139; odczyt 28.11.2026)
+- 35 plików `assets/plakietka/<kod>.svg`: oficjalna czarna plakietka „Download on the App Store”, pobrana bajt w bajt z Apple Marketing Tools (https://toolbox.marketingtools.apple.com/app-store/), adres każdego pliku, język Apple, data i suma SHA-256 w `assets/plakietka/ZRODLA.json`. Pobranie: `node scripts/plakietka-pobierz.mjs` (ręcznie; właściciel zaakceptował licencję „App Store Marketing Artwork License Agreement” 28.11.2026, pobranie w jego imieniu). Zero modyfikacji; test `tests/z40-plakietka.test.mjs` porównuje sumy.
+- Odwzorowania (decyzje „analogia, do weta”): `sr` → plakietka angielska (Apple nie ma serbskiej; adres en-us); `es-419` → es-mx (Apple nie ma es-419; hiszpański latynoamerykański); `nb` → no-no (Apple: norweski); `zh-Hant` → zh-tw; `pt` → pt-pt, `pt-BR` → pt-br; `sl` → sl-si; `et` → et-ee; `da` → da-dk; `sv` → sv-se; `el` → el-gr.
+- Czarna plakietka na ciemnym tle: plik ma własną jasną ramkę Apple `#a6a6a6` (kontrast z tłem ≈ 7,3:1, rachunek z luminancji WCAG), wypełnienie czarne `#000` na tle ramki `rgb(18,25,34)` (kontrast samej czerni 1,19:1), ramka plakietki widoczna; zrzuty `pomiary/plakietka/` (pl, en, jasny i ciemny; skrypt `zrzuty.mjs`). Plakietki nie przerabiamy; jeśli Apple wymaga innej wersji na ciemne tło, zmiana tylko na inny plik Apple (biała), nie na zmianę koloru.
+- `config.json → appStoreId` zostaje puste do publikacji aplikacji (wtedy bez plakietki i bez linku).
+
 ## Krok właściciela
-1. Zaakceptować licencję na stronie wytycznych (konto Apps4Brew), pobrać plakietkę „Download on the App Store”, czarną (preferowana), w wersjach językowych.
-2. Zapisać jako `assets/plakietka/<kod>.svg`, gdzie `<kod>` to nazwa pliku z `src/ui/` bez `.json`: `pl`, `en`, `cs`, `sk`, `hu`, `ro`, `bg`, `hr`, `sl`, `sr`, `lt`, `lv`, `et`, `uk`, `es`, `es-419`, `pt`, `pt-BR`, `de`, `fr`, `it`, `nl`, `sv`, `da`, `nb`, `fi`, `tr`, `el`, `id`, `ms`, `vi`, `ru`, `ja`, `ko`, `zh-Hant`.
-3. Apple nie ma (wg listy z odczytu) plakietki w języku serbskim: dla `sr` zostaje link tekstowy albo angielska plakietka pod nazwą `sr.svg` — decyzja właściciela.
-4. Dopiero potem wpisać `appStoreId`.
+1. Przy publikacji wpisać `appStoreId` w `config.json` (po wpisaniu pojawia się plakietka i linia znaków Apple).
+2. Zdecydować o `sr` (plakietka angielska) i `es-419` (es-mx) — albo zażądać linku tekstowego (usunąć plik).
