@@ -91,6 +91,16 @@
    "tokeny_we": 13617,
    "tokeny_wy": 2879,
    "koszt_usd": 0.056024000000000004
+  },
+  {
+   "przebieg": "przeglad",
+   "batch_id": "msgbatch_01JtRNeh2fxFNEB65r9MyED7",
+   "model": "claude-opus-5-5",
+   "data": "2026-11-28",
+   "rodzaj_kosztu": "rzeczywisty",
+   "tokeny_we": 215283,
+   "tokeny_wy": 13874,
+   "koszt_usd": 0.569306
   }
  ]
 }
