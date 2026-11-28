@@ -89,5 +89,32 @@
     "chest_press_machine": "Tlakové stroje na hrudník",
     "cable_press": "Tlaky na kladkách",
     "kneeling_hinge": "Předklony v kleku a vsedě"
+  },
+  "wynik": "{n} z {m} cviků",
+  "wszystkieJezyki": "všechny jazyky ({n})",
+  "appleZnaki": "App Store a logo Apple jsou ochranné známky společnosti Apple Inc. registrované v USA a dalších zemích.",
+  "prawne": {
+    "nav": "Právní dokumenty",
+    "privacy": "Soukromí",
+    "terms": "Podmínky"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(datum zveřejnění)"
+  },
+  "wsparcie": {
+    "w1": "Používání tohoto webu je bezplatné.",
+    "w2": "Aplikace nabízí {dni} tréninkových dnů v měsíci bez předplatného. Plná verze je placená: předplatné, nebo doživotní přístup.",
+    "w3": "Jejím zakoupením zároveň podpoříte rozvoj tohoto webu."
+  },
+  "ramka": {
+    "tytul": "V aplikaci {nazwa}",
+    "z1": "V aplikaci můžete tento cvik přidat do tréninku nebo do vlastní šablony.",
+    "z2": "Během tréninku zapisujete každou sérii a vedle vidíte výsledek z minula.",
+    "z3": "Po odškrtnutí série se spustí odpočet pauzy.",
+    "z4": "Když vybavení nemáte nebo je obsazené, aplikace nabídne náhrady, včetně stejného pohybu na jiném nářadí.",
+    "z5": "Po výběru místa tréninku seznam zobrazí cviky, které tam lze provést.",
+    "z6": "Na obrazovce cviku vidíte své poslední tréninky s tímto cvikem a v sekci „Pokrok“ graf a rekordy.",
+    "z7": "Ze šablon sestavíte týdenní plán, nebo vygenerujete šablony a plán podle několika voleb.",
+    "z8": "Historie, pokrok, šablony a záloha jsou dostupné vždy, i bez placené verze."
   }
 }

@@ -88,5 +88,32 @@
     "chest_press_machine": "Máquinas de supino",
     "cable_press": "Supino na polia",
     "kneeling_hinge": "Dobradiça de quadril ajoelhado"
+  },
+  "wynik": "{n} de {m} exercícios",
+  "wszystkieJezyki": "todos os idiomas ({n})",
+  "appleZnaki": "App Store e o logotipo da Apple são marcas comerciais da Apple Inc., registradas nos EUA e em outros países.",
+  "prawne": {
+    "nav": "Documentos legais",
+    "privacy": "Privacidade",
+    "terms": "Termos"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(data de publicação)"
+  },
+  "wsparcie": {
+    "w1": "Este site é gratuito.",
+    "w2": "O app oferece {dni} dias de treino por mês sem assinatura. A versão completa é paga: assinatura ou acesso vitalício.",
+    "w3": "A compra também ajuda a manter este site."
+  },
+  "ramka": {
+    "tytul": "No app {nazwa}",
+    "z1": "No app, você pode adicionar este exercício a um treino ou ao seu próprio modelo.",
+    "z2": "Durante o treino, você registra cada série e vê ao lado o resultado da vez anterior.",
+    "z3": "Ao marcar uma série como feita, começa a contagem do descanso.",
+    "z4": "Se você não tem o equipamento ou ele está ocupado, o app sugere substitutos, inclusive o mesmo movimento em outro aparelho.",
+    "z5": "Depois de escolher onde você treina, a lista mostra os exercícios que dá para fazer lá.",
+    "z6": "Na tela do exercício, você vê seus últimos treinos com ele e, em “Progresso”, o gráfico e os recordes.",
+    "z7": "Com os modelos, você monta o plano da semana ou gera modelos e um plano a partir de algumas escolhas.",
+    "z8": "Histórico, progresso, modelos e backup ficam sempre disponíveis, mesmo sem a versão paga."
   }
 }

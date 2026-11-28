@@ -87,5 +87,32 @@
     "chest_press_machine": "Rinnalt surumise trenažöörid",
     "cable_press": "Surumised plokkidega",
     "kneeling_hinge": "Puusalt painutus põlvitades"
+  },
+  "wynik": "{n} / {m} harjutust",
+  "wszystkieJezyki": "kõik keeled ({n})",
+  "appleZnaki": "App Store ja Apple'i logo on ettevõtte Apple Inc. kaubamärgid, mis on registreeritud USA-s ja teistes riikides.",
+  "prawne": {
+    "nav": "Õiguslikud dokumendid",
+    "privacy": "Privaatsus",
+    "terms": "Tingimused"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(avaldamise kuupäev)"
+  },
+  "wsparcie": {
+    "w1": "See veebileht on tasuta.",
+    "w2": "Rakendus annab sulle {dni} treeningpäeva kuus ilma tellimuseta. Täisversioon on tasuline: tellimus või eluaegne juurdepääs.",
+    "w3": "Selle ostmine toetab ka selle veebilehe arendamist."
+  },
+  "ramka": {
+    "tytul": "Rakenduses {nazwa}",
+    "z1": "Rakenduses saad selle harjutuse lisada treeningusse või oma malli.",
+    "z2": "Treeningu ajal salvestad iga seeria ja näed kõrval eelmise korra tulemust.",
+    "z3": "Kui märgid seeria tehtuks, algab pausi loendus.",
+    "z4": "Kui sul pole vajalikku varustust või see on hõivatud, pakub rakendus asendusi, ka sama liigutust teise vahendiga.",
+    "z5": "Kui valid treeningkoha, näitab nimekiri harjutusi, mida seal teha saab.",
+    "z6": "Harjutuse ekraanil näed oma viimaseid treeninguid selle harjutusega, „Edenemine” vaates aga graafikut ja rekordeid.",
+    "z7": "Mallidest saad koostada nädalaplaani või lasta mõne valiku põhjal luua mallid ja plaani.",
+    "z8": "Ajalugu, edenemine, mallid ja varukoopia on alati saadaval, ka ilma tasulise versioonita."
   }
 }

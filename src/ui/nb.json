@@ -87,5 +87,32 @@
     "chest_press_machine": "Brystpressmaskiner",
     "cable_press": "Kabelpress",
     "kneeling_hinge": "Hoftehengsel på knær"
+  },
+  "wynik": "{n} av {m} øvelser",
+  "wszystkieJezyki": "alle språk ({n})",
+  "appleZnaki": "App Store og Apple-logoen er varemerker for Apple Inc., registrert i USA og andre land.",
+  "prawne": {
+    "nav": "Juridiske dokumenter",
+    "privacy": "Personvern",
+    "terms": "Vilkår"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(publiseringsdato)"
+  },
+  "wsparcie": {
+    "w1": "Denne nettsiden er gratis.",
+    "w2": "Appen gir deg {dni} treningsdager i måneden uten abonnement. Fullversjonen koster penger: abonnement eller livstidstilgang.",
+    "w3": "Når du kjøper den, støtter du også utviklingen av denne nettsiden."
+  },
+  "ramka": {
+    "tytul": "I {nazwa}-appen",
+    "z1": "I appen kan du legge til denne øvelsen i en økt eller i din egen mal.",
+    "z2": "Under økten logger du hvert sett, og ved siden av ser du resultatet fra forrige gang.",
+    "z3": "Når du huker av et sett, starter nedtellingen av hvilen.",
+    "z4": "Har du ikke utstyret, eller er det opptatt, foreslår appen erstatninger, også den samme bevegelsen på et annet apparat.",
+    "z5": "Når du har valgt hvor du trener, viser listen øvelsene du kan gjøre der.",
+    "z6": "På øvelsesskjermen ser du de siste øktene dine med den, og under «Fremgang» finner du graf og rekorder.",
+    "z7": "Med malene kan du sette opp en ukeplan, eller generere maler og en plan ut fra noen få valg.",
+    "z8": "Historikk, fremgang, maler og sikkerhetskopi er alltid tilgjengelig, også uten betalt versjon."
   }
 }

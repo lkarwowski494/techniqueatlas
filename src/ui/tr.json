@@ -87,5 +87,32 @@
     "chest_press_machine": "Göğüs press makineleri",
     "cable_press": "Kablo press",
     "kneeling_hinge": "Diz çökerek kalça menteşesi"
+  },
+  "wynik": "{n} / {m} egzersiz",
+  "wszystkieJezyki": "tüm diller ({n})",
+  "appleZnaki": "App Store ve Apple logosu, Apple Inc.'in ABD'de ve diğer ülkelerde tescilli ticari markalarıdır.",
+  "prawne": {
+    "nav": "Yasal belgeler",
+    "privacy": "Gizlilik",
+    "terms": "Koşullar"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(yayın tarihi)"
+  },
+  "wsparcie": {
+    "w1": "Bu web sitesi ücretsizdir.",
+    "w2": "Uygulama, abonelik olmadan ayda {dni} antrenman günü sunar. Tam sürüm ücretlidir: abonelik veya süresiz erişim.",
+    "w3": "Satın almanız bu web sitesinin gelişimini de destekler."
+  },
+  "ramka": {
+    "tytul": "{nazwa} uygulamasında",
+    "z1": "Uygulamada bu egzersizi bir antrenmana veya kendi şablonunuza ekleyebilirsiniz.",
+    "z2": "Antrenman sırasında her seti kaydedersiniz ve yanında önceki seferki sonucunuzu görürsünüz.",
+    "z3": "Bir seti işaretlediğinizde dinlenme geri sayımı başlar.",
+    "z4": "Ekipmanınız yoksa ya da ekipman doluysa, uygulama alternatif egzersizler önerir; aynı hareketin başka bir alette yapılanı da dahil.",
+    "z5": "Antrenman yerinizi seçtiğinizde liste orada yapabileceğiniz egzersizleri gösterir.",
+    "z6": "Egzersiz ekranında bu egzersizle yaptığınız son antrenmanları, \"İlerleme\" bölümünde ise grafiği ve rekorlarınızı görürsünüz.",
+    "z7": "Şablonlarınızdan haftalık bir plan oluşturabilir ya da birkaç tercihten yola çıkarak şablonlar ve plan oluşturabilirsiniz.",
+    "z8": "Geçmiş, ilerleme, şablonlar ve yedekleme her zaman kullanılabilir, ücretli sürüm olmadan da."
   }
 }

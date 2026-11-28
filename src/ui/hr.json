@@ -88,5 +88,32 @@
     "chest_press_machine": "Sprave za potisak prsa",
     "cable_press": "Potisci na sajlama",
     "kneeling_hinge": "Pregib u kuku na koljenima"
+  },
+  "wynik": "{n} od {m} vježbi",
+  "wszystkieJezyki": "svi jezici ({n})",
+  "appleZnaki": "App Store i logotip Apple zaštitni su znakovi tvrtke Apple Inc., registrirani u SAD-u i drugim zemljama.",
+  "prawne": {
+    "nav": "Pravni dokumenti",
+    "privacy": "Privatnost",
+    "terms": "Uvjeti"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(datum objave)"
+  },
+  "wsparcie": {
+    "w1": "Ova je stranica besplatna.",
+    "w2": "Aplikacija bez pretplate pruža {dni} dana treninga mjesečno. Puna verzija se plaća: pretplata ili doživotni pristup.",
+    "w3": "Njezina kupnja ujedno podržava razvoj ove stranice."
+  },
+  "ramka": {
+    "tytul": "U aplikaciji {nazwa}",
+    "z1": "U aplikaciji ovu vježbu možete dodati u trening ili u vlastiti predložak.",
+    "z2": "Tijekom treninga bilježite svaku seriju, a pokraj nje vidite rezultat od prošlog puta.",
+    "z3": "Nakon što označite seriju, počinje odbrojavanje odmora.",
+    "z4": "Kada nemate opremu ili je zauzeta, aplikacija predlaže zamjene, uključujući isti pokret na drugoj spravi.",
+    "z5": "Nakon što odaberete mjesto treninga, popis prikazuje vježbe koje se ondje mogu izvesti.",
+    "z6": "Na zaslonu vježbe vidite svoje posljednje treninge s njom, a u „Napretku” grafikon i rekorde.",
+    "z7": "Od predložaka možete složiti tjedni plan ili generirati predloške i plan na temelju nekoliko postavki.",
+    "z8": "Povijest, napredak, predlošci i sigurnosna kopija uvijek su dostupni, i bez plaćene verzije."
   }
 }

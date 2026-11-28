@@ -10,7 +10,7 @@ import { zTlumaczeniem, zastosuj } from '../scripts/przeklad/rdzen.mjs';
 import { ROOT, tmpDir, read } from './pomoc.mjs';
 
 const CZEKAJACE = ['wynik', 'wszystkieJezyki', 'appleZnaki', 'prawne', 'prawneBrak', 'wsparcie', 'ramka'], /* Z-40: trzy nowe teksty (pl, en) czekają na przekład API */ zm = s => (s.match(/\{[a-zA-Z]+\}/g) ?? []).sort().join();
-const kopia = () => { const d = tmpDir('atlas-ui-'); for (const f of ['config.json', 'docs/przeklad/zrodla.json', 'docs/nazwy/pl.json']) { mkdirSync(join(d, f, '..'), { recursive: true }); cpSync(join(ROOT, f), join(d, f)); } for (const k of ['src/ui', 'src/szablony', 'docs/teksty/prawne']) cpSync(join(ROOT, k), join(d, k), { recursive: true }); return d; };
+const kopia = () => { const d = tmpDir('atlas-ui-'); for (const f of ['config.json', 'docs/przeklad/zrodla.json', 'docs/nazwy/pl.json']) { mkdirSync(join(d, f, '..'), { recursive: true }); cpSync(join(ROOT, f), join(d, f)); } for (const k of ['src/ui', 'src/szablony', 'docs/teksty/prawne']) cpSync(join(ROOT, k), join(d, k), { recursive: true }); for (const kod of ['de', 'ja']) { const p = join(d, 'src/ui', `${kod}.json`), j = JSON.parse(readFileSync(p, 'utf8')); for (const c of CZEKAJACE) delete j[c]; writeFileSync(p, JSON.stringify(j, null, 2) + '\n'); } return d; }; /* BQ3: po przekładzie repo ma komplet kluczy; fixtura przywraca stan „czeka na przekład” dla de i ja */
 
 test('Z-34 źródło „ui” zastępuje „ramka”: mapa src/ui/{pl,en}.json → src/ui/{kod}.json, bez znacznika oczekuje; pozycje to wszystkie teksty pl z angielskim odpowiednikiem i tymi samymi zmiennymi {…}', () => {
   const k = JSON.parse(read('docs/przeklad/zrodla.json')), ui = k.zrodla.find(z => z.id === 'ui');

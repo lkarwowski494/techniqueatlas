@@ -88,5 +88,32 @@
     "chest_press_machine": "Máquinas de press de peito",
     "cable_press": "Press no cabo",
     "kneeling_hinge": "Dobradiça da anca de joelhos"
+  },
+  "wynik": "{n} de {m} exercícios",
+  "wszystkieJezyki": "todas as línguas ({n})",
+  "appleZnaki": "App Store e o logótipo Apple são marcas comerciais da Apple Inc., registadas nos EUA e noutros países.",
+  "prawne": {
+    "nav": "Documentos legais",
+    "privacy": "Privacidade",
+    "terms": "Termos"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(data de publicação)"
+  },
+  "wsparcie": {
+    "w1": "Este site é gratuito.",
+    "w2": "A aplicação oferece {dni} dias de treino por mês sem subscrição. A versão completa é paga: subscrição ou acesso vitalício.",
+    "w3": "A sua compra também apoia o desenvolvimento deste site."
+  },
+  "ramka": {
+    "tytul": "Na aplicação {nazwa}",
+    "z1": "Na aplicação, pode adicionar este exercício a um treino ou a um modelo próprio.",
+    "z2": "Durante o treino, regista cada série e vê ao lado o resultado da vez anterior.",
+    "z3": "Depois de marcar uma série como feita, começa a contagem do descanso.",
+    "z4": "Se não tiver o equipamento ou se estiver ocupado, a aplicação sugere substitutos, incluindo o mesmo movimento noutro equipamento.",
+    "z5": "Depois de escolher o local de treino, a lista mostra os exercícios que é possível fazer lá.",
+    "z6": "No ecrã do exercício, vê os seus treinos mais recentes com ele e, em «Progresso», o gráfico e os recordes.",
+    "z7": "A partir dos modelos, pode montar o plano semanal ou gerar modelos e um plano a partir de algumas escolhas.",
+    "z8": "O histórico, o progresso, os modelos e a cópia de segurança estão sempre disponíveis, mesmo sem a versão paga."
   }
 }

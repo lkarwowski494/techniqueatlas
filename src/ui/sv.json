@@ -87,5 +87,32 @@
     "chest_press_machine": "Bröstpressmaskiner",
     "cable_press": "Kabelpress",
     "kneeling_hinge": "Höftfällning på knä"
+  },
+  "wynik": "{n} av {m} övningar",
+  "wszystkieJezyki": "alla språk ({n})",
+  "appleZnaki": "App Store och Apple-logotypen är varumärken som tillhör Apple Inc., registrerade i USA och andra länder.",
+  "prawne": {
+    "nav": "Juridiska dokument",
+    "privacy": "Integritet",
+    "terms": "Villkor"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(publiceringsdatum)"
+  },
+  "wsparcie": {
+    "w1": "Den här webbplatsen är gratis att använda.",
+    "w2": "Appen ger dig {dni} träningsdagar i månaden utan prenumeration. Fullversionen är betald: en prenumeration eller livstidsåtkomst.",
+    "w3": "Köpet stöder också utvecklingen av den här webbplatsen."
+  },
+  "ramka": {
+    "tytul": "I appen {nazwa}",
+    "z1": "I appen kan du lägga till den här övningen i ett pass eller i en egen mall.",
+    "z2": "Under passet loggar du varje set och ser resultatet från förra gången bredvid.",
+    "z3": "När du bockar av ett set startar nedräkningen av vilan.",
+    "z4": "Om du saknar utrustningen eller den är upptagen föreslår appen ersättare, även samma rörelse med annan utrustning.",
+    "z5": "När du har valt var du tränar visar listan de övningar du kan göra där.",
+    "z6": "På övningens skärm ser du dina senaste pass med den, och under ”Framsteg” hittar du diagram och rekord.",
+    "z7": "Av dina mallar sätter du ihop en veckoplan, eller så genererar du mallar och en plan utifrån några val.",
+    "z8": "Historik, framsteg, mallar och säkerhetskopior är alltid tillgängliga, även utan den betalda versionen."
   }
 }

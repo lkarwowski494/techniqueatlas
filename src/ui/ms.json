@@ -84,5 +84,32 @@
     "chest_press_machine": "Mesin chest press",
     "cable_press": "Cable press",
     "kneeling_hinge": "Hip hinge sambil melutut"
+  },
+  "wynik": "{n} daripada {m} senaman",
+  "wszystkieJezyki": "semua bahasa ({n})",
+  "appleZnaki": "App Store dan logo Apple ialah tanda dagangan Apple Inc., yang didaftarkan di A.S. dan negara-negara lain.",
+  "prawne": {
+    "nav": "Dokumen undang-undang",
+    "privacy": "Privasi",
+    "terms": "Terma"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(tarikh penerbitan)"
+  },
+  "wsparcie": {
+    "w1": "Laman web ini percuma.",
+    "w2": "Aplikasi ini memberi anda {dni} hari latihan sebulan tanpa langganan. Versi penuh berbayar: langganan atau akses seumur hidup.",
+    "w3": "Pembeliannya juga menyokong pembangunan laman web ini."
+  },
+  "ramka": {
+    "tytul": "Dalam aplikasi {nazwa}",
+    "z1": "Dalam aplikasi, anda boleh menambah senaman ini pada latihan atau pada templat anda sendiri.",
+    "z2": "Semasa latihan, anda merekod setiap set dan melihat keputusan kali lepas di sebelahnya.",
+    "z3": "Selepas anda menandakan set, kiraan detik rehat bermula.",
+    "z4": "Jika anda tiada peralatan atau ia sedang digunakan, aplikasi mencadangkan pengganti, termasuk gerakan yang sama pada peralatan lain.",
+    "z5": "Selepas anda memilih tempat latihan, senarai menunjukkan senaman yang boleh dilakukan di sana.",
+    "z6": "Pada skrin senaman, anda melihat latihan terkini anda dengannya, dan dalam “Kemajuan” terdapat carta serta rekod anda.",
+    "z7": "Daripada templat, anda boleh menyusun pelan mingguan atau menjana templat dan pelan daripada beberapa pilihan.",
+    "z8": "Sejarah, kemajuan, templat dan sandaran sentiasa tersedia, walaupun tanpa versi berbayar."
   }
 }

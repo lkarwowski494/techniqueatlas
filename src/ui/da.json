@@ -87,5 +87,32 @@
     "chest_press_machine": "Brystpresmaskiner",
     "cable_press": "Kabelpres",
     "kneeling_hinge": "Hoftehængsel på knæ"
+  },
+  "wynik": "{n} af {m} øvelser",
+  "wszystkieJezyki": "alle sprog ({n})",
+  "appleZnaki": "App Store og Apple-logoet er varemærker tilhørende Apple Inc., registreret i USA og andre lande.",
+  "prawne": {
+    "nav": "Juridiske dokumenter",
+    "privacy": "Privatliv",
+    "terms": "Vilkår"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(udgivelsesdato)"
+  },
+  "wsparcie": {
+    "w1": "Denne hjemmeside er gratis at bruge.",
+    "w2": "Appen giver dig {dni} træningsdage om måneden uden abonnement. Den fulde version koster penge: et abonnement eller livstidsadgang.",
+    "w3": "Når du køber den, støtter du også udviklingen af denne hjemmeside."
+  },
+  "ramka": {
+    "tytul": "I appen {nazwa}",
+    "z1": "I appen kan du tilføje øvelsen til en træning eller til din egen skabelon.",
+    "z2": "Under træningen logger du hvert sæt, og ved siden af ser du dit resultat fra sidste gang.",
+    "z3": "Når du krydser et sæt af, starter nedtællingen af hvilen.",
+    "z4": "Hvis du ikke har udstyret, eller det er optaget, foreslår appen erstatninger, også den samme bevægelse på et andet redskab.",
+    "z5": "Når du har valgt, hvor du træner, viser listen de øvelser, du kan lave der.",
+    "z6": "På øvelsens skærm ser du dine seneste træninger med den, og under „Fremskridt“ ser du en graf og dine rekorder.",
+    "z7": "Med dine skabeloner kan du lægge en ugeplan, eller du kan generere skabeloner og en plan ud fra nogle få valg.",
+    "z8": "Din historik, dine fremskridt, skabeloner og sikkerhedskopier er altid tilgængelige, også uden den betalte version."
   }
 }

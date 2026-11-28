@@ -87,5 +87,32 @@
     "chest_press_machine": "Mellnyomó gépek",
     "cable_press": "Kábeles nyomások",
     "kneeling_hinge": "Csípőhajlítás térdelve"
+  },
+  "wynik": "{n} / {m} gyakorlat",
+  "wszystkieJezyki": "összes nyelv ({n})",
+  "appleZnaki": "Az App Store és az Apple logó az Apple Inc. Egyesült Államokban és más országokban bejegyzett védjegyei.",
+  "prawne": {
+    "nav": "Jogi dokumentumok",
+    "privacy": "Adatvédelem",
+    "terms": "Feltételek"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(közzététel dátuma)"
+  },
+  "wsparcie": {
+    "w1": "Ez a weboldal ingyenesen használható.",
+    "w2": "Az alkalmazás előfizetés nélkül havonta {dni} edzésnapot biztosít. A teljes verzió fizetős: előfizetés vagy örökös hozzáférés.",
+    "w3": "Megvásárlása ennek a weboldalnak a fejlesztését is támogatja."
+  },
+  "ramka": {
+    "tytul": "A(z) {nazwa} alkalmazásban",
+    "z1": "Az alkalmazásban ezt a gyakorlatot hozzáadhatja egy edzéshez vagy a saját sablonjához.",
+    "z2": "Edzés közben minden sorozatot rögzíthet, és mellette látja az előző alkalom eredményét.",
+    "z3": "A sorozat kipipálása után elindul a pihenő visszaszámlálása.",
+    "z4": "Ha nincs meg az eszköz, vagy foglalt, az alkalmazás helyettesítő gyakorlatokat javasol, köztük ugyanazt a mozgást más eszközön is.",
+    "z5": "Az edzés helyszínének kiválasztása után a lista az ott elvégezhető gyakorlatokat mutatja.",
+    "z6": "A gyakorlat képernyőjén láthatja a legutóbbi edzéseit ezzel a gyakorlattal, a „Fejlődés” részben pedig a grafikont és a rekordjait.",
+    "z7": "A sablonokból heti tervet állíthat össze, vagy néhány beállítás alapján sablonokat és tervet hozhat létre.",
+    "z8": "Az előzmények, a fejlődés, a sablonok és a biztonsági mentés mindig elérhetők, a fizetős verzió nélkül is."
   }
 }

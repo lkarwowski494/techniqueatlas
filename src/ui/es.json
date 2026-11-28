@@ -88,5 +88,32 @@
     "chest_press_machine": "Máquinas de press de pecho",
     "cable_press": "Press en polea",
     "kneeling_hinge": "Bisagra de cadera de rodillas"
+  },
+  "wynik": "{n} de {m} ejercicios",
+  "wszystkieJezyki": "todos los idiomas ({n})",
+  "appleZnaki": "App Store y el logotipo de Apple son marcas comerciales de Apple Inc., registradas en EE. UU. y en otros países.",
+  "prawne": {
+    "nav": "Documentos legales",
+    "privacy": "Privacidad",
+    "terms": "Condiciones"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(fecha de publicación)"
+  },
+  "wsparcie": {
+    "w1": "Esta web es gratuita.",
+    "w2": "La app te da {dni} días de entrenamiento al mes sin suscripción. La versión completa es de pago: suscripción o acceso de por vida.",
+    "w3": "Comprarla también apoya el desarrollo de esta web."
+  },
+  "ramka": {
+    "tytul": "En la app {nazwa}",
+    "z1": "En la app puedes añadir este ejercicio a un entreno o a tu propia plantilla.",
+    "z2": "Durante el entreno apuntas cada serie y al lado ves el resultado de la vez anterior.",
+    "z3": "Al marcar una serie, empieza la cuenta atrás del descanso.",
+    "z4": "Si no tienes el material o está ocupado, la app te sugiere sustitutos, incluido el mismo movimiento en otro aparato.",
+    "z5": "Cuando eliges dónde entrenas, la lista muestra los ejercicios que puedes hacer allí.",
+    "z6": "En la pantalla del ejercicio ves tus últimos entrenos con él, y en «Progreso», la gráfica y los récords.",
+    "z7": "Con tus plantillas puedes montar un plan semanal, o generar plantillas y un plan a partir de unas pocas preferencias.",
+    "z8": "El historial, el progreso, las plantillas y la copia de seguridad están siempre disponibles, también sin la versión de pago."
   }
 }

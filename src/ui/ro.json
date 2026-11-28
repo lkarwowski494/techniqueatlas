@@ -88,5 +88,32 @@
     "chest_press_machine": "Aparate de împins pentru piept",
     "cable_press": "Împingeri la cablu",
     "kneeling_hinge": "Flexie de șold în genunchi"
+  },
+  "wynik": "{n} din {m} exerciții",
+  "wszystkieJezyki": "toate limbile ({n})",
+  "appleZnaki": "App Store și sigla Apple sunt mărci comerciale ale Apple Inc., înregistrate în SUA și în alte țări.",
+  "prawne": {
+    "nav": "Documente juridice",
+    "privacy": "Confidențialitate",
+    "terms": "Termeni"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(data publicării)"
+  },
+  "wsparcie": {
+    "w1": "Acest site este gratuit.",
+    "w2": "Aplicația vă oferă {dni} zile de antrenament pe lună fără abonament. Versiunea completă este cu plată: abonament sau acces pe viață.",
+    "w3": "Achiziționarea ei susține și dezvoltarea acestui site."
+  },
+  "ramka": {
+    "tytul": "În aplicația {nazwa}",
+    "z1": "În aplicație puteți adăuga acest exercițiu la un antrenament sau la propriul șablon.",
+    "z2": "În timpul antrenamentului înregistrați fiecare serie și vedeți alături rezultatul de data trecută.",
+    "z3": "După ce bifați o serie, pornește cronometrul pentru pauză.",
+    "z4": "Dacă nu aveți echipamentul sau este ocupat, aplicația vă sugerează înlocuitori, inclusiv aceeași mișcare pe alt echipament.",
+    "z5": "După ce alegeți locul de antrenament, lista afișează exercițiile pe care le puteți face acolo.",
+    "z6": "Pe ecranul exercițiului vedeți ultimele antrenamente cu el, iar în „Progres” un grafic și recordurile.",
+    "z7": "Din șabloane vă puteți face un plan săptămânal sau puteți genera șabloane și un plan pornind de la câteva opțiuni.",
+    "z8": "Istoricul, progresul, șabloanele și copia de rezervă sunt disponibile oricând, chiar și fără versiunea cu plată."
   }
 }

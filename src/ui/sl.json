@@ -89,5 +89,32 @@
     "chest_press_machine": "Naprave za potisk prsi",
     "cable_press": "Potiski na škripcih",
     "kneeling_hinge": "Pregib v kolkih na kolenih"
+  },
+  "wynik": "{n} od {m} vaj",
+  "wszystkieJezyki": "vsi jeziki ({n})",
+  "appleZnaki": "App Store in logotip Apple sta blagovni znamki družbe Apple Inc., registrirani v ZDA in drugih državah.",
+  "prawne": {
+    "nav": "Pravni dokumenti",
+    "privacy": "Zasebnost",
+    "terms": "Pogoji"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(datum objave)"
+  },
+  "wsparcie": {
+    "w1": "Ta spletna stran je brezplačna.",
+    "w2": "Aplikacija vam brez naročnine ponuja {dni} dni treninga na mesec. Polna različica je plačljiva: naročnina ali trajni dostop.",
+    "w3": "Njen nakup podpira tudi razvoj te spletne strani."
+  },
+  "ramka": {
+    "tytul": "V aplikaciji {nazwa}",
+    "z1": "V aplikaciji lahko to vajo dodate v trening ali v lastno predlogo.",
+    "z2": "Med treningom zapišete vsako serijo, ob njej pa vidite rezultat iz prejšnjega treninga.",
+    "z3": "Ko serijo označite kot opravljeno, se začne odštevanje počitka.",
+    "z4": "Če opreme nimate ali je zasedena, vam aplikacija predlaga nadomestke, tudi isti gib z drugo opremo.",
+    "z5": "Ko izberete, kje trenirate, seznam prikaže vaje, ki jih lahko tam izvedete.",
+    "z6": "Na zaslonu vaje vidite svoje zadnje treninge z njo, v razdelku »Napredek« pa graf in rekorde.",
+    "z7": "Iz predlog sestavite tedenski načrt ali pa predloge in načrt ustvarite na podlagi nekaj izbir.",
+    "z8": "Zgodovina, napredek, predloge in varnostne kopije so vedno na voljo, tudi brez plačljive različice."
   }
 }

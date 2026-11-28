@@ -87,5 +87,32 @@
     "chest_press_machine": "Borstpersmachines",
     "cable_press": "Kabelpersen",
     "kneeling_hinge": "Heupscharnier op de knieën"
+  },
+  "wynik": "{n} van {m} oefeningen",
+  "wszystkieJezyki": "alle talen ({n})",
+  "appleZnaki": "App Store en het Apple-logo zijn handelsmerken van Apple Inc., geregistreerd in de VS en andere landen.",
+  "prawne": {
+    "nav": "Juridische documenten",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(publicatiedatum)"
+  },
+  "wsparcie": {
+    "w1": "Deze website is gratis.",
+    "w2": "De app geeft je {dni} trainingsdagen per maand zonder abonnement. Voor de volledige versie betaal je: een abonnement of levenslange toegang.",
+    "w3": "Met je aankoop steun je ook deze website."
+  },
+  "ramka": {
+    "tytul": "In de app {nazwa}",
+    "z1": "In de app voeg je deze oefening toe aan een training of aan je eigen sjabloon.",
+    "z2": "Tijdens een training log je elke set en zie je ernaast je resultaat van de vorige keer.",
+    "z3": "Zodra je een set afvinkt, begint het aftellen van je rust.",
+    "z4": "Heb je de apparatuur niet of is die bezet, dan stelt de app vervangers voor, ook dezelfde beweging op een ander toestel.",
+    "z5": "Kies je waar je traint, dan toont de lijst de oefeningen die je daar kunt doen.",
+    "z6": "Op het oefeningscherm zie je je laatste trainingen met deze oefening, en in „Voortgang” een grafiek en je records.",
+    "z7": "Met je sjablonen stel je een weekplan samen, of je genereert sjablonen en een plan op basis van een paar keuzes.",
+    "z8": "Geschiedenis, voortgang, sjablonen en back-ups zijn altijd beschikbaar, ook zonder betaalde versie."
   }
 }

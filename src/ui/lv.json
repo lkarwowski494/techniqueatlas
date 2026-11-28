@@ -88,5 +88,32 @@
     "chest_press_machine": "Krūšu spiešanas trenažieri",
     "cable_press": "Spiešana pie blokiem",
     "kneeling_hinge": "Gūžas locījums uz ceļiem"
+  },
+  "wynik": "{n} no {m} vingrinājumiem",
+  "wszystkieJezyki": "visas valodas ({n})",
+  "appleZnaki": "App Store un Apple logotips ir uzņēmuma Apple Inc. preču zīmes, kas reģistrētas ASV un citās valstīs.",
+  "prawne": {
+    "nav": "Juridiskie dokumenti",
+    "privacy": "Privātums",
+    "terms": "Noteikumi"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(publicēšanas datums)"
+  },
+  "wsparcie": {
+    "w1": "Šīs vietnes lietošana ir bezmaksas.",
+    "w2": "Lietotne bez abonementa nodrošina {dni} treniņu dienas mēnesī. Pilnā versija ir maksas: abonements vai mūža piekļuve.",
+    "w3": "Tās iegāde atbalsta arī šīs vietnes attīstību."
+  },
+  "ramka": {
+    "tytul": "Lietotnē {nazwa}",
+    "z1": "Lietotnē varat pievienot šo vingrinājumu treniņam vai savai veidnei.",
+    "z2": "Treniņa laikā jūs pierakstāt katru sēriju, un blakus redzat iepriekšējās reizes rezultātu.",
+    "z3": "Kad atzīmējat sēriju, sākas atpūtas laika atskaite.",
+    "z4": "Ja jums nav aprīkojuma vai tas ir aizņemts, lietotne piedāvā aizstājējus, arī to pašu kustību ar citu aprīkojumu.",
+    "z5": "Kad izvēlaties treniņa vietu, sarakstā redzami vingrinājumi, ko tur var izpildīt.",
+    "z6": "Vingrinājuma ekrānā redzami jūsu pēdējie treniņi ar to, bet sadaļā “Progress” – grafiks un rekordi.",
+    "z7": "No veidnēm varat izveidot nedēļas plānu vai ģenerēt veidnes un plānu, balstoties uz dažām izvēlēm.",
+    "z8": "Vēsture, progress, veidnes un rezerves kopija ir pieejamas vienmēr, arī bez maksas versijas."
   }
 }

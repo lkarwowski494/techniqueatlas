@@ -88,5 +88,32 @@
     "chest_press_machine": "Macchine per la spinta al petto",
     "cable_press": "Spinte ai cavi",
     "kneeling_hinge": "Hip hinge in ginocchio"
+  },
+  "wynik": "{n} di {m} esercizi",
+  "wszystkieJezyki": "tutte le lingue ({n})",
+  "appleZnaki": "App Store e il logo Apple sono marchi di Apple Inc., registrati negli Stati Uniti e in altri paesi.",
+  "prawne": {
+    "nav": "Documenti legali",
+    "privacy": "Privacy",
+    "terms": "Termini"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(data di pubblicazione)"
+  },
+  "wsparcie": {
+    "w1": "Questo sito è gratuito.",
+    "w2": "L’app ti dà {dni} giorni di allenamento al mese senza abbonamento. La versione completa è a pagamento: abbonamento o accesso a vita.",
+    "w3": "Acquistarla sostiene anche lo sviluppo di questo sito."
+  },
+  "ramka": {
+    "tytul": "Nell’app {nazwa}",
+    "z1": "Nell’app puoi aggiungere questo esercizio a un allenamento o a una tua scheda.",
+    "z2": "Durante l’allenamento registri ogni serie e accanto vedi il risultato della volta precedente.",
+    "z3": "Quando spunti una serie, parte il conto alla rovescia del recupero.",
+    "z4": "Se non hai l’attrezzo o è occupato, l’app ti propone dei sostituti, anche lo stesso movimento con un attrezzo diverso.",
+    "z5": "Dopo aver scelto dove ti alleni, l’elenco mostra gli esercizi che puoi fare lì.",
+    "z6": "Nella schermata dell’esercizio vedi i tuoi ultimi allenamenti con quell’esercizio, e in “Progressi” il grafico e i record.",
+    "z7": "Con le schede puoi creare un piano settimanale, oppure generare schede e piano partendo da alcune scelte.",
+    "z8": "Cronologia, progressi, schede e backup sono sempre disponibili, anche senza la versione a pagamento."
   }
 }

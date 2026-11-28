@@ -89,5 +89,32 @@
     "chest_press_machine": "Krūtinės spaudimo treniruokliai",
     "cable_press": "Spaudimai su blokais",
     "kneeling_hinge": "Lenkimas per klubus ant kelių"
+  },
+  "wynik": "{n} iš {m} pratimų",
+  "wszystkieJezyki": "visos kalbos ({n})",
+  "appleZnaki": "App Store ir Apple logotipas yra Apple Inc. prekių ženklai, registruoti JAV ir kitose šalyse.",
+  "prawne": {
+    "nav": "Teisiniai dokumentai",
+    "privacy": "Privatumas",
+    "terms": "Sąlygos"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(paskelbimo data)"
+  },
+  "wsparcie": {
+    "w1": "Ši svetainė yra nemokama.",
+    "w2": "Programėlė suteikia {dni} treniruočių dienų per mėnesį be prenumeratos. Visa versija yra mokama: prenumerata arba neterminuota prieiga.",
+    "w3": "Ją įsigydami taip pat remiate šios svetainės plėtrą."
+  },
+  "ramka": {
+    "tytul": "Programėlėje {nazwa}",
+    "z1": "Programėlėje šį pratimą galite pridėti prie treniruotės arba savo šablono.",
+    "z2": "Treniruotės metu įrašote kiekvieną seriją, o šalia matote ankstesnio karto rezultatą.",
+    "z3": "Pažymėjus seriją, pradedamas poilsio laiko atgalinis skaičiavimas.",
+    "z4": "Jei neturite įrangos arba ji užimta, programėlė pasiūlo pakaitalų, taip pat tą patį judesį su kita įranga.",
+    "z5": "Pasirinkus treniruočių vietą, sąraše rodomi pratimai, kuriuos ten galima atlikti.",
+    "z6": "Pratimo ekrane matote savo paskutines treniruotes su juo, o skiltyje „Pažanga“ – grafiką ir rekordus.",
+    "z7": "Iš šablonų sudarysite savaitės planą arba pagal kelis pasirinkimus sugeneruosite šablonus ir planą.",
+    "z8": "Istorija, pažanga, šablonai ir atsarginė kopija pasiekiami visada, net ir be mokamos versijos."
   }
 }

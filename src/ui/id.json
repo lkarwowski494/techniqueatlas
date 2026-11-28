@@ -84,5 +84,32 @@
     "chest_press_machine": "Mesin chest press",
     "cable_press": "Cable press",
     "kneeling_hinge": "Hip hinge sambil berlutut"
+  },
+  "wynik": "{n} dari {m} gerakan",
+  "wszystkieJezyki": "semua bahasa ({n})",
+  "appleZnaki": "App Store dan logo Apple adalah merek dagang Apple Inc., yang terdaftar di AS dan negara lain.",
+  "prawne": {
+    "nav": "Dokumen hukum",
+    "privacy": "Privasi",
+    "terms": "Ketentuan"
+  },
+  "prawneBrak": {
+    "dataObowiazywania": "(tanggal publikasi)"
+  },
+  "wsparcie": {
+    "w1": "Situs ini gratis digunakan.",
+    "w2": "Aplikasi ini memberi Anda {dni} hari latihan per bulan tanpa langganan. Versi lengkapnya berbayar: langganan atau akses seumur hidup.",
+    "w3": "Membelinya juga mendukung pengembangan situs ini."
+  },
+  "ramka": {
+    "tytul": "Di aplikasi {nazwa}",
+    "z1": "Di aplikasi, Anda bisa menambahkan gerakan ini ke latihan atau ke templat Anda sendiri.",
+    "z2": "Selama latihan, Anda mencatat setiap set dan melihat hasil dari latihan sebelumnya di sebelahnya.",
+    "z3": "Setelah Anda mencentang set, hitung mundur istirahat dimulai.",
+    "z4": "Jika Anda tidak punya alatnya atau alatnya sedang dipakai, aplikasi menyarankan pengganti, termasuk gerakan yang sama dengan alat lain.",
+    "z5": "Setelah Anda memilih tempat latihan, daftar menampilkan gerakan yang bisa dilakukan di sana.",
+    "z6": "Di layar gerakan, Anda melihat latihan terakhir Anda dengan gerakan itu, dan di \"Progres\" ada grafik serta rekor Anda.",
+    "z7": "Dari templat, Anda bisa menyusun rencana mingguan, atau membuat templat dan rencana dari beberapa pilihan.",
+    "z8": "Riwayat, progres, templat, dan cadangan selalu tersedia, juga tanpa versi berbayar."
   }
 }
