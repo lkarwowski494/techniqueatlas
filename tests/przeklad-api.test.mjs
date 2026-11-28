@@ -8,6 +8,7 @@ import { join, dirname } from 'node:path';
 import { ROOT } from '../src/lib.mjs';
 import { tmpDir } from './pomoc.mjs';
 import * as rdzen from '../scripts/przeklad/rdzen.mjs';
+import * as wspolne from '../scripts/przeklad/wspolne.mjs';
 import * as wydatki from '../scripts/przeklad/wydatki.mjs';
 import * as zrodla from '../scripts/przeklad/zrodla.mjs';
 
@@ -327,4 +328,131 @@ test('workflowy: wspólna grupa concurrency, start tylko z main, teksty z gałę
     assert.match(y, /github\.ref != 'refs\/heads\/main'/); assert.match(y, /galaz_tekstow:/); assert.match(y, /WEJ_GALAZ: \$\{\{ inputs\.galaz_tekstow \}\}/);
     assert.match(y, /\^\[A-Za-z0-9\._\/-\]\+\$/); assert.match(y, /git fetch/); assert.doesNotMatch(y, /git (push|commit)/);
   }
+});
+
+/* ---------- poprawki 28.11.2026 (sesja BO): wybór języków, max_tokens wg pisma i podział, spacje, pomijanie istniejących, licznik z gałęzi tekstów ---------- */
+const szacunekJezyki = (root, tryb = 'przeklad') => [...new Set(czytaj(join(root, tryb === 'przeklad' ? 'raport-przekladu' : 'raport-przegladu', 'szacunek.json')).wiersze.map((w) => w.jezyk))].sort();
+const plikiPrzeglad = (root, kody) => { for (const kod of kody) zapisz(root, `docs/nazwy/${kod}.json`, { 'Press 1': `${kod} 1`, 'Press 2': `${kod} 2`, 'Press 3': `${kod} 3` }); };
+
+test('--jezyki: tylko wskazane języki, limit liczony po wyborze; pusta lista = wszystkie; nieznany kod, pl i niedozwolone znaki → błąd bez połączeń', async () => {
+  const root = fixture({ jezykow: 5 }); const api = atrapa();
+  const r = await uruchom('przeklad', ['--szacuj', '--jezyki', 'de,pt'], { root, api });
+  assert.equal(r.kod, 0, r.logi.join('\n')); assert.deepEqual(szacunekJezyki(root), ['de', 'pt']);
+  assert.equal(czytaj(join(root, 'raport-przekladu/szacunek.json')).zadan, 3 * 2, '3 źródła × 2 języki');
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--jezyki', 'pt,de,x05', '--limit', '2'], { root, api })).kod, 0);
+  assert.deepEqual(szacunekJezyki(root), ['de', 'pt'], 'limit 2 z wybranych, w kolejności config.json');
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--jezyki', ''], { root, api })).kod, 0); assert.deepEqual(szacunekJezyki(root), ['de', 'fr', 'pt', 'x04', 'x05']);
+  const obcy = await uruchom('przeklad', ['--szacuj', '--jezyki', 'de,xx'], { root, api }); assert.equal(obcy.kod, 1); assert.match(obcy.logi.join('\n'), /xx/);
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--jezyki', 'pl'], { root, api })).kod, 1);
+  for (const zle of ['de;rm', 'de pt', '../x', '$(id)', 'de,,']) await assert.rejects(() => rdzen.main('przeklad', ['--szacuj', '--jezyki', zle], {}, { fetchFn: api.fetchFn, log() {}, root }), /--jezyki/, zle);
+  assert.equal(api.wywolania.length, 0);
+});
+test('--jezyki działa także w przeglądzie: ocenia tylko wskazane języki', async () => {
+  const root = fixture(); plikiPrzeglad(root, ['fr', 'de', 'pt']);
+  const r = await uruchom('przeglad', ['--szacuj', '--zrodlo', 'nazwy', '--jezyki', 'pt'], { root }); assert.equal(r.kod, 0, r.logi.join('\n')); assert.deepEqual(szacunekJezyki(root, 'przeglad'), ['pt']);
+});
+for (const plik of ['przeklad-tlumaczen.yml', 'przeglad-tlumaczen.yml']) {
+  test(`${plik}: wejście jezyki przez env, walidacja wzorcem, --jezyki w kroku szacunku i płatnym`, () => {
+    const yml = readFileSync(join(ROOT, '.github/workflows', plik), 'utf8');
+    assert.match(yml, /^ {6}jezyki:\n/m); assert.equal(yml.split('WEJ_JEZYKI: ${{ inputs.jezyki }}').length - 1, 2, 'env w obu krokach');
+    assert.equal(yml.split('[[ "$WEJ_JEZYKI" =~ ^[A-Za-z0-9,-]*$ ]]').length - 1, 2, 'walidacja wzorcem w obu krokach'); assert.equal(yml.split('--jezyki "$WEJ_JEZYKI"').length - 1, 2);
+    assert.match(yml, /^permissions:\n  contents: read\s*$/m);
+  });
+}
+
+test('max_tokens wg pisma: greka ma wyższy współczynnik niż cyrylica i łacina; źródło z wyjściem > 16000 tokenów dzielone na części (kolejne custom_id), mała reszta bez zmian', async () => {
+  assert.ok(wspolne.WSPOLCZYNNIK('el') >= 2.5 && wspolne.WSPOLCZYNNIK('el') > wspolne.WSPOLCZYNNIK('bg') && wspolne.WSPOLCZYNNIK('bg') > wspolne.WSPOLCZYNNIK('fr'));
+  const root = fixture({ nazw: 708 }); zapisz(root, 'config.json', { jezyki: ['pl', 'en', 'el', 'fr'] }); const api = atrapa();
+  const r = await uruchom('przeklad', ['--zrodlo', 'nazwy', '--zgoda-koszt', '--wyjscie', join(root, 'raport')], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 0, r.logi.join('\n'));
+  const idy = api.zadania().map((z) => z.custom_id);
+  assert.ok(idy.includes('pr-nazwy-fr'), 'mały język: identyfikator bez zmian'); assert.ok(idy.filter((i) => /^pr-nazwy-p\d+-el$/.test(i)).length >= 2, `części el: ${idy}`);
+  const el = api.zadania().filter((z) => /-el$/.test(z.custom_id)); const lista = el.flatMap((z) => JSON.parse(z.params.messages[0].content.split('\n').pop()).map((p) => p.id));
+  assert.deepEqual(lista.map(Number).sort((a, b) => a - b), Array.from({ length: 708 }, (_, i) => i + 1), 'części razem dają całe źródło, bez dubli');
+  assert.ok(api.zadania().every((z) => z.params.max_tokens <= 64000 && z.params.max_tokens >= 4000));
+  const raport = czytaj(join(root, 'raport/nazwy/el.json')); assert.equal(raport.pozycji, 708); assert.equal(raport.przyjete, 708); assert.equal(raport.blad, null);
+});
+test('podział na części: obcięta część (max_tokens) zostaje w raporcie jako błąd, a propozycje pozostałych części są zachowane', () => {
+  const poz = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => ({ id: a + i, klucz: `k${a + i}`, pl: `p${a + i}`, en: 'x' }));
+  const meta = { model: 'm', effort: 'medium', batch_id: 'b' };
+  const ok = rdzen.raportPrzekladu({ zrodlo: { id: 'nazwy' }, kod: 'el', pozycje: poz(1, 2) }, { blad: null, tekst: JSON.stringify({ 1: 'a', 2: 'b' }) }, meta, null);
+  const zle = rdzen.raportPrzekladu({ zrodlo: { id: 'nazwy' }, kod: 'el', pozycje: poz(3, 4) }, { blad: 'odpowiedź ucięta (max_tokens)', tekst: null }, meta, null);
+  const razem = rdzen.scalRaporty('przeklad', [ok, zle]);
+  assert.equal(razem.pozycji, 4); assert.equal(razem.przyjete, 2); assert.deepEqual(Object.keys(razem.propozycje), ['k1', 'k2']); assert.match(razem.blad, /max_tokens/); assert.equal(razem.odrzucone.length, 2);
+  assert.equal(rdzen.scalRaporty('przeklad', [ok]).blad, null);
+});
+
+test('spacje: źródło „ albo ” (spójnik między wstawkami) zachowuje spacje wokół tłumaczenia także wtedy, gdy model je obetnie; pozycje bez spacji bez zmian', () => {
+  const poz = [{ id: 1, klucz: 'albo', pl: ' albo ', en: ' or ' }, { id: 2, klucz: 'b', pl: 'Tekst', en: 'Text' }, { id: 3, klucz: 'c', pl: 'Linia\n', en: 'Line\n' }];
+  for (const odp of [{ 1: 'або', 2: 'Текст', 3: 'Рядок' }, { 1: ' або ', 2: 'Текст', 3: 'Рядок\n' }, { 1: '  або', 2: 'Текст ', 3: 'Рядок' }]) {
+    const o = rdzen.parsujOdpowiedz(JSON.stringify(odp), poz, 'uk', null);
+    assert.equal(o.propozycje.albo, ' або ', JSON.stringify(odp)); assert.equal(o.propozycje.b, 'Текст'); assert.equal(o.propozycje.c, 'Рядок\n');
+  }
+  assert.match(rdzen.SYSTEM_PRZEKLAD, /spacje/i); assert.match(rdzen.SYSTEM_PRZEGLAD, /spacje/i);
+});
+test('spacje: poprawka z przeglądu też zachowuje spacje źródła; end-to-end przekład → --zastosuj zapisuje „ albo ” ze spacjami', async () => {
+  const root = fixture(); const wyj = join(root, 'raport');
+  zapisz(root, 'src/szablony/pl.json', { sprzet: 'Potrzebny sprzęt: {lista}.', albo: ' albo ' }); zapisz(root, 'src/szablony/en.json', { sprzet: 'Equipment: {lista}.', albo: ' or ' });
+  const api = atrapa(); const f = api.fetchFn; /* model „obcina” spacje: odpowiada bez nich */
+  api.fetchFn = async (u, o) => { const r = await f(u, o); if (!String(u).endsWith('/results')) return r; const t = await r.text(); return { ok: true, status: 200, text: async () => t.replaceAll('T: albo ', 'T:albo') }; };
+  const rr = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wyjscie', wyj], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api }); assert.equal(rr.kod, 0, rr.logi.join('\n'));
+  assert.equal(czytaj(join(wyj, 'szablony/fr.json')).propozycje.albo, ' T:albo ');
+  assert.equal((await uruchom('przeklad', ['--zastosuj', wyj], { root })).kod, 0); assert.equal(czytaj(join(root, 'src/szablony/fr.json')).albo, ' T:albo ');
+  const poz = [{ id: 1, klucz: 'albo', pl: ' albo ', en: ' or ', tlumaczenie: 'ou' }];
+  const p = rdzen.raportPrzegladu({ zrodlo: { id: 'szablony' }, kod: 'fr', pozycje: poz }, { blad: null, tekst: JSON.stringify({ 1: { poprawka: 'ou', powod: 'x', waga: 'średnia' } }) }, {});
+  assert.equal(p.uwagi[0].poprawka, ' ou ');
+});
+
+test('języki z istniejącymi tłumaczeniami są pomijane (bez ponownego płacenia): pełny cel → pominięty, częściowy → tylko brakujące pozycje; --nadpisz wysyła wszystko', async () => {
+  const root = fixture(); const api = atrapa();
+  zapisz(root, 'docs/nazwy/fr.json', { 'Press 1': 'a', 'Press 2': 'b', 'Press 3': 'c' }); zapisz(root, 'docs/nazwy/de.json', { 'Press 1': 'a' });
+  const r = await uruchom('przeklad', ['--zrodlo', 'nazwy', '--wyjscie', join(root, 'raport')], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 0, r.logi.join('\n')); const idy = api.zadania().map((z) => z.custom_id).sort(); assert.deepEqual(idy, ['pr-nazwy-de', 'pr-nazwy-pt']);
+  assert.deepEqual(JSON.parse(api.zadania().find((z) => z.custom_id === 'pr-nazwy-de').params.messages[0].content.split('\n').pop()).map((p) => p.id), ['2', '3'], 'de: tylko brakujące pozycje');
+  assert.match(r.logi.join('\n'), /pominięto nazwy\/fr.*--nadpisz/); assert.ok(!existsSync(join(root, 'raport/nazwy/fr.json')));
+  const api2 = atrapa(); const n = await uruchom('przeklad', ['--zrodlo', 'nazwy', '--nadpisz', '--wyjscie', join(root, 'raport2')], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api: api2 });
+  assert.equal(n.kod, 0, n.logi.join('\n')); assert.deepEqual(api2.zadania().map((z) => z.custom_id).sort(), ['pr-nazwy-de', 'pr-nazwy-fr', 'pr-nazwy-pt']);
+  assert.equal(JSON.parse(api2.zadania().find((z) => z.custom_id === 'pr-nazwy-de').params.messages[0].content.split('\n').pop()).length, 3);
+});
+test('pomijanie istniejących: szacunek liczy tylko to, co wysłane; gdy wszystko istnieje → kod 0 bez żądań; dokumenty: istniejący plik pomijany; przegląd bez zmian', async () => {
+  const root = fixture(); const api = atrapa();
+  for (const kod of ['fr', 'de', 'pt']) { zapisz(root, `docs/nazwy/${kod}.json`, { 'Press 1': 'a', 'Press 2': 'b', 'Press 3': 'c' }); zapisz(root, `src/szablony/${kod}.json`, { sprzet: 'x {lista}', pytania: { setup: 'a', move: 'b' } }); zapisz(root, `docs/teksty/prawne/regulamin.${kod}.md`, '# x\n'); }
+  const r = await uruchom('przeklad', ['--wyjscie', join(root, 'raport')], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(r.kod, 0, r.logi.join('\n')); assert.equal(api.wywolania.filter((w) => w.metoda === 'POST' && /batches$/.test(w.url)).length, 0, 'nic do przetłumaczenia: żadnego batcha'); assert.match(r.logi.join('\n'), /nic do przetłumaczenia/);
+  const p = await uruchom('przeglad', ['--szacuj', '--zrodlo', 'nazwy'], { root }); assert.equal(p.kod, 0); assert.deepEqual(szacunekJezyki(root, 'przeglad'), ['de', 'fr', 'pt']);
+});
+
+/* ---------- licznik wydatków z gałęzi tekstów ---------- */
+const wpis = (id, koszt, rodzaj = 'rzeczywisty') => ({ przebieg: 'przeklad', batch_id: id, model: 'claude-opus-5-5', data: '2026-11-28', rodzaj_kosztu: rodzaj, tokeny_we: 1, tokeny_wy: 1, koszt_usd: koszt });
+test('licznik z gałęzi tekstów (--wydatki-galaz): wpisy spoza main liczą się do limitu 80 USD (kod 5); ten sam batch bierze wyższy koszt; plik z gałęzi nie podnosi limitu', async () => {
+  const root = fixture(); zapisz(root, 'docs/przeklad/wydatki.json', { limit_usd: 80, wpisy: [wpis('msgbatch_A', 10)] });
+  zapisz(root, 'galaz.json', { limit_usd: 500, wpisy: [wpis('msgbatch_A', 1), wpis('msgbatch_B', 75)] });
+  const r = await uruchom('przeklad', ['--szacuj', '--zgoda-koszt', '--wydatki-galaz', join(root, 'galaz.json')], { root });
+  assert.equal(r.kod, 5, r.logi.join('\n')); assert.match(r.logi.join('\n'), /wydano dotąd 85\.00/);
+  assert.equal(czytaj(join(root, 'raport-przekladu/szacunek.json')).wydano_dotad_usd, 85); assert.equal(czytaj(join(root, 'raport-przekladu/szacunek.json')).limit_laczny_usd, 80);
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--zgoda-koszt'], { root })).kod, 0, 'bez pliku z gałęzi: sam main (10 USD) mieści się w limicie');
+});
+test('licznik z gałęzi: wpis rzeczywisty z gałęzi zastępuje szacunek z main (jak --zapisz-wydatek); niższy koszt z gałęzi nie zaniża wpisu rzeczywistego z main; szacunek z gałęzi blokuje przebieg (kod 6); niepoprawny plik → błąd', async () => {
+  const root = fixture(); const api = atrapa();
+  zapisz(root, 'docs/przeklad/wydatki.json', { limit_usd: 80, wpisy: [wpis('msgbatch_A', 70, 'szacunek'), wpis('msgbatch_C', 20)] });
+  zapisz(root, 'galaz.json', { wpisy: [wpis('msgbatch_A', 5), wpis('msgbatch_C', 1)] });
+  const ok = await uruchom('przeklad', ['--szacuj', '--zgoda-koszt', '--wydatki-galaz', join(root, 'galaz.json')], { root, api });
+  assert.equal(ok.kod, 0, ok.logi.join('\n')); assert.equal(czytaj(join(root, 'raport-przekladu/szacunek.json')).wydano_dotad_usd, 25, '5 (rzeczywisty zamiast szacunku) + 20 (wyższy z main)');
+  zapisz(root, 'galaz.json', { wpisy: [wpis('msgbatch_N', 1, 'szacunek')] }); zapisz(root, 'docs/przeklad/wydatki.json', { wpisy: [] });
+  const wisi = await uruchom('przeklad', ['--zrodlo', 'szablony', '--limit', '1', '--wydatki-galaz', join(root, 'galaz.json')], { root, env: { ANTHROPIC_API_KEY: KLUCZ }, api });
+  assert.equal(wisi.kod, 6); assert.match(wisi.logi.join('\n'), /msgbatch_N/); assert.ok(!api.wywolania.some((w) => w.metoda === 'POST' && /batches$/.test(w.url)));
+  zapisz(root, 'galaz.json', { wpisy: [{ batch_id: 'x' }] }); assert.equal((await uruchom('przeklad', ['--szacuj', '--wydatki-galaz', join(root, 'galaz.json')], { root })).kod, 1);
+  assert.equal((await uruchom('przeklad', ['--szacuj', '--wydatki-galaz', join(root, 'nie-ma.json')], { root })).kod, 1);
+});
+for (const plik of ['przeklad-tlumaczen.yml', 'przeglad-tlumaczen.yml']) {
+  test(`${plik}: wydatki.json z gałęzi tekstów czytany tylko do pliku roboczego i przekazany do obu kroków; limity i uprawnienia bez zmian`, () => {
+    const yml = readFileSync(join(ROOT, '.github/workflows', plik), 'utf8');
+    assert.match(yml, /git show FETCH_HEAD:docs\/przeklad\/wydatki\.json > wydatki-galaz\.json/); assert.equal(yml.split('--wydatki-galaz wydatki-galaz.json').length - 1, 2, 'oba kroki dostają plik');
+    assert.match(yml, /\[ -f wydatki-galaz\.json \]/); assert.doesNotMatch(yml, /git (push|commit)|contents: write/); assert.match(yml, /6 USD/);
+  });
+}
+test('przeklad-tlumaczen.yml: wejście nadpisz (domyślnie nie) przekazane przez env do kroku szacunku i płatnego; przegląd go nie ma', () => {
+  const yml = readFileSync(join(ROOT, '.github/workflows/przeklad-tlumaczen.yml'), 'utf8');
+  assert.match(yml, /^ {6}nadpisz:\n(.*\n)*? {8}default: false/m); assert.equal(yml.split('WEJ_NADPISZ: ${{ inputs.nadpisz }}').length - 1, 2); assert.equal(yml.split('ARGS+=(--nadpisz)').length - 1, 2);
+  assert.doesNotMatch(readFileSync(join(ROOT, '.github/workflows/przeglad-tlumaczen.yml'), 'utf8'), /nadpisz/);
 });
