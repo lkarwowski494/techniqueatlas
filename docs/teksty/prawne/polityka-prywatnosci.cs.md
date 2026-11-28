@@ -16,12 +16,12 @@ Web provozuje {{administrator}}, kontakt: {{kontakt}}.
 ## Co se děje, když otevřete web
 
 - Váš prohlížeč stahuje soubory webu (HTML, CSS, skripty, kresby cviků) ze serveru hostingu. Web nestahuje nic z jiných služeb: žádná písma, skripty, obrázky ani pluginy.
-- Server hostingu při každé návštěvě ukládá vaši IP adresu a z bezpečnostních důvodů ji uchovává. Protokoly vede poskytovatel hostingu, společnost se sídlem v USA, podle vlastních pravidel. Údaje proto mohou být zpracovávány v USA. Poskytovatel prohlašuje, že dodržuje rámec ochrany osobních údajů EU–USA (rozhodnutí Evropské komise o odpovídající úrovni ochrany).
+- Server hostingu při každé návštěvě ukládá vaši IP adresu a z bezpečnostních důvodů ji uchovává. Protokoly vede poskytovatel hostingu, společnost se sídlem v USA, podle vlastních pravidel. Údaje proto mohou být zpracovávány v USA. Poskytovatel prohlašuje, že dodržuje rámec EU–USA pro ochranu osobních údajů (rozhodnutí Evropské komise o odpovídající úrovni ochrany).
 - Web nemá vlastní statistiky návštěvnosti.
 
 ## Vyhledávání, filtry a kresby
 
-- Text, který zadáte do vyhledávání názvů cviků, se nikam neodesílá. Prohlížeč stáhne ze serveru webu jeden soubor se seznamem názvů v daném jazyce a vyhledává v něm u vás.
+- Text, který zadáte do vyhledávání názvů cviků, se nikam neodesílá. Prohlížeč stáhne ze serveru webu jeden soubor se seznamem názvů v daném jazyce a vyhledává v něm přímo ve vašem zařízení.
 - Filtry seznamu fungují v prohlížeči a nemění adresu stránky.
 - Animovaná kresba cviku načítá vlastní datový soubor webu. Pokud je v systému zapnuté nastavení „Omezit pohyb“, animace se nespustí sama. Toto nastavení čte pouze váš prohlížeč.
 - Web funguje i bez JavaScriptu: seznam cviků a jejich popisy jsou v běžném HTML.
@@ -45,7 +45,7 @@ Protože samotný web neshromažďuje osobní údaje, nemáme žádné údaje, k
 
 Ne. K používání webu neposkytujete žádné údaje.
 
-## Automatizovaná rozhodování
+## Automatizované rozhodování
 
 Nečiníme rozhodnutí založená výhradně na automatizovaném zpracování, včetně profilování.
 

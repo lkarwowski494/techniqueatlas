@@ -31,7 +31,7 @@ Používání začíná okamžikem otevření webu a končí okamžikem jeho zav
 
 ## 6. Reklamace
 
-Připomínky a reklamace týkající se webu (např. chybu v obsahu nebo nefunkční funkci) zasílejte na {{kontakt}}. Popište, čeho se záležitost týká a na které stránce. Odpovíme bez zbytečného odkladu, nejpozději do 14 dnů.
+Připomínky a reklamace týkající se webu (např. chyba v obsahu nebo nefungující funkce) zasílejte na {{kontakt}}. Popište, čeho se záležitost týká a na které stránce. Odpovíme bez zbytečného odkladu, nejpozději do 14 dnů.
 
 ## 7. Odpovědnost
 

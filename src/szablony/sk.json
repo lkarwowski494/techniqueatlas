@@ -7,7 +7,7 @@
  "sprzet": "Potrebné vybavenie: {lista}.",
  "rodzaj": "Typ pohybu: {rodzaj}.",
  "blad": "Častá chyba: {zdanie}",
- "albo": "alebo",
+ "albo": " alebo ",
  "pytania": {
   "setup": "Ako sa pripraviť?",
   "move": "Ako vykonať pohyb?",

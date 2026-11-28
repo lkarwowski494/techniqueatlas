@@ -31,7 +31,7 @@ Používanie sa začína otvorením stránky a končí jej zatvorením. Neexistu
 
 ## 6. Reklamácie
 
-Pripomienky a reklamácie týkajúce sa stránky (napr. chyba v obsahu, nefunkčná funkcia) pošlite na {{kontakt}}. Opíšte, čoho sa vec týka a na ktorej stránke. Odpovieme bez zbytočného odkladu, najneskôr do 14 dní.
+Pripomienky a reklamácie týkajúce sa stránky (napr. chyba v obsahu, nefungujúca funkcia) pošlite na {{kontakt}}. Opíšte, čoho sa vec týka a na ktorej stránke. Odpovieme bez zbytočného odkladu, najneskôr do 14 dní.
 
 ## 7. Zodpovednosť
 

@@ -6,7 +6,7 @@ Platí od {{dataObowiazywania}} · verzia 1
 
 Samotná stránka Technique Atlas nezhromažďuje vaše osobné údaje. Nemá účty, formuláre ani reklamy. Nepoužíva súbory cookie, úložisko prehliadača, analytiku ani nástroje na sledovanie.
 Stránka načítava iba vlastné súbory. Vyhľadávanie a filtre fungujú vo vašom prehliadači.
-Stránku sprístupňuje hostingová služba, ktorá pri každej návšteve z bezpečnostných dôvodov zaznamenáva IP adresu do svojich záznamov (podrobnosti nižšie).
+Stránku sprístupňuje hostingová služba, ktorá pri každej návšteve z bezpečnostných dôvodov zaznamenáva IP adresu do svojich logov (podrobnosti nižšie).
 Otázky: {{kontakt}}.
 
 ## Kto zodpovedá za stránku
@@ -15,8 +15,8 @@ Stránku prevádzkuje {{administrator}}, kontakt: {{kontakt}}.
 
 ## Čo sa deje, keď otvoríte stránku
 
-- Váš prehliadač sťahuje súbory stránky (HTML, CSS, skripty, kresby cvikov) zo servera hostingu. Stránka nič nesťahuje z iných služieb: písma, skripty, obrázky ani doplnky.
-- Server hostingu pri každej návšteve zaznamenáva vašu IP adresu a z bezpečnostných dôvodov ju uchováva. Záznamy vedie poskytovateľ hostingu, spoločnosť so sídlom v USA, podľa vlastných pravidiel. Údaje sa preto môžu spracúvať v USA. Poskytovateľ deklaruje dodržiavanie rámca ochrany údajov medzi EÚ a USA (rozhodnutie Európskej komisie o primeranej úrovni ochrany).
+- Váš prehliadač sťahuje súbory stránky (HTML, CSS, skripty, kresby cvikov) zo servera hostingu. Stránka nesťahuje nič z iných služieb: žiadne písma, skripty, obrázky ani doplnky.
+- Server hostingu pri každej návšteve zaznamenáva vašu IP adresu a z bezpečnostných dôvodov ju uchováva. Logy vedie poskytovateľ hostingu, spoločnosť so sídlom v USA, podľa vlastných pravidiel. Údaje sa preto môžu spracúvať v USA. Poskytovateľ deklaruje dodržiavanie rámca ochrany údajov medzi EÚ a USA (rozhodnutie Európskej komisie o primeranej úrovni ochrany).
 - Stránka nemá vlastné štatistiky návštevnosti.
 
 ## Vyhľadávanie, filtre a kresby
@@ -39,7 +39,7 @@ Stránka nemá kontaktný formulár. Ak nám napíšete e-mail na {{kontakt}}, s
 ## Vaše práva
 
 Máte právo na prístup k svojim údajom, ich opravu, vymazanie, obmedzenie spracúvania, právo namietať a právo na prenosnosť. Môžete tiež podať sťažnosť predsedovi poľského Úradu na ochranu osobných údajov.
-Keďže samotná stránka nezhromažďuje osobné údaje, nemáme údaje, ktoré by sme mohli poskytnúť alebo vymazať, okrem e-mailov, ktoré nám pošlete. Vo veci záznamov hostingu nám napíšte a uvedieme vám poskytovateľa a spôsob, ako ho kontaktovať.
+Keďže samotná stránka nezhromažďuje osobné údaje, nemáme údaje, ktoré by sme mohli poskytnúť alebo vymazať, okrem e-mailov, ktoré nám pošlete. Vo veci logov hostingu nám napíšte a uvedieme vám poskytovateľa a spôsob, ako ho kontaktovať.
 
 ## Musíte poskytnúť údaje?
 

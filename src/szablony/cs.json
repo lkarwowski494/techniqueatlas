@@ -7,7 +7,7 @@
  "sprzet": "Potřebné vybavení: {lista}.",
  "rodzaj": "Typ pohybu: {rodzaj}.",
  "blad": "Častá chyba: {zdanie}",
- "albo": "nebo",
+ "albo": " nebo ",
  "pytania": {
   "setup": "Jak se připravit?",
   "move": "Jak provést pohyb?",
@@ -17,7 +17,7 @@
   "sprzet": "Jaké vybavení potřebujete?",
   "zamienniki": "Čím ho lze nahradit?"
  },
- "opisGlownej": "{n} {opisow}: kresba pohybu: {f}, tipy k technice: {c}, náhrady: {z}.",
+ "opisGlownej": "{n} {opisow}: kresba pohybu u {f}, tipy k technice u {c}, náhrady u {z}.",
  "opisow": {
   "one": "popis",
   "few": "popisy",
@@ -31,7 +31,7 @@
   "many": "položek",
   "other": "položky"
  },
- "opisKategorii": "{n} {pozycji}, např. {lista}.",
+ "opisKategorii": "{n} {pozycji}, včetně {lista}.",
  "opisKategoriiJedna": "Jedna položka: {lista}.",
  "opisKategoriiBezPrzykladow": "{n} {pozycji}; kresba pohybu: {f}, tipy k technice: {c}."
 }
