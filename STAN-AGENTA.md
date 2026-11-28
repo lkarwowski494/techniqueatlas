@@ -1,4 +1,28 @@
-# Stan agenta — Z-34 zasięg (08-programista, build), sesja BJ
+# Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)
+
+## Zrobione (każde: test akceptacyjny czerwony przed, zielony po; `tests/z40-poprawki.test.mjs`, `tests/z40-przewijanie.test.mjs`)
+- 001 nagłówek: zawijanie marki, podtytuł znika w nagłówku < 22rem (zapytanie kontenera); przy teście 35 języków wyszły jeszcze: wykaz, `.grupy`, przyciski figury, linki stopki — `overflow-wrap`/`minmax(0,1fr)` w `komponenty.css`. 35 języków × 3 strony: 0 px.
+- 002 licznik `p.wynik` (aria-live, aria-atomic) na liście i stronach filtra, aktualizowany w `szukaj.js`; klucz UI `wynik` (pl, en).
+- 003 przycisk animacji bez `aria-pressed`; 004 podpis figury = „rysunek schematyczny”; 005 przyciski błędów: tekst = nazwa bez kropki, `aria-label` „Pokaż częsty błąd: …”; 006 stopka: bieżący + angielski + „wszystkie języki (N)”; 007 wykaz w zapytaniu kontenera (35rem); 008 `a.jezyk` min-height 44 px; 011 design-spec dostosowany do tekstu strony.
+- 009 plakietka: `assets/plakietka/<język>.svg` (od właściciela) → `<img alt height=44>`; brak pliku → zwykły link tekstowy + UWAGA w budowaniu; linia znaków Apple (`appleZnaki`) tylko przy grafice. Instrukcja: `docs/teksty/plakietka-app-store.md`. Apple, odczyt 28.11.2026, https://developer.apple.com/app-store/marketing/guidelines/.
+- Pomiary: `pomiary/z40/` (40 widoków: axe 0, przewijanie 0 px przy 320 px/200%).
+
+## Decyzje (analogia, do weta)
+1. KO-138 (koordynator): wariant (a) ze spadkiem do (b); pliki Apple tylko od właściciela po akceptacji licencji.
+2. 007: próg wykazu jako zapytanie kontenera `.arkusz` 35rem (≈ dawne 640 px), bo `@media` w em nie skaluje się z ustawieniem tekstu w teście 200%.
+3. 011: zostaje tekst stały „Jak zrobić to ćwiczenie?”; design-spec poprawiony (opcja b raportu).
+4. Dodatkowo w systemie `overflow-wrap:anywhere` i `minmax(0,1fr)` (reszta przewijania wykryta testem 35 języków).
+5. Istniejące testy zmienione z powodem (komentarze): figura-przegladarka, petla-jednokierunkowa (podpis → linia), hreflang i jezyki-podglad (stopka), z31 i z34-przeklad-ui (nowe klucze UI).
+
+## Nie zrobione
+- 010 (OG i opis na listach, stronach prawnych, 404; 180 ćwiczeń bez figury): wymaga zasobu graficznego i decyzji właściciela (`[DO USTALENIA]`, design-spec §10 pkt 4).
+- Przyjęte zgłoszenia (`[hidden]`, `.widoki`, `.drobne`, `.tekst-prawny`, `p.odp`) nie przeniesione z `src/css.mjs` do systemu — zadanie roli 04 (fix).
+- Przekład kluczy `wynik`, `wszystkieJezyki`, `appleZnaki` na 33 języki: przekład API (`docs/teksty/ui-do-przekladu-z33.md`).
+
+---
+## Wcześniej (Z-34, sesja BJ)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z34-zasieg` (od `strona/integracja-start` @ 7a8dcb4)
 
