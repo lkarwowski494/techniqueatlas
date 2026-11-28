@@ -52,6 +52,6 @@ test('Z-34 źródło „ui”: język z jednym napisem zamiast form liczby mnogi
 
 test('Z-34 źródło „ui”: także z --nadpisz napis zamiast drzewa (countLine w ja) zostaje nietknięty (przegląd KO-137)', () => {
   const root = kopia(), ja = JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8')), wyj = join(root, 'raport'); mkdirSync(join(wyj, 'ui'), { recursive: true });
-  writeFileSync(join(wyj, 'ui/ja.json'), JSON.stringify({ propozycje: { 'countLine.few': '{n} Übungen (few)' } }));
+  writeFileSync(join(wyj, 'ui/ja.json'), JSON.stringify({ propozycje: { 'countLine.other': '{n} Übungen (other)' } }));
   const w = zastosuj(root, wyj, { nadpisz: true }); assert.equal(w.zapisanych, 0); assert.equal(JSON.parse(readFileSync(join(root, 'src/ui/ja.json'), 'utf8')).countLine, ja.countLine); assert.match(w.pominietych[0], /napis zamiast drzewa/);
 });

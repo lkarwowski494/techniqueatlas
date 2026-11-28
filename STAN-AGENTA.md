@@ -7,7 +7,8 @@ Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start bb10f4d; sc
 - b) Przegląd szablonów cs, hr, sl, lv: msgbatch_016a8sMRukZNoccnuZsPmU7p, run 46141711071, 0,09 USD; 1 poprawka niska (sl) nałożona; tests/liczba-mnoga.test.mjs zielony dla 35 języków.
 - c) KO-147 P3: `ui.countLine` z formami wg Intl.PluralRules w 18 językach (+ en). Test tests/liczba-mnoga-napisy.test.mjs czerwony (18 języków) → zielony. Przekład: msgbatch_01R3pxmosuVwH3q6UinC2Vj6 (run 46140513113), 0,23 USD. Opis i obejście (workflow nie czyta src/ui): docs/przeklad/przeglad-szablony-liczba-mnoga-2026-11-28.md.
 - Scalono `main` (PR #8, pozycjeDlaJezyka) do gałęzi: bez niego źródło „ui” prosiło o formy few/many dla języków, które ich nie mają (test z34 „dokładnie klucze czekające”). Konflikt w rdzen.mjs rozwiązany (oba importy).
-- tests/z34-przeklad-ui.test.mjs: w dwóch testach „napis zamiast drzewa” fixtura de → ja (de ma już formy; mechanizm i asercje bez zmian).
+- scripts/przeklad/zrodla.mjs: angielski odpowiednik pozycji w frazie liczby mnogiej, której en nie ma (pl few/many), to forma `other` en (zapas CLDR); bez tego test z34 „pozycje z angielskim” czerwony po dodaniu form do en.
+- tests/z34-przeklad-ui.test.mjs: w dwóch testach (fixtura de → ja; w teście nadpisz propozycja `countLine.other` zamiast `.few`, bo ja ma po scaleniu PR #8 tylko `other`) „napis zamiast drzewa” fixtura de → ja (de ma już formy; mechanizm i asercje bez zmian).
 
 ## Koszt API (docs/przeklad/wydatki.json): 28,13 z 80 USD (start sesji 27,24; ta sesja 0,89)
 
