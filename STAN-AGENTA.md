@@ -13,6 +13,8 @@ Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start bb10f4d; sc
 - CI 46143520547 (7821ef8): 513/515 zielone, 1 czerwony: sprzatanie.test „katalogi tymczasowe przez pomoc.mjs” — tests/przeklad-liczba-mnoga.test.mjs (z PR #8) używał mkdtempSync; przepisany na tmpDir() z pomoc.mjs (asercje bez zmian). Skutek scalenia main z integracją, nie zmiany BQ2.
 - e) (dodatkowe, KO-147/KO-149): gałąź `strona/przeklad-zrodlo-ui` od main dbf4233 (źródło ui zamiast ramka, test tests/zrodlo-ui.test.mjs, workflowy src/ui — zmiana koordynatora 70026b7), raport SHA c26129b. Bez PR i bez scalania.
 
+- **CI zielony: tests.yml run 46146411051 na d6ee491 (success).** Wcześniejszy run 46143520547 (7821ef8) czerwony z powodu strażnika tmpDir (naprawione).
+
 ## Koszt API (docs/przeklad/wydatki.json): 28,13 z 80 USD (start sesji 27,24; ta sesja 0,89)
 
 ## Decyzje (analogia, do weta)
