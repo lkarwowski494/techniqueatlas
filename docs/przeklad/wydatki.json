@@ -1,5 +1,16 @@
 {
  "_opis": "Licznik wydatków łącznych na API przekładu i przeglądu (limit 80 USD, słowa właściciela 27.11.2026). Wpisy dopisuje lokalnie: node scripts/przeklad/przeklad-api.mjs --zapisz-wydatek <katalog raportu>; limit w kodzie (scripts/przeklad/wspolne.mjs) jest nadrzędny wobec pola limit_usd.",
  "limit_usd": 80,
- "wpisy": []
+ "wpisy": [
+  {
+   "przebieg": "przeklad",
+   "batch_id": "msgbatch_01BrxigrL8TBaRCkLyo68FEb",
+   "model": "claude-opus-5-5",
+   "data": "2026-11-28",
+   "rodzaj_kosztu": "rzeczywisty",
+   "tokeny_we": 112078,
+   "tokeny_wy": 73318,
+   "koszt_usd": 0.957336
+  }
+ ]
 }
