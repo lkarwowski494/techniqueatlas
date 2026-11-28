@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Belangrijkste spieren: {lista}.",
+ "miesniePomocnicze": "Ondersteunende spieren: {lista}.",
+ "partia": "Lichaamsdeel: {grupa}.",
+ "sprzet": "Benodigd materiaal: {lista}.",
+ "rodzaj": "Type beweging: {rodzaj}.",
+ "blad": "Veelgemaakte fout: {zdanie}",
+ "albo": "of",
+ "pytania": {
+  "setup": "Hoe zet je je klaar?",
+  "move": "Hoe voer je de beweging uit?",
+  "miesnie": "Welke spieren werken mee?",
+  "tips": "Wat helpt je techniek?",
+  "mistakes": "Welke fouten moet je vermijden?",
+  "sprzet": "Welk materiaal heb je nodig?",
+  "zamienniki": "Waarmee kun je deze oefening vervangen?"
+ },
+ "opisGlownej": "{n} {opisow}: bewegingstekening bij {f}, techniektips bij {c}, vervangers bij {z}.",
+ "opisow": {
+  "one": "beschrijving",
+  "few": "beschrijvingen",
+  "many": "beschrijvingen",
+  "other": "beschrijvingen"
+ },
+ "opisListy": "{n} {pozycji} van A tot Z, te filteren op lichaamsdeel, materiaal en type beweging.",
+ "pozycji": {
+  "one": "oefening",
+  "few": "oefeningen",
+  "many": "oefeningen",
+  "other": "oefeningen"
+ },
+ "opisKategorii": "{n} {pozycji}, waaronder {lista}.",
+ "opisKategoriiJedna": "Eén oefening: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}, met bewegingstekening bij {f} en techniektips bij {c}."
+}

@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} – {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Hauptmuskeln: {lista}.",
+ "miesniePomocnicze": "Hilfsmuskeln: {lista}.",
+ "partia": "Muskelgruppe: {grupa}.",
+ "sprzet": "Benötigte Ausrüstung: {lista}.",
+ "rodzaj": "Bewegungsart: {rodzaj}.",
+ "blad": "Häufiger Fehler: {zdanie}",
+ "albo": "oder",
+ "pytania": {
+  "setup": "Wie stellst du dich auf?",
+  "move": "Wie führst du die Bewegung aus?",
+  "miesnie": "Welche Muskeln arbeiten?",
+  "tips": "Was hilft bei der Technik?",
+  "mistakes": "Welche Fehler solltest du vermeiden?",
+  "sprzet": "Welche Ausrüstung brauchst du?",
+  "zamienniki": "Womit kannst du sie ersetzen?"
+ },
+ "opisGlownej": "{n} {opisow}: Bewegungsgrafik für {f}, Technik-Tipps für {c}, Ersatzübungen für {z}.",
+ "opisow": {
+  "one": "Beschreibung",
+  "few": "Beschreibungen",
+  "many": "Beschreibungen",
+  "other": "Beschreibungen"
+ },
+ "opisListy": "{n} {pozycji} von A bis Z, filterbar nach Muskelgruppe, Ausrüstung und Bewegungsart.",
+ "pozycji": {
+  "one": "Eintrag",
+  "few": "Einträge",
+  "many": "Einträge",
+  "other": "Einträge"
+ },
+ "opisKategorii": "{n} {pozycji}, darunter {lista}.",
+ "opisKategoriiJedna": "Ein Eintrag: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} mit Bewegungsgrafik für {f} und Technik-Tipps für {c}."
+}

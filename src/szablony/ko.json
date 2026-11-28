@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "주동근: {lista}.",
+ "miesniePomocnicze": "보조근: {lista}.",
+ "partia": "부위: {grupa}.",
+ "sprzet": "필요한 장비: {lista}.",
+ "rodzaj": "동작 유형: {rodzaj}.",
+ "blad": "흔한 실수: {zdanie}",
+ "albo": "또는",
+ "pytania": {
+  "setup": "자세는 어떻게 잡나요?",
+  "move": "동작은 어떻게 하나요?",
+  "miesnie": "어떤 근육을 쓰나요?",
+  "tips": "자세에 도움이 되는 팁은?",
+  "mistakes": "피해야 할 실수는?",
+  "sprzet": "어떤 장비가 필요한가요?",
+  "zamienniki": "대신 할 수 있는 종목은?"
+ },
+ "opisGlownej": "{n}개 {opisow}: 동작 그림 {f}개, 자세 팁 {c}개, 대체 종목 {z}개.",
+ "opisow": {
+  "one": "종목 설명",
+  "few": "종목 설명",
+  "many": "종목 설명",
+  "other": "종목 설명"
+ },
+ "opisListy": "{n}개 {pozycji}를 A부터 Z까지, 부위·장비·동작 유형별로 찾아보세요.",
+ "pozycji": {
+  "one": "종목",
+  "few": "종목",
+  "many": "종목",
+  "other": "종목"
+ },
+ "opisKategorii": "{n}개 {pozycji}, {lista} 포함.",
+ "opisKategoriiJedna": "종목 1개: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n}개 {pozycji}: 동작 그림 {f}개, 자세 팁 {c}개."
+}

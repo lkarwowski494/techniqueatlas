@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Основни мускули: {lista}.",
+ "miesniePomocnicze": "Спомагателни мускули: {lista}.",
+ "partia": "Мускулна група: {grupa}.",
+ "sprzet": "Необходимо оборудване: {lista}.",
+ "rodzaj": "Вид движение: {rodzaj}.",
+ "blad": "Честа грешка: {zdanie}",
+ "albo": "или",
+ "pytania": {
+  "setup": "Как да заемете изходна позиция?",
+  "move": "Как да изпълните движението?",
+  "miesnie": "Кои мускули работят?",
+  "tips": "Какво помага за техниката?",
+  "mistakes": "Кои грешки да избягвате?",
+  "sprzet": "Какво оборудване е необходимо?",
+  "zamienniki": "С какво може да се замени?"
+ },
+ "opisGlownej": "{n} {opisow}: рисунка на движението при {f}, съвети за техниката при {c}, заместители при {z}.",
+ "opisow": {
+  "one": "описание",
+  "few": "описания",
+  "many": "описания",
+  "other": "описания"
+ },
+ "opisListy": "{n} {pozycji} от А до Я с филтър по мускулна група, оборудване и вид движение.",
+ "pozycji": {
+  "one": "позиция",
+  "few": "позиции",
+  "many": "позиции",
+  "other": "позиции"
+ },
+ "opisKategorii": "{n} {pozycji}, включително {lista}.",
+ "opisKategoriiJedna": "Една позиция: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} с рисунка на движението при {f} и съвети за техниката при {c}."
+}

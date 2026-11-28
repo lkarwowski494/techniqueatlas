@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Glavni mišići: {lista}.",
+ "miesniePomocnicze": "Pomoćni mišići: {lista}.",
+ "partia": "Dio tijela: {grupa}.",
+ "sprzet": "Potrebna oprema: {lista}.",
+ "rodzaj": "Vrsta pokreta: {rodzaj}.",
+ "blad": "Česta greška: {zdanie}",
+ "albo": "ili",
+ "pytania": {
+  "setup": "Kako se postaviti?",
+  "move": "Kako izvesti pokret?",
+  "miesnie": "Koji mišići rade?",
+  "tips": "Što pomaže u tehnici?",
+  "mistakes": "Koje greške izbjegavati?",
+  "sprzet": "Koja je oprema potrebna?",
+  "zamienniki": "Čime se može zamijeniti?"
+ },
+ "opisGlownej": "{n} {opisow}: crtež pokreta za {f}, savjeti za tehniku za {c}, zamjene za {z}.",
+ "opisow": {
+  "one": "opis",
+  "few": "opisa",
+  "many": "opisa",
+  "other": "opisa"
+ },
+ "opisListy": "{n} {pozycji} od A do Ž s filtrom po dijelu tijela, opremi i vrsti pokreta.",
+ "pozycji": {
+  "one": "stavka",
+  "few": "stavke",
+  "many": "stavki",
+  "other": "stavki"
+ },
+ "opisKategorii": "{n} {pozycji}, uključujući {lista}.",
+ "opisKategoriiJedna": "Jedna stavka: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} s crtežom pokreta za {f} i savjetima za tehniku za {c}."
+}

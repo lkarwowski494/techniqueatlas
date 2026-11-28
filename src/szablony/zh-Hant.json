@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa}－{dopisek}",
+ "nazwaPodwojna": "{lokalna}（{angielska}）",
+ "miesnieGlowne": "主要肌肉：{lista}。",
+ "miesniePomocnicze": "輔助肌肉：{lista}。",
+ "partia": "肌群：{grupa}。",
+ "sprzet": "需要器材：{lista}。",
+ "rodzaj": "動作類型：{rodzaj}。",
+ "blad": "常見錯誤：{zdanie}",
+ "albo": "或",
+ "pytania": {
+  "setup": "怎麼準備起始姿勢？",
+  "move": "動作怎麼做？",
+  "miesnie": "練到哪些肌肉？",
+  "tips": "有哪些技巧提示？",
+  "mistakes": "要避免哪些錯誤？",
+  "sprzet": "需要什麼器材？",
+  "zamienniki": "可以用什麼替代動作？"
+ },
+ "opisGlownej": "{n} {opisow}：其中 {f} 篇有動作圖解，{c} 篇有技巧提示，{z} 篇有替代動作。",
+ "opisow": {
+  "one": "篇動作說明",
+  "few": "篇動作說明",
+  "many": "篇動作說明",
+  "other": "篇動作說明"
+ },
+ "opisListy": "{n} {pozycji}，從 A 到 Z 排列，可依肌群、器材和動作類型篩選。",
+ "pozycji": {
+  "one": "個動作",
+  "few": "個動作",
+  "many": "個動作",
+  "other": "個動作"
+ },
+ "opisKategorii": "{n} {pozycji}，包括 {lista}。",
+ "opisKategoriiJedna": "只有一個動作：{lista}。",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}，其中 {f} 個有動作圖解，{c} 個有技巧提示。"
+}

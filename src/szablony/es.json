@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Músculos principales: {lista}.",
+ "miesniePomocnicze": "Músculos secundarios: {lista}.",
+ "partia": "Parte del cuerpo: {grupa}.",
+ "sprzet": "Material necesario: {lista}.",
+ "rodzaj": "Tipo de movimiento: {rodzaj}.",
+ "blad": "Error frecuente: {zdanie}",
+ "albo": "o",
+ "pytania": {
+  "setup": "¿Cómo colocarte?",
+  "move": "¿Cómo se hace el movimiento?",
+  "miesnie": "¿Qué músculos trabaja?",
+  "tips": "¿Qué te ayuda con la técnica?",
+  "mistakes": "¿Qué errores debes evitar?",
+  "sprzet": "¿Qué material necesitas?",
+  "zamienniki": "¿Con qué puedes sustituirlo?"
+ },
+ "opisGlownej": "{n} {opisow}: {f} con dibujo del movimiento, {c} con consejos de técnica y {z} con sustitutos.",
+ "opisow": {
+  "one": "descripción",
+  "few": "descripciones",
+  "many": "descripciones",
+  "other": "descripciones"
+ },
+ "opisListy": "{n} {pozycji} de la A a la Z, con filtro por parte del cuerpo, material y tipo de movimiento.",
+ "pozycji": {
+  "one": "entrada",
+  "few": "entradas",
+  "many": "entradas",
+  "other": "entradas"
+ },
+ "opisKategorii": "{n} {pozycji}, entre ellas {lista}.",
+ "opisKategoriiJedna": "Una entrada: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}: {f} con dibujo del movimiento y {c} con consejos de técnica."
+}

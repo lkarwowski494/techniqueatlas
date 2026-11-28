@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Основні м’язи: {lista}.",
+ "miesniePomocnicze": "Допоміжні м’язи: {lista}.",
+ "partia": "Частина тіла: {grupa}.",
+ "sprzet": "Потрібне обладнання: {lista}.",
+ "rodzaj": "Тип руху: {rodzaj}.",
+ "blad": "Поширена помилка: {zdanie}",
+ "albo": "або",
+ "pytania": {
+  "setup": "Як зайняти вихідне положення?",
+  "move": "Як виконувати рух?",
+  "miesnie": "Які м’язи працюють?",
+  "tips": "Що допоможе з технікою?",
+  "mistakes": "Яких помилок уникати?",
+  "sprzet": "Яке обладнання потрібне?",
+  "zamienniki": "Чим її можна замінити?"
+ },
+ "opisGlownej": "{n} {opisow}: малюнок руху в {f}, підказки з техніки в {c}, заміни в {z}.",
+ "opisow": {
+  "one": "опис",
+  "few": "описи",
+  "many": "описів",
+  "other": "опису"
+ },
+ "opisListy": "{n} {pozycji} від А до Я з фільтром за частиною тіла, обладнанням і типом руху.",
+ "pozycji": {
+  "one": "позиція",
+  "few": "позиції",
+  "many": "позицій",
+  "other": "позиції"
+ },
+ "opisKategorii": "{n} {pozycji}, зокрема {lista}.",
+ "opisKategoriiJedna": "Одна позиція: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}: малюнок руху в {f}, підказки з техніки в {c}."
+}

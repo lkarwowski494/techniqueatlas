@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Peamised lihased: {lista}.",
+ "miesniePomocnicze": "Abilihased: {lista}.",
+ "partia": "Lihasrühm: {grupa}.",
+ "sprzet": "Vajalik varustus: {lista}.",
+ "rodzaj": "Liikumise tüüp: {rodzaj}.",
+ "blad": "Levinud viga: {zdanie}",
+ "albo": "või",
+ "pytania": {
+  "setup": "Kuidas end sisse seada?",
+  "move": "Kuidas liigutust teha?",
+  "miesnie": "Milliseid lihaseid see treenib?",
+  "tips": "Mis aitab tehnikat parandada?",
+  "mistakes": "Milliseid vigu vältida?",
+  "sprzet": "Millist varustust on vaja?",
+  "zamienniki": "Millega seda asendada?"
+ },
+ "opisGlownej": "{n} {opisow}: liikumisjoonis {f} juures, tehnikavihjed {c} juures, asendused {z} juures.",
+ "opisow": {
+  "one": "kirjeldus",
+  "few": "kirjeldust",
+  "many": "kirjeldust",
+  "other": "kirjeldust"
+ },
+ "opisListy": "{n} {pozycji} tähestiku järjekorras, filtreeritav lihasrühma, varustuse ja liikumise tüübi järgi.",
+ "pozycji": {
+  "one": "kirje",
+  "few": "kirjet",
+  "many": "kirjet",
+  "other": "kirjet"
+ },
+ "opisKategorii": "{n} {pozycji}, sealhulgas {lista}.",
+ "opisKategoriiJedna": "Üks kirje: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}, liikumisjoonis {f} ja tehnikavihjed {c} juures."
+}

@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Ana kaslar: {lista}.",
+ "miesniePomocnicze": "Yardımcı kaslar: {lista}.",
+ "partia": "Vücut bölgesi: {grupa}.",
+ "sprzet": "Gerekli ekipman: {lista}.",
+ "rodzaj": "Hareket türü: {rodzaj}.",
+ "blad": "Sık yapılan hata: {zdanie}",
+ "albo": "veya",
+ "pytania": {
+  "setup": "Nasıl pozisyon almalısınız?",
+  "move": "Hareketi nasıl yapmalısınız?",
+  "miesnie": "Hangi kaslar çalışır?",
+  "tips": "Tekniğinize ne yardımcı olur?",
+  "mistakes": "Hangi hatalardan kaçınmalısınız?",
+  "sprzet": "Hangi ekipmana ihtiyacınız var?",
+  "zamienniki": "Yerine hangi egzersizleri yapabilirsiniz?"
+ },
+ "opisGlownej": "{n} {opisow}: hareket çizimi: {f}, teknik ipuçları: {c}, alternatif egzersizler: {z}.",
+ "opisow": {
+  "one": "açıklama",
+  "few": "açıklama",
+  "many": "açıklama",
+  "other": "açıklama"
+ },
+ "opisListy": "A'dan Z'ye {n} {pozycji}; vücut bölgesi, ekipman ve hareket türüne göre filtrelenebilir.",
+ "pozycji": {
+  "one": "kayıt",
+  "few": "kayıt",
+  "many": "kayıt",
+  "other": "kayıt"
+ },
+ "opisKategorii": "{n} {pozycji}, aralarında: {lista}.",
+ "opisKategoriiJedna": "Tek kayıt: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; hareket çizimi: {f}, teknik ipuçları: {c}."
+}

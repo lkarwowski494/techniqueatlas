@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} – {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Hovedmuskler: {lista}.",
+ "miesniePomocnicze": "Hjelpemuskler: {lista}.",
+ "partia": "Kroppsdel: {grupa}.",
+ "sprzet": "Utstyr du trenger: {lista}.",
+ "rodzaj": "Bevegelsestype: {rodzaj}.",
+ "blad": "Vanlig feil: {zdanie}",
+ "albo": "eller",
+ "pytania": {
+  "setup": "Hvordan stiller du deg opp?",
+  "move": "Hvordan utfører du bevegelsen?",
+  "miesnie": "Hvilke muskler jobber?",
+  "tips": "Hva hjelper på teknikken?",
+  "mistakes": "Hvilke feil bør du unngå?",
+  "sprzet": "Hvilket utstyr trenger du?",
+  "zamienniki": "Hva kan du bytte den ut med?"
+ },
+ "opisGlownej": "{n} {opisow}: bevegelsestegning for {f}, teknikktips for {c}, erstatninger for {z}.",
+ "opisow": {
+  "one": "beskrivelse",
+  "few": "beskrivelser",
+  "many": "beskrivelser",
+  "other": "beskrivelser"
+ },
+ "opisListy": "{n} {pozycji} fra A til Å, med filter for kroppsdel, utstyr og bevegelsestype.",
+ "pozycji": {
+  "one": "øvelse",
+  "few": "øvelser",
+  "many": "øvelser",
+  "other": "øvelser"
+ },
+ "opisKategorii": "{n} {pozycji}, blant annet {lista}.",
+ "opisKategoriiJedna": "Én øvelse: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} med bevegelsestegning for {f} og teknikktips for {c}."
+}

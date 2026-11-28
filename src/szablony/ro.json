@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Mușchi principali: {lista}.",
+ "miesniePomocnicze": "Mușchi secundari: {lista}.",
+ "partia": "Grupă musculară: {grupa}.",
+ "sprzet": "Echipament necesar: {lista}.",
+ "rodzaj": "Tipul mișcării: {rodzaj}.",
+ "blad": "Greșeală frecventă: {zdanie}",
+ "albo": "sau",
+ "pytania": {
+  "setup": "Cum vă poziționați?",
+  "move": "Cum executați mișcarea?",
+  "miesnie": "Ce mușchi lucrează?",
+  "tips": "Ce vă ajută la tehnică?",
+  "mistakes": "Ce greșeli trebuie evitate?",
+  "sprzet": "Ce echipament este necesar?",
+  "zamienniki": "Cu ce îl puteți înlocui?"
+ },
+ "opisGlownej": "{n} {opisow}: desenul mișcării la {f}, indicații de tehnică la {c}, înlocuitori la {z}.",
+ "opisow": {
+  "one": "descriere",
+  "few": "descrieri",
+  "many": "de descrieri",
+  "other": "de descrieri"
+ },
+ "opisListy": "{n} {pozycji} de la A la Z, cu filtru pentru grupa musculară, echipament și tipul mișcării.",
+ "pozycji": {
+  "one": "exercițiu",
+  "few": "exerciții",
+  "many": "de exerciții",
+  "other": "de exerciții"
+ },
+ "opisKategorii": "{n} {pozycji}, printre care {lista}.",
+ "opisKategoriiJedna": "Un singur exercițiu: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}, cu desenul mișcării la {f} și indicații de tehnică la {c}."
+}

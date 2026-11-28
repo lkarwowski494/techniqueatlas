@@ -1,0 +1,37 @@
+{
+ "tytulCwiczenia": "{nazwa} — {dopisek}",
+ "nazwaPodwojna": "{lokalna} ({angielska})",
+ "miesnieGlowne": "Fő izmok: {lista}.",
+ "miesniePomocnicze": "Segédizmok: {lista}.",
+ "partia": "Testrész: {grupa}.",
+ "sprzet": "Szükséges felszerelés: {lista}.",
+ "rodzaj": "Mozgástípus: {rodzaj}.",
+ "blad": "Gyakori hiba: {zdanie}",
+ "albo": "vagy",
+ "pytania": {
+  "setup": "Hogyan kell beállni?",
+  "move": "Hogyan kell végrehajtani a mozdulatot?",
+  "miesnie": "Mely izmok dolgoznak?",
+  "tips": "Mi segít a kivitelezésben?",
+  "mistakes": "Milyen hibákat kell elkerülni?",
+  "sprzet": "Milyen felszerelés szükséges?",
+  "zamienniki": "Mivel helyettesíthető?"
+ },
+ "opisGlownej": "{n} {opisow}: {f} esetében rajz a mozdulatról, {c} esetében kivitelezési tippek, {z} esetében helyettesítők.",
+ "opisow": {
+  "one": "leírás",
+  "few": "leírás",
+  "many": "leírás",
+  "other": "leírás"
+ },
+ "opisListy": "{n} {pozycji} A-tól Z-ig, testrész, felszerelés és mozgástípus szerint szűrhetően.",
+ "pozycji": {
+  "one": "tétel",
+  "few": "tétel",
+  "many": "tétel",
+  "other": "tétel"
+ },
+ "opisKategorii": "{n} {pozycji}, köztük {lista}.",
+ "opisKategoriiJedna": "Egy tétel: {lista}.",
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; {f} esetében rajz a mozdulatról, {c} esetében kivitelezési tippek."
+}
