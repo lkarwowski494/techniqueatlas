@@ -4,7 +4,10 @@
   "home": "Hem",
   "library": "Bibliotek",
   "allExercises": "Alla övningar",
-  "countLine": "{n} övningar — bläddra efter muskelgrupp och utrustning.",
+  "countLine": {
+    "one": "{n} övning – bläddra efter kroppsdel och utrustning.",
+    "other": "{n} övningar – bläddra efter kroppsdel och utrustning."
+  },
   "searchLabel": "Sök övningar",
   "searchPlaceholder": "Övningens namn",
   "noResults": "Inga övningar för dessa filter",

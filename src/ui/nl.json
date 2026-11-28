@@ -4,7 +4,10 @@
   "home": "Home",
   "library": "Bibliotheek",
   "allExercises": "Alle oefeningen",
-  "countLine": "{n} oefeningen — bladeren op spiergroep en materiaal.",
+  "countLine": {
+    "one": "{n} oefening — bekijk per lichaamsdeel en materiaal.",
+    "other": "{n} oefeningen — bekijk per lichaamsdeel en materiaal."
+  },
   "searchLabel": "Oefeningen zoeken",
   "searchPlaceholder": "Naam van de oefening",
   "noResults": "Geen oefeningen voor deze filters",

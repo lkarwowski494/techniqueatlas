@@ -4,7 +4,10 @@
   "home": "Ana sayfa",
   "library": "Kütüphane",
   "allExercises": "Tüm egzersizler",
-  "countLine": "{n} egzersiz — kas grubuna ve ekipmana göre göz atın.",
+  "countLine": {
+    "one": "{n} egzersiz — vücut bölgesine ve ekipmana göre göz atın.",
+    "other": "{n} egzersiz — vücut bölgesine ve ekipmana göre göz atın."
+  },
   "searchLabel": "Egzersiz ara",
   "searchPlaceholder": "Egzersiz adı",
   "noResults": "Bu filtrelere uygun egzersiz yok",

@@ -4,7 +4,10 @@
   "home": "Startseite",
   "library": "Bibliothek",
   "allExercises": "Alle Übungen",
-  "countLine": "{n} Übungen — nach Muskelgruppe und Ausrüstung durchsuchen.",
+  "countLine": {
+    "one": "{n} Übung – stöbere nach Muskelgruppe und Equipment.",
+    "other": "{n} Übungen – stöbere nach Muskelgruppe und Equipment."
+  },
   "searchLabel": "Übungen suchen",
   "searchPlaceholder": "Name der Übung",
   "noResults": "Keine Übungen für diese Filter",

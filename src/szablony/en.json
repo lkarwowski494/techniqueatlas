@@ -24,6 +24,5 @@
   "pozycji": { "one": "entry", "other": "entries" },
   "opisKategorii": "{n} {pozycji}, including {lista}.",
   "opisKategoriiJedna": "One entry: {lista}.",
-  "opisKategoriiBezPrzykladow": "{n} {pozycji}; movement drawing for {f}, technique cues for {c}.",
-  "countLine": {"one":"{n} exercise — browse by muscle group and equipment.","other":"{n} exercises — browse by muscle group and equipment."}
+  "opisKategoriiBezPrzykladow": "{n} {pozycji}; movement drawing for {f}, technique cues for {c}."
 }

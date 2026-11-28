@@ -4,7 +4,10 @@
   "home": "Forside",
   "library": "Bibliotek",
   "allExercises": "Alle øvelser",
-  "countLine": "{n} øvelser — gennemse efter muskelgruppe og udstyr.",
+  "countLine": {
+    "one": "{n} øvelse – se efter muskelgruppe og udstyr.",
+    "other": "{n} øvelser – se efter muskelgruppe og udstyr."
+  },
   "searchLabel": "Søg efter øvelser",
   "searchPlaceholder": "Navn på øvelse",
   "noResults": "Ingen øvelser med disse filtre",

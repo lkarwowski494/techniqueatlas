@@ -4,7 +4,11 @@
   "home": "Inicio",
   "library": "Biblioteca",
   "allExercises": "Todos los ejercicios",
-  "countLine": "{n} ejercicios — explora por grupo muscular y material.",
+  "countLine": {
+    "one": "{n} ejercicio: explora por parte del cuerpo y material.",
+    "many": "{n} ejercicios: explora por parte del cuerpo y material.",
+    "other": "{n} ejercicios: explora por parte del cuerpo y material."
+  },
   "searchLabel": "Buscar ejercicios",
   "searchPlaceholder": "Nombre del ejercicio",
   "noResults": "No hay ejercicios con estos filtros",

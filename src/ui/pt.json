@@ -4,7 +4,11 @@
   "home": "Início",
   "library": "Biblioteca",
   "allExercises": "Todos os exercícios",
-  "countLine": "{n} exercícios — navegue por grupo muscular e equipamento.",
+  "countLine": {
+    "one": "{n} exercício — consulte por grupo muscular e equipamento.",
+    "many": "{n} de exercícios — consulte por grupo muscular e equipamento.",
+    "other": "{n} exercícios — consulte por grupo muscular e equipamento."
+  },
   "searchLabel": "Pesquisar exercícios",
   "searchPlaceholder": "Nome do exercício",
   "noResults": "Nenhum exercício com estes filtros",

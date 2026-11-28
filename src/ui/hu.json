@@ -4,7 +4,10 @@
   "home": "Kezdőlap",
   "library": "Gyakorlattár",
   "allExercises": "Összes gyakorlat",
-  "countLine": "{n} gyakorlat — böngéssz izomcsoport és eszköz szerint.",
+  "countLine": {
+    "one": "{n} gyakorlat – böngésszen testrész és eszköz szerint.",
+    "other": "{n} gyakorlat – böngésszen testrész és eszköz szerint."
+  },
   "searchLabel": "Gyakorlatok keresése",
   "searchPlaceholder": "Gyakorlat neve",
   "noResults": "Ezekre a szűrőkre nincs gyakorlat",

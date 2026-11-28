@@ -4,7 +4,11 @@
   "home": "Accueil",
   "library": "Bibliothèque",
   "allExercises": "Tous les exercices",
-  "countLine": "{n} exercices — à parcourir par groupe musculaire et matériel.",
+  "countLine": {
+    "one": "{n} exercice — parcourez la bibliothèque par groupe musculaire et par équipement.",
+    "many": "{n} exercices — parcourez-les par groupe musculaire et par équipement.",
+    "other": "{n} exercices — parcourez-les par groupe musculaire et par équipement."
+  },
   "searchLabel": "Rechercher un exercice",
   "searchPlaceholder": "Nom de l'exercice",
   "noResults": "Aucun exercice pour ces filtres",

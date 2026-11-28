@@ -4,7 +4,10 @@
   "home": "Etusivu",
   "library": "Kirjasto",
   "allExercises": "Kaikki liikkeet",
-  "countLine": "{n} liikettä — selaa lihasryhmän ja välineen mukaan.",
+  "countLine": {
+    "one": "{n} liike — selaa lihasryhmän ja välineiden mukaan.",
+    "other": "{n} liikettä — selaa lihasryhmän ja välineiden mukaan."
+  },
   "searchLabel": "Hae liikkeitä",
   "searchPlaceholder": "Liikkeen nimi",
   "noResults": "Näillä suodattimilla ei löydy liikkeitä",

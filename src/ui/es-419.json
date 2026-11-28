@@ -4,7 +4,11 @@
   "home": "Inicio",
   "library": "Biblioteca",
   "allExercises": "Todos los ejercicios",
-  "countLine": "{n} ejercicios — explora por grupo muscular y equipo.",
+  "countLine": {
+    "one": "{n} ejercicio: explóralo por parte del cuerpo y equipo.",
+    "many": "{n} ejercicios: explóralos por parte del cuerpo y equipo.",
+    "other": "{n} ejercicios: explóralos por parte del cuerpo y equipo."
+  },
   "searchLabel": "Buscar ejercicios",
   "searchPlaceholder": "Nombre del ejercicio",
   "noResults": "No hay ejercicios con estos filtros",

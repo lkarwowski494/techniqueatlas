@@ -4,7 +4,10 @@
   "home": "Avaleht",
   "library": "Raamatukogu",
   "allExercises": "Kõik harjutused",
-  "countLine": "{n} harjutust — sirvi lihasgrupi ja varustuse järgi.",
+  "countLine": {
+    "one": "{n} harjutus — sirvi lihasrühma ja varustuse järgi.",
+    "other": "{n} harjutust — sirvi lihasrühma ja varustuse järgi."
+  },
   "searchLabel": "Otsi harjutusi",
   "searchPlaceholder": "Harjutuse nimi",
   "noResults": "Nende filtritega harjutusi ei leitud",
