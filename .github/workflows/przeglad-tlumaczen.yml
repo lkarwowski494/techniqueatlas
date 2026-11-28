@@ -1,0 +1,126 @@
+# Przegląd tłumaczeń strony przez API Anthropic — osobny przebieg zwracający listę poprawek (decyzja właściciela 27.11.2026; wzorzec: repo aplikacji, przeglad-tlumaczen.yml).
+# Tylko ręcznie (workflow_dispatch), odczyt repozytorium (contents: read). Płatny z kredytów API właściciela (Message Batches, −50%). Klucz: sekret ANTHROPIC_API_KEY
+# (ustawia właściciel w Settings → Secrets and variables → Actions), użyty w JEDNYM kroku jako zmienna środowiskowa; skrypt nigdy go nie wypisuje.
+# Pliki w repo NIE są zmieniane — wynik to artefakt `raport-przegladu` (7 dni): raporty JSON, podsumowanie.md, szacunek.json i wydatek.json.
+# Limity: 6 USD na przebieg (powyżej — stop bez zgoda_koszt=tak) i 80 USD łącznie wg docs/przeklad/wydatki.json (bez wyjątku). Po przebiegu płatnym zaksięguj wydatek lokalnie:
+#   node scripts/przeklad/przeglad-api.mjs --zapisz-wydatek <katalog artefaktu>, potem commit docs/przeklad/wydatki.json.
+# Workflow startuje WYŁĄCZNIE z main (jeden licznik wydatków, wspólna grupa concurrency z drugim workflowem). Teksty z innej gałęzi (np. strona/z24-nazwy-pl) podaj w polu galaz_tekstow: są tylko czytane do katalogu roboczego, nic nie jest zapisywane do repo.
+# Twarda granica kosztu to limit wydatków w konsoli Anthropic (krok właściciela); licznik w repo jest drugą, programową barierą.
+# Kolejność: przebieg dowodowy (limit=2) z tylko_szacuj=nie dopiero po przejrzeniu szacunku (tylko_szacuj=tak, domyślnie).
+name: Przegląd tłumaczeń strony (API, ręcznie)
+on:
+  workflow_dispatch:
+    inputs:
+      galaz_tekstow:
+        description: 'Gałąź z tekstami do przekładu (np. strona/z24-nazwy-pl); puste = teksty z main. Teksty są tylko czytane; workflow startuje wyłącznie z main'
+        type: string
+        default: ''
+      zrodlo:
+        description: 'Źródła po przecinku (nazwy, szablony, prawne, ramka); puste = wszystkie'
+        type: string
+        default: ''
+      model:
+        description: 'Model (domyślnie najnowszy Opus, effort medium)'
+        type: choice
+        default: opus
+        options: [opus, sonnet]
+      limit:
+        description: 'Tylko N pierwszych języków (puste = wszystkie 33); przebieg dowodowy: 2'
+        type: string
+        default: ''
+      tylko_szacuj:
+        description: 'Tylko szacunek kosztu, bez wysyłania czegokolwiek płatnego'
+        type: boolean
+        default: true
+      zgoda_koszt:
+        description: 'Zgoda na koszt powyżej 6 USD na przebieg (tak / nie); limit 80 USD łącznie obowiązuje zawsze'
+        type: choice
+        default: 'nie'
+        options: ['nie', 'tak']
+      wznow:
+        description: 'Odbiór wyników wysłanego wcześniej batcha (msgbatch_… z logu przebiegu, który przekroczył czas oczekiwania); puste = nowy przebieg'
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: przeklad-api
+  cancel-in-progress: false
+jobs:
+  przeglad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Start tylko z main (jeden licznik wydatków)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Uruchom z gałęzi main (Use workflow from: main); teksty z innej gałęzi podaj w polu galaz_tekstow."
+          exit 1
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Teksty z gałęzi z wejścia (tylko odczyt, bez zapisu do repo)
+        env:
+          WEJ_GALAZ: ${{ inputs.galaz_tekstow }}
+        run: |
+          set -eu
+          if [ -n "$WEJ_GALAZ" ]; then
+            [[ "$WEJ_GALAZ" =~ ^[A-Za-z0-9._/-]+$ ]] && [[ "$WEJ_GALAZ" != -* ]] && [[ "$WEJ_GALAZ" != *..* ]] || { echo "::error::galaz_tekstow: niedozwolone znaki"; exit 1; }
+            git fetch --depth 1 origin "$WEJ_GALAZ"
+            for P in docs/nazwy docs/teksty src/szablony; do
+              if [ -n "$(git ls-tree --name-only FETCH_HEAD "$P")" ]; then git checkout FETCH_HEAD -- "$P"; fi
+            done
+          fi
+      - name: Słownik terminów aplikacji (npm run dane, bez sekretów)
+        run: npm run dane
+      - name: Szacunek kosztu bez klucza — stop powyżej 6 USD bez zgody i powyżej 80 USD łącznie
+        env:
+          WEJ_ZRODLO: ${{ inputs.zrodlo }}
+          WEJ_MODEL: ${{ inputs.model }}
+          WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
+        run: |
+          set -eu
+          [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
+          ARGS=(--szacuj --zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przegladu)
+          if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
+          node scripts/przeklad/przeglad-api.mjs "${ARGS[@]}"
+      - name: Przebieg (szacunek dokładny lub batch)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          WEJ_ZRODLO: ${{ inputs.zrodlo }}
+          WEJ_MODEL: ${{ inputs.model }}
+          WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
+          WEJ_SZACUJ: ${{ inputs.tylko_szacuj }}
+          WEJ_WZNOW: ${{ inputs.wznow }}
+        run: |
+          set -eu
+          [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
+          ARGS=(--zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przegladu)
+          if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
+          if [ "$WEJ_SZACUJ" = "true" ]; then ARGS+=(--szacuj); fi
+          if [ -n "$WEJ_WZNOW" ]; then
+            [[ "$WEJ_WZNOW" =~ ^msgbatch_[A-Za-z0-9]+$ ]] || { echo "::error::wznow: oczekiwany identyfikator msgbatch_…"; exit 1; }
+            ARGS+=(--wznow "$WEJ_WZNOW")
+          fi
+          node scripts/przeklad/przeglad-api.mjs "${ARGS[@]}"
+      - name: Podsumowanie w logu przebiegu
+        if: always()
+        run: |
+          if [ -f raport-przegladu/podsumowanie.md ]; then cat raport-przegladu/podsumowanie.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f raport-przegladu/szacunek.json ]; then node -e "const s=require('./raport-przegladu/szacunek.json');console.log('Szacunek: '+JSON.stringify(s.koszt_wg_modelu)+'; wydano dotąd: '+s.wydano_dotad_usd+' USD')" >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Artefakt (tylko raporty, 7 dni)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raport-przegladu
+          path: |
+            raport-przegladu/**/*.json
+            raport-przegladu/*.json
+            raport-przegladu/podsumowanie.md
+          if-no-files-found: ignore
+          retention-days: 7
