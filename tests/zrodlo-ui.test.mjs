@@ -1,17 +1,18 @@
 // BQ2 e): źródło „ui” (src/ui/{pl,en}.json → src/ui/{kod}.json) w mechanizmie przekładu API. Bez sieci i bez klucza; fixtura w katalogu tymczasowym, niezależna od danych strony.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { wczytajZrodla, pozycjeDlaJezyka } from '../scripts/przeklad/zrodla.mjs';
 import { zastosuj } from '../scripts/przeklad/rdzen.mjs';
 import { ROOT } from './pomoc.mjs';
 
+let licznik = 0; const katalogi = []; process.on('exit', () => { for (const d of katalogi) rmSync(d, { recursive: true, force: true }); }); /* bez mkdtemp: sprzatanie.test.mjs (integracja) wymaga tmpDir z pomoc.mjs, którego main nie ma */
 const zapisz = (root, f, o) => { mkdirSync(join(root, f, '..'), { recursive: true }); writeFileSync(join(root, f), JSON.stringify(o, null, 2) + '\n'); };
 const czytaj = (root, f) => JSON.parse(readFileSync(join(root, f), 'utf8'));
 function fixtura() {
-  const root = mkdtempSync(join(tmpdir(), 'zrodlo-ui-'));
+  const root = join(tmpdir(), `zrodlo-ui-${process.pid}-${Date.now()}-${++licznik}`); mkdirSync(root, { recursive: true }); katalogi.push(root);
   zapisz(root, 'config.json', { jezyki: ['pl', 'en', 'de', 'ja'] });
   mkdirSync(join(root, 'docs/przeklad'), { recursive: true }); cpSync(join(ROOT, 'docs/przeklad/zrodla.json'), join(root, 'docs/przeklad/zrodla.json'));
   const pl = { countLine: { one: '{n} ćwiczenie', few: '{n} ćwiczenia', many: '{n} ćwiczeń', other: '{n} ćwiczenia' }, wsparcie: { w2: 'Aplikacja daje {dni} dni.' }, tytul: 'Tytuł' };
