@@ -82,12 +82,15 @@ test('Z-34 (A7) ikona: każda strona ma <link rel="icon"> na ten sam stały plik
   assert.deepEqual(wymiaryPng(readFileSync(join(out, 'apple-touch-icon.png'))), { w: 180, h: 180 });
 });
 
-test('Z-34 (A8) obraz ćwiczenia: strona z figurą ma <img src alt> do istniejącego pliku, alt z nazwą ćwiczenia w języku strony; każdy <img> w dist ma alt i istniejący plik', () => {
-  const zle = [];
+/* KO-137 (koordynator, 28.11.2026, do weta): A8 „obok lub zamiast” — rysunek jest w danych strukturalnych (WebPage.primaryImageOfPage), og:image i mapie obrazów witryny; wizualnie ukryty <img> odpada (szara strefa „treści dla robota”, B4; potrójnie czytany przez czytnik ekranu; <img> po figcaption psuje <figure>). */
+test('Z-34 (A8, KO-137) obraz ćwiczenia: strona z figurą nie ma <img> (rysunek to <svg>), a adres PNG podglądu jest w mapie witryny jako <image:image><image:loc> (Google image sitemap); każdy <img> w dist ma alt i istniejący plik', () => {
+  const zle = [], mapa = {};
+  for (const l of JEZ) { const xml = czytaj(out, `sitemap-${l}.xml`); assert.match(xml, /xmlns:image="http:\/\/www\.google\.com\/schemas\/sitemap-image\/1\.1"/); for (const u of xml.match(/<url>[\s\S]*?<\/url>/g) ?? []) mapa[u.match(/<loc>([^<]+)<\/loc>/)[1]] = [...u.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(m => m[1]); }
   for (const l of JEZ) for (const e of cw(l).filter(zFigura)) {
-    const f = plik(l, e), imgi = [...czytaj(out, f).matchAll(/<img\s[^>]*>/g)].map(m => m[0]);
-    if (!imgi.some(t => { const src = t.match(/src="([^"]+)"/)?.[1], alt = t.match(/alt="([^"]*)"/)?.[1]; return src && istnieje(out, rozwiaz(f, src, D)) && alt?.includes(nazwaStrony(l, e).replace(/&/g, '&amp;').replace(/"/g, '&quot;')); })) zle.push(f);
+    const f = plik(l, e); if (/<img\s/.test(czytaj(out, f))) zle.push(`${f}: <img>`);
+    if (indeksowane.has(f)) { const adres = `${D}/${urlOf(f)}`; if (JSON.stringify(mapa[adres]) !== JSON.stringify([`${D}/assets/podglad/${e.slug}.png`])) zle.push(`${f}: mapa ${JSON.stringify(mapa[adres])}`); }
   }
+  for (const l of JEZ) for (const e of cw(l).filter(e => !zFigura(e))) { const adres = `${D}/${urlOf(plik(l, e))}`; if (mapa[adres]?.length) zle.push(`${adres}: obraz bez rysunku`); }
   for (const f of plikiHtml(out)) for (const m of czytaj(out, f).matchAll(/<img\s[^>]*>/g)) if (!/\salt="/.test(m[0]) || !istnieje(out, rozwiaz(f, m[0].match(/src="([^"]+)"/)?.[1] ?? '', D) ?? '')) zle.push(`${f}: ${m[0]}`);
   assert.equal(zle.length, 0, `${zle.length}, np. ${zle.slice(0, 2)}`);
 });

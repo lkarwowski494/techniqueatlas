@@ -205,7 +205,6 @@ ${wymiarHtml(lang, site, f.phases)}
 <div class="fig-ster"><button type="button" class="b-anim" data-pause aria-pressed="false" hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-pressed="false" hidden>${esc(ui.showError)}: ${esc(e.text)}</button>`).join('')}</div>
 <p class="podpis" data-error-text hidden aria-live="polite"></p>
 <figcaption class="drobne">${esc(phases)} · ${esc(ui.schematic)}</figcaption>
-<img class="wizualnie-ukryte" src="${relUrl(file, `assets/podglad/${ex.slug}.png`)}" alt="${esc(label).replaceAll('&#39;', "'")}" width="1200" height="630" decoding="async">
 <script type="application/json" data-errors>${jsonForScript(f.errors)}</script>
 <script type="application/json" data-labels>${jsonForScript({ pause: ui.pause, resume: ui.resume, showError: ui.showError, hideError: ui.hideError, errorLine: ui.errorLine })}</script>
 </figure>`;
@@ -281,7 +280,7 @@ ${ramkaHtml(ctx, lang)}
   /* podgląd (A9, A11): ten sam rysunek ćwiczenia (obie pozycje) jako PNG 1200×630 z assets/podglad/ — wspólny dla języków; bez rysunku brak obrazka (nie logo, nie ikona) */
   const obraz = fig ? { url: abs(ctx.cfg, `assets/podglad/${ex.slug}.png`), alt: nazwaStrony(ctx, lang, ex) } : null;
   const webPage = obraz ? { '@context': 'https://schema.org', '@type': 'WebPage', url: abs(ctx.cfg, urlOf(file)), name: tytul, inLanguage: hreflang(lang), primaryImageOfPage: { '@type': 'ImageObject', url: obraz.url, width: 1200, height: 630 } } : null;
-  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: tytul, description: opis, robots: robotsFor(ctx, lang, own), canonical: urlOf(file), ogType: 'article', ogImage: obraz,
+  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, obraz: obraz?.url, /* adres PNG podglądu → <image:image> w mapie witryny */ html: layout(ctx, { file, lang, title: tytul, description: opis, robots: robotsFor(ctx, lang, own), canonical: urlOf(file), ogType: 'article', ogImage: obraz,
     alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs), ...(webPage ? [webPage] : [])], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
 }
 

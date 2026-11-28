@@ -92,7 +92,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
     const url = p => `${cfg.domena}/${urlOf(p.file)}`, lastmod = `<lastmod>${dataWydania()}</lastmod>`; /* bez changefreq i priority (A13, B8) */
     for (const l of langs) {
       const mine = idx.filter(p => p.lang === l); if (!mine.length) continue;
-      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${mine.map(p => `<url><loc>${esc(url(p))}</loc>${lastmod}${altOf(p).flatMap(q => hreflangCodes(q.lang).map(c => `<xhtml:link rel="alternate" hreflang="${esc(c)}" href="${esc(url(q))}"/>`)).join('')}</url>`).join('\n')}\n</urlset>\n`;
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${mine.map(p => `<url><loc>${esc(url(p))}</loc>${lastmod}${altOf(p).flatMap(q => hreflangCodes(q.lang).map(c => `<xhtml:link rel="alternate" hreflang="${esc(c)}" href="${esc(url(q))}"/>`)).join('')}${p.obraz ? `<image:image><image:loc>${esc(p.obraz)}</image:loc></image:image>` : ''}</url>`).join('\n')}\n</urlset>\n`;
       write(out, `sitemap-${l}.xml`, xml); sitemaps.push(`sitemap-${l}.xml`);
     }
     write(out, 'sitemap-glowna.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(cfg.domena)}/</loc>${lastmod}</url></urlset>\n`); sitemaps.push('sitemap-glowna.xml');

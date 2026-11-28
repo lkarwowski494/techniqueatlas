@@ -82,7 +82,7 @@ test('robots.txt i mapy witryny przy włączonym indeksowaniu: Allow + indeks ma
 });
 test('mapa witryny: alternatywy językowe (xhtml:link) są wzajemne i dotyczą tylko wersji indeksowanych', async () => {
   const { out } = await buildOnce('idx', INDEXING, BEZ_STARTU);
-  const parse = l => new Map([...read(out, `sitemap-${l}.xml`).matchAll(/<url><loc>([^<]+)<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)*)<\/url>/g)].map(m => [m[1], [...m[2].matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(x => [x[1], x[2]])]));
+  const parse = l => new Map([...read(out, `sitemap-${l}.xml`).matchAll(/<url><loc>([^<]+)<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)*)(?:<image:image>.*?<\/image:image>)?<\/url>/g)].map(m => [m[1], [...m[2].matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(x => [x[1], x[2]])]));
   const pl = parse('pl'), en = parse('en');
   for (const [loc, alts] of pl) { const mine = alts.find(a => a[0] === 'pl'); assert.equal(mine[1], loc); for (const [lg, href] of alts.filter(a => a[0] === 'en')) assert.ok((en.get(href) ?? []).some(a => a[1] === loc), `${loc} ↔ ${href}`); }
 });

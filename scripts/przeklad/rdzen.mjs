@@ -227,6 +227,8 @@ export function zastosuj(root, katalog, { nadpisz = false } = {}) {
       const poz = wg.get(klucz);
       if (!poz) { wynik.pominietych.push(`${z.id}/${kod}: klucz spoza źródła „${klucz.slice(0, 40)}”`); continue; }
       if (typeof tl !== 'string' || !tl.trim() || zmienne(poz.pl).join('') !== zmienne(tl).join('')) { wynik.pominietych.push(`${z.id}/${kod}: zmienne „${klucz.slice(0, 40)}”`); continue; }
+      /* węzeł, który język ma jako zwykły napis (countLine w de, ja, en), zostaje napisem także z --nadpisz: zastąpienie go drzewem form liczby mnogiej zepsułoby tekst strony */
+      if (z.rodzaj === 'mapa' && typeof pobierz(d, poz.sciezka) !== 'string' && typeof tekstNaSciezce(d, poz.sciezka) === 'string') { wynik.pominietych.push(`${z.id}/${kod}: „${klucz.slice(0, 40)}” — język ma napis zamiast drzewa (nie zastępuję, także z --nadpisz)`); continue; }
       const istnieje = z.rodzaj === 'mapa' ? (typeof tekstNaSciezce(d, poz.sciezka) === 'string' && tekstNaSciezce(d, poz.sciezka).trim() !== '') : existsSync(join(root, sciezkaCelu(z, kod, klucz)));
       if (istnieje && !nadpisz) { wynik.pominietych.push(`${z.id}/${kod}: „${klucz.slice(0, 40)}” istnieje (użyj --nadpisz, żeby zastąpić)`); continue; }
       if (z.rodzaj === 'mapa') ustaw(d, poz.sciezka, typografia(kod, tl));

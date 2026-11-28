@@ -49,7 +49,7 @@ test('po przełączeniu indeksowania (35 języków budowanych, indeksujJezyki be
   /* przełącznik języków (widoczne linki) pokazuje wszystkie 35 i nie dubluje się z hreflang */
   const en = read(out, 'en/exercises/back-squat/index.html'); assert.equal([...en.matchAll(/<a href="[^"]*" hreflang="[^"]+" lang="[^"]+">/g)].length, ALL.length - 1);
   /* zestaw hreflang strony = zestaw xhtml:link w mapie dla tego samego adresu */
-  const xml = read(out, 'sitemap-en.xml'), block = xml.match(/<url><loc>[^<]*\/en\/exercises\/back-squat\/<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)+)<\/url>/)[1];
+  const xml = read(out, 'sitemap-en.xml'), block = xml.match(/<url><loc>[^<]*\/en\/exercises\/back-squat\/<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)+)(?:<image:image>.*?<\/image:image>)?<\/url>/)[1];
   assert.deepEqual([...block.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(m => m[1]).sort(), hrefs(read(out, 'en/exercises/back-squat/index.html')).map(a => a[0]).filter(c => c !== 'x-default').sort());
 });
 test('dodanie języka do indeksujJezyki: język dodany do indeksujJezyki wchodzi do klastra hreflang i map po obu stronach (wzajemnie), a ten sam język bez wpisu znika z obu', async () => {
