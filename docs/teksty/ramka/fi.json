@@ -1,0 +1,11 @@
+{
+ "tytul": "Sovelluksessa {nazwa}",
+ "z1": "Sovelluksessa voit lisätä tämän liikkeen treeniin tai omaan pohjaan.",
+ "z2": "Treenin aikana kirjaat jokaisen sarjan, ja vieressä näet edellisen kerran tuloksen.",
+ "z3": "Kun kuittaat sarjan tehdyksi, palautuksen ajastin käynnistyy.",
+ "z4": "Jos sinulla ei ole välinettä tai se on varattu, sovellus ehdottaa korvaavia liikkeitä, myös samaa liikettä toisella välineellä.",
+ "z5": "Kun valitset treenipaikan, lista näyttää liikkeet, jotka voit tehdä siellä.",
+ "z6": "Liikkeen näkymässä näet viimeisimmät treenisi sillä liikkeellä, ja ”Kehitys”-kohdassa kaavion ja ennätyksesi.",
+ "z7": "Pohjista voit koota viikon suunnitelman tai luoda pohjat ja suunnitelman muutaman valinnan perusteella.",
+ "z8": "Historia, kehitys, pohjat ja varmuuskopio ovat aina käytettävissä, myös ilman maksullista versiota."
+}

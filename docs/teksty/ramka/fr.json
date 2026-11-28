@@ -1,0 +1,11 @@
+{
+ "tytul": "Dans l’application {nazwa}",
+ "z1": "Dans l’application, vous pouvez ajouter cet exercice à une séance ou à votre propre modèle.",
+ "z2": "Pendant la séance, vous enregistrez chaque série et voyez à côté votre résultat de la fois précédente.",
+ "z3": "Dès que vous cochez une série, le décompte du repos démarre.",
+ "z4": "Si vous n’avez pas le matériel ou s’il est occupé, l’application vous propose des substituts, y compris le même mouvement sur un autre appareil.",
+ "z5": "Une fois votre lieu d’entraînement choisi, la liste affiche les exercices que vous pouvez y faire.",
+ "z6": "Sur l’écran de l’exercice, vous voyez vos dernières séances avec cet exercice, et dans « Progrès », un graphique et vos records.",
+ "z7": "À partir de vos modèles, vous construisez votre plan de la semaine, ou vous générez des modèles et un plan à partir de quelques choix.",
+ "z8": "L’historique, les progrès, les modèles et la sauvegarde restent toujours accessibles, même sans la version payante."
+}

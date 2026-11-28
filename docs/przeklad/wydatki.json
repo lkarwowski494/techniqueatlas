@@ -61,6 +61,16 @@
    "tokeny_we": 42839,
    "tokeny_wy": 36022,
    "koszt_usd": 0.445898
+  },
+  {
+   "przebieg": "przeklad",
+   "batch_id": "msgbatch_014brBTYuygaYCcBK6dmK484",
+   "model": "claude-opus-5-5",
+   "data": "2026-11-28",
+   "rodzaj_kosztu": "rzeczywisty",
+   "tokeny_we": 198472,
+   "tokeny_wy": 27886,
+   "koszt_usd": 0.675804
   }
  ]
 }

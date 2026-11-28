@@ -61,7 +61,7 @@ test('Z-33 ramka „w aplikacji” (wariant A, do weta Z-21): każda strona ćwi
   assert.equal(zle.length, 0, `${zle.length} stron, np. ${zle.slice(0, 2)}`);
 });
 
-test('Z-33 ramka w języku podglądu (de): każda strona ćwiczenia ma aside.ramka z 8 niepustymi zdaniami i bez zdań polskich ani angielskich', CZEKA('Z-33', 'zdania ramki w języku de czekają na przekład API (docs/przeklad)'), () => {
+test('Z-33 ramka w języku podglądu (de): każda strona ćwiczenia ma aside.ramka z 8 niepustymi zdaniami i bez zdań polskich ani angielskich', () => {
   const zle = cwiczenia(ctx, 'de').filter(f => { const r = element(czytaj(out, f), 'aside', 'ramka'), zd = r ? elementy(r.wnetrze, 'li').map(e => tekst(e.wnetrze)) : []; return zd.length !== 8 || zd.some(z => !z || ZDANIA.pl.includes(z) || ZDANIA.en.includes(z)); });
   assert.equal(zle.length, 0, `${zle.length} stron`);
 });
