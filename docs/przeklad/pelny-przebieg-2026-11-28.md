@@ -56,7 +56,7 @@ Krytyczne 7, średnie 126, niskie 93.
 | ja | 0 | 0 | 3 | 3 |
 | sk | 0 | 0 | 4 | 4 |
 
-Krytyczne (7), wszystkie przyjęte: hu ×3 (nazwy Triceps Kickback: „hátra döntött törzzsel” czytane jako tułów do tyłu, zamiast pochylenia w przód); nb, sv, vi (regulamin: wzmocnienie gwarancji, odwrócenie sensu „nie wymaga instalacji”, wzmocnienie „bez zbędnej zwłoki”); uk (szablon `albo` bez spacji wokół spójnika). Wzorzec błędu z przebiegu dowodowego (spacje wokół `albo`) powtórzył się w bg i innych; `bg` ma najwięcej uwag (19 średnich).
+Krytyczne (7), wszystkie przyjęte: hu ×3 (nazwy Triceps Kickback: „hátra döntött törzzsel” czytane jako tułów do tyłu, zamiast pochylenia w przód); nb, sv, vi (regulamin: wzmocnienie gwarancji, odwrócenie sensu „nie wymaga instalacji”, wzmocnienie „bez zbędnej zwłoki”); uk (szablon `albo` bez spacji wokół spójnika). Ta sama usterka (`albo` bez spacji, średnia waga) wystąpiła w 29 językach z 32: prompt tłumaczenia obcina spacje klucza ` albo `; warto to dopisać do promptu przed następnym przebiegiem. `bg` ma najwięcej uwag (19: 17 w nazwach, głównie spójność terminu „snatch” i „гира” zarezerwowane dla kettlebella).
 
 ## Nałożenie
 
