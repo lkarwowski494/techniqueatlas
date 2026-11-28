@@ -25,7 +25,10 @@ export const ZALOZENIA_PRZEGLADU = { tokenyOk: 8, tokenyPoprawka: 90, udzialPopr
 const API = 'https://api.anthropic.com/v1';
 const WERSJA_API = '2023-06-01';
 
-export const WSPOLCZYNNIK = (kod) => (['ja', 'ko', 'zh-Hant'].includes(kod) ? 1.0 : ['el', 'bg', 'ru', 'uk', 'sr'].includes(kod) ? 1.6 : ['de', 'fi', 'hu', 'tr', 'nl', 'sv', 'da', 'nb', 'et', 'lt', 'lv', 'sl', 'hr', 'cs', 'sk', 'ro'].includes(kod) ? 1.35 : 1.25);
+/** Współczynnik długości tłumaczenia względem angielskiego w tokenach, zależny od pisma. Grecki ma najgorszą tokenizację (28.11.2026: nazwy/el ucięte przy max_tokens 35 900, które wystarczyło cyrylicy ze współczynnikiem 1,6), więc dostaje własny, wyższy. */
+export const WSPOLCZYNNIK = (kod) => (['ja', 'ko', 'zh-Hant'].includes(kod) ? 1.0 : kod === 'el' ? 2.6 : ['bg', 'ru', 'uk', 'sr'].includes(kod) ? 1.6 : ['de', 'fi', 'hu', 'tr', 'nl', 'sv', 'da', 'nb', 'et', 'lt', 'lv', 'sl', 'hr', 'cs', 'sk', 'ro'].includes(kod) ? 1.35 : 1.25);
+/** Największe szacowane wyjście (bez „myślenia”) jednego żądania; większe źródło jest dzielone na części (kolejne żądania). Przegląd ma wyjście głównie „ok”, więc wyższy próg. Pojedyncza pozycja się nie dzieli. */
+export const CZESC_WY_MAKS = { przeklad: 16000, przeglad: 30000 };
 
 /** Rejestr zwracania się per język (z repo aplikacji, docs/16; teksty strony trzymają ten sam rejestr co aplikacja). */
 export const REJESTR = {

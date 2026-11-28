@@ -24,6 +24,10 @@ on:
         type: choice
         default: opus
         options: [opus, sonnet]
+      jezyki:
+        description: 'Tylko wskazane języki, kody po przecinku (np. el lub cs,pt-BR); puste = wszystkie. Limit liczony dla wybranych; walidacja wzorcem'
+        type: string
+        default: ''
       limit:
         description: 'Tylko N pierwszych języków (puste = wszystkie 33); przebieg dowodowy: 2'
         type: string
@@ -37,6 +41,10 @@ on:
         type: choice
         default: 'nie'
         options: ['nie', 'tak']
+      nadpisz:
+        description: 'Przetłumacz ponownie także pozycje, które już mają tłumaczenie w repo (domyślnie pomijane, bez ponownego płacenia)'
+        type: boolean
+        default: false
       wznow:
         description: 'Odbiór wyników wysłanego wcześniej batcha (msgbatch_… z logu przebiegu, który przekroczył czas oczekiwania); puste = nowy przebieg'
         type: string
@@ -73,6 +81,8 @@ jobs:
             for P in docs/nazwy docs/teksty src/szablony; do
               if [ -n "$(git ls-tree --name-only FETCH_HEAD "$P")" ]; then git checkout FETCH_HEAD -- "$P"; fi
             done
+            # licznik wydatków z gałęzi tekstów (tylko odczyt do pliku roboczego; skrypt scala go z wydatki.json z main, bez obniżania sumy i limitu)
+            if git cat-file -e FETCH_HEAD:docs/przeklad/wydatki.json 2>/dev/null; then git show FETCH_HEAD:docs/przeklad/wydatki.json > wydatki-galaz.json; fi
           fi
       - name: Słownik terminów aplikacji (npm run dane, bez sekretów)
         run: npm run dane
@@ -81,12 +91,17 @@ jobs:
           WEJ_ZRODLO: ${{ inputs.zrodlo }}
           WEJ_MODEL: ${{ inputs.model }}
           WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_JEZYKI: ${{ inputs.jezyki }}
           WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
+          WEJ_NADPISZ: ${{ inputs.nadpisz }}
         run: |
           set -eu
           [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
-          ARGS=(--szacuj --zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przekladu)
+          [[ "$WEJ_JEZYKI" =~ ^[A-Za-z0-9,-]*$ ]] || { echo "::error::jezyki: tylko litery, cyfry, przecinki i myślniki"; exit 1; }
+          ARGS=(--szacuj --zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --jezyki "$WEJ_JEZYKI" --wyjscie raport-przekladu)
+          if [ -f wydatki-galaz.json ]; then ARGS+=(--wydatki-galaz wydatki-galaz.json); fi
           if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
+          if [ "$WEJ_NADPISZ" = "true" ]; then ARGS+=(--nadpisz); fi
           node scripts/przeklad/przeklad-api.mjs "${ARGS[@]}"
       - name: Przebieg (szacunek dokładny lub batch)
         env:
@@ -94,15 +109,20 @@ jobs:
           WEJ_ZRODLO: ${{ inputs.zrodlo }}
           WEJ_MODEL: ${{ inputs.model }}
           WEJ_LIMIT: ${{ inputs.limit }}
+          WEJ_JEZYKI: ${{ inputs.jezyki }}
           WEJ_ZGODA: ${{ inputs.zgoda_koszt }}
           WEJ_SZACUJ: ${{ inputs.tylko_szacuj }}
           WEJ_WZNOW: ${{ inputs.wznow }}
+          WEJ_NADPISZ: ${{ inputs.nadpisz }}
         run: |
           set -eu
           [[ "$WEJ_ZRODLO" =~ ^[a-z0-9,]*$ ]] || { echo "::error::zrodlo: tylko małe litery, cyfry i przecinki"; exit 1; }
-          ARGS=(--zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --wyjscie raport-przekladu)
+          [[ "$WEJ_JEZYKI" =~ ^[A-Za-z0-9,-]*$ ]] || { echo "::error::jezyki: tylko litery, cyfry, przecinki i myślniki"; exit 1; }
+          ARGS=(--zrodlo "$WEJ_ZRODLO" --model "$WEJ_MODEL" --limit "$WEJ_LIMIT" --jezyki "$WEJ_JEZYKI" --wyjscie raport-przekladu)
+          if [ -f wydatki-galaz.json ]; then ARGS+=(--wydatki-galaz wydatki-galaz.json); fi
           if [ "$WEJ_ZGODA" = "tak" ]; then ARGS+=(--zgoda-koszt); fi
           if [ "$WEJ_SZACUJ" = "true" ]; then ARGS+=(--szacuj); fi
+          if [ "$WEJ_NADPISZ" = "true" ]; then ARGS+=(--nadpisz); fi
           if [ -n "$WEJ_WZNOW" ]; then
             [[ "$WEJ_WZNOW" =~ ^msgbatch_[A-Za-z0-9]+$ ]] || { echo "::error::wznow: oczekiwany identyfikator msgbatch_…"; exit 1; }
             ARGS+=(--wznow "$WEJ_WZNOW")
