@@ -51,3 +51,12 @@ test('nałożenie: brakujący klucz dopisany z wcięciem 2 spacje; istniejące t
   assert.deepEqual(czytaj(root, 'src/ui/ja.json'), ja0); assert.ok(w.pominietych.some((s) => /napis zamiast drzewa/.test(s)), w.pominietych.join('\n'));
   const w2 = zastosuj(root, wyj, { nadpisz: true }); assert.deepEqual(czytaj(root, 'src/ui/ja.json'), ja0); assert.ok(w2.pominietych.some((s) => /napis zamiast drzewa/.test(s)));
 });
+
+test('workflowy przekładu i przeglądu: przy galaz_tekstow pobierają z gałęzi także src/ui (źródło „ui” czyta teksty z gałęzi); uprawnienia contents: read bez zmian (KO-149)', () => {
+  for (const f of ['przeklad-tlumaczen.yml', 'przeglad-tlumaczen.yml']) {
+    const y = readFileSync(join(ROOT, '.github/workflows', f), 'utf8');
+    assert.match(y, /for P in docs\/nazwy docs\/teksty src\/szablony src\/ui; do/, `${f}: lista ścieżek z gałęzi tekstów bez src/ui`);
+    assert.match(y, /git checkout FETCH_HEAD -- "\$P"/, `${f}: pobranie ścieżki z FETCH_HEAD`);
+    assert.match(y, /permissions:\n  contents: read\n/, `${f}: uprawnienia tylko do odczytu`);
+  }
+});
