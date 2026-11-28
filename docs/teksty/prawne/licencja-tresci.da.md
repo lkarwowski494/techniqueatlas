@@ -24,7 +24,7 @@ Gælder fra {{dataObowiazywania}} · version 1
 
 ## 4. Øvelsesdatabasen
 
-Samlingen af øvelser med beskrivelser, tips, tegninger og oversættelser er en database, som vi har udarbejdet for egne midler. Uden skriftlig tilladelse må du ikke udtrække eller offentligt gøre hele eller en væsentlig del af databasen tilgængelig, heller ikke i omarbejdet form, herunder for at lave andre apps, databaser eller datasæt til træning af modeller. Det gælder også gentagen udtrækning af små dele, hvis de tilsammen udgør en væsentlig del.
+Samlingen af øvelser med beskrivelser, tips, tegninger og oversættelser er en database, som vi har udarbejdet for egne midler. Uden skriftlig tilladelse må du ikke udtrække hele eller en væsentlig del af databasen eller gøre den offentligt tilgængelig, heller ikke i omarbejdet form, herunder for at lave andre apps, databaser eller datasæt til træning af modeller. Det gælder også gentagen udtrækning af små dele, hvis de tilsammen udgør en væsentlig del.
 Punkt 1 (indeksering, citering og opsummering med link) er ikke en sådan udtrækning.
 Undtaget er robotter, som denne sides robots.txt-fil udtrykkeligt giver adgang; de bruger indholdet i det omfang, deres udbyder beskriver.
 

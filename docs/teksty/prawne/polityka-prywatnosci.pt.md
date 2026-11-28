@@ -4,7 +4,7 @@ Em vigor desde {{dataObowiazywania}} · versão 1
 
 ## Em resumo
 
-O site Technique Atlas, por si só, não recolhe os seus dados pessoais. Não tem contas, formulários nem publicidade. Não utiliza cookies, armazenamento do navegador, ferramentas de análise nem ferramentas de rastreamento.
+O site Technique Atlas, por si só, não recolhe os seus dados pessoais. Não tem contas, formulários nem publicidade. Não utiliza cookies, armazenamento do navegador, ferramentas de análise nem ferramentas de rastreio.
 O site carrega apenas os seus próprios ficheiros. A pesquisa e os filtros funcionam no seu navegador.
 O site é disponibilizado por um serviço de alojamento. Esse serviço regista o endereço IP em cada visita nos seus registos (logs), por motivos de segurança (detalhes abaixo).
 Questões: {{kontakt}}.

@@ -7,7 +7,7 @@
  "sprzet": "Nepieciešamais aprīkojums: {lista}.",
  "rodzaj": "Kustības veids: {rodzaj}.",
  "blad": "Bieža kļūda: {zdanie}",
- "albo": "vai",
+ "albo": " vai ",
  "pytania": {
   "setup": "Kā ieņemt sākuma pozīciju?",
   "move": "Kā izpildīt kustību?",

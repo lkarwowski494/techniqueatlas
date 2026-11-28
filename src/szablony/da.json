@@ -4,10 +4,10 @@
  "miesnieGlowne": "Primære muskler: {lista}.",
  "miesniePomocnicze": "Hjælpemuskler: {lista}.",
  "partia": "Muskelgruppe: {grupa}.",
- "sprzet": "Udstyr: {lista}.",
+ "sprzet": "Nødvendigt udstyr: {lista}.",
  "rodzaj": "Bevægelsestype: {rodzaj}.",
  "blad": "Typisk fejl: {zdanie}",
- "albo": "eller",
+ "albo": " eller ",
  "pytania": {
   "setup": "Hvordan stiller du dig op?",
   "move": "Hvordan udfører du bevægelsen?",

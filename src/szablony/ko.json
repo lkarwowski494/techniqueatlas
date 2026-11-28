@@ -7,7 +7,7 @@
  "sprzet": "필요한 장비: {lista}.",
  "rodzaj": "동작 유형: {rodzaj}.",
  "blad": "흔한 실수: {zdanie}",
- "albo": "또는",
+ "albo": " 또는 ",
  "pytania": {
   "setup": "자세는 어떻게 잡나요?",
   "move": "동작은 어떻게 하나요?",
@@ -24,7 +24,7 @@
   "many": "종목 설명",
   "other": "종목 설명"
  },
- "opisListy": "{n}개 {pozycji}를 A부터 Z까지, 부위·장비·동작 유형별로 찾아보세요.",
+ "opisListy": "{n}개 {pozycji}을 A부터 Z까지, 부위·장비·동작 유형별로 찾아보세요.",
  "pozycji": {
   "one": "종목",
   "few": "종목",

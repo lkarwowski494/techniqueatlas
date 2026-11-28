@@ -16,12 +16,12 @@ Die Website wird von {{administrator}} betrieben, Kontakt: {{kontakt}}.
 ## Was passiert, wenn du die Website öffnest
 
 - Dein Browser lädt die Dateien der Website (HTML, CSS, Skripte, Übungszeichnungen) vom Hosting-Server. Die Website lädt nichts von anderen Diensten: keine Schriftarten, Skripte, Bilder oder Plugins.
-- Der Hosting-Server speichert bei jedem Besuch deine IP-Adresse und bewahrt sie aus Sicherheitsgründen auf. Die Logs führt der Hosting-Anbieter, ein Unternehmen mit Sitz in den USA, nach eigenen Regeln. Die Daten können daher in den USA verarbeitet werden. Der Anbieter erklärt, das EU-US-Datenschutzrahmenabkommen (Angemessenheitsbeschluss der Europäischen Kommission) einzuhalten.
+- Der Hosting-Server speichert bei jedem Besuch deine IP-Adresse und bewahrt sie aus Sicherheitsgründen auf. Die Logs führt der Hosting-Anbieter, ein Unternehmen mit Sitz in den USA, nach eigenen Regeln. Die Daten können daher in den USA verarbeitet werden. Der Anbieter erklärt, den EU-US-Datenschutzrahmen (Angemessenheitsbeschluss der Europäischen Kommission) einzuhalten.
 - Die Website hat keine eigene Besucherstatistik.
 
 ## Suche, Filter und Zeichnungen
 
-- Der Text, den du in die Suche nach Übungsnamen eingibst, wird nirgendwohin gesendet. Dein Browser lädt vom Server der Website eine Datei mit der Liste der Namen in der jeweiligen Sprache und durchsucht sie bei dir.
+- Der Text, den du in die Suche nach Übungsnamen eingibst, wird nirgendwohin gesendet. Dein Browser lädt vom Server der Website eine Datei mit der Liste der Namen in der jeweiligen Sprache und durchsucht sie auf deinem Gerät.
 - Die Listenfilter laufen in deinem Browser und ändern die Seitenadresse nicht.
 - Die animierte Übungszeichnung lädt eine eigene Datendatei der Website. Ist in deinem System die Einstellung „Bewegung reduzieren“ aktiviert, startet die Animation nicht von selbst. Diese Einstellung liest nur dein Browser.
 - Die Website funktioniert auch ohne JavaScript: Die Übungsliste und die Beschreibungen sind normales HTML.

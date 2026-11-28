@@ -7,7 +7,7 @@
  "sprzet": "Tarvittavat välineet: {lista}.",
  "rodzaj": "Liiketyyppi: {rodzaj}.",
  "blad": "Yleinen virhe: {zdanie}",
- "albo": "tai",
+ "albo": " tai ",
  "pytania": {
   "setup": "Miten asetut alkuasentoon?",
   "move": "Miten teet liikkeen?",

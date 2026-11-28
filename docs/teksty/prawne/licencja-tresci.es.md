@@ -30,4 +30,4 @@ Se exceptúan los robots a los que el archivo robots.txt de este sitio permite e
 
 ## 5. Permiso para otros usos
 
-¿Quieres usar el contenido de otra forma? Escribe a: {{kontakt}}.
+¿Quieres usar el contenido de otra forma? Escribe a {{kontakt}}.

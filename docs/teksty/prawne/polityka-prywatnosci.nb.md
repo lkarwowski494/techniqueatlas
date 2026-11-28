@@ -29,7 +29,7 @@ Nettstedet drives av {{administrator}}, kontakt: {{kontakt}}.
 ## Lenker til andre tjenester
 
 - Knappen «App Store» fører til appens side i App Store. Adressen inneholder kampanjemerket `techniqueatlas-<språk>`. Det viser bare hvilken språkversjon av nettstedet besøket kom fra, ikke hvem du er. Etter at du har fulgt lenken, gjelder appbutikkens vilkår.
-- På iPhone og iPad kan nettleseren vise et appbanner. Nettleseren viser det selv, basert på en kode i sidens kildekode.
+- På iPhone og iPad kan nettleseren vise et appbanner. Nettleseren viser det selv, basert på en tagg i sidens kode.
 - Språkvelgeren og de øvrige lenkene fører til sider på dette nettstedet.
 
 ## Når du skriver til oss
@@ -55,4 +55,4 @@ Nettstedet selv samler ikke inn opplysninger fra noen, heller ikke fra barn.
 
 ## Endringer
 
-Hvis det nettstedet gjør med opplysninger endres, oppdaterer vi denne erklæringen før en slik versjon publiseres, og oppgir ny dato. Nettstedets kode er offentlig, så alle endringer er synlige i historikken til kodelageret.
+Hvis det endres hva nettstedet gjør med opplysninger, oppdaterer vi denne erklæringen før en slik versjon publiseres, og oppgir ny dato. Nettstedets kode er offentlig, så alle endringer er synlige i historikken til kodelageret.

@@ -4,7 +4,7 @@ Berlaku sejak {{dataObowiazywania}} · versi 1
 
 ## 1. Penyedia layanan
 
-Situs {{adresStrony}} dikelola oleh {{administrator}}, kontak: {{kontakt}} (selanjutnya: „kami”).
+Situs {{adresStrony}} dikelola oleh {{administrator}}, kontak: {{kontakt}} (selanjutnya: “kami”).
 
 ## 2. Yang ditawarkan situs
 
@@ -17,7 +17,7 @@ Konten situs bersifat informatif. **Konten ini bukan nasihat medis maupun rencan
 
 ## 3. Persyaratan teknis
 
-Anda cukup memerlukan browser web terbaru dengan akses internet. Deskripsi dan daftar gerakan juga berfungsi tanpa JavaScript. Animasi gambar, filter, dan pencarian memerlukan JavaScript yang aktif.
+Anda hanya memerlukan browser web terbaru dengan akses internet. Deskripsi dan daftar gerakan juga berfungsi tanpa JavaScript. Animasi gambar, filter, dan pencarian memerlukan JavaScript yang aktif.
 Situs ini tidak memerlukan akun, cookie, maupun pemasangan apa pun.
 
 ## 4. Aturan penggunaan

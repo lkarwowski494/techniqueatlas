@@ -31,7 +31,7 @@ Việc sử dụng bắt đầu khi bạn mở trang và kết thúc khi bạn �
 
 ## 6. Khiếu nại
 
-Hãy gửi góp ý và khiếu nại về trang (ví dụ lỗi trong nội dung, chức năng không hoạt động) đến {{kontakt}}. Hãy mô tả vấn đề và trang liên quan. Chúng tôi sẽ trả lời không chậm trễ, muộn nhất trong vòng 14 ngày.
+Hãy gửi góp ý và khiếu nại về trang (ví dụ lỗi trong nội dung, chức năng không hoạt động) đến {{kontakt}}. Hãy mô tả vấn đề và trang liên quan. Chúng tôi sẽ trả lời không chậm trễ quá mức cần thiết, muộn nhất trong vòng 14 ngày.
 
 ## 7. Trách nhiệm
 

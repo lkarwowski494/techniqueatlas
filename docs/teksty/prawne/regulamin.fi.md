@@ -11,7 +11,7 @@ Sivustoa {{adresStrony}} ylläpitää {{administrator}}, yhteystiedot: {{kontakt
 Tarjoamme maksutta ja ilman rekisteröitymistä:
 - liikekirjaston kuvauksineen ja lihaksineen, ja useimpiin liikkeisiin myös tekniikkavinkit, yleiset virheet, korvaavat liikkeet ja liikkeen piirroksen;
 - liikeluettelon suodattimineen ja nimihaun;
-- sivuston useilla kielillä.
+- sivuston kieliversiot useilla kielillä.
 
 Sivuston sisältö on tarkoitettu tiedoksi. **Se ei ole lääketieteellistä neuvontaa eikä yksilöllinen hoito- tai kuntoutussuunnitelma.** Jos sinulla on sairaus, vamma tai olet raskaana tai jos olet epävarma terveydentilastasi, käy liikkeet läpi lääkärin tai fysioterapeutin kanssa.
 
@@ -31,7 +31,7 @@ Käyttö alkaa, kun avaat sivuston, ja päättyy, kun suljet sen. Määräaikais
 
 ## 6. Reklamaatiot
 
-Lähetä sivustoa koskevat huomautukset ja reklamaatiot (esim. virhe sisällössä tai toimimaton toiminto) osoitteeseen {{kontakt}}. Kerro, mitä asia koskee ja millä sivulla. Vastaamme ilman aiheetonta viivytystä, viimeistään 14 päivän kuluessa.
+Lähetä sivustoa koskevat huomautukset ja reklamaatiot (esim. virhe sisällössä tai ominaisuus, joka ei toimi) osoitteeseen {{kontakt}}. Kerro, mitä asia koskee ja millä sivulla. Vastaamme ilman aiheetonta viivytystä, viimeistään 14 päivän kuluessa.
 
 ## 7. Vastuu
 

@@ -24,7 +24,7 @@ Em vigor a partir de {{dataObowiazywania}} · versão 1
 
 ## 4. Base de exercícios
 
-A coleção de exercícios com descrições, dicas, desenhos e traduções é uma base de dados que elaboramos com investimento próprio. Sem autorização por escrito, não é permitido extrair nem disponibilizar publicamente a totalidade ou uma parte substancial dessa base, inclusive de forma modificada, inclusive para criar outros aplicativos, bases de dados ou conjuntos de dados para treinar modelos. Isso também se aplica à extração repetida de pequenas partes que, em conjunto, formem uma parte substancial.
+A coleção de exercícios com descrições, dicas, desenhos e traduções é uma base de dados que elaboramos com investimento próprio. Sem autorização por escrito, não é permitido extrair nem disponibilizar publicamente a totalidade ou uma parte substancial dessa base, inclusive de forma modificada, incluindo para criar outros aplicativos, bases de dados ou conjuntos de dados para treinar modelos. Isso também se aplica à extração repetida de pequenas partes que, em conjunto, formem uma parte substancial.
 O item 1 (indexar, citar e resumir com link) não constitui essa extração.
 A exceção são os robôs aos quais o arquivo robots.txt deste site permite expressamente o acesso; eles usam o conteúdo no âmbito descrito pelo seu fornecedor.
 

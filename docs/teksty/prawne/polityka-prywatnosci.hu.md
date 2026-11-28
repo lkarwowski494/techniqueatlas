@@ -55,4 +55,4 @@ Maga az oldal senkitől sem gyűjt adatokat, gyermekektől sem.
 
 ## Változások
 
-Ha megváltozik, hogy az oldal mit tesz az adatokkal, az ilyen változat közzététele előtt módosítjuk ezt a szabályzatot, és feltüntetjük az új dátumot. Az oldal kódja nyilvános, így minden változás látható a tárhelye (repository) előzményeiben.
+Ha megváltozik, hogy az oldal mit tesz az adatokkal, az ilyen változat közzététele előtt módosítjuk ezt a szabályzatot, és feltüntetjük az új dátumot. Az oldal kódja nyilvános, így minden változás látható a kódtárának (repository) előzményeiben.

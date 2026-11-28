@@ -7,9 +7,9 @@ En vigueur à partir du {{dataObowiazywania}} · version 1
 ## 1. Ce que vous pouvez faire sans demander
 
 - Lire le site, imprimer ses pages et les enregistrer en PDF pour votre usage personnel.
-- **Coachs, instructeurs et kinésithérapeutes :** imprimer les pages d’exercices (et, lorsque le site les proposera, les plans d’entraînement) et distribuer les impressions ou les fichiers PDF à vos élèves, y compris dans le cadre d’une activité rémunérée (séances, consultations, cours).
+- **Coachs, instructeurs et kinésithérapeutes :** imprimer les pages d’exercices (et, lorsque le site les proposera, les plans d’entraînement) et distribuer les impressions ou les fichiers PDF à vos clients ou patients, y compris dans le cadre d’une activité rémunérée (séances, consultations, cours).
 - Mettre un lien vers n’importe quelle page du site et citer de courts extraits en indiquant l’adresse de la page.
-- Moteurs de recherche et assistants IA : indexer les pages, les citer et les résumer dans leurs réponses avec un lien vers la page.
+- Moteurs de recherche et assistants IA : indexer les pages, les citer et les résumer dans leurs réponses avec un lien vers la page.
 
 ## 2. Conditions
 
@@ -26,8 +26,8 @@ En vigueur à partir du {{dataObowiazywania}} · version 1
 
 La collection d’exercices avec descriptions, conseils, dessins et traductions est une base de données que nous avons constituée grâce à nos propres investissements. Sans accord écrit, il est interdit d’extraire ou de mettre à la disposition du public la totalité ou une partie substantielle de cette base, y compris sous une forme transformée, notamment pour créer d’autres applications, bases de données ou jeux de données destinés à l’entraînement de modèles. Cela vaut aussi pour l’extraction répétée de petites parties qui, ensemble, constituent une partie substantielle.
 Le point 1 (indexation, citation et résumé avec lien) ne constitue pas une telle extraction.
-Font exception les robots auxquels le fichier robots.txt de ce site autorise expressément l’accès ; ils utilisent le contenu dans les limites décrites par leur fournisseur.
+Font exception les robots auxquels le fichier robots.txt de ce site autorise expressément l’accès ; ils utilisent le contenu dans les limites décrites par leur fournisseur.
 
 ## 5. Autorisation pour d’autres usages
 
-Vous souhaitez utiliser le contenu autrement ? Écrivez à : {{kontakt}}.
+Vous souhaitez utiliser le contenu autrement ? Écrivez à : {{kontakt}}.

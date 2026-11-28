@@ -7,9 +7,9 @@
  "sprzet": "Dụng cụ cần có: {lista}.",
  "rodzaj": "Kiểu chuyển động: {rodzaj}.",
  "blad": "Lỗi thường gặp: {zdanie}",
- "albo": "hoặc",
+ "albo": " hoặc ",
  "pytania": {
-  "setup": "Vào tư thế thế nào?",
+  "setup": "Vào tư thế như thế nào?",
   "move": "Thực hiện động tác thế nào?",
   "miesnie": "Bài tập này tác động lên cơ nào?",
   "tips": "Điều gì giúp cải thiện kỹ thuật?",
@@ -17,7 +17,7 @@
   "sprzet": "Cần dụng cụ gì?",
   "zamienniki": "Có thể thay bằng bài tập nào?"
  },
- "opisGlownej": "{n} {opisow}: {f} có hình minh họa chuyển động, {c} có hướng dẫn kỹ thuật, {z} có bài thay thế.",
+ "opisGlownej": "{n} {opisow}: {f} bài có hình minh họa chuyển động, {c} bài có hướng dẫn kỹ thuật, {z} bài có bài thay thế.",
  "opisow": {
   "one": "bài mô tả",
   "few": "bài mô tả",
@@ -33,5 +33,5 @@
  },
  "opisKategorii": "{n} {pozycji}, gồm {lista}.",
  "opisKategoriiJedna": "Một mục: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}; {f} có hình minh họa chuyển động, {c} có hướng dẫn kỹ thuật."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; {f} mục có hình minh họa chuyển động, {c} mục có hướng dẫn kỹ thuật."
 }

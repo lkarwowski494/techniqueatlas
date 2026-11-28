@@ -9,7 +9,7 @@ Websitet {{adresStrony}} drives af {{administrator}}, kontakt: {{kontakt}} (here
 ## 2. Hvad siden tilbyder
 
 Gratis og uden registrering stiller vi følgende til rådighed:
-- et øvelsesbibliotek med beskrivelse og muskler og for de fleste øvelser også teknik-tips, almindelige fejl, erstatninger og en tegning af bevægelsen;
+- et øvelsesbibliotek med beskrivelse og muskler og for de fleste øvelser også tekniktips, almindelige fejl, erstatninger og en tegning af bevægelsen;
 - en liste over øvelser med filtre og søgning efter navne;
 - versioner af siden på mange sprog.
 

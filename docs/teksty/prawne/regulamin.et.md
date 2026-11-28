@@ -13,7 +13,7 @@ Tasuta ja ilma registreerimiseta pakume:
 - harjutuste loendit filtritega ja nimede otsingut;
 - saidi versioone paljudes keeltes.
 
-Saidi sisu on informatiivne. **See ei ole meditsiiniline nõuanne ega individuaalne ravi- või taastusravikava.** Haiguse, vigastuse, raseduse või tervisega seotud kahtluste korral arutage harjutused läbi arsti või füsioterapeudiga.
+Saidi sisu on informatiivne. **See ei ole meditsiiniline nõuanne ega individuaalne ravi- või taastusravikava.** Haiguse, vigastuse, raseduse või tervisega seotud kahtluste korral aruta harjutused läbi arsti või füsioterapeudiga.
 
 ## 3. Tehnilised nõuded
 
@@ -31,7 +31,7 @@ Kasutamine algab saidi avamise hetkest ja lõpeb selle sulgemise hetkel. Tähtaj
 
 ## 6. Kaebused
 
-Saadad saidi kohta märkused ja kaebused (nt viga sisus, mittetöötav funktsioon) aadressile {{kontakt}}. Kirjelda, mida asi puudutab ja millisel lehel. Vastame põhjendamatu viivituseta, hiljemalt 14 päeva jooksul.
+Saada saidi kohta märkused ja kaebused (nt viga sisus, mittetöötav funktsioon) aadressile {{kontakt}}. Kirjelda, mida asi puudutab ja millisel lehel. Vastame põhjendamatu viivituseta, hiljemalt 14 päeva jooksul.
 
 ## 7. Vastutus
 

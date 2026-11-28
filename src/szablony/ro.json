@@ -7,7 +7,7 @@
  "sprzet": "Echipament necesar: {lista}.",
  "rodzaj": "Tipul mișcării: {rodzaj}.",
  "blad": "Greșeală frecventă: {zdanie}",
- "albo": "sau",
+ "albo": " sau ",
  "pytania": {
   "setup": "Cum vă poziționați?",
   "move": "Cum executați mișcarea?",

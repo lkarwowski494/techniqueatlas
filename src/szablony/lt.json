@@ -7,7 +7,7 @@
  "sprzet": "Reikalinga įranga: {lista}.",
  "rodzaj": "Judesio tipas: {rodzaj}.",
  "blad": "Dažna klaida: {zdanie}",
- "albo": "arba",
+ "albo": " arba ",
  "pytania": {
   "setup": "Kaip pasiruošti?",
   "move": "Kaip atlikti judesį?",

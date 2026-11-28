@@ -18,7 +18,7 @@ Vrijedi od {{dataObowiazywania}} · verzija 1
 
 ## 3. Što nije dopušteno bez našeg pisanog odobrenja
 
-- Prodavati same ispise ili PDF datoteke ni sadržaj stranice (npr. kao e-knjigu, tečaj, plaćene materijale).
+- Prodavati same ispise ni PDF datoteke ni sadržaj stranice (npr. kao e-knjigu, tečaj, plaćene materijale).
 - Kopirati crteže i animacije vježbi zasebno, izvan ispisa cijele stranice ili plana (npr. u vlastite materijale, aplikacije, društvene mreže).
 - Objavljivati sadržaj stranice na drugom servisu, u aplikaciji ili publikaciji.
 

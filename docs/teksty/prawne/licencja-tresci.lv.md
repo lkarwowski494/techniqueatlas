@@ -13,7 +13,7 @@ Spēkā no {{dataObowiazywania}} · versija 1
 
 ## 2. Nosacījumi
 
-- Katrā izdrukā un PDF failā saglabājas vietnes adrese ({{adresStrony}}).
+- Katrā izdrukā un PDF failā jāsaglabā vietnes adrese ({{adresStrony}}).
 - Nemainiet saturu tā, lai tas maldinātu par vingrinājuma tehniku, un neuzdodiet to par savu.
 
 ## 3. Ko nedrīkst darīt bez mūsu rakstiskas piekrišanas

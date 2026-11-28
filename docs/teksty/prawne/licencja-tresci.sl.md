@@ -30,4 +30,4 @@ Izjema so roboti, ki jim datoteka robots.txt tega spletnega mesta izrecno dovolj
 
 ## 5. Dovoljenje za drugačno uporabo
 
-Želite vsebino uporabiti drugače? Pišite na: {{kontakt}}.
+Želite vsebino uporabiti drugače? Pišite na {{kontakt}}.

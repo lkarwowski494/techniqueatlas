@@ -39,7 +39,7 @@ Dbáme na správnost obsahu, ale nezaručujeme, že je bez chyb ani že web fung
 
 ## 8. Ochrana osobních údajů
 
-Pravidla ochrany osobních údajů popisují zásady ochrany osobních údajů webu ({{adresStrony}}/…/prywatnosc).
+Ochranu osobních údajů popisují zásady ochrany osobních údajů webu ({{adresStrony}}/…/prywatnosc).
 
 ## 9. Změny podmínek
 

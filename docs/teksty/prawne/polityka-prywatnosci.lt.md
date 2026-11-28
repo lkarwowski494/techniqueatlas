@@ -23,12 +23,12 @@ Svetainę tvarko {{administrator}}, kontaktai: {{kontakt}}.
 
 - Tekstas, kurį įvedate pratimų pavadinimų paieškoje, niekur nesiunčiamas. Naršyklė iš svetainės serverio atsisiunčia vieną failą su pavadinimų sąrašu ta kalba ir ieško jame jūsų įrenginyje.
 - Sąrašo filtrai veikia naršyklėje ir nekeičia puslapio adreso.
-- Animuotas pratimo piešinys įkelia paties svetainės duomenų failą. Jei sistemoje įjungtas nustatymas „Sumažinti judėjimą“, animacija nepasileidžia savaime. Šį nustatymą nuskaito tik jūsų naršyklė.
+- Animuotas pratimo piešinys įkelia pačios svetainės duomenų failą. Jei sistemoje įjungtas nustatymas „Sumažinti judėjimą“, animacija nepasileidžia savaime. Šį nustatymą nuskaito tik jūsų naršyklė.
 - Svetainė veikia ir be „JavaScript“: pratimų sąrašas ir aprašymai pateikti paprastu HTML.
 
 ## Nuorodos į kitas paslaugas
 
-- Mygtukas „App Store“ veda į programėlės puslapį „App Store“. Adrese yra kampanijos žymė `techniqueatlas-<kalba>`. Ji rodo tik, iš kurios svetainės kalbos versijos atėjote, o ne kas jūs esate. Perėjus galioja programėlių parduotuvės taisyklės.
+- Mygtukas „App Store“ veda į programėlės puslapį „App Store“. Adrese yra kampanijos žymė `techniqueatlas-<kalba>`. Ji rodo tik tai, iš kurios svetainės kalbos versijos atėjote, o ne tai, kas jūs esate. Perėjus galioja programėlių parduotuvės taisyklės.
 - „iPhone“ ir „iPad“ įrenginiuose naršyklė gali rodyti programėlės reklamjuostę. Ją rodo pati naršyklė pagal žymą puslapio kode.
 - Kalbos perjungiklis ir kitos nuorodos veda į šios svetainės puslapius.
 

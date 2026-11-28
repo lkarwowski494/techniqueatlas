@@ -7,9 +7,9 @@
  "sprzet": "Vajalik varustus: {lista}.",
  "rodzaj": "Liikumise tüüp: {rodzaj}.",
  "blad": "Levinud viga: {zdanie}",
- "albo": "või",
+ "albo": " või ",
  "pytania": {
-  "setup": "Kuidas end sisse seada?",
+  "setup": "Kuidas algasendisse asuda?",
   "move": "Kuidas liigutust teha?",
   "miesnie": "Milliseid lihaseid see treenib?",
   "tips": "Mis aitab tehnikat parandada?",
@@ -33,5 +33,5 @@
  },
  "opisKategorii": "{n} {pozycji}, sealhulgas {lista}.",
  "opisKategoriiJedna": "Üks kirje: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}, liikumisjoonis {f} ja tehnikavihjed {c} juures."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}, liikumisjoonis {f} juures ja tehnikavihjed {c} juures."
 }

@@ -7,11 +7,11 @@
  "sprzet": "Benodigd materiaal: {lista}.",
  "rodzaj": "Type beweging: {rodzaj}.",
  "blad": "Veelgemaakte fout: {zdanie}",
- "albo": "of",
+ "albo": " of ",
  "pytania": {
   "setup": "Hoe zet je je klaar?",
   "move": "Hoe voer je de beweging uit?",
-  "miesnie": "Welke spieren werken mee?",
+  "miesnie": "Welke spieren train je hiermee?",
   "tips": "Wat helpt je techniek?",
   "mistakes": "Welke fouten moet je vermijden?",
   "sprzet": "Welk materiaal heb je nodig?",

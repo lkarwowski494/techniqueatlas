@@ -9,7 +9,7 @@ Platí od {{dataObowiazywania}} · verzia 1
 - Čítať stránku, tlačiť jej stránky a ukladať ich do PDF na vlastné použitie.
 - **Tréneri, inštruktori a fyzioterapeuti:** tlačiť stránky cvikov (a keď ich stránka sprístupní, aj tréningové plány) a rozdávať výtlačky alebo súbory PDF svojim zverencom, a to aj v rámci platenej práce (tréningy, konzultácie, lekcie).
 - Odkazovať na ľubovoľnú stránku webu a citovať krátke úryvky s uvedením adresy stránky.
-- Vyhľadávačom a asistentom AI: indexovať stránky, citovať ich a zhrnúť ich v odpovediach s odkazom na stránku.
+- Vyhľadávačom a asistentom AI: indexovať stránky, citovať ich a zhŕňať ich v odpovediach s odkazom na stránku.
 
 ## 2. Podmienky
 
@@ -30,4 +30,4 @@ Výnimkou sú roboty, ktorým súbor robots.txt tejto stránky výslovne povoľu
 
 ## 5. Súhlas s iným použitím
 
-Chcete obsah použiť inak? Napíšte na: {{kontakt}}.
+Chcete obsah použiť inak? Napíšte na {{kontakt}}.

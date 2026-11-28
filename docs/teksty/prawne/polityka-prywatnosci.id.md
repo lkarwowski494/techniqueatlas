@@ -23,22 +23,22 @@ Situs ini dikelola oleh {{administrator}}, kontak: {{kontakt}}.
 
 - Teks yang Anda ketik di pencarian nama gerakan tidak dikirim ke mana pun. Browser mengunduh satu file dari server situs berisi daftar nama dalam bahasa tersebut dan mencarinya di perangkat Anda.
 - Filter daftar berjalan di browser dan tidak mengubah alamat halaman.
-- Gambar gerakan beranimasi memuat file data milik situs sendiri. Jika pengaturan „Kurangi Gerakan” aktif di sistem Anda, animasi tidak berjalan otomatis. Pengaturan ini hanya dibaca oleh browser Anda.
+- Gambar gerakan beranimasi memuat file data milik situs sendiri. Jika pengaturan “Kurangi Gerakan” aktif di sistem Anda, animasi tidak berjalan otomatis. Pengaturan ini hanya dibaca oleh browser Anda.
 - Situs juga berfungsi tanpa JavaScript: daftar gerakan dan deskripsinya tersedia dalam HTML biasa.
 
 ## Tautan ke layanan lain
 
-- Tombol „App Store” mengarah ke halaman aplikasi di App Store. Alamatnya memuat tanda kampanye `techniqueatlas-<bahasa>`. Tanda ini hanya menunjukkan dari versi bahasa situs mana kunjungan berasal, bukan siapa Anda. Setelah Anda membuka tautan, ketentuan toko aplikasi yang berlaku.
+- Tombol “App Store” mengarah ke halaman aplikasi di App Store. Alamatnya memuat tanda kampanye `techniqueatlas-<bahasa>`. Tanda ini hanya menunjukkan dari versi bahasa situs mana kunjungan berasal, bukan siapa Anda. Setelah Anda membuka tautan, berlaku ketentuan toko aplikasi.
 - Di iPhone dan iPad, browser dapat menampilkan banner aplikasi. Banner ini ditampilkan oleh browser sendiri berdasarkan tag dalam kode halaman.
 - Pengalih bahasa dan tautan lainnya mengarah ke halaman situs ini.
 
 ## Saat Anda menghubungi kami
 
-Situs ini tidak memiliki formulir kontak. Jika Anda mengirim email ke {{kontakt}}, kami memproses pesan Anda sebagaimana dijelaskan dalam bagian „Saat Anda menghubungi kami” pada kebijakan privasi aplikasi: {{politykaAplikacji}}. Di sana dijelaskan tujuan, dasar hukum, masa penyimpanan, penerima, dan hak-hak Anda.
+Situs ini tidak memiliki formulir kontak. Jika Anda mengirim email ke {{kontakt}}, kami memproses pesan Anda sebagaimana dijelaskan dalam bagian “Saat Anda menghubungi kami” pada kebijakan privasi aplikasi: {{politykaAplikacji}}. Di sana dijelaskan tujuan, dasar hukum, masa penyimpanan, penerima, dan hak-hak Anda.
 
 ## Hak Anda
 
-Anda berhak mengakses data Anda, memperbaikinya, menghapusnya, membatasi pemrosesannya, mengajukan keberatan, dan memindahkan data. Anda juga dapat mengajukan pengaduan kepada Presiden Kantor Perlindungan Data Pribadi Polandia.
+Anda berhak mengakses data Anda, memperbaikinya, menghapusnya, membatasi pemrosesannya, mengajukan keberatan, dan memindahkan data. Anda juga dapat mengajukan pengaduan kepada Ketua Kantor Perlindungan Data Pribadi Polandia (UODO).
 Karena situs ini sendiri tidak mengumpulkan data pribadi, kami tidak memiliki data yang dapat kami berikan atau hapus, kecuali email yang Anda kirim kepada kami. Terkait log hosting, hubungi kami, dan kami akan memberi tahu penyedianya serta cara menghubunginya.
 
 ## Apakah Anda wajib memberikan data

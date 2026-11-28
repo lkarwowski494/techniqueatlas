@@ -7,7 +7,7 @@
  "sprzet": "Alat yang dibutuhkan: {lista}.",
  "rodzaj": "Jenis gerakan: {rodzaj}.",
  "blad": "Kesalahan umum: {zdanie}",
- "albo": "atau",
+ "albo": " atau ",
  "pytania": {
   "setup": "Bagaimana posisi awalnya?",
   "move": "Bagaimana cara melakukan gerakannya?",

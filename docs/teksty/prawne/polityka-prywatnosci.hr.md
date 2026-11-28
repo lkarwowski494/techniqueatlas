@@ -28,8 +28,8 @@ Stranicu vodi {{administrator}}, kontakt: {{kontakt}}.
 
 ## Poveznice na druge servise
 
-- Tipka „App Store” vodi na stranicu aplikacije u App Storeu. Adresa sadrži oznaku kampanje `techniqueatlas-<jezik>`. Ona govori samo s koje je jezične verzije stranice došao prijelaz, a ne tko ste vi. Nakon prijelaza vrijede pravila trgovine aplikacijama.
-- Na iPhoneu i iPadu preglednik može prikazati natpis aplikacije. Prikazuje ga sam preglednik na temelju oznake u kodu stranice.
+- Gumb „App Store” vodi na stranicu aplikacije u App Storeu. Adresa sadrži oznaku kampanje `techniqueatlas-<jezik>`. Ona govori samo s koje je jezične verzije stranice došao posjet, a ne tko ste vi. Nakon prelaska na tu stranicu vrijede pravila trgovine aplikacijama.
+- Na iPhoneu i iPadu preglednik može prikazati banner aplikacije. Prikazuje ga sam preglednik na temelju oznake u kodu stranice.
 - Izbornik jezika i ostale poveznice vode na stranice ovog servisa.
 
 ## Kada nam pišete

@@ -7,7 +7,7 @@
  "sprzet": "Potrebna oprema: {lista}.",
  "rodzaj": "Vrsta pokreta: {rodzaj}.",
  "blad": "Česta greška: {zdanie}",
- "albo": "ili",
+ "albo": " ili ",
  "pytania": {
   "setup": "Kako se postaviti?",
   "move": "Kako izvesti pokret?",
@@ -17,7 +17,7 @@
   "sprzet": "Koja je oprema potrebna?",
   "zamienniki": "Čime se može zamijeniti?"
  },
- "opisGlownej": "{n} {opisow}: crtež pokreta za {f}, savjeti za tehniku za {c}, zamjene za {z}.",
+ "opisGlownej": "{n} {opisow}: crtež pokreta za {f}, savjeti o tehnici za {c}, zamjene za {z}.",
  "opisow": {
   "one": "opis",
   "few": "opisa",
@@ -29,9 +29,9 @@
   "one": "stavka",
   "few": "stavke",
   "many": "stavki",
-  "other": "stavki"
+  "other": "stavke"
  },
  "opisKategorii": "{n} {pozycji}, uključujući {lista}.",
  "opisKategoriiJedna": "Jedna stavka: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji} s crtežom pokreta za {f} i savjetima za tehniku za {c}."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji} s crtežom pokreta za {f} i savjetima o tehnici za {c}."
 }

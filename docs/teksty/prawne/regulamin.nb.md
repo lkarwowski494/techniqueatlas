@@ -13,7 +13,7 @@ Gratis og uten registrering tilbyr vi:
 - en øvelsesliste med filtre og navnesøk;
 - versjoner av nettstedet på mange språk.
 
-Innholdet på nettstedet er kun til informasjon. **Det er ikke medisinske råd eller en individuell behandlings- eller rehabiliteringsplan.** Ved sykdom, skade, graviditet eller tvil om helsen din bør du rådføre deg med lege eller fysioterapeut om øvelsene.
+Innholdet på nettstedet er kun til informasjon. **Det er ikke medisinske råd eller en individuell behandlings- eller rehabiliteringsplan.** Ved sykdom, skade, graviditet eller tvil om helsen din: rådfør deg med lege eller fysioterapeut om øvelsene.
 
 ## 3. Tekniske krav
 
@@ -35,7 +35,7 @@ Tilbakemeldinger og klager som gjelder nettstedet (f.eks. en feil i innholdet el
 
 ## 7. Ansvar
 
-Vi sørger for at innholdet er korrekt, men vi garanterer ikke at det er feilfritt eller at nettstedet fungerer uten avbrudd. Du trener på eget ansvar og velger vekt etter egne forutsetninger.
+Vi legger vekt på at innholdet skal være korrekt, men vi garanterer ikke at det er feilfritt eller at nettstedet fungerer uten avbrudd. Du trener på eget ansvar og velger vekt etter egne forutsetninger.
 
 ## 8. Personvern
 

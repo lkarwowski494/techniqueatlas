@@ -7,7 +7,7 @@
  "sprzet": "Szükséges felszerelés: {lista}.",
  "rodzaj": "Mozgástípus: {rodzaj}.",
  "blad": "Gyakori hiba: {zdanie}",
- "albo": "vagy",
+ "albo": " vagy ",
  "pytania": {
   "setup": "Hogyan kell beállni?",
   "move": "Hogyan kell végrehajtani a mozdulatot?",

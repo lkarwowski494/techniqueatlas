@@ -24,8 +24,8 @@ Berlaku sejak {{dataObowiazywania}} · versi 1
 
 ## 4. Basis data gerakan
 
-Kumpulan gerakan beserta deskripsi, petunjuk, gambar, dan terjemahannya adalah basis data yang kami susun dengan investasi kami sendiri. Tanpa izin tertulis, Anda tidak boleh mengambil atau menyediakan untuk umum seluruh atau sebagian substansial basis data ini, termasuk dalam bentuk yang diubah, termasuk untuk membuat aplikasi, basis data, atau kumpulan data lain untuk melatih model. Ketentuan ini juga berlaku untuk pengambilan berulang atas bagian-bagian kecil yang jika digabungkan membentuk bagian substansial.
-Butir 1 (mengindeks, mengutip, dan merangkum dengan tautan) bukan termasuk pengambilan semacam itu.
+Kumpulan gerakan beserta deskripsi, petunjuk, gambar, dan terjemahannya adalah basis data yang kami susun dengan investasi kami sendiri. Tanpa izin tertulis, Anda tidak boleh mengambil atau menyediakan untuk umum seluruh atau sebagian substansial basis data ini, juga dalam bentuk yang diubah, termasuk untuk membuat aplikasi, basis data, atau kumpulan data lain untuk melatih model. Ketentuan ini juga berlaku untuk pengambilan berulang atas bagian-bagian kecil yang jika digabungkan membentuk bagian substansial.
+Butir 1 (mengindeks, mengutip, dan merangkum dengan tautan) tidak termasuk pengambilan semacam itu.
 Pengecualian berlaku bagi robot yang secara tegas diizinkan mengakses oleh file robots.txt situs ini; robot tersebut menggunakan konten dalam batas yang dijelaskan oleh penyedianya.
 
 ## 5. Izin untuk penggunaan lain

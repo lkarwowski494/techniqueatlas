@@ -13,7 +13,7 @@ Gratis en zonder registratie bieden we:
 - een lijst met oefeningen met filters en een zoekfunctie voor namen;
 - versies van de website in veel talen.
 
-De inhoud van de website is bedoeld als informatie. **Het is geen medisch advies en geen individueel behandel- of revalidatieplan.** Bij ziekte, een blessure, zwangerschap of twijfel over je gezondheid overleg je de oefeningen met een arts of fysiotherapeut.
+De inhoud van de website is bedoeld als informatie. **Het is geen medisch advies en geen individueel behandel- of revalidatieplan.** Bij ziekte, een blessure, zwangerschap of twijfel over je gezondheid: overleg met een arts of fysiotherapeut over de oefeningen.
 
 ## 3. Technische vereisten
 

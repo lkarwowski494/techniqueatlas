@@ -23,7 +23,7 @@ Vietni uztur {{administrator}}, kontakti: {{kontakt}}.
 
 - Teksts, ko ievadāt vingrinājumu nosaukumu meklēšanā, netiek nekur nosūtīts. Pārlūks no vietnes servera lejupielādē vienu failu ar nosaukumu sarakstu attiecīgajā valodā un meklē tajā jūsu ierīcē.
 - Saraksta filtri darbojas pārlūkā un nemaina lapas adresi.
-- Animētais vingrinājuma zīmējums ielādē vietnes datu failu. Ja sistēmā ir ieslēgts iestatījums “Samazināt kustības”, animācija nesākas automātiski. Šo iestatījumu nolasa tikai jūsu pārlūks.
+- Animētais vingrinājuma zīmējums ielādē pašas vietnes datu failu. Ja sistēmā ir ieslēgts iestatījums “Samazināt kustības”, animācija nesākas automātiski. Šo iestatījumu nolasa tikai jūsu pārlūks.
 - Vietne darbojas arī bez JavaScript: vingrinājumu saraksts un to apraksti ir parastā HTML formātā.
 
 ## Saites uz citiem pakalpojumiem

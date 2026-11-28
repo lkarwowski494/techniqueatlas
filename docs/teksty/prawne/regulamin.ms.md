@@ -13,7 +13,7 @@ Secara percuma dan tanpa pendaftaran, kami menyediakan:
 - senarai senaman dengan penapis dan carian nama;
 - versi laman dalam pelbagai bahasa.
 
-Kandungan laman ini adalah untuk tujuan maklumat. **Ia bukan nasihat perubatan atau pelan rawatan atau pemulihan individu.** Jika anda menghidap penyakit, mengalami kecederaan, hamil atau ragu-ragu tentang keadaan kesihatan anda, rujuk senaman dengan doktor atau ahli fisioterapi.
+Kandungan laman ini adalah untuk tujuan maklumat. **Ia bukan nasihat perubatan atau pelan rawatan atau pemulihan individu.** Jika anda menghidap penyakit, mengalami kecederaan, hamil atau ragu-ragu tentang keadaan kesihatan anda, bincangkan senaman tersebut dengan doktor atau ahli fisioterapi.
 
 ## 3. Keperluan teknikal
 
@@ -22,7 +22,7 @@ Laman ini tidak memerlukan akaun, kuki atau pemasangan apa-apa.
 
 ## 4. Peraturan penggunaan
 
-- Anda tidak boleh menerbitkan kandungan sendiri di laman ini, jadi tiada kandungan pengguna untuk disederhanakan. Semasa menghubungi kami, jangan hantar kandungan yang menyalahi undang-undang.
+- Anda tidak boleh menerbitkan kandungan sendiri di laman ini, jadi tiada kandungan pengguna untuk dimoderasi. Semasa menghubungi kami, jangan hantar kandungan yang menyalahi undang-undang.
 - Anda menggunakan kandungan mengikut lesen kandungan ({{adresStrony}}/…/licencja). Muat turun secara pukal dan penyalinan automatik sebahagian besar kandungan di luar skop lesen adalah dilarang.
 
 ## 5. Permulaan dan penamatan penggunaan

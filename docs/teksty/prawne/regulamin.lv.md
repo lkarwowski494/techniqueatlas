@@ -17,7 +17,7 @@ Vietnes saturs ir informatīvs. **Tas nav medicīniska konsultācija, ne arī in
 
 ## 3. Tehniskās prasības
 
-Pietiek ar atjauninātu tīmekļa pārlūku un interneta piekļuvi. Apraksti un vingrinājumu saraksts darbojas arī bez JavaScript. Zīmējuma animācijai, filtriem un meklēšanai ir jābūt ieslēgtam JavaScript.
+Pietiek ar atjauninātu tīmekļa pārlūku un interneta piekļuvi. Apraksti un vingrinājumu saraksts darbojas arī bez JavaScript. Zīmējuma animācijai, filtriem un meklēšanai ir nepieciešams ieslēgts JavaScript.
 Vietnei nav nepieciešams konts, sīkfaili vai jebkā instalēšana.
 
 ## 4. Lietošanas noteikumi

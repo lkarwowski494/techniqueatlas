@@ -7,7 +7,7 @@
  "sprzet": "Gerekli ekipman: {lista}.",
  "rodzaj": "Hareket türü: {rodzaj}.",
  "blad": "Sık yapılan hata: {zdanie}",
- "albo": "veya",
+ "albo": " veya ",
  "pytania": {
   "setup": "Nasıl pozisyon almalısınız?",
   "move": "Hareketi nasıl yapmalısınız?",
@@ -17,7 +17,7 @@
   "sprzet": "Hangi ekipmana ihtiyacınız var?",
   "zamienniki": "Yerine hangi egzersizleri yapabilirsiniz?"
  },
- "opisGlownej": "{n} {opisow}: hareket çizimi: {f}, teknik ipuçları: {c}, alternatif egzersizler: {z}.",
+ "opisGlownej": "{n} {opisow}: {f} tanesinde hareket çizimi, {c} tanesinde teknik ipuçları, {z} tanesinde alternatif egzersizler.",
  "opisow": {
   "one": "açıklama",
   "few": "açıklama",
@@ -31,7 +31,7 @@
   "many": "kayıt",
   "other": "kayıt"
  },
- "opisKategorii": "{n} {pozycji}, aralarında: {lista}.",
+ "opisKategorii": "{n} {pozycji}, aralarında {lista} var.",
  "opisKategoriiJedna": "Tek kayıt: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}; hareket çizimi: {f}, teknik ipuçları: {c}."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}; {f} tanesinde hareket çizimi, {c} tanesinde teknik ipuçları var."
 }

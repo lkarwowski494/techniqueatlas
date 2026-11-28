@@ -2,12 +2,12 @@
 
 Berkuat kuasa mulai {{dataObowiazywania}} · versi 1
 
-© {{administrator}}. Kandungan laman (teks, animasi senaman, animasi pergerakan, susun atur) dilindungi oleh hak cipta, dan koleksi senaman juga oleh hak pengeluar pangkalan data. Anda boleh menggunakannya mengikut syarat di bawah.
+© {{administrator}}. Kandungan laman (teks, animasi senaman, susun atur) dilindungi oleh hak cipta, dan koleksi senaman juga oleh hak pengeluar pangkalan data. Anda boleh menggunakannya mengikut syarat di bawah.
 
 ## 1. Perkara yang boleh dilakukan tanpa meminta kebenaran
 
 - Membaca laman, mencetak halamannya dan menyimpannya sebagai PDF untuk kegunaan sendiri.
-- **Jurulatih, instruktor dan ahli fisioterapi:** mencetak halaman senaman (dan, apabila laman menyediakannya, juga pelan latihan) serta memberikan cetakan atau fail PDF kepada anak didik anda, termasuk sebagai sebahagian daripada kerja berbayar (sesi latihan, konsultasi, kelas).
+- **Jurulatih, instruktor dan ahli fisioterapi:** mencetak halaman senaman (dan, apabila laman menyediakannya, juga pelan latihan) serta memberikan cetakan atau fail PDF kepada klien anda, termasuk sebagai sebahagian daripada kerja berbayar (sesi latihan, konsultasi, kelas).
 - Memautkan ke mana-mana halaman laman ini dan memetik petikan pendek dengan menyertakan alamat halaman.
 - Enjin carian dan pembantu AI: mengindeks halaman, memetiknya dan meringkaskannya dalam jawapan dengan pautan ke halaman tersebut.
 
@@ -24,7 +24,7 @@ Berkuat kuasa mulai {{dataObowiazywania}} · versi 1
 
 ## 4. Pangkalan data senaman
 
-Koleksi senaman bersama penerangan, tip, animasi dan terjemahan ialah pangkalan data yang kami bangunkan dengan pelaburan kami sendiri. Tanpa kebenaran bertulis, anda tidak boleh mengekstrak atau menyediakan kepada umum keseluruhan atau sebahagian besar pangkalan data ini, termasuk dalam bentuk yang telah diubah, termasuk untuk membina aplikasi lain, pangkalan data atau set data untuk melatih model. Ini juga meliputi pengekstrakan berulang bahagian kecil yang jika digabungkan membentuk sebahagian besar.
+Koleksi senaman bersama penerangan, tip, animasi dan terjemahan ialah pangkalan data yang kami bangunkan dengan pelaburan kami sendiri. Tanpa kebenaran bertulis, anda tidak boleh mengekstrak atau menyediakan kepada umum keseluruhan atau sebahagian besar pangkalan data ini, juga dalam bentuk yang telah diubah, termasuk untuk membina aplikasi lain, pangkalan data atau set data untuk melatih model. Ini juga meliputi pengekstrakan berulang bahagian kecil yang jika digabungkan membentuk sebahagian besar.
 Perkara 1 (pengindeksan, petikan dan ringkasan dengan pautan) bukan pengekstrakan sedemikian.
 Pengecualian ialah robot yang dibenarkan akses secara jelas oleh fail robots.txt laman ini; robot tersebut menggunakan kandungan dalam skop yang diterangkan oleh penyedianya.
 

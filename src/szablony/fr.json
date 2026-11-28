@@ -7,7 +7,7 @@
  "sprzet": "Équipement nécessaire : {lista}.",
  "rodzaj": "Type de mouvement : {rodzaj}.",
  "blad": "Erreur fréquente : {zdanie}",
- "albo": "ou",
+ "albo": " ou ",
  "pytania": {
   "setup": "Comment vous mettre en place ?",
   "move": "Comment faire le mouvement ?",

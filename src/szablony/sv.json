@@ -7,12 +7,12 @@
  "sprzet": "Utrustning som behövs: {lista}.",
  "rodzaj": "Rörelsetyp: {rodzaj}.",
  "blad": "Vanligt misstag: {zdanie}",
- "albo": "eller",
+ "albo": " eller ",
  "pytania": {
   "setup": "Hur intar du startpositionen?",
   "move": "Hur utför du rörelsen?",
   "miesnie": "Vilka muskler arbetar?",
-  "tips": "Vad hjälper tekniken?",
+  "tips": "Vad hjälper dig med tekniken?",
   "mistakes": "Vilka misstag ska du undvika?",
   "sprzet": "Vilken utrustning behöver du?",
   "zamienniki": "Vad kan du ersätta den med?"

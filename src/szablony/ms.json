@@ -7,9 +7,9 @@
  "sprzet": "Peralatan diperlukan: {lista}.",
  "rodzaj": "Jenis pergerakan: {rodzaj}.",
  "blad": "Kesilapan biasa: {zdanie}",
- "albo": "atau",
+ "albo": " atau ",
  "pytania": {
-  "setup": "Bagaimana untuk bersedia?",
+  "setup": "Bagaimana untuk mengambil kedudukan permulaan?",
   "move": "Bagaimana untuk melakukan pergerakan?",
   "miesnie": "Otot mana yang bekerja?",
   "tips": "Apa yang membantu teknik anda?",

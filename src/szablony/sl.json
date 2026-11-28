@@ -7,7 +7,7 @@
  "sprzet": "Potrebna oprema: {lista}.",
  "rodzaj": "Vrsta gibanja: {rodzaj}.",
  "blad": "Pogosta napaka: {zdanie}",
- "albo": "ali",
+ "albo": " ali ",
  "pytania": {
   "setup": "Kako se postavite?",
   "move": "Kako izvedete gib?",

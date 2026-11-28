@@ -23,7 +23,7 @@ Die Website erfordert kein Konto, keine Cookies und keine Installation.
 ## 4. Nutzungsregeln
 
 - Auf der Website kannst du keine eigenen Inhalte veröffentlichen, daher gibt es keine Nutzerinhalte zu moderieren. Wenn du uns kontaktierst, sende keine rechtswidrigen Inhalte.
-- Du nutzt die Inhalte gemäß der Inhaltslizenz ({{adresStrony}}/…/lizenz). Massenhaftes Herunterladen und automatisiertes Kopieren eines wesentlichen Teils der Inhalte über den Umfang der Lizenz hinaus ist verboten.
+- Du nutzt die Inhalte gemäß der Inhaltslizenz ({{adresStrony}}/…/lizenz). Massenhaftes Herunterladen und automatisiertes Kopieren eines wesentlichen Teils der Inhalte über den Umfang der Lizenz hinaus sind verboten.
 
 ## 5. Beginn und Ende der Nutzung
 

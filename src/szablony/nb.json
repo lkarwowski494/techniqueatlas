@@ -7,7 +7,7 @@
  "sprzet": "Utstyr du trenger: {lista}.",
  "rodzaj": "Bevegelsestype: {rodzaj}.",
  "blad": "Vanlig feil: {zdanie}",
- "albo": "eller",
+ "albo": " eller ",
  "pytania": {
   "setup": "Hvordan stiller du deg opp?",
   "move": "Hvordan utfører du bevegelsen?",

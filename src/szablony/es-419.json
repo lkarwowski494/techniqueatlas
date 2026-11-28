@@ -7,7 +7,7 @@
  "sprzet": "Equipo necesario: {lista}.",
  "rodzaj": "Tipo de movimiento: {rodzaj}.",
  "blad": "Error común: {zdanie}",
- "albo": "o",
+ "albo": " o ",
  "pytania": {
   "setup": "¿Cómo te colocas?",
   "move": "¿Cómo se hace el movimiento?",

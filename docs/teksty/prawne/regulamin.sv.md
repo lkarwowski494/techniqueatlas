@@ -18,7 +18,7 @@ Webbplatsens innehåll är endast avsett som information. **Det är inte medicin
 ## 3. Tekniska krav
 
 Det räcker med en uppdaterad webbläsare och internetanslutning. Beskrivningar och övningslistan fungerar även utan JavaScript. Animeringen av teckningen, filtren och sökningen kräver att JavaScript är påslaget.
-Webbplatsen kräver inget konto, inga cookies och att du installerar något.
+Webbplatsen kräver inget konto och inga cookies, och du behöver inte installera något.
 
 ## 4. Regler för användning
 
@@ -35,7 +35,7 @@ Skicka synpunkter och reklamationer om webbplatsen (t.ex. ett fel i innehållet 
 
 ## 7. Ansvar
 
-Vi ser till att innehållet är korrekt, men vi garanterar inte att det är fritt från fel eller att webbplatsen fungerar utan avbrott. Du tränar på eget ansvar och väljer vikt efter din egen förmåga.
+Vi strävar efter att innehållet ska vara korrekt, men vi garanterar inte att det är fritt från fel eller att webbplatsen fungerar utan avbrott. Du tränar på eget ansvar och väljer vikt efter din egen förmåga.
 
 ## 8. Integritet
 
