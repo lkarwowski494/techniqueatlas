@@ -130,7 +130,7 @@ test('Z-31 krótka odpowiedź (KO-135): section.odp z h2 i akapitem na stronach 
   const stan = { z: 0, bez: 0 };
   for (const l of ['pl', 'en']) for (const e of ctx.data[l].exercises) {
     const h = strona(l, e.slug), s = element(h, 'section', 'odp'), wlasne = e.cues.scope === 'own' && !e.cues.missing;
-    if (wlasne) { stan.z++; assert.ok(s, `${l}/${e.slug}: brak section.odp`); assert.match(s.wnetrze, /<h2 id="odp-t">[^<]+<\/h2><p>[^<]{20,}<\/p>/, `${l}/${e.slug}`); assert.match(s.otwarcie, /aria-labelledby="odp-t"/); }
+    if (wlasne) { stan.z++; assert.ok(s, `${l}/${e.slug}: brak section.odp`); assert.match(s.wnetrze, /<h2 id="odp-t">[^<]+<\/h2><p class="odp">[^<]{20,}<\/p>/, `${l}/${e.slug}`); assert.match(s.otwarcie, /aria-labelledby="odp-t"/); }
     else { stan.bez++; assert.equal(s, null, `${l}/${e.slug}: section.odp przy wskazówkach spoza zakresu own (scope ${e.cues.scope}, missing ${e.cues.missing})`); }
   }
   assert.ok(stan.z > 100 && stan.bez > 0, `próba za mała albo brak ćwiczeń ze wskazówkami ogólnymi: ${JSON.stringify(stan)}`);

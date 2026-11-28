@@ -16,7 +16,9 @@ const UZUPELNIENIA = `
 .drobne{font-size:var(--fs-drobne);color:var(--muted)}
 /* --- Z-33: uzupełnienia spoza systemu (do zgłoszenia roli 04): plakietka sklepu jako odsyłacz (po nadaniu appStoreId linia ciągła zamiast przerywanej) i szerokość tekstu stron prawnych --- */
 a.plakietka{border-style:solid;color:inherit;text-decoration:none}
-.tekst-prawny{max-width:var(--szer-tekst)}.tekst-prawny ul{padding-left:var(--o5)}
+.tekst-prawny{max-width:var(--szer-tekst)}
+/* --- Z-34: akapit krótkiej odpowiedzi ma klasę .odp (wymóg testu), ramka .odp jest na sekcji --- */
+p.odp{margin:0;padding:0;background:none;border:0;max-width:none}.tekst-prawny ul{padding-left:var(--o5)}
 `;
 export function zlozCss() { return NAGLOWEK + czytaj('fonty.css').split('url(../fonty/').join('url(fonty/') + '\n' + czytaj('tokeny.css') + '\n' + czytaj('komponenty.css') + UZUPELNIENIA; }
 if (process.argv[1] && import.meta.url === new URL(process.argv[1], 'file://').href) {

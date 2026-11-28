@@ -49,4 +49,6 @@ run('node', [join(app, 'scripts/strona/silnik-build.mjs'), '--out', cache]);
 copyFileSync(join(app, 'docs/lokalizacja/slownik-terminow.json'), join(cache, 'dane/slownik-terminow.json'));
 const man = readJson('.cache/dane/manifest.json');
 if (man.app.commit !== pin.commit) throw new Error(`eksport (${man.app.commit}) ≠ PIN.json (${pin.commit})`);
+/* data wydania = data commitu aplikacji z PIN.json (KO-135): jedyne źródło <lastmod> w mapach witryny (src/build.mjs → dataWydania) */
+writeFileSync(join(cache, 'dane/data-wydania.json'), JSON.stringify({ commit: pin.commit, data: out('git', ['log', '-1', '--format=%cs', pin.commit], { cwd: app }) }) + '\n');
 console.log(`dane: wersja ${man.app.version}, commit ${pin.commit.slice(0, 7)}, języki: ${man.languages.map(l => l.lang).join(',')}`);

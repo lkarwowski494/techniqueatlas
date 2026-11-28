@@ -105,7 +105,7 @@ export function szablonyCwiczenia(d, ui, lang, e, { nazwaLokalna, pelny = false,
   const P = t.pytania, pytania = {};
   if (wlasne(e) && c.setup?.length) pytania.setup = P.setup;
   if (wlasne(e) && c.move?.length) pytania.move = P.move;
-  if (e.regions.length) pytania.miesnie = P.miesnie;
+  if (e.regions.some(r => r.load >= 0.5)) pytania.miesnie = P.miesnie; /* sekcja mięśni na stronie pokazuje partie z obciążeniem ≥ 0,5 (main/aux w exercisePage); same lekkie regiony nie tworzą sekcji (Z-34: pusta sekcja = brak nagłówka) */
   if (wlasne(e) ? c.tips?.length : c.ok?.length) pytania.tips = P.tips;
   if (c.mistakes?.length) pytania.mistakes = P.mistakes;
   if (e.requires.length) pytania.sprzet = P.sprzet;

@@ -11,7 +11,7 @@ import { urlOf } from '../src/pages.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId } from '../src/taksonomia.mjs';
 import { szablonyCwiczen, szablonyGlownej, szablonyListy, szablonyKategorii } from '../src/szablony.mjs';
 import { requireData, tmpDist, BEZ_STARTU, repoFiles, read, isText } from './pomoc.mjs';
-import { CZEKA, czytaj, plikiHtml, element, elementy, tekst, rozwiaz, istnieje, meta, linki, jsonld, wymiaryPng, nazwyLokalne, nazwaLokalna } from './strona-html.mjs';
+import { czytaj, plikiHtml, element, elementy, tekst, rozwiaz, istnieje, meta, linki, jsonld, wymiaryPng, nazwyLokalne, nazwaLokalna } from './strona-html.mjs';
 
 requireData();
 const ZEGAR = Date.UTC(2031, 0, 1), Prawdziwa = Date;
@@ -41,7 +41,7 @@ function grupy(txt) {
 }
 const UCZENIE = ['GPTBot', 'ClaudeBot', 'CCBot', 'Applebot-Extended', '__usage_ai-training'], WYSZUKIWANIE = ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Applebot'];
 
-test('Z-34 robots.txt przy indeksowaniu (KO-130 wariant B): * Allow /; Disallow / dla GPTBot, ClaudeBot, CCBot, Applebot-Extended, __usage_ai-training; jawne Google-Extended Allow /; Sitemap; nic więcej', CZEKA('Z-34', 'robots.txt bez grup KO-130'), () => {
+test('Z-34 robots.txt przy indeksowaniu (KO-130 wariant B): * Allow /; Disallow / dla GPTBot, ClaudeBot, CCBot, Applebot-Extended, __usage_ai-training; jawne Google-Extended Allow /; Sitemap; nic więcej', () => {
   const txt = czytaj(out, 'robots.txt'), g = grupy(txt);
   assert.deepEqual([...g.keys()].sort(), ['*', 'Google-Extended', ...UCZENIE].sort());
   assert.deepEqual(g.get('*'), ['allow: /']); assert.deepEqual(g.get('Google-Extended'), ['allow: /']);
@@ -65,13 +65,13 @@ test('Z-34 link kanoniczny: każda strona poza 404 i przekierowaniami ma dokład
   assert.deepEqual(zle, []);
 });
 
-test('Z-34 (A6) nazwa witryny: strona / ma WebSite JSON-LD (name, url = domena z „/”), name = <title> = h1 = og:site_name', CZEKA('Z-34', 'strona / bez JSON-LD'), () => {
+test('Z-34 (A6) nazwa witryny: strona / ma WebSite JSON-LD (name, url = domena z „/”), name = <title> = h1 = og:site_name', () => {
   const h = czytaj(out, 'index.html'), ws = jsonld(h).find(j => j['@type'] === 'WebSite');
   assert.ok(ws, 'brak WebSite na /'); assert.equal(ws.url, `${D}/`);
   assert.equal(ws.name, tytul(h)); assert.equal(ws.name, tekst(element(h, 'h1').wnetrze)); assert.equal(meta(h, 'og:site_name'), ws.name);
 });
 
-test('Z-34 (A7) ikona: każda strona ma <link rel="icon"> na ten sam stały plik PNG w dist (kwadrat > 48 px), nie data:; /apple-touch-icon.png 180×180 (specyfikacja §7)', CZEKA('Z-34', 'ikona data:'), () => {
+test('Z-34 (A7) ikona: każda strona ma <link rel="icon"> na ten sam stały plik PNG w dist (kwadrat > 48 px), nie data:; /apple-touch-icon.png 180×180 (specyfikacja §7)', () => {
   const cele = new Set();
   for (const f of plikiHtml(out)) {
     const ik = linki(czytaj(out, f), 'icon'); assert.ok(ik.length, `${f}: brak ikony`);
@@ -82,7 +82,7 @@ test('Z-34 (A7) ikona: każda strona ma <link rel="icon"> na ten sam stały plik
   assert.deepEqual(wymiaryPng(readFileSync(join(out, 'apple-touch-icon.png'))), { w: 180, h: 180 });
 });
 
-test('Z-34 (A8) obraz ćwiczenia: strona z figurą ma <img src alt> do istniejącego pliku, alt z nazwą ćwiczenia w języku strony; każdy <img> w dist ma alt i istniejący plik', CZEKA('Z-34', 'rysunek tylko jako <svg><use>'), () => {
+test('Z-34 (A8) obraz ćwiczenia: strona z figurą ma <img src alt> do istniejącego pliku, alt z nazwą ćwiczenia w języku strony; każdy <img> w dist ma alt i istniejący plik', () => {
   const zle = [];
   for (const l of JEZ) for (const e of cw(l).filter(zFigura)) {
     const f = plik(l, e), imgi = [...czytaj(out, f).matchAll(/<img\s[^>]*>/g)].map(m => m[0]);
@@ -93,7 +93,7 @@ test('Z-34 (A8) obraz ćwiczenia: strona z figurą ma <img src alt> do istnieją
 });
 
 const podglad = e => `${D}/assets/podglad/${e.slug}.png`;
-test('Z-34 (A9) podgląd: strona z figurą ma og:image = /assets/podglad/<slug>.png (PNG 1200×630 w dist), og:image:alt = nazwa w języku strony, og:title = <title>, og:url = canonical, og:type i og:site_name', CZEKA('Z-34', 'brak og:*'), () => {
+test('Z-34 (A9) podgląd: strona z figurą ma og:image = /assets/podglad/<slug>.png (PNG 1200×630 w dist), og:image:alt = nazwa w języku strony, og:title = <title>, og:url = canonical, og:type i og:site_name', () => {
   const zle = [];
   for (const l of JEZ) for (const e of cw(l).filter(zFigura)) {
     const f = plik(l, e), h = czytaj(out, f), img = meta(h, 'og:image');
@@ -103,7 +103,7 @@ test('Z-34 (A9) podgląd: strona z figurą ma og:image = /assets/podglad/<slug>.
   assert.equal(zle.length, 0, `${zle.length}, np. ${zle.slice(0, 2)}`);
 });
 
-test('Z-34 (A9, budżet §8 — decyzja Z-30 do weta): pliki podglądu — jeden PNG 1200×630 na ćwiczenie z figurą, każdy ≤ 30 KB, razem ≤ 10 MB (szacunek specyfikacji ok. 8 MB + 25%)', CZEKA('Z-34', 'brak assets/podglad'), () => {
+test('Z-34 (A9, budżet §8 — decyzja Z-30 do weta): pliki podglądu — jeden PNG 1200×630 na ćwiczenie z figurą, każdy ≤ 30 KB, razem ≤ 10 MB (szacunek specyfikacji ok. 8 MB + 25%)', () => {
   const kat = join(out, 'assets/podglad'), z = cw('en').filter(zFigura);
   const pliki = (() => { try { return readdirSync(kat); } catch { return []; } })();
   assert.deepEqual(z.filter(e => !pliki.includes(`${e.slug}.png`)).map(e => e.slug).slice(0, 5), []);
@@ -120,7 +120,7 @@ test('Z-34 podgląd bez figury (przypadek brzegowy, decyzja 4 specyfikacji [DO U
   assert.deepEqual(zle, []);
 });
 
-test('Z-34 (A11) WebPage z primaryImageOfPage: strona z figurą ma WebPage JSON-LD (url = canonical), obraz = og:image; BreadcrumbList zostaje', CZEKA('Z-34', 'tylko BreadcrumbList'), () => {
+test('Z-34 (A11) WebPage z primaryImageOfPage: strona z figurą ma WebPage JSON-LD (url = canonical), obraz = og:image; BreadcrumbList zostaje', () => {
   const zle = [];
   for (const l of JEZ) for (const e of cw(l).filter(zFigura)) {
     const f = plik(l, e), h = czytaj(out, f), j = jsonld(h), wp = j.find(x => x['@type'] === 'WebPage'), obraz = wp?.primaryImageOfPage;
@@ -135,7 +135,7 @@ test('Z-34 (B2) bez HowTo, FAQPage, Course, ExercisePlan, ClaimReview, LearningV
   assert.deepEqual(zle, []);
 });
 
-test('Z-34 (A10, Z-22) tytuł i opis strony ćwiczenia = szablony (pl z nazwami lokalnymi Z-32); pominOpis → brak <meta name="description">, nigdy na stronie indeksowanej', CZEKA('Z-34', 'tytuł „nazwa — witryna”, opis „nazwa: mięśnie”'), () => {
+test('Z-34 (A10, Z-22) tytuł i opis strony ćwiczenia = szablony (pl z nazwami lokalnymi Z-32); pominOpis → brak <meta name="description">, nigdy na stronie indeksowanej', () => {
   const zle = [];
   for (const l of JEZ) for (const e of cw(l)) {
     const f = plik(l, e), h = czytaj(out, f), s = SZ[l].get(e.slug), opis = meta(h, 'description');
@@ -151,7 +151,7 @@ test('Z-34 przypadki brzegowe szablonów: istnieją strony z pominOpis (noindex)
   assert.ok(dlugie.length > 0); for (const e of dlugie) assert.equal(SZ.pl.get(e.slug).tytul, N.pl[e.id], e.slug);
 });
 
-test('Z-34 (Z-22) strona główna języka, lista A–Z i strony filtrów: tytuł i opis = szablony (szablonyGlownej, szablonyListy, szablonyKategorii)', CZEKA('Z-34', 'tytuły z ogonem nazwy witryny, opisy z licznika'), () => {
+test('Z-34 (Z-22) strona główna języka, lista A–Z i strony filtrów: tytuł i opis = szablony (szablonyGlownej, szablonyListy, szablonyKategorii)', () => {
   const zle = [], DIR = { group: ['muscles', v => GROUP_ID[v]], equipment: ['equipment', v => EQUIPMENT_ID[v]], family: ['movements', v => familyId(v)] };
   for (const l of JEZ) {
     const d = ctx.data[l], ui = ctx.ui[l];
@@ -161,24 +161,26 @@ test('Z-34 (Z-22) strona główna języka, lista A–Z i strony filtrów: tytuł
   assert.equal(zle.length, 0, `${zle.length}, np. ${zle.slice(0, 3)}`);
 });
 
-test('Z-34 (A10) strona / ma opis witryny: <meta name="description"> 50–160 znaków', CZEKA('Z-34', 'strona / bez opisu'), () => {
+test('Z-34 (A10) strona / ma opis witryny: <meta name="description"> 50–160 znaków', () => {
   const o = meta(czytaj(out, 'index.html'), 'description'); assert.ok(o, 'brak opisu'); assert.ok([...o].length >= 50 && [...o].length <= 160, o);
 });
 
-test('Z-34 (A10) unikalność: wśród stron indeksowanych języka każdy <title> i każdy opis występuje raz', CZEKA('Z-34', 'strona główna i lista mają ten sam opis'), () => {
+test('Z-34 (A10) unikalność: wśród stron indeksowanych języka każdy <title> i każdy opis występuje raz (wyjątek opisu: ćwiczenia o identycznych danych — bliźniaki seated-cable-row i seated-dual-cable-row, docs/teksty/szablony-stron.md; ta sama reguła co w tests/szablony.test.mjs)', () => {
+  const klucz = e => JSON.stringify([e.regions, e.requires, e.cues]), cwSlug = (l, f) => cw(l).find(e => plik(l, e) === f);
   for (const l of JEZ) for (const [co, f] of [['tytuł', tytul], ['opis', h => meta(h, 'description')]]) {
-    const w = [...indeksowane].filter(p => p.startsWith(`${l}/`)).map(p => f(czytaj(out, p))), powt = w.filter((x, i) => x && w.indexOf(x) !== i);
-    assert.deepEqual([...new Set(powt)], [], `${l}: ${co}`);
+    const grupy = new Map(); for (const p of [...indeksowane].filter(p => p.startsWith(`${l}/`))) { const v = f(czytaj(out, p)); if (v) grupy.set(v, [...(grupy.get(v) ?? []), p]); }
+    const powt = [...grupy.values()].filter(g => g.length > 1).filter(g => co === 'tytuł' || !g.every(p => cwSlug(l, p)) || !g.every(p => klucz(cwSlug(l, p)) === klucz(cwSlug(l, g[0]))));
+    assert.deepEqual(powt, [], `${l}: ${co}`);
   }
 });
 
-test('Z-34 (Z-22 2.3) krótka odpowiedź: strona z własnymi wskazówkami ma p.odp = szablon odpowiedzi (przy wskazówkach ogólnych i bez wskazówek — [DO USTALENIA], sprzeczność design-spec §5 z szablony-stron.md 2.3)', CZEKA('Z-34', 'brak krótkiej odpowiedzi'), () => {
+test('Z-34 (Z-22 2.3) krótka odpowiedź: strona z własnymi wskazówkami ma p.odp = szablon odpowiedzi (przy wskazówkach ogólnych i bez wskazówek — [DO USTALENIA], sprzeczność design-spec §5 z szablony-stron.md 2.3)', () => {
   const zle = [];
   for (const l of JEZ) for (const e of cw(l).filter(e => e.cues.scope === 'own' && !e.cues.missing)) { const p = element(czytaj(out, plik(l, e)), 'p', 'odp'); if (!p || tekst(p.wnetrze) !== SZ[l].get(e.slug).odpowiedz) zle.push(plik(l, e)); }
   assert.equal(zle.length, 0, `${zle.length}, np. ${zle.slice(0, 2)}`);
 });
 
-test('Z-34 (Z-22 2.4) nagłówki-pytania: h2 strony ćwiczenia zawierają każde pytanie z szablonu, a nie ma pytania przy pustej sekcji', CZEKA('Z-34', 'h2 bez pytań'), () => {
+test('Z-34 (Z-22 2.4) nagłówki-pytania: h2 strony ćwiczenia zawierają każde pytanie z szablonu, a nie ma pytania przy pustej sekcji', () => {
   const zle = [], wszystkie = l => new Set([...SZ[l].values()].flatMap(s => Object.values(s.pytania)));
   for (const l of JEZ) { const P = wszystkie(l); for (const e of cw(l)) {
     const h2 = elementy(czytaj(out, plik(l, e)), 'h2').map(x => tekst(x.wnetrze)), oczek = Object.values(SZ[l].get(e.slug).pytania);
@@ -187,7 +189,7 @@ test('Z-34 (Z-22 2.4) nagłówki-pytania: h2 strony ćwiczenia zawierają każde
   assert.equal(zle.length, 0, `${zle.length}, np. ${zle.slice(0, 2)}`);
 });
 
-test('Z-34 (A13) mapy witryny: każdy <url> ma <lastmod> RRRR-MM-DD z danych, nie z zegara budowania (zegar przestawiony na 2031-01-01); bez changefreq i priority', CZEKA('Z-34', 'brak lastmod'), () => {
+test('Z-34 (A13) mapy witryny: każdy <url> ma <lastmod> RRRR-MM-DD z danych, nie z zegara budowania (zegar przestawiony na 2031-01-01); bez changefreq i priority', () => {
   for (const s of r.sitemaps.filter(s => s !== 'sitemap.xml')) {
     const xml = czytaj(out, s), urle = xml.match(/<url>[\s\S]*?<\/url>/g) ?? [];
     assert.doesNotMatch(xml, /<changefreq>|<priority>/, s);
@@ -195,7 +197,7 @@ test('Z-34 (A13) mapy witryny: każdy <url> ma <lastmod> RRRR-MM-DD z danych, ni
   }
 });
 
-test('Z-34 (A12) IndexNow: przy indeksowaniu w korzeniu dist jest plik <klucz>.txt z treścią = klucz (8–128 znaków [A-Za-z0-9-])', CZEKA('Z-34', 'brak pliku klucza'), () => {
+test('Z-34 (A12) IndexNow: przy indeksowaniu w korzeniu dist jest plik <klucz>.txt z treścią = klucz (8–128 znaków [A-Za-z0-9-])', () => {
   const klucze = readdirSync(out).filter(f => f.endsWith('.txt') && f !== 'robots.txt').filter(f => readFileSync(join(out, f), 'utf8').trim() === basename(f, '.txt'));
   assert.equal(klucze.length, 1, `pliki klucza: ${klucze}`); assert.match(basename(klucze[0], '.txt'), /^[A-Za-z0-9-]{8,128}$/);
 });

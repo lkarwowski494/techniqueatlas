@@ -2,7 +2,7 @@
 // Wygląd: system „Arkusz” (docs/design/system/design-spec.md; assets/site.css = tokeny + komponenty + kroje); wszystkie teksty stałe z src/ui/<język>.json, treść ćwiczeń z eksportu aplikacji — bez zastępczych tekstów z innych języków.
 import { esc, fill, plural, jsonForScript, relUrl } from './lib.mjs';
 import { langPath, hreflang, hreflangCodes, GROUP_ID, EQUIPMENT_ID, familyId } from './taksonomia.mjs';
-import { szablonyCwiczenia, JEZYKI as JEZYKI_SZABLONOW } from './szablony.mjs';
+import { szablonyCwiczenia, szablonyGlownej, szablonyListy, szablonyKategorii, JEZYKI as JEZYKI_SZABLONOW } from './szablony.mjs';
 import { DOKUMENTY } from './prawne.mjs';
 
 const SECTION = ['setup', 'move'];
@@ -22,14 +22,18 @@ export function layout(ctx, m, bodyHtml) {
   /* hreflang tylko dla języków indeksowanych (indeksujJezyki): zestaw w HTML = zestaw w mapach witryny, a wersje noindex (podgląd 35 języków) nie wchodzą do klastra; przełącznik języków w stopce pokazuje wszystkie budowane */
   const alt = (m.alternates ?? []).filter(a => cfg.indeksujJezyki.includes(a.lang)).flatMap(a => hreflangCodes(a.lang).map(c => `<link rel="alternate" hreflang="${esc(c)}" href="${esc(abs(cfg, a.path))}">`));
   if (m.xDefault !== undefined) alt.push(`<link rel="alternate" hreflang="x-default" href="${esc(abs(cfg, m.xDefault))}">`);
+  /* Open Graph (A9): tytuł, adres i typ dla każdej strony z adresem kanonicznym; obrazek tylko tam, gdzie jest rysunek ćwiczenia (nie logo, nie ikona — A9) */
+  const og = m.canonical === undefined || m.refresh ? [] : [['og:site_name', ui.siteName], ['og:type', m.ogType ?? 'website'], ['og:title', m.title], ['og:url', abs(cfg, m.canonical)], ...(m.description ? [['og:description', m.description]] : []), ...(m.ogImage ? [['og:image', m.ogImage.url], ['og:image:width', '1200'], ['og:image:height', '630'], ['og:image:alt', m.ogImage.alt]] : [])].map(([k, v]) => `<meta property="${k}" content="${esc(v)}">`);
   const head = [
     '<meta charset="utf-8">', '<meta name="viewport" content="width=device-width,initial-scale=1">',
     `<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">`,
     `<title>${esc(m.title)}</title>`, m.description ? `<meta name="description" content="${esc(m.description)}">` : '',
     `<meta name="generator" content="techniqueatlas app ${esc(ctx.man.app.version)} ${esc(ctx.man.app.commit.slice(0, 7))}">`,
+    ...og,
     m.refresh ? `<meta http-equiv="refresh" content="0;url=${esc(m.refresh)}">` : '', m.robots ? `<meta name="robots" content="${m.robots}">` : '', m.canonical !== undefined ? `<link rel="canonical" href="${esc(abs(cfg, m.canonical))}">` : '', ...alt,
     cfg.appStoreId ? `<meta name="apple-itunes-app" content="app-id=${esc(cfg.appStoreId)}">` : '',
-    '<link rel="icon" href="data:,">', /* bez pliku ikony: przeglądarka nie prosi o /favicon.ico (404 w konsoli); pliki ikony wpina Z-33 */
+    /* ikona (A7): PNG, stałe adresy (Google: „The favicon URL must be stable”); apple-touch-icon 180 px w korzeniu (specyfikacja §7) */
+    `<link rel="icon" type="image/png" sizes="96x96" href="${u('assets/favicon-96.png')}">`, `<link rel="icon" type="image/png" sizes="192x192" href="${u('assets/favicon-192.png')}">`, `<link rel="apple-touch-icon" href="${u('apple-touch-icon.png')}">`,
     `<link rel="stylesheet" href="${u('assets/site.css')}">`, ...(m.styles ?? []).map(c => `<link rel="stylesheet" href="${u(c)}">`),
     ...(m.jsonld ?? []).map(j => `<script type="application/ld+json">${jsonForScript(j)}</script>`),
   ].filter(Boolean).join('\n');
@@ -84,7 +88,10 @@ export function robotsFor(ctx, lang, ownContent = true) {
 export function chooserPage(ctx) {
   const file = paths.chooser(); const ui = ctx.ui[ctx.cfg.jezykDomyslny];
   const items = ctx.langs.map(l => `<li><a href="${relUrl(file, urlOf(paths.home(l)))}" hreflang="${esc(hreflang(l))}" lang="${esc(hreflang(l))}">${esc(ctx.names[l])}</a></li>`).join('');
-  const html = layout(ctx, { file, lang: ctx.cfg.jezykDomyslny, title: ui.siteName, description: '', robots: robotsFor(ctx, ctx.cfg.jezykDomyslny), canonical: urlOf(file), alternates: alternatesFor(ctx, paths.home), xDefault: urlOf(file), bezWierszaJezykow: true },
+  /* A6: nazwa witryny na stronie `/` (domena); nazwa = <title> = h1 = og:site_name; opis witryny z szablonu strony głównej języka domyślnego (Z-22), gdy język ma szablony */
+  const dl = ctx.cfg.jezykDomyslny, opis = ctx.data[dl] && JEZYKI_SZABLONOW.includes(dl) ? szablonyGlownej(ctx.data[dl], ui, dl).opis : '';
+  const webSite = { '@context': 'https://schema.org', '@type': 'WebSite', name: ui.siteName, url: `${ctx.cfg.domena}/` };
+  const html = layout(ctx, { file, lang: ctx.cfg.jezykDomyslny, title: ui.siteName, description: opis, robots: robotsFor(ctx, ctx.cfg.jezykDomyslny), canonical: urlOf(file), alternates: alternatesFor(ctx, paths.home), xDefault: urlOf(file), jsonld: [webSite], bezWierszaJezykow: true },
     `<h1>${esc(ui.siteName)}</h1>\n<h2>${esc(ui.chooseLanguage)}</h2>\n<ul class="jezyki-l">${items}</ul>`);
   return { file, html, lang: null, kind: 'chooser', indexable: !!ctx.cfg.indeksowanie };
 }
@@ -117,7 +124,8 @@ ${g.movements.length ? `<section class="grupa" id="ruch"><h2>${esc(ui.byMovement
 <section><h2>${esc(ui.basics)}</h2><ul class="wiersze">${basics.map(e => `<li><a href="${u(urlOf(paths.exercise(lang, e.slug)))}"${nazwaAttr(ctx, lang, e)}>${nazwaHtml(ctx, lang, e)}</a><span class="meta">${esc(d.labels.groups[e.group])} · ${esc(d.labels.equipment[e.equipment])}</span></li>`).join('')}</ul>
 <p><a class="dalej" href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)} (${d.exercises.length})</a></p></section>`;
   const webSite = { '@context': 'https://schema.org', '@type': 'WebSite', name: ui.siteName, url: abs(ctx.cfg, urlOf(file)), inLanguage: hreflang(lang) };
-  return { file, lang, kind: 'home', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: ui.siteName, description: count, robots: robotsFor(ctx, lang), canonical: urlOf(file),
+  const sz = ctx.sz[lang] ? szablonyGlownej(d, ui, lang) : null; /* Z-22; język bez szablonów — dotychczasowy opis (licznik) */
+  return { file, lang, kind: 'home', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: sz?.tytul ?? ui.siteName, description: sz?.opis ?? count, robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, paths.home), xDefault: urlOf(paths.chooser()), jsonld: [webSite], scripts: ['assets/szukaj.js'], crumbs: [{ name: ui.home, path: file }], menu: true }, body) };
 }
 
@@ -141,7 +149,8 @@ ${searchBlock(ui, lang, u)}
 <div class="pusto" data-pusto hidden><h2>${esc(ui.noResults)}</h2><p>${esc(ui.emptyHint)}</p><button type="button" class="wyczysc" data-wyczysc>${esc(ui.clearFilters)}</button></div>
 ${wykaz(ctx, lang, file, sorted, kolumny, ui.allExercises, true)}`;
   const crumbs = [...crumbBase(ctx, lang), { name: ui.allExercises, path: file }];
-  return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: ui.allExercises, description: fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
+  const sz = ctx.sz[lang] ? szablonyListy(d, ui, lang) : null;
+  return { file, lang, kind: 'list', indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: sz?.tytul ?? ui.allExercises, description: sz?.opis ?? fill(plural(lang, ui.countLine, d.exercises.length), { n: d.exercises.length }), robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, paths.list), xDefault: defaultOf(ctx, paths.list), jsonld: [bcJson(ctx, crumbs)], scripts: ['assets/szukaj.js'], crumbs, menu: true, current: 'list' }, body) };
 }
 
@@ -152,8 +161,9 @@ export function filterPage(ctx, lang, kind, x) {
   const parent = { muscle: ui.byMuscle, equipment: ui.byEquipment, movement: ui.byMovement }[kind];
   const crumbs = [...crumbBase(ctx, lang), { name: parent, path: paths.home(lang) }, { name: x.label, path: file }];
   const title = fill(ui.exercisesIn, { nazwa: x.label });
+  const sz = ctx.sz[lang] ? szablonyKategorii(d, ui, lang).find(k => k.rodzaj === key && k.wartosc === x.value) : null; /* Z-22: opis z licznika i przykładów */
   const kolumny = ['muscle', 'equipment', ...(g.movements.length ? ['movement'] : [])].filter(k => k !== kind); /* kolumna wymiaru, po którym filtrujemy, nic nie wnosi */
-  return { file, lang, kind, indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title, description: title, robots: robotsFor(ctx, lang), canonical: urlOf(file),
+  return { file, lang, kind, indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: sz?.tytul ?? title, description: sz?.opis ?? title, robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: defaultOf(ctx, l => paths[kind](l, x.id)), jsonld: [bcJson(ctx, crumbs)], crumbs, menu: true },
     `<h1>${esc(title)}</h1>\n${wykaz(ctx, lang, file, sorted, kolumny, title)}\n<p><a class="dalej" href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)}</a></p>`) };
 }
@@ -195,6 +205,7 @@ ${wymiarHtml(lang, site, f.phases)}
 <div class="fig-ster"><button type="button" class="b-anim" data-pause aria-pressed="false" hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-pressed="false" hidden>${esc(ui.showError)}: ${esc(e.text)}</button>`).join('')}</div>
 <p class="podpis" data-error-text hidden aria-live="polite"></p>
 <figcaption class="drobne">${esc(phases)} · ${esc(ui.schematic)}</figcaption>
+<img class="wizualnie-ukryte" src="${relUrl(file, `assets/podglad/${ex.slug}.png`)}" alt="${esc(label).replaceAll('&#39;', "'")}" width="1200" height="630" decoding="async">
 <script type="application/json" data-errors>${jsonForScript(f.errors)}</script>
 <script type="application/json" data-labels>${jsonForScript({ pause: ui.pause, resume: ui.resume, showError: ui.showError, hideError: ui.hideError, errorLine: ui.errorLine })}</script>
 </figure>`;
@@ -230,18 +241,19 @@ export function exercisePage(ctx, lang, ex) {
   const d = ctx.data[lang], ui = d.labels.ui, site = ctx.ui[lang], file = paths.exercise(lang, ex.slug), u = to => relUrl(file, to), L = d.labels;
   const fig = ctx.figs[ex.slug] && ex.figure ? ctx.figs[ex.slug] : null;
   const cue = k => ex.cues.scope === 'own' ? ex.cues[k] : k === 'tips' ? ex.cues.ok : k === 'mistakes' ? ex.cues.mistakes : null;
+  const sz = ctx.sz[lang]?.get(ex.slug), Q = (k, domyslny) => sz?.pytania[k] ?? domyslny; /* nagłówki-pytania (Z-22 2.4): tylko pl i en; pozostałe języki — dotychczasowe nagłówki */
   const list = (title, items) => items?.length ? `<section><h2>${esc(title)}</h2><ul>${items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></section>` : '';
   const main = ex.regions.filter(r => r.load >= 1).map(r => L.regions[r.id]), aux = ex.regions.filter(r => r.load >= 0.5 && r.load < 1).map(r => L.regions[r.id]);
   const figure = fig ? figureBlock(ctx, lang, ex, fig, file) : null;
-  const text = SECTION.map(k => cue(k)).some(x => x?.length) ? SECTION.map(k => list(ui[k], cue(k))).join('\n') : '';
+  const text = SECTION.map(k => cue(k)).some(x => x?.length) ? SECTION.map(k => list(Q(k, ui[k]), cue(k))).join('\n') : '';
   const roles = ex.roles?.length ? `<ul class="role">${ex.roles.map(r => `<li><strong>${esc(L.regions[r.id])}</strong> — ${esc(r.text)}</li>`).join('')}</ul>` : ''; /* zdania o roli mięśnia: tylko gdy eksport je zawiera (bez zastępczych) */
   const silhouette = silhouetteBlock(ctx, lang, ex, file);
   const muscleText = (main.length ? `<p>${esc(fill(ui.musclesMain, { lista: main.join(', ') }))}</p>` : '') + (aux.length ? `<p>${esc(fill(ui.musclesAux, { lista: aux.join(', ') }))}</p>` : '') + roles + (ex.musclesApproximate ? `<p class="drobne">${esc(ui.musclesApprox)}</p>` : '');
-  const muscles = silhouette + muscleText ? `<section class="miesnie"><h2>${esc(site.muscles)}</h2>${silhouette}${muscleText}</section>` : '';
-  const needs = ex.requires.length ? `<section><h2>${esc(site.equipmentNeeded)}</h2><ul>${ex.requires.map(g => `<li>${esc(g.map(c => L.capabilities[c]).join(' / '))}</li>`).join('')}</ul></section>` : '';
+  const muscles = silhouette + muscleText ? `<section class="miesnie"><h2>${esc(Q('miesnie', site.muscles))}</h2>${silhouette}${muscleText}</section>` : '';
+  const needs = ex.requires.length ? `<section><h2>${esc(Q('sprzet', site.equipmentNeeded))}</h2><ul>${ex.requires.map(g => `<li>${esc(g.map(c => L.capabilities[c]).join(' / '))}</li>`).join('')}</ul></section>` : '';
   const bySlug = ctx.bySlug[lang];
-  const alts = ex.alternatives.length ? `<section><h2>${esc(site.alternatives)}</h2><ul class="zam">${ex.alternatives.map(s => `<li><a href="${u(urlOf(paths.exercise(lang, s)))}">${nazwaLokalna(ctx, lang, bySlug.get(s)) ? nazwaHtml(ctx, lang, bySlug.get(s)) : `<span class="nazwa-pl"${nameAttr(lang)}>${esc(bySlug.get(s).name)}</span>`}</a></li>`).join('')}</ul></section>` : '';
-  const cueSections = [text, list(ui.tips, cue('tips')), list(ui.mistakes, cue('mistakes'))].filter(Boolean).join('\n');
+  const alts = ex.alternatives.length ? `<section><h2>${esc(Q('zamienniki', site.alternatives))}</h2><ul class="zam">${ex.alternatives.map(s => `<li><a href="${u(urlOf(paths.exercise(lang, s)))}">${nazwaLokalna(ctx, lang, bySlug.get(s)) ? nazwaHtml(ctx, lang, bySlug.get(s)) : `<span class="nazwa-pl"${nameAttr(lang)}>${esc(bySlug.get(s).name)}</span>`}</a></li>`).join('')}</ul></section>` : '';
+  const cueSections = [text, list(Q('tips', ui.tips), cue('tips')), list(Q('mistakes', ui.mistakes), cue('mistakes'))].filter(Boolean).join('\n');
   /* tabliczka rysunkowa: klasyfikacja jako linki do stron filtrów; nazwa angielska (w polskim — z eksportu en, gdy jest budowany) */
   const enName = ctx.bySlug.en?.get(ex.slug)?.name ?? ex.name, family = ctx.familyLabel(lang, ex.family);
   const tabRow = (label, inner) => `<div><dt>${esc(label)}</dt><dd>${inner}</dd></div>`;
@@ -249,7 +261,7 @@ export function exercisePage(ctx, lang, ex) {
   /* krótka odpowiedź (KO-135): tylko przy własnych wskazówkach; szablon Z-22 (pl, en) — pozostałe języki dostaną ją z tłumaczeniem szablonów (Z-26/Z-34) */
   const own = ex.cues.scope === 'own' && !ex.cues.missing;
   const odpowiedz = own && JEZYKI_SZABLONOW.includes(lang) ? szablonyCwiczenia(d, site, lang, ex).odpowiedz : '';
-  const odp = odpowiedz ? `<section class="odp" aria-labelledby="odp-t"><h2 id="odp-t">${esc(site.howTo)}</h2><p>${esc(odpowiedz)}</p></section>` : '';
+  const odp = odpowiedz ? `<section class="odp" aria-labelledby="odp-t"><h2 id="odp-t">${esc(site.howTo)}</h2><p class="odp">${esc(odpowiedz)}</p></section>` : '';
   const nota = ex.cues.scope === 'general' ? `<p class="nota">${esc(ui.generalNote)}</p>` : '';
   const tekstowa = (nota || cueSections) ? `<div class="uk-p">${nota}${cueSections}${needs}${alts}</div>` : '';
   const uklad = fig || tekstowa
@@ -264,10 +276,13 @@ ${ramkaHtml(ctx, lang)}
   /* S6/ZM-08 (27.11.2026, P-1; odwraca ZM-06): do indeksu ćwiczenia z własnymi wskazówkami kompletnymi w tym języku (D1), bez wymogu pełnej karty (`pelna` nie ma znaczenia);
      reszta noindex,follow. Reguła sama zdejmuje noindex, gdy ćwiczenie spełni warunek. Strażnik S6 sprawdza wynik niezależnie. */
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
-  /* tytuł: z lokalną nazwą wg szablonu Z-22 („lokalna (angielska)”, sama lokalna przy limicie 60, SZ-7); bez niej sama angielska — dopiski i opisy dochodzą w Z-34 */
-  const lokalna = nazwaLokalna(ctx, lang, ex), title = lokalna && JEZYKI_SZABLONOW.includes(lang) ? szablonyCwiczenia(d, site, lang, ex, { nazwaLokalna: lokalna }).tytul : ex.name;
-  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title, description: `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`, robots: robotsFor(ctx, lang, own), canonical: urlOf(file),
-    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs)], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
+  /* tytuł i opis: szablony Z-22 (pl, en; pominOpis → bez <meta name="description">); pozostałe języki — nazwa i mięśnie, do czasu przekładu szablonów przez API */
+  const tytul = sz ? sz.tytul : ex.name, opis = sz ? (sz.pominOpis ? '' : sz.opis) : `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`;
+  /* podgląd (A9, A11): ten sam rysunek ćwiczenia (obie pozycje) jako PNG 1200×630 z assets/podglad/ — wspólny dla języków; bez rysunku brak obrazka (nie logo, nie ikona) */
+  const obraz = fig ? { url: abs(ctx.cfg, `assets/podglad/${ex.slug}.png`), alt: nazwaStrony(ctx, lang, ex) } : null;
+  const webPage = obraz ? { '@context': 'https://schema.org', '@type': 'WebPage', url: abs(ctx.cfg, urlOf(file)), name: tytul, inLanguage: hreflang(lang), primaryImageOfPage: { '@type': 'ImageObject', url: obraz.url, width: 1200, height: 630 } } : null;
+  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, html: layout(ctx, { file, lang, title: tytul, description: opis, robots: robotsFor(ctx, lang, own), canonical: urlOf(file), ogType: 'article', ogImage: obraz,
+    alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs), ...(webPage ? [webPage] : [])], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
 }
 
 /** Strona prawna (Z-33): dokument z docs/teksty/prawne/ w języku strony; język bez przekładu → wersja angielska z lang="en" (przekład API: docs/przeklad, źródło „prawne”). */

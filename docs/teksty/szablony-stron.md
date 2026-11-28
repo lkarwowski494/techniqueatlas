@@ -40,12 +40,12 @@ Własne wskazówki: `{cues.move[0]} {zdanie mięśni}` (bez ruchu — pierwsze z
 |---|---|---|---|
 | `cues.setup` | Jak się ustawić? | How do you set up? | własne wskazówki z ustawieniem |
 | `cues.move` | Jak wykonać ruch? | How do you perform the movement? | własne wskazówki z ruchem |
-| `regions` (mięśnie, sylwetka) | Które mięśnie pracują? | Which muscles does it work? | ćwiczenie ma mięśnie |
+| `regions` (mięśnie, sylwetka) | Które mięśnie pracują? | Which muscles does it work? | ćwiczenie ma mięśnie z obciążeniem ≥ 0,5 (same lekkie regiony nie tworzą sekcji) |
 | `cues.tips` / `cues.ok` | Co pomaga w technice? | What helps your technique? | są wskazówki (przy ogólnych zostaje dopisek „Ogólne wskazówki dla tego ruchu”) |
 | `cues.mistakes` | Jakich błędów unikać? | Which mistakes should you avoid? | są błędy |
 | `requires` | Jaki sprzęt jest potrzebny? | What equipment do you need? | jest sprzęt |
 | `alternatives` | Czym można je zastąpić? | What can you do instead? | są zamienniki |
-Bez nazwy ćwiczenia w nagłówku (nazwa raz, w `<h1>`; Google o tytule: „there's no reason to have the same words or phrases appear multiple times” — przeniesione analogią na nagłówki). Pusta sekcja = brak nagłówka. Dziś mięśnie nie mają nagłówka — Z-34 dodaje `<h2>` nad sylwetką i listami.
+Bez nazwy ćwiczenia w nagłówku (nazwa raz, w `<h1>`; Google o tytule: „there's no reason to have the same words or phrases appear multiple times” — przeniesione analogią na nagłówki). Pusta sekcja = brak nagłówka. Dziś mięśnie nie mają nagłówka — Z-34 dodaje `<h2>` nad sylwetką i listami (28.11.2026: warunek „ma mięśnie” = obciążenie ≥ 0,5, bo tylko takie partie strona wypisuje; 83 ćwiczenia pl i en mają same lekkie regiony i nie mają sekcji).
 
 ## 3. Strona główna języka, lista, kategorie
 

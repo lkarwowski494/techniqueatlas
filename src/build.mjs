@@ -8,6 +8,7 @@ import { chooserPage, notFoundPage, homePage, listPage, filterPage, exercisePage
 import { effectiveSlugs, checkSlugLock, remapSlugs } from './slugi.mjs';
 import { startGuards, checkIndexingRule, checkPrawne, checkRamka } from './straznicy.mjs';
 import { DOKUMENTY, wczytajPrawne } from './prawne.mjs';
+import { szablonyCwiczen, JEZYKI as JEZYKI_SZABLONOW } from './szablony.mjs';
 import { dniBezOplat, dokumentRamki } from './aplikacja.mjs';
 import { GROUP_ID, EQUIPMENT_ID, familyId, hreflangCodes } from './taksonomia.mjs';
 
@@ -18,6 +19,15 @@ export function checkPin(src = {}) {
   return pin;
 }
 
+/** Data wydania danych (RRRR-MM-DD) = data commitu aplikacji z PIN.json, zapisana przez `npm run dane` (KO-135, A13): jedyne źródło <lastmod> w mapach witryny — nigdy data budowania. */
+export function dataWydania() {
+  const pin = readJson('PIN.json'), f = join(CACHE, 'dane/data-wydania.json'), d = existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null;
+  if (!d || d.commit !== pin.commit || !/^\d{4}-\d{2}-\d{2}$/.test(d.data)) throw new Error('brak daty wydania danych dla PIN.json (lastmod w mapach witryny) — uruchom npm run dane');
+  return d.data;
+}
+
+/** Roboty uczące modele (KO-130, badanie zasięgu sekcja C): `Disallow: /` przy indeksowaniu; `__usage_ai-training` to wspólny sygnał uczenia (szkic IETF). */
+export const UCZENIE_MODELI = ['GPTBot', 'ClaudeBot', 'CCBot', 'Applebot-Extended', '__usage_ai-training'];
 const write = (out, file, text) => { const p = join(out, file); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, text); };
 
 /** `slugi`, `zmianaDanych` i `pominStraznikowStartu` to wejścia dla testów: pierwsze podaje zamrożenie i tabelę adresów zamiast plików, `zmianaDanych` (data → data) podstawia pola eksportu (np. `pelna` przed PIN z F-20), ostatnie wyłącza warunki startu: S3/S4/S8, warunek „pole pelna w eksporcie” (S6) i wymóg zamrożonych adresów — reguła S6 dla zbudowanych stron działa zawsze (testy sitemap przy indeksowanie=true na danych przed wydaniem); CLI nie przekazuje żadnego. */
@@ -49,7 +59,9 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   if (!pominStraznikowStartu) for (const g of [checkPrawne({ wartosci, indexing: !!cfg.indeksowanie }), checkRamka({ doc: dokumentRamki(), ui: { pl: readJson('src/ui/pl.json'), en: uiEn }, wersjaWydania: cfg.wersjaWydania, indexing: !!cfg.indeksowanie })]) { startErrors.push(...g.errors); warnings.push(...g.warnings); }
   const familyLabel = (l, f) => ui[l].families?.[f];
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
-  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel };
+  /* Z-34 (A10): tytuły i opisy stron ćwiczeń z szablonów Z-22 (pl, en); pozostałe języki — dotychczasowe zachowanie do czasu przekładu szablonów przez API */
+  const sz = Object.fromEntries(langs.filter(l => JEZYKI_SZABLONOW.includes(l)).map(l => [l, szablonyCwiczen(data[l], ui[l], l, Object.fromEntries(data[l].exercises.map(e => [e.slug, { nazwaLokalna: nazwy[l]?.[e.id] }])))]));
+  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel, sz };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });
   const report = { languages: {} };
@@ -77,16 +89,20 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   if (cfg.indeksowanie) {
     const key = p => p.file.replace(/^[^/]+\//, ''), idx = pages.filter(p => p.indexable);
     const altOf = p => idx.filter(q => q.lang && q.lang !== null && key(q) === key(p));
-    const url = p => `${cfg.domena}/${urlOf(p.file)}`;
+    const url = p => `${cfg.domena}/${urlOf(p.file)}`, lastmod = `<lastmod>${dataWydania()}</lastmod>`; /* bez changefreq i priority (A13, B8) */
     for (const l of langs) {
       const mine = idx.filter(p => p.lang === l); if (!mine.length) continue;
-      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${mine.map(p => `<url><loc>${esc(url(p))}</loc>${altOf(p).flatMap(q => hreflangCodes(q.lang).map(c => `<xhtml:link rel="alternate" hreflang="${esc(c)}" href="${esc(url(q))}"/>`)).join('')}</url>`).join('\n')}\n</urlset>\n`;
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${mine.map(p => `<url><loc>${esc(url(p))}</loc>${lastmod}${altOf(p).flatMap(q => hreflangCodes(q.lang).map(c => `<xhtml:link rel="alternate" hreflang="${esc(c)}" href="${esc(url(q))}"/>`)).join('')}</url>`).join('\n')}\n</urlset>\n`;
       write(out, `sitemap-${l}.xml`, xml); sitemaps.push(`sitemap-${l}.xml`);
     }
-    write(out, 'sitemap-glowna.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(cfg.domena)}/</loc></url></urlset>\n`); sitemaps.push('sitemap-glowna.xml');
+    write(out, 'sitemap-glowna.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${esc(cfg.domena)}/</loc>${lastmod}</url></urlset>\n`); sitemaps.push('sitemap-glowna.xml');
     write(out, 'sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemaps.map(s => `<sitemap><loc>${esc(cfg.domena)}/${s}</loc></sitemap>`).join('\n')}\n</sitemapindex>\n`);
-    write(out, 'robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.domena}/sitemap.xml\n`);
+    /* robots.txt (KO-130, wariant B): roboty wyszukiwania i cytowań dozwolone (grupa *), uczenie modeli zakazane tam, gdzie nie kosztuje cytowań; Google-Extended jawnie dozwolony (inaczej wspólny sygnał uczenia zostałby odczytany jako jego zakaz) */
+    write(out, 'robots.txt', `User-agent: *\nAllow: /\n\n${UCZENIE_MODELI.map(a => `User-agent: ${a}`).join('\n')}\nDisallow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${cfg.domena}/sitemap.xml\n`);
+    /* IndexNow (A12): plik klucza w korzeniu; klucz jest publiczny z założenia protokołu. Wysyłka adresów to osobny, ręczny skrypt po publikacji — nie część budowania */
+    if (cfg.indexNowKlucz) { if (!/^[A-Za-z0-9-]{8,128}$/.test(cfg.indexNowKlucz)) throw new Error('config.json → indexNowKlucz: 8–128 znaków [A-Za-z0-9-]'); write(out, `${cfg.indexNowKlucz}.txt`, `${cfg.indexNowKlucz}\n`); }
   } else write(out, 'robots.txt', 'User-agent: *\nAllow: /\n'); /* bez Disallow: przy zablokowanym skanowaniu Google nie zobaczy noindex (badanie indeksowania 01.11.2026, pkt 5); brak Sitemap */
+  cpSync(join(ROOT, 'assets/apple-touch-icon.png'), join(out, 'apple-touch-icon.png')); /* stały adres w korzeniu (specyfikacja §7); kopia pliku z assets/ */
   write(out, '.nojekyll', '');
   mkdirSync(CACHE, { recursive: true }); writeFileSync(join(CACHE, 'raport-brakow.json'), JSON.stringify({ app: man.app, ...report }, null, 1) + '\n'); /* raport poza dist: nie jest publikowany */
   return { out, pages, cfg, report, sitemaps, warnings, ctx };

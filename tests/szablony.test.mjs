@@ -89,7 +89,7 @@ for (const lang of JEZYKI) {
 
   test(`${lang}: nagłówki-pytania tylko przy sekcjach z treścią, bez nazwy ćwiczenia, zakończone znakiem zapytania`, () => {
     for (const { e, s } of wyniki) {
-      const ma = { setup: wlasne(e) && e.cues.setup?.length, move: wlasne(e) && e.cues.move?.length, tips: wlasne(e) ? e.cues.tips?.length : e.cues.ok?.length, mistakes: e.cues.mistakes?.length, sprzet: e.requires.length, zamienniki: e.alternatives.length, miesnie: e.regions.length };
+      const ma = { setup: wlasne(e) && e.cues.setup?.length, move: wlasne(e) && e.cues.move?.length, tips: wlasne(e) ? e.cues.tips?.length : e.cues.ok?.length, mistakes: e.cues.mistakes?.length, sprzet: e.requires.length, zamienniki: e.alternatives.length, miesnie: e.regions.some(r => r.load >= 0.5) /* Z-34: sekcja mięśni na stronie (listy main/aux) istnieje od obciążenia 0,5; same lekkie regiony — brak sekcji, więc brak nagłówka */ };
       for (const [k, v] of Object.entries(ma)) assert.equal(k in s.pytania, !!v, `${e.slug}: ${k}`);
       for (const q of Object.values(s.pytania)) { assert.match(q, /\?$/); assert.ok(!q.includes(e.name), e.slug); }
     }

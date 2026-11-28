@@ -4,7 +4,7 @@ Stan: 27.11.2026 · rola 07-jakosc (build) · gałąź `strona/z30-testy` od `st
 Wejście: `docs/design/system/design-spec.md` (Z-12, „Arkusz”), `docs/teksty/szablony-stron.md` + `src/szablony.mjs` (Z-22), `docs/teksty/prawne/` (Z-20), `docs/teksty/ramka-w-aplikacji.md` (Z-21), `docs/nazwy/pl.json` (Z-24, recenzja Z-25), `docs/badanie-zasiegu-2026-11-27.md` (Z-06, A1–A15, B1–B9, KO-130), `docs/55-plan-startu.md`.
 Zakres: tylko testy i ten dokument. `src/pages.mjs` i `assets/` bez zmian. Wdrożenie robią Z-31…Z-34.
 
-Oczekujące: Z-33 1, Z-34 15
+Oczekujące: Z-33 1
 
 (Wiersz wyżej sprawdza `tests/z30-oczekujace.test.mjs`. Przy zdjęciu oznaczenia zmniejsz liczbę w tym samym commicie.)
 
@@ -90,6 +90,8 @@ Wynik: przebieg pojedynczych plików `node --test tests/z3x-*.test.mjs` 27.11.20
 „Strażnik zdań ramki” z opisu Z-33 to S13 w `src/straznicy.mjs` (`checkRamka`): zdania w `src/ui/pl.json` i `en.json` (klucze `ramka.z1…z8`, `wsparcie.w1…w3`) muszą być zdaniami z `docs/teksty/ramka-w-aplikacji.md`, a dokument musi być sprawdzony dla wersji = `config.json → wersjaWydania` (przy `indeksowanie=true` błąd, inaczej ostrzeżenie). S12 (`checkPrawne`): wstawki `{{administrator}}`, `{{kontakt}}`, `{{dataObowiazywania}}` wypełnione przed indeksowaniem. Test akceptacyjny ramki (tabela dokumentu) zostaje niezależnym sprawdzeniem.
 
 ### Z-34 zasięg wg A1–A15 i Z-22 (`tests/z34-zasieg.test.mjs`)
+
+Stan 28.11.2026 (sesja BJ): wdrożone, wszystkie testy poniżej zielone (kolumna „Wynik dziś” to stan z 27.11.2026, przed wdrożeniem). Dwa uzgodnienia testu z danymi, oba z powodem w teście: unikalność opisów dopuszcza bliźniaki o identycznych danych (jak `szablony.test`), a nagłówek mięśni wymaga obciążenia ≥ 0,5 (jak sekcja na stronie). Dodatkowo `tests/z34-indexnow-podglad.test.mjs` (IndexNow bez sieci, świeżość obrazków podglądu).
 
 Build z `indeksowanie=true` (bez warunków startu, jak `build.test`) pod zegarem przestawionym na 2031-01-01.
 
