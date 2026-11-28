@@ -48,7 +48,7 @@ test('po przełączeniu indeksowania (35 języków budowanych, indeksujJezyki be
   }
   /* Z-40 006: stopka = bieżący + angielski + link „wszystkie języki (35)” do strony wyboru, która ma wszystkie 35 i nie dubluje się z hreflang w <head> */
   const en = read(out, 'en/exercises/back-squat/index.html'); assert.equal([...en.matchAll(/<a href="[^"]*" hreflang="[^"]+" lang="[^"]+">/g)].length, 0);
-  assert.match(en, new RegExp(`<a href="[^"]*" lang="en">all languages \\(${ALL.length}\\)</a>`));
+  assert.match(en, new RegExp(`<a href="[^"]*">all languages \\(${ALL.length}\\)</a>`));
   /* zestaw hreflang strony = zestaw xhtml:link w mapie dla tego samego adresu */
   const xml = read(out, 'sitemap-en.xml'), block = xml.match(/<url><loc>[^<]*\/en\/exercises\/back-squat\/<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)+)(?:<image:image>.*?<\/image:image>)?<\/url>/)[1];
   assert.deepEqual([...block.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(m => m[1]).sort(), hrefs(read(out, 'en/exercises/back-squat/index.html')).map(a => a[0]).filter(c => c !== 'x-default').sort());

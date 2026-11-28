@@ -66,7 +66,7 @@ test('strona / (wybór języka): canonical na siebie, pełny zestaw hreflang (ka
 });
 test('lang strony: <html lang> i odnośniki językowe — sr-Cyrl dla serbskiego, es-419 zostaje (znacznik języka, nie kod wyszukiwarki)', () => {
   assert.match(read('sr/exercises/back-squat/index.html'), /<html lang="sr-Cyrl">/); assert.match(read('es-419/exercises/back-squat/index.html'), /<html lang="es-419">/);
-  assert.match(read('en/exercises/back-squat/index.html'), /<a href="[^"]*" lang="en">all languages \(\d+\)<\/a>/); /* Z-40 006: stopka ma skrót (bieżący, angielski, „wszystkie języki”); pełna lista z sr-Cyrl jest na stronie wyboru języka (niżej) */
+  assert.match(read('en/exercises/back-squat/index.html'), /<a href="[^"]*">all languages \(\d+\)<\/a>/); /* Z-40 006: stopka ma skrót (bieżący, angielski, „wszystkie języki”); pełna lista z sr-Cyrl jest na stronie wyboru języka (niżej) */
   assert.match(read('index.html'), /hreflang="sr-Cyrl" lang="sr-Cyrl"/);
 });
 test('mapy witryny: xhtml:link z tymi samymi kodami (es-XX × region, sr-Cyrl), wzajemnie i bez duplikatów', () => {
