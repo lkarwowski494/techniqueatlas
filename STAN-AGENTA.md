@@ -1,3 +1,43 @@
+# Stan agenta — BQ4: ramka z3/z7 w 8 językach wg nazw z aplikacji, pokrycie zapasu en (09-lokalizacja, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/ramka-terminy` (od `strona/integracja-start` @ 58ae378, SHA zgodny) · polecenie: docs/koordynacja/polecenia/BQ4.md (repo trening, gałąź koordynacja)
+
+- a) Przywrócone wersje sprzed 58ae378 (`4f08073`) dla 9 zdań (z3: cs sk ro de et; z7: et el ko sl). Te teksty = terminy zalecane ze słownika aplikacji (`.cache/dane/slownik-terminow.json`): przerwa = Pauza/Pauza/Pauză/Pause/Paus; plan (tygodnia) = Πρόγραμμα/플랜/Načrt/Plaan. z3 el/ko/sl i z7 cs/sk/ro/de bez zmian (nie kolidowały). Pojęcia „plan tygodnia” w słowniku nie ma jako osobnego id; użyto id `plan`.
+- b) Strażnik: czerwony na tych zdaniach (17 trafień: dzien_wolny, pauza_treningu, faza_pauza × z3; plan_subskrypcji × z7), potem 17 wyjątków w `WYJATKI` z komentarzem grupy i powodem nazywającym oba pojęcia, zielony (3/3). Logika i asercje testu bez zmian.
+- c) Nowy test w tests/z40-poprawki.test.mjs: kopia `ctx.ui.de` bez „wynik” → `listPage` daje angielski tekst z `lang="en"`, liczby n/m; kontrola: nietknięty de bez `lang="en"`. Czerwony po zepsuciu zapasu w src/pages.mjs (zmiana cofnięta), zielony po cofnięciu. Istniejącego testu nie zmieniono.
+- d) Przegląd API: szacunek opus 1,20 USD (górna granica 1,70; sonnet 0,60) — powyżej spodziewanych 0,5, bo workflow przegląda całe src/ui (98 tys. tokenów wejścia), nie 17 zdań; uruchomiono na opus (decyzja „analogia, do weta”). Run szacunku 46159846782, run płatny 46159918705, batch msgbatch_01WwD4Pn2D3bVvrB2c6qM2tB, koszt rzeczywisty 0,39 USD (zaksięgowane: wydatki.json 32,86 z 80). 0 uwag do zdań ramki z3/z7. Poza ramką: 1 krytyczna (et families.forearm „Käsivarred” = ręce, nie przedramiona → „Küünarvarred”) — NAŁOŻONA; 8 średnich i 9 niskich nienałożonych (et: bench_press, overhead_press, leg_machine, chest_press_machine…; ro cable_row/cable_press „helcometru”; sl lunge „klop→podest”; cs, sk, de, el niskie) — do decyzji.
+- e) docs/55-plan-startu.md: Z-33 i Z-34 → zrobione, 2026-11-28, dowód: integracja @ 58ae378, tests.yml 46156099923 (success). Test plan-startu 9/9. tests/z33-prawne-ramka.test.mjs: oznaczenie „CZEKA Z-33” zostało tylko w komentarzu (linia 3) i niewykorzystanym imporcie `CZEKA` (linia 7); wywołań `CZEKA(` brak — komentarz nieaktualny, założeń testu nie zmieniano.
+- Zakres 9, nie 17 zdań: 17 to liczba kluczy wyjątków (zdanie × pojęcie), zmienionych zdań jest 9.
+
+## 9 zdań przed (58ae378 / BQ3) → po (BQ4)
+| zdanie | przed (58ae378) | po (BQ4) |
+|---|---|---|
+| cs z3 | Po odškrtnutí série se spustí odpočítávání odpočinku. | Po odškrtnutí série se spustí odpočet pauzy. |
+| sk z3 | Po odškrtnutí série sa spustí odpočítavanie odpočinku. | Po odškrtnutí série sa spustí odpočítavanie pauzy. |
+| ro z3 | După ce bifați o serie, pornește cronometrul de odihnă. | După ce bifați o serie, pornește cronometrul pentru pauză. |
+| de z3 | Sobald du einen Satz abhakst, läuft der Timer für die Erholung. | Sobald du einen Satz abhakst, läuft der Timer für die Pause. |
+| et z3 | Kui märgid seeria tehtuks, algab puhkeaja loendus. | Kui märgid seeria tehtuks, algab pausi loendus. |
+| et z7 | Mallidest saad koostada nädalakava või lasta mõne valiku põhjal luua mallid ja kava. | Mallidest saad koostada nädalaplaani või lasta mõne valiku põhjal luua mallid ja plaani. |
+| el z7 | Από τα πρότυπα φτιάχνεις το εβδομαδιαίο πλάνο ή δημιουργείς πρότυπα και πλάνο με βάση λίγες επιλογές. | Από τα πρότυπα φτιάχνεις το εβδομαδιαίο πρόγραμμα ή δημιουργείς πρότυπα και πρόγραμμα με βάση λίγες επιλογές. |
+| ko z7 | 루틴으로 주간 계획을 짜거나, 몇 가지 조건만 정해 루틴과 계획을 자동으로 만들 수 있습니다. | 루틴으로 주간 플랜을 짜거나, 몇 가지 조건만 정해 루틴과 플랜을 자동으로 만들 수 있습니다. |
+| sl z7 | Iz predlog sestavite tedenski spored ali pa predloge in spored ustvarite na podlagi nekaj izbir. | Iz predlog sestavite tedenski načrt ali pa predloge in načrt ustvarite na podlagi nekaj izbir. |
+
+## Koszt API: 32,86 z 80 USD (start 32,47; ta sesja 0,39)
+
+## Decyzje (analogia, do weta)
+1. Przegląd na opus mimo szacunku 1,20 USD (> 0,5): jakość et/sl/ko ważniejsza, koszt rzeczywisty 0,39.
+2. Nałożona tylko 1 krytyczna poprawka spoza ramki; średnie i niskie czekają na decyzję (poza zakresem BQ4).
+
+## Propozycje
+- U źródła (repo Trening, słownik aplikacji): zakazy pojęć pauza_treningu, faza_pauza, dzien_wolny (cs/sk/ro „pauz”, de „Pause”, et „paus”) trafiają w termin zalecany pojęcia przerwa; plan_subskrypcji zakazuje „plaan/πρόγραμμ/플랜/načrt”, które są terminami zalecanymi pojęcia plan. Poprawka: zawęzić wzorce (np. wymagać kontekstu treningu lub dodać wyklucz) albo zmienić termin zalecany jednego z pojęć. Tylko opis, bez zmiany tutaj.
+- Zatwierdzić et/ro/sl średnie poprawki u rodzimych użytkowników.
+
+## Otwarte
+- Brak przeglądu człowieka (przegląd modelu go nie zastępuje).
+- Komentarz „CZEKA Z-33” w tests/z33-prawne-ramka.test.mjs do usunięcia przez koordynatora.
+
+---
+
 # Stan agenta — BQ3: scalenie z integracją, przekład kluczy UI w 33 językach (09-lokalizacja, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start 190f564; scalone `strona/scalenie-prawne` 6885fd1 i `main` e97094e) · polecenie: docs/koordynacja/polecenia/BQ3.md (repo trening, gałąź koordynacja)
