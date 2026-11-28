@@ -2,11 +2,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, mkdtempSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import { build } from '../src/build.mjs';
-import { requireData, tmpDist, ROOT } from './pomoc.mjs';
+import { requireData, tmpDist, tmpDir, ROOT } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
 import { czytaj, element, elementy } from './strona-html.mjs';
 
@@ -47,7 +46,7 @@ test('Z-40 009: z appStoreId i plikami każda strona ćwiczenia ma w ramce link 
 });
 
 test('Z-40 009: z appStoreId, ale bez pliku plakietki: zwykły link tekstowy bez <img>, bez linii znaków Apple, z ostrzeżeniem budowania', async () => {
-  const pusty = mkdtempSync(join(tmpdir(), 'plakietka-'));
+  const pusty = tmpDir('plakietka-');
   const r = await build({ out: tmpDist(), cfg: { appStoreId: APP, jezyki: ['pl', 'en'] }, plakietkaDir: pusty });
   for (const l of ['pl', 'en']) { const rm = ramka(r.out, l); assert.doesNotMatch(rm.wnetrze, /<img/, l); assert.match(rm.wnetrze, /<a href="https:\/\/apps\.apple\.com\/app\/id123456789[^"]*">[^<]+<\/a>/, `${l}: link tekstowy`); assert.doesNotMatch(stopka(r.out, l), /class="zastrz"/, `${l}: linia znaków bez grafiki`); }
   assert.ok(r.warnings?.some(w => /plakietka App Store/.test(w)) ?? true);
