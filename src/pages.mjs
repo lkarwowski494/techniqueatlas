@@ -186,6 +186,9 @@ export function poseSheet(ctx, fig) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${E.viewBox(box)}">${poseIds(fig).map(id => `<g id="${id}" transform="${E.groupTransform(box)}">${E.innerAt(fig.frames, id === 'start' ? 0 : 1, fig.views[0])}</g>`).join('\n')}</svg>\n`;
 }
 
+/** Tempo powtórzenia ma sens tylko przy ćwiczeniu liczonym w powtórzeniach; ćwiczenia na czas i izometryczne (metryka time, weight_time, …) liczy się czasem trwania, nie powtórzeniem (Z-35 001, KO-152). Wartości pola `metric` z eksportu danych. */
+export const wLiczbiePowtorzen = e => e.metric === 'reps' || e.metric === 'weight_reps';
+
 /** Linia wymiarowa tempa (element firmowy, design-spec §4): odcinek = faza z czasem > 0, długość z klas t<ms/100> (bez stylu w atrybucie, CSP); opis dla czytnika i sekwencja tekstem pod linią. Czysta funkcja: dane faz → HTML. */
 export function wymiarHtml(lang, ui, phases) {
   /* fazy `untimed` (ćwiczenia balistyczne, chód: czas w danych jest zastępczy, nie opisuje ruchu) — bez linii: nie podajemy czasu, którego ćwiczenie nie ma */
@@ -211,7 +214,7 @@ function figureBlock(ctx, lang, ex, fig, file) {
   const html = `<figure class="fig" data-figure data-fig="${esc(ex.slug)}">
 <div class="pozycje" data-poses>${poses}</div>
 <div class="widoki" data-views hidden>${views.map(v => `<svg role="img" aria-label="${esc(label)}" viewBox="${E.viewBox(v.box)}" data-view="${v.name}"><g transform="${E.groupTransform(v.box)}" data-g></g></svg>`).join('')}</div>
-${wymiarHtml(lang, site, f.phases)}
+${wLiczbiePowtorzen(ex) ? wymiarHtml(lang, site, f.phases) : ''}
 <div class="fig-ster"><button type="button" class="b-anim" data-pause hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-label="${esc(ui.showError)}: ${esc(e.text.replace(/\.\s*$/, ''))}" aria-pressed="false" hidden>${esc(e.text.replace(/\.\s*$/, ''))}</button>`).join('')}</div>
 <p class="podpis" data-error-text hidden aria-live="polite"></p>
 <figcaption class="drobne">${esc(ui.schematic)}</figcaption>
@@ -290,7 +293,7 @@ ${ramka.html}
      reszta noindex,follow. Reguła sama zdejmuje noindex, gdy ćwiczenie spełni warunek. Strażnik S6 sprawdza wynik niezależnie. */
   const indexable = !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang) && own;
   /* tytuł i opis: szablony Z-22 (pl, en; pominOpis → bez <meta name="description">); pozostałe języki — nazwa i mięśnie, do czasu przekładu szablonów przez API */
-  const tytul = sz ? sz.tytul : ex.name, opis = sz ? (sz.pominOpis ? '' : sz.opis) : `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`;
+  const tytul = sz ? sz.tytul : nazwaStrony(ctx, lang, ex), opis = sz ? (sz.pominOpis ? '' : sz.opis) : `${nazwaStrony(ctx, lang, ex)}${main.length ? ': ' + main.join(', ') : ''}`;
   /* podgląd (A9, A11): ten sam rysunek ćwiczenia (obie pozycje) jako PNG 1200×630 z assets/podglad/ — wspólny dla języków; bez rysunku brak obrazka (nie logo, nie ikona) */
   const obraz = fig ? { url: abs(ctx.cfg, `assets/podglad/${ex.slug}.png`), alt: nazwaStrony(ctx, lang, ex) } : null;
   const webPage = obraz ? { '@context': 'https://schema.org', '@type': 'WebPage', url: abs(ctx.cfg, urlOf(file)), name: tytul, inLanguage: hreflang(lang), primaryImageOfPage: { '@type': 'ImageObject', url: obraz.url, width: 1200, height: 630 } } : null;

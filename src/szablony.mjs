@@ -158,15 +158,16 @@ export function szablonyListy(d, ui, lang) {
   const t = teksty[lang], n = d.exercises.length;
   return { tytul: ui.allExercises, opis: fill(t.opisListy, { n, pozycji: plural(lang, t.pozycji, n) }) };
 }
-/** Strony jednego filtra (partia, sprzęt, rodzaj ruchu): przykłady = pierwsze 3 nazwy A–Z bez słów tytułu. */
+/** Strony jednego filtra (partia, sprzęt, rodzaj ruchu): przykłady = pierwsze 3 nazwy A–Z (lokalne, gdy ćwiczenie ma pole `nazwaLokalna`) bez słów tytułu. */
 export function szablonyKategorii(d, ui, lang) {
   const t = teksty[lang], col = new Intl.Collator(lang), out = [];
   const grupy = [['group', d.labels.groups], ['equipment', d.labels.equipment], ['family', Object.fromEntries(Object.entries(ui.families ?? {}))]];
   for (const [klucz, etykiety] of grupy) for (const wartosc of [...new Set(d.exercises.map(e => e[klucz]))]) {
     const label = etykiety[wartosc]; if (!label) continue;
     const tytul = fill(ui.exercisesIn, { nazwa: label });
-    const ex = d.exercises.filter(e => e[klucz] === wartosc).sort((a, b) => col.compare(a.name, b.name)), n = ex.length;
-    const wolne = ex.map(e => e.name).filter(x => !wspolne(lang, tytul, x).length), przyklady = wolne.slice(0, 3);
+    const nz = e => e.nazwaLokalna ?? e.name; /* nazwa jak w h1 strony: lokalna, gdy build ją dopisał (Z-35 002) */
+    const ex = d.exercises.filter(e => e[klucz] === wartosc).sort((a, b) => col.compare(nz(a), nz(b))), n = ex.length;
+    const wolne = ex.map(nz).filter(x => !wspolne(lang, tytul, x).length), przyklady = wolne.slice(0, 3);
     const zKategorii = lista => fill(t.opisKategorii, { n, pozycji: plural(lang, t.pozycji, n), lista: lista.join(', ') });
     for (const x of wolne.slice(3)) { if (dl(zKategorii(przyklady)) >= LIMITY.opis.min || dl(zKategorii([...przyklady, x])) > LIMITY.opis.max) break; przyklady.push(x); } /* krótkie nazwy: dokładamy przykład, aż opis osiągnie minimum */
     const bez = fill(t.opisKategoriiBezPrzykladow, { n, pozycji: plural(lang, t.pozycji, n), f: ex.filter(e => e.figure).length, c: ex.filter(e => e.cues.scope !== 'none').length });
