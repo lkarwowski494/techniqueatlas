@@ -78,7 +78,7 @@ jobs:
           if [ -n "$WEJ_GALAZ" ]; then
             [[ "$WEJ_GALAZ" =~ ^[A-Za-z0-9._/-]+$ ]] && [[ "$WEJ_GALAZ" != -* ]] && [[ "$WEJ_GALAZ" != *..* ]] || { echo "::error::galaz_tekstow: niedozwolone znaki"; exit 1; }
             git fetch --depth 1 origin "$WEJ_GALAZ"
-            for P in docs/nazwy docs/teksty src/szablony; do
+            for P in docs/nazwy docs/teksty src/szablony src/ui; do
               if [ -n "$(git ls-tree --name-only FETCH_HEAD "$P")" ]; then git checkout FETCH_HEAD -- "$P"; fi
             done
             # licznik wydatków z gałęzi tekstów (tylko odczyt do pliku roboczego; skrypt scala go z wydatki.json z main, bez obniżania sumy i limitu)
