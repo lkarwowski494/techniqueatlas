@@ -7,6 +7,9 @@ import { DOKUMENTY } from './prawne.mjs';
 
 const SECTION = ['setup', 'move'];
 const abs = (cfg, path) => `${cfg.domena}/${path}`;
+/** Blok tekstów stałych jest „własny” tylko w komplecie podkluczy; niepełny (np. ramka bez z5) spada w całości na wersję angielską z lang="en" — nigdy „undefined” w HTML (Z-33, recenzja). */
+const komplet = (o, klucze) => !!o && klucze.every(k => typeof o[k] === 'string' && o[k] !== '');
+const KLUCZE_RAMKI = ['tytul', ...Array.from({ length: 8 }, (_, i) => `z${i + 1}`)], KLUCZE_WSPARCIA = ['w1', 'w2', 'w3'];
 const dirOf = file => file.replace(/index\.html$/, '');
 
 const MARKA = 'Technique Atlas'; /* nazwa marki w nagłówku (design-spec §5); nazwa aplikacji w ramce: config.json → nazwaAplikacji */
@@ -40,7 +43,7 @@ export function layout(ctx, m, bodyHtml) {
   const crumbs = m.crumbs?.length ? `<nav class="okruszki" aria-label="${esc(ui.breadcrumbs)}"><ol>${m.crumbs.map((c, i) => `<li>${c.path && i < m.crumbs.length - 1 ? `<a href="${u(urlOf(c.path))}">${esc(c.name)}</a>` : `<span aria-current="page"${c.lang ? ` lang="${c.lang}"` : ''}>${esc(c.name)}</span>`}</li>`).join('')}</ol></nav>` : '';
   const langs = (m.alternates ?? []).length > 1 && !m.bezWierszaJezykow ? `<p class="jezyki">${esc(ui.language)}: ${m.alternates.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`).join(' · ')}</p>` : '';
   /* stopka (Z-33): akapit o wsparciu, link do sklepu, języki, dokumenty prawne; teksty bez przekładu (jeszcze) = angielskie z lang="en" (przekład API, docs/przeklad) */
-  const wsp = ui.wsparcie ? { ui: ui.wsparcie, lang: '' } : { ui: ctx.uiEn.wsparcie, lang: ' lang="en"' };
+  const wsp = komplet(ui.wsparcie, KLUCZE_WSPARCIA) ? { ui: ui.wsparcie, lang: '' } : { ui: ctx.uiEn.wsparcie, lang: ' lang="en"' };
   const wsparcie = `<p class="wsparcie"${wsp.lang}>${esc(['w1', 'w2', 'w3'].map(k => fill(wsp.ui[k], { dni: ctx.dni })).join(' '))}</p>\n`;
   const prawneTekst = k => ui.prawne?.[k] ? { t: ui.prawne[k], lang: '' } : { t: ctx.uiEn.prawne[k], lang: ' lang="en"' };
   const prawneLinki = DOKUMENTY.map(d => { const tt = d.klucz === 'privacy' && !ui.prawne?.privacy ? { t: ui.privacy, lang: '' } : prawneTekst(d.klucz); /* „Prywatność” z tekstów stałych, gdy język nie ma jeszcze pełnej nazwy dokumentu */ return `<a href="${u(urlOf(paths.legal(lang, d.slug)))}"${tt.lang}>${esc(tt.t)}</a>`; }).join(' · ');
@@ -217,7 +220,7 @@ export function figureModule(ctx, slug, fig) {
 /** Ramka „w aplikacji” (Z-33, wariant A z docs/teksty/ramka-w-aplikacji.md; nie tekst z makiet — N-1): 8 zdań, nazwa aplikacji z config.json, plakietka sklepu tylko przy appStoreId.
  * Język bez własnych zdań (przekład API jeszcze nie nałożony) pokazuje zdania angielskie z lang="en" na tytule i liście. */
 function ramkaHtml(ctx, lang) {
-  const own = !!ctx.ui[lang].ramka, r = own ? ctx.ui[lang].ramka : ctx.uiEn.ramka, k = own ? '' : ' lang="en"', ui = ctx.ui[lang], id = ctx.cfg.appStoreId;
+  const own = komplet(ctx.ui[lang].ramka, KLUCZE_RAMKI), r = own ? ctx.ui[lang].ramka : ctx.uiEn.ramka, k = own ? '' : ' lang="en"', ui = ctx.ui[lang], id = ctx.cfg.appStoreId;
   const zdania = Array.from({ length: 8 }, (_, i) => `<li>${esc(r[`z${i + 1}`])}</li>`).join('');
   const plakietka = id ? `<a class="plakietka" href="https://apps.apple.com/app/id${esc(id)}?ct=techniqueatlas-${esc(lang)}">${esc(ui.appStore)}</a>` : '';
   return `<aside class="ramka" id="aplikacja" aria-labelledby="ramka-t">\n<h2 id="ramka-t"${k}>${esc(fill(r.tytul, { nazwa: ctx.cfg.nazwaAplikacji }))}</h2>\n<ul class="ramka-l"${k}>${zdania}</ul>\n${plakietka}</aside>`;

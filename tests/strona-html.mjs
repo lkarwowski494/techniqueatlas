@@ -54,3 +54,6 @@ export function wymiaryPng(buf) {
 export function nazwyLokalne(lang) { const f = join(new URL('..', import.meta.url).pathname, `docs/nazwy/${lang}.json`); return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null; }
 /** Nazwa w języku strony tak, jak ma ją pokazać h1 (szablony-stron.md 2.1): lokalna różna od angielskiej nie tylko wielkością liter, inaczej angielska. */
 export const nazwaLokalna = (lang, N, e) => N?.[e.id] && N[e.id].toLocaleLowerCase(lang) !== e.name.toLocaleLowerCase(lang) ? N[e.id] : null;
+
+/** Parytet podkluczy (Z-33, recenzja): dla kluczy czekających na przekład — jeśli język ma klucz, ma mieć dokładnie te podklucze co pl; brak klucza to nie błąd. */
+export const brakujacePodklucze = (u, pl, klucze) => klucze.filter(k => k in u).flatMap(k => { const a = Object.keys(pl[k] ?? {}), b = Object.keys(u[k] ?? {}); return [...a.filter(x => !b.includes(x)).map(x => `${k}: brak ${x}`), ...b.filter(x => !a.includes(x)).map(x => `${k}: nadmiarowy ${x}`)]; });

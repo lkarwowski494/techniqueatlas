@@ -6,7 +6,10 @@ import { join } from 'node:path';
 import { bezKomentarzy, mdDoHtml, wstaw } from '../src/prawne.mjs';
 import { checkPrawne, checkRamka } from '../src/straznicy.mjs';
 import { dniBezOplat, dokumentRamki } from '../src/aplikacja.mjs';
-import { read, tmpDir } from './pomoc.mjs';
+import { read, tmpDir, tmpDist, BEZ_STARTU } from './pomoc.mjs';
+import { build } from '../src/build.mjs';
+import { exercisePage, homePage } from '../src/pages.mjs';
+import { brakujacePodklucze } from './strona-html.mjs';
 
 test('Z-33 prawne: komentarze (także zagnieżdżone, z [DO KONSULTACJI]) znikają, wstawki są podmieniane, brak wartości daje tekst zastępczy, a znaczniki w wartościach są escapowane', () => {
   assert.equal(bezKomentarzy('a <!-- x <!-- D-1 --> y --> b <!-- [DO KONSULTACJI] z -->c'), 'a  b c');
@@ -41,4 +44,23 @@ test('Z-33 liczba dni bez opłat pochodzi z lib/access.ts aplikacji (5 w wersji 
     assert.throws(() => dniBezOplat(d), /FREE_TRAINING_DAYS_PER_MONTH/);
     writeFileSync(join(d, 'app/lib/access.ts'), 'export const PAYWALL = {\n  FREE_TRAINING_DAYS_PER_MONTH: 3,\n};\n'); assert.equal(dniBezOplat(d), 3);
   }
+});
+
+/* Z-33 recenzja (NISKIE): język z niepełnym zestawem podkluczy (np. ramka bez z5, wsparcie bez w2) nie wypisuje „undefined”; cały blok spada na wersję angielską z lang="en" */
+test('Z-33 (recenzja, NISKIE) ramka i akapit o wsparciu z brakującym podkluczem: bez „undefined”, blok angielski z lang="en"', async () => {
+  const r = await build({ out: tmpDist(), cfg: { jezyki: ['pl', 'en', 'de'] }, ...BEZ_STARTU }), ctx = r.ctx, ex = ctx.data.de.exercises[0];
+  const { z5, ...ramkaBezZ5 } = ctx.uiEn.ramka, { w2, ...wspBezW2 } = ctx.uiEn.wsparcie; assert.ok(z5 && w2);
+  ctx.ui.de = { ...ctx.ui.de, ramka: ramkaBezZ5, wsparcie: wspBezW2 };
+  const html = exercisePage(ctx, 'de', ex).html;
+  assert.doesNotMatch(html, /undefined/); assert.match(html, /<aside class="ramka"[\s\S]*?<h2 id="ramka-t" lang="en">/); assert.match(html, /<p class="wsparcie" lang="en">/);
+  assert.doesNotMatch(homePage(ctx, 'de').html, /undefined/);
+  /* język z kompletnym zestawem zostaje własny (bez lang="en") */
+  ctx.ui.de = { ...ctx.ui.de, ramka: ctx.uiEn.ramka, wsparcie: ctx.uiEn.wsparcie }; assert.doesNotMatch(exercisePage(ctx, 'de', ex).html, /<h2 id="ramka-t" lang="en">/);
+});
+
+test('Z-33 (recenzja, NISKIE) parytet kluczy UI: wyjątek sprawdza podklucze, gdy język ma klucz (ramka bez z5 → błąd), a gdy klucza nie ma — nic', () => {
+  const pl = { ramka: { tytul: 'a', z1: 'b', z5: 'c' }, wsparcie: { w1: 'a' }, x: 1 };
+  assert.deepEqual(brakujacePodklucze({ x: 1 }, pl, ['ramka', 'wsparcie']), []);
+  assert.deepEqual(brakujacePodklucze({ ramka: { tytul: 'a', z1: 'b', z5: 'c' }, wsparcie: { w1: 'a' } }, pl, ['ramka', 'wsparcie']), []);
+  assert.deepEqual(brakujacePodklucze({ ramka: { tytul: 'a', z1: 'b' }, wsparcie: { w1: 'a', w9: 'z' } }, pl, ['ramka', 'wsparcie']), ['ramka: brak z5', 'wsparcie: nadmiarowy w9']);
 });
