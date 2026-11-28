@@ -1,3 +1,21 @@
+# Stan agenta — BR: dwie krótkie strony prawne (08-programista, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/prawne-proste` (od `strona/integracja-start` @ 074e3f8)
+
+## Zrobione (decyzje właściciela 28.11.2026 cytowane w commitach)
+- Teksty: `docs/teksty/prawne/{prywatnosc,warunki}.{pl,en}.md` (55/96 słów pl, 63/119 en); stare regulamin/licencja/polityka (35 języków) usunięte.
+- Kod: `src/prawne.mjs` (2 dokumenty, slugi privacy-policy i terms), stopka „© 2026 Apps4Brew, Warszawa · support@apps4brew.com” z `config.json` (prowadzacy, kontakt, rokStrony); bez TA_ADMINISTRATOR/TA_KONTAKT; S12 tylko data.
+- Wsparcie: „bez subskrypcji” / „without a subscription” (src/ui, docs/teksty/ramka-w-aplikacji.md).
+- Testy: `tests/prawne-proste.test.mjs` (nowy), zmienione z powodu decyzji: z33-prawne-ramka, z33-moduly, z34-przeklad-ui, straznik-sekrety (mailto/e-mail), figura-przegladarka (404 dopuszcza mailto:).
+- Lokalnie `npm test`: 246/253 zielone; czerwone: build.test i jezyki-podglad (SIGKILL — też przed zmianami), z30 (todo bez CZEKA — naprawione), 404 (naprawione).
+
+## Nie zrobione / w toku
+- Przekład 33 języków: workflow z main zna źródła nazwy, szablony, prawne, ramka (nie `ui`) → tłumaczone tylko dokumenty `prawne`; klucze UI (prawne.nav/privacy/terms, wsparcie.w2) zostają na angielskim zapasie z lang="en". Szacunek w kolejce Actions (run 46139931580), koszt jeszcze nieznany; wydatki.json bez zmian (ok. 25,68 USD).
+- Po przekładzie: nałożenie `--zastosuj`, test BR-f (33 języków), księgowanie wydatku, zielony tests.yml.
+
+---
+## Wcześniej
+
 # Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)
