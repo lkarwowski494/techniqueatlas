@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { build } from '../src/build.mjs';
+import { listPage } from '../src/pages.mjs';
 import { buildOnce, requireData, tmpDist, ROOT } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
 import { czytaj, element, elementy, tekst, hrefy } from './strona-html.mjs';
@@ -88,6 +89,15 @@ test('Z-40 002: język bez własnego tekstu „wynik” (de) dostaje wersję ang
   /* BQ3: po przekładzie src/ui (BQ3 b) de ma własny „wynik”, więc zastępczy angielski jest sprawdzany tylko, gdy język go jeszcze nie ma; w obu stanach brak „undefined” i parametrów */
   const p = element(czytaj(out, 'de/exercises/index.html'), 'p', 'wynik'); assert.ok(p); assert.doesNotMatch(p.wnetrze, /undefined|\{n\}|\{m\}/);
   if (readJson('src/ui/de.json').wynik) assert.doesNotMatch(p.otwarcie, /lang="en"/); else assert.match(p.otwarcie, /lang="en"/);
+});
+
+test('Z-40 002 (zapas en, BQ4 c): kopia danych de bez klucza „wynik” → akapit z angielskim tekstem i lang="en", z liczbami; nietknięty de bez lang="en"', () => {
+  /* Istniejący przypadek wyżej jest warunkowy (de ma po przekładzie własny „wynik”), więc ścieżka zapasu nie byłaby sprawdzana nigdzie: tu fixtura usuwa klucz z kopii ctx.ui.de (plików nie zmienia). */
+  const { wynik, ...deBez } = ctx.ui.de; assert.ok(wynik, 'punkt wyjścia: de ma własny „wynik”');
+  const n = ctx.data.de.exercises.length, oczekiwany = EN.wynik.replace('{n}', n).replace('{m}', n);
+  const p = element(listPage({ ...ctx, ui: { ...ctx.ui, de: deBez } }, 'de').html, 'p', 'wynik'); assert.ok(p, 'brak p.wynik');
+  assert.match(p.otwarcie, /lang="en"/); assert.equal(tekst(p.wnetrze), oczekiwany); assert.doesNotMatch(p.wnetrze, /undefined|\{n\}|\{m\}/);
+  const wlasny = element(listPage(ctx, 'de').html, 'p', 'wynik'); assert.doesNotMatch(wlasny.otwarcie, /lang="en"/); assert.equal(tekst(wlasny.wnetrze), wynik.replace('{n}', n).replace('{m}', n));
 });
 
 test('Z-40 002 (przeglądarka): wybór filtra zmienia element p.wynik[aria-live] na liczbę widocznych wierszy; „wyczyść” przywraca pełną liczbę; zero wyników = „0 z M”', async () => {
