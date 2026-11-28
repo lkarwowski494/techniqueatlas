@@ -29,16 +29,16 @@ test('zgodność wstecz: figura z danych bez pola loop (stary PIN) nie dostaje l
   assert.match(figureModule(ctx, 'back-squat', { ...fig, loop: 'jednokierunkowa' }), /"loop":"jednokierunkowa"/); /* negatyw: pole przechodzi, gdy jest */
 });
 
-test('podpis rysunku: faza bez sekund (Power Clean) bez czasu, wahadło z sekundami; pauza bez czasu jak dotąd; fazy bez znacznika untimed (stary eksport) mają sekundy', { skip: SKIP }, () => {
-  assert.doesNotMatch(caption(html('en', 'power-clean')), /\d s/); assert.match(caption(html('en', 'power-clean')), /^[^·]+ · /); /* nazwa fazy · „Rysunek schematyczny” */
-  assert.equal(caption(html('en', 'power-clean')).split(' · ').length, 2);
-  assert.match(caption(html('en', 'clean-pull')), /\d(?:\.\d)? s/); assert.match(caption(html('en', 'back-squat')), /2 s.*Pause.*1 s/);
-  assert.doesNotMatch(caption(html('pl', 'power-clean')), /\d s/);
+/* Z-40 004: podpis figury nie powtarza faz (tempo niesie linia wymiarowa); decyzja BA (27.11.2026: faza untimed bez czasu) dotyczy teraz linii wymiarowej — test przeniesiony z podpisu na aria-label linii */
+test('podpis rysunku i linia tempa: podpis to sam „rysunek schematyczny”; faza bez sekund (Power Clean) bez linii i czasu, wahadło z sekundami; fazy bez znacznika untimed (stary eksport) mają sekundy w linii', { skip: SKIP }, () => {
+  const wymiar = h => h.match(/<div class="wymiar[^"]*" role="img" aria-label="([^"]*)"/)?.[1] ?? null;
+  for (const [l, s] of [['en', 'power-clean'], ['en', 'clean-pull'], ['en', 'back-squat'], ['pl', 'power-clean']]) assert.doesNotMatch(caption(html(l, s)), /\d s|·/, `${l}/${s}`);
+  assert.equal(wymiar(html('en', 'power-clean')), null); assert.equal(wymiar(html('pl', 'power-clean')), null);
+  assert.match(wymiar(html('en', 'clean-pull')), /\d(?:\.\d)? s/); assert.match(wymiar(html('en', 'back-squat')), /2 s.*1 s/); assert.match(wymiar(html('en', 'back-squat')), /Pause/);
   /* stary eksport: ta sama faza bez znacznika untimed zachowuje sekundy (negatyw) */
   const ex = ctx.data.en.exercises.find(e => e.slug === 'power-clean');
   const stary = exercisePage(ctx, 'en', { ...ex, figure: { ...ex.figure, phases: ex.figure.phases.map(({ untimed: _u, ...p }) => p) } }).html;
-  assert.match(caption(stary), /Lifting 2\.5 s/);
-  assert.doesNotMatch(caption(exercisePage(ctx, 'en', ex).html), /2\.5 s/);
+  assert.match(wymiar(stary), /Lifting 2\.5 s/);
 });
 
 /* funkcja czasu w przeglądarce: moduł strony z dist, silnik z aplikacji */

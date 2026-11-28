@@ -34,7 +34,8 @@ test('„Ogranicz ruch”: wybór częstego błędu odsłania widoki z pozą bł
   await withPage({ reducedMotion: 'reduce' }, async page => {
     await page.waitForTimeout(300); await page.locator('[data-error]:visible').first().click();
     assert.equal(await vis(page, '[data-views]'), true); assert.equal(await vis(page, '[data-error-text]'), true);
-    assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), null); /* Z-40 003: przycisk animacji bez aria-pressed (stan niesie zmienna etykieta); wcześniej oczekiwano 'true' */
+    assert.equal(await page.locator('[data-pause]').textContent(), 'Resume animation');
   });
 });
 test('bez ograniczenia ruchu: animowane widoki zastępują pozycje, przycisk „Pause animation”, kształty się zmieniają w czasie', { skip: SKIP }, async () => {
@@ -42,7 +43,7 @@ test('bez ograniczenia ruchu: animowane widoki zastępują pozycje, przycisk „
     await page.waitForSelector('[data-views]:not([hidden])');
     assert.equal(await vis(page, '[data-poses]'), false); assert.equal(await page.locator('[data-pause]').textContent(), 'Pause animation');
     const a = await page.locator('[data-g]').first().innerHTML(); await page.waitForTimeout(700); assert.notEqual(await page.locator('[data-g]').first().innerHTML(), a);
-    await page.click('[data-pause]'); assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), 'true');
+    await page.click('[data-pause]'); assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), null); assert.equal(await page.locator('[data-pause]').textContent(), 'Resume animation'); /* Z-40 003: zamiast aria-pressed='true' — etykieta „Resume animation” */
   });
 });
 test('sylwetka: dwa rysunki (przód, tył) mają rozmiar, a partie ćwiczenia mają kolor akcentu (zmienne CSS przez <use>), nie domyślny', async () => {

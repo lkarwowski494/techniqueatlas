@@ -9,7 +9,7 @@ import { wczytajZrodla } from '../scripts/przeklad/zrodla.mjs';
 import { zTlumaczeniem, zastosuj } from '../scripts/przeklad/rdzen.mjs';
 import { ROOT, tmpDir, read } from './pomoc.mjs';
 
-const CZEKAJACE = ['prawne', 'prawneBrak', 'wsparcie', 'ramka'], zm = s => (s.match(/\{[a-zA-Z]+\}/g) ?? []).sort().join();
+const CZEKAJACE = ['wynik', 'wszystkieJezyki', 'appleZnaki', 'prawne', 'prawneBrak', 'wsparcie', 'ramka'], /* Z-40: trzy nowe teksty (pl, en) czekają na przekład API */ zm = s => (s.match(/\{[a-zA-Z]+\}/g) ?? []).sort().join();
 const kopia = () => { const d = tmpDir('atlas-ui-'); for (const f of ['config.json', 'docs/przeklad/zrodla.json', 'docs/nazwy/pl.json']) { mkdirSync(join(d, f, '..'), { recursive: true }); cpSync(join(ROOT, f), join(d, f)); } for (const k of ['src/ui', 'src/szablony', 'docs/teksty/prawne']) cpSync(join(ROOT, k), join(d, k), { recursive: true }); return d; };
 
 test('Z-34 źródło „ui” zastępuje „ramka”: mapa src/ui/{pl,en}.json → src/ui/{kod}.json, bez znacznika oczekuje; pozycje to wszystkie teksty pl z angielskim odpowiednikiem i tymi samymi zmiennymi {…}', () => {
