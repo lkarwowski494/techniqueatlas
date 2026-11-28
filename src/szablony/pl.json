@@ -24,5 +24,6 @@
   "pozycji": { "one": "pozycja", "few": "pozycje", "many": "pozycji", "other": "pozycji" },
   "opisKategorii": "{n} {pozycji}, w tym {lista}.",
   "opisKategoriiJedna": "Jedna pozycja: {lista}.",
-  "opisKategoriiBezPrzykladow": "{n} {pozycji} z rysunkiem ruchu przy {f} i wskazówkami techniki przy {c}."
+  "opisKategoriiBezPrzykladow": "{n} {pozycji} z rysunkiem ruchu przy {f} i wskazówkami techniki przy {c}.",
+  "countLine": {"one":"{n} ćwiczenie — przeglądaj według partii mięśniowej i sprzętu.","few":"{n} ćwiczenia — przeglądaj według partii mięśniowej i sprzętu.","many":"{n} ćwiczeń — przeglądaj według partii mięśniowej i sprzętu.","other":"{n} ćwiczenia — przeglądaj według partii mięśniowej i sprzętu."}
 }
