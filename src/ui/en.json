@@ -93,18 +93,15 @@
   },
   "prawne": {
     "nav": "Legal documents",
-    "privacy": "Privacy policy",
-    "terms": "Terms of use",
-    "license": "Content licence"
+    "privacy": "Privacy",
+    "terms": "Terms"
   },
   "prawneBrak": {
-    "administrator": "(operator details to be added at publication)",
-    "kontakt": "(contact address to be added at publication)",
     "dataObowiazywania": "(publication date)"
   },
   "wsparcie": {
     "w1": "This website is free to use.",
-    "w2": "The app gives you {dni} training days a month at no charge. The full version is paid: a subscription or lifetime access.",
+    "w2": "The app gives you {dni} training days a month without a subscription. The full version is paid: a subscription or lifetime access.",
     "w3": "Buying it also supports this website."
   },
   "ramka": {

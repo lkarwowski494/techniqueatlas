@@ -1,30 +1,19 @@
-# Teksty prawne strony (Z-20): projekty pl + en
+# Teksty prawne strony: dwie krótkie strony (BR, 28.11.2026)
 
-Autor: sesja AS (M8-formalnosci, build, zakres zawężony), 27.11.2026. Stan: **projekt do recenzji Z-23** (P-4: autor i niezależny recenzent). Tłumaczenie na 33 języki to Z-26, a przeniesienie do słowników i stron to Z-33.
-To nie jest porada prawna. Kwestie niejednoznaczne mają **[DO KONSULTACJI]** z pytaniem, które można zadać prawnikowi, i bezpieczniejszą opcją. Wybór należy do właściciela.
+Od 28.11.2026 strona ma **dwie** strony prawne, wzorowane na apps4brew.com (stopka „© 2026 Apps4Brew, Warszawa”, kontakt support@apps4brew.com):
 
-| Plik | Co |
-|---|---|
-| `polityka-prywatnosci.pl.md`, `polityka-prywatnosci.en.md` | polityka prywatności strony |
-| `regulamin.pl.md`, `regulamin.en.md` | regulamin strony (usługa drogą elektroniczną) |
-| `licencja-tresci.pl.md`, `licencja-tresci.en.md` | licencja treści (druk dla trenerów, docs/54:188) |
-| `dowody.md` | tabela twierdzenie → dowód (`plik:linia`, strona z cytatem) i lista `[DO KONSULTACJI]` |
-| `do-wlasciciela.md` | pytania do właściciela prostym językiem (PP, R, L, nieprzeczytane ustawy) z opcjami i rekomendacją; decyzje Z-23 do weta |
+| Plik | Co | Długość |
+|---|---|---|
+| `prywatnosc.<język>.md` | „Prywatność”: strona nic nie zbiera; hosting (GitHub Pages) zapisuje techniczne logi z adresem IP na własnych zasadach; kontakt | ok. 55–65 słów |
+| `warunki.<język>.md` | „Warunki”: treść bezpłatna i ogólna, nie porada medyczna; rysunki tylko jako część całej strony; baza ćwiczeń nie hurtem ani po kawałku; roboty dozwolone przez robots.txt | ok. 100–120 słów |
+| `dowody.md` | dowody twierdzeń o tym, co robi strona (kod, testy) | |
+| `do-wlasciciela.md` | pytania z Z-23 z odpowiedziami właściciela z 28.11.2026 | |
 
-## Wstawki (wypełnia Z-33 z ustawień, nie z tego repo)
+Języki: pl i en (źródła), 33 pozostałe z przekładu API (`docs/przeklad/`, źródło `prawne`).
 
-Repo jest publiczne. Strażnik `straznik-sekrety` dopuszcza tylko adresy e-mail noreply, a w repo nie zapisujemy danych osobowych (polecenie AS pkt 2). Dlatego dane administratora i kontakt są wstawkami:
-- `{{administrator}}` (imię i nazwisko albo firma, jak w polityce prywatności aplikacji; art. 13 ust. 1 lit. a RODO, art. 5 ust. 2 UŚUDE). Decyzja: skąd Z-33 bierze tę wartość. **[DO USTALENIA] T-1.**
-- `{{kontakt}}`: adres e-mail kontaktu (ten sam co w polityce aplikacji).
-- `{{politykaAplikacji}}`: adres polityki prywatności aplikacji (`config.json` → `polityka`).
-- `{{dataObowiazywania}}`: data publikacji (Z-51).
-- `{{adresStrony}}`: `config.json` → `domena`.
+## Decyzje (28.11.2026, właściciel; szczegóły w `do-wlasciciela.md`)
 
-## Decyzja zapisana „do weta” (tryb analogii, polecenie AS pkt 5)
-
-- **27.11.2026, D12 zmienione przez plan:** docs/54 D12 A (docs/54:150) zakładało link w stopce do polityki aplikacji. Plan z 27.11 (Z-33 „Strony prawne + stopka”, P-5 „Od razu 35 języków”) zakłada **własne strony prawne strony**.
-  Projekty piszę jako osobną politykę strony, która odsyła do polityki aplikacji tylko w sprawie e-maili. Odrzucone: sam link do polityki aplikacji. Powód: tamta polityka opisuje aplikację, nie stronę (brak logów hostingu, wyszukiwarki, linku do sklepu).
-  Zależy od: P-5, Z-33.
-- **27.11.2026, licencja a asystenci AI (P-11):** licencja zabrania budowania zbiorów do uczenia modeli z istotnej części treści (jak klauzula bazy danych w LICENSE aplikacji). Wprost **pozwala** wyszukiwarkom i asystentom AI indeksować strony, cytować je i streszczać z odnośnikiem.
-  Odrzucone: (a) zakaz wszelkiego użycia przez AI, sprzeczny z P-11 („jeszcze ważniejsze w AI”); (b) brak zapisu o AI, niespójny z LICENSE aplikacji.
-  Zależy od: Z-06 (roboty AI, robots.txt). Pytanie do koordynatora wysłane.
+- Prowadzący i kontakt jak na apps4brew.com: „Apps4Brew, Warszawa”, support@apps4brew.com, bez imienia i nazwiska. Wpisane wprost w tekstach i w `config.json` (`prowadzacy`, `kontakt`, `rokStrony`); wstawek `{{administrator}}`, `{{kontakt}}` i zmiennych środowiska `TA_ADMINISTRATOR`, `TA_KONTAKT` nie ma.
+- Jedyna wstawka: `{{dataObowiazywania}}` (`config.json`; strażnik S12 wymaga jej przy indeksowaniu).
+- Regulamin i licencja treści połączone w „Warunki”. Bez reklamacji, terminów, planów treningowych, artykułów ustaw i procedury próśb o dane.
+- Przed publikacją nikt nie czytał tekstów jako prawnik; właściciel uznał, że to zwykły katalog ćwiczeń i prawnego przeglądu nie zleca (odpowiedź 13).

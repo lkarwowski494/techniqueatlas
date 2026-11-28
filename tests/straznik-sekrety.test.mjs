@@ -10,7 +10,8 @@ const SECRETS = [/-----BEGIN [A-Z ]*PRIVATE KEY-----/, /\bgh[pousr]_[A-Za-z0-9]{
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g;
 /** Dozwolone tylko adresy neutralne (noreply). Adres kontaktowy strony dodaje właściciel świadomie — wpis tutaj w tym samym commicie. */
 /* noreply@github.com: komitent scalenia PR przez GitHub (interfejs i API) — adres neutralny, nie osobisty (01.11.2026, scalenie #3) */
-const ALLOWED_EMAIL = [/^noreply@anthropic\.com$/, /@users\.noreply\.github\.com$/, /^noreply@github\.com$/];
+/* support@apps4brew.com: publiczny kontakt prowadzącego, jak w stopce apps4brew.com (decyzja właściciela 28.11.2026: „Jak apps4brew”) */
+const ALLOWED_EMAIL = [/^support@apps4brew\.com$/, /^noreply@anthropic\.com$/, /@users\.noreply\.github\.com$/, /^noreply@github\.com$/];
 const UDID = /\b[0-9A-Fa-f]{8}-[0-9A-Fa-f]{16}\b/; /* UDID urządzeń Apple (nowy format 8-16) */
 /** Przypięcia do commitu aplikacji (pole "commit" w danych i manifestach) nie są sekretem — usuwane przed szukaniem 40 znaków szesnastkowych. */
 const PINNED = /"commit":\s*"[0-9a-f]{40}"/g;

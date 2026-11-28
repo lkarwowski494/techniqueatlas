@@ -53,8 +53,8 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   const startErrors = []; /* błędy S3/S4/S8 zgłaszane razem z S6 (po zbudowaniu stron, przed zapisem): jeden komunikat ze wszystkimi naruszeniami */
   if (!pominStraznikowStartu) { const g = startGuards({ cfg, pin, manifest: man, data, langs }); startErrors.push(...g.errors); warnings.push(...g.warnings); }
-  /* Z-33: wstawki stron prawnych (administrator i kontakt ze zmiennych środowiska — repo jest publiczne), liczba dni bez opłat z kodu aplikacji, teksty prawne */
-  const wartosci = { administrator: cfg.administrator ?? process.env.TA_ADMINISTRATOR ?? '', kontakt: cfg.kontakt ?? process.env.TA_KONTAKT ?? '', dataObowiazywania: cfg.dataObowiazywania ?? '', politykaAplikacji: cfg.polityka, adresStrony: cfg.domena };
+  /* Z-33: wstawki stron prawnych (tylko data obowiązywania), liczba dni bez opłat z kodu aplikacji, teksty prawne */
+  const wartosci = { dataObowiazywania: cfg.dataObowiazywania ?? '' };
   const uiEn = readJson('src/ui/en.json'), dni = dniBezOplat(), prawne = wczytajPrawne({ langs, wartosci, brak: Object.fromEntries(Object.entries(ui).map(([l, x]) => [l, x.prawneBrak]).filter(([, x]) => x)) });
   if (!pominStraznikowStartu) for (const g of [checkPrawne({ wartosci, indexing: !!cfg.indeksowanie }), checkRamka({ doc: dokumentRamki(), ui: { pl: readJson('src/ui/pl.json'), en: uiEn }, wersjaWydania: cfg.wersjaWydania, indexing: !!cfg.indeksowanie })]) { startErrors.push(...g.errors); warnings.push(...g.warnings); }
   const familyLabel = (l, f) => ui[l].families?.[f];

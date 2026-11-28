@@ -130,6 +130,34 @@ Opis: docs/przeklad/README.md (sekcja „Zmiany 28.11.2026”).
 ---
 ## Wcześniej (integracja-start)
 
+---
+
+# Stan agenta — BR: dwie krótkie strony prawne (08-programista, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/prawne-proste` (od `strona/integracja-start` @ 074e3f8)
+
+## Zrobione (decyzje właściciela 28.11.2026 cytowane w commitach)
+- Teksty: `docs/teksty/prawne/{prywatnosc,warunki}.{pl,en}.md` (55/96 słów pl, 63/119 en); stare regulamin/licencja/polityka (35 języków) usunięte.
+- Kod: `src/prawne.mjs` (2 dokumenty, slugi privacy-policy i terms), stopka „© 2026 Apps4Brew, Warszawa · support@apps4brew.com” z `config.json` (prowadzacy, kontakt, rokStrony); bez TA_ADMINISTRATOR/TA_KONTAKT; S12 tylko data.
+- Wsparcie: „bez subskrypcji” / „without a subscription” (src/ui, docs/teksty/ramka-w-aplikacji.md).
+- Testy: `tests/prawne-proste.test.mjs` (nowy), zmienione z powodu decyzji: z33-prawne-ramka, z33-moduly, z34-przeklad-ui, straznik-sekrety (mailto/e-mail), figura-przegladarka (404 dopuszcza mailto:).
+- Lokalnie `npm test`: 246/253 zielone; czerwone: build.test i jezyki-podglad (SIGKILL — też przed zmianami), z30 (todo bez CZEKA — naprawione), 404 (naprawione).
+
+## Przekład i przegląd API (zrobione)
+- Przekład 33 języków (tylko dokumenty `prawne`: `prywatnosc`, `warunki`): run 46141591575, batch msgbatch_01Xppxh9kvx55HxRaDi9fLpM, 0,89 USD rzeczywiste, 66/66 przyjęte; nałożone `--zastosuj`.
+- Przegląd API: run 46143719757, batch msgbatch_01BE4Z6eN2JurtfnzQwNaAqS, 0,70 USD; uwagi: 2 krytyczne (warunki et, zh-Hant: zawężenie zakazu bazy), 3 średnie (warunki nl, sk; prywatnosc sr), 9 niskich. Nałożone poprawki krytyczne i średnie (5 plików); niskie (el prywatnosc; es-419, fi, id, it, lt, ms, pt-BR, sl warunki) NIE nałożone — do przeglądu człowieka/natywnego (artefakt run-u wygasa 05.12.2026).
+- wydatki.json: łącznie 27,26 z 80 USD (poprzednio 25,68 + 0,89 + 0,70).
+- Teksty prawne nie były czytane przez prawnika (decyzja właściciela 13: nie zlecamy).
+- Klucze UI (prawne.nav/privacy/terms, wsparcie.w2) w 33 językach: angielski zapas z lang="en"; przekład źródła `ui` robi BQ2 po dodaniu źródła na main (KO-148).
+
+## Propozycje / otwarte
+- Nieużywany klucz `ui.rights` (stopka bierze dane z config.json) — usunąć w BQ2.
+- Na main zostały stare tłumaczenia regulamin/licencja-tresci/polityka-prywatnosci; ta gałąź je usuwa (scalenie przenosi usunięcie).
+- Lokalnie `build.test` i `jezyki-podglad` kończą SIGKILL (pamięć kontenera, występowało też przed zmianami); w CI zielone.
+
+---
+## Wcześniej
+
 # Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)

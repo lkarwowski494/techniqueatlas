@@ -26,7 +26,7 @@
    "koncowka_pl": ".pl.md",
    "koncowka_en": ".en.md",
    "cel": "docs/teksty/prawne/{nazwa}.{kod}.md",
-   "opis": "teksty prawne strony (polityka prywatności, regulamin, licencja treści; Z-20)",
+   "opis": "teksty prawne strony (Prywatność i Warunki; Z-20, uproszczone w BR 28.11.2026)",
    "wskazowka": "Każda pozycja to cały dokument Markdown. Wstawki {{…}} zostaw bez zmian. To projekt, nie porada prawna."
   },
   {
