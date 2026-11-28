@@ -70,7 +70,7 @@ test('lang strony: <html lang> i odnośniki językowe — sr-Cyrl dla serbskiego
   assert.match(read('index.html'), /hreflang="sr-Cyrl" lang="sr-Cyrl"/);
 });
 test('mapy witryny: xhtml:link z tymi samymi kodami (es-XX × region, sr-Cyrl), wzajemnie i bez duplikatów', () => {
-  const xml = read('sitemap-en.xml'), block = xml.match(/<url><loc>[^<]*\/en\/exercises\/[^<]+<\/loc>((?:<xhtml:link[^>]*\/>)+)<\/url>/)[1];
+  const xml = read('sitemap-en.xml'), block = xml.match(/<url><loc>[^<]*\/en\/exercises\/[^<]+<\/loc>(?:<lastmod>[^<]*<\/lastmod>)?((?:<xhtml:link[^>]*\/>)+)<\/url>/)[1];
   const alts = [...block.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(m => [m[1], m[2]]), codes = alts.map(a => a[0]);
   assert.equal(new Set(codes).size, codes.length);
   for (const r of ES_419_HREFLANG_REGIONS) assert.ok(codes.includes(`es-${r}`), r);

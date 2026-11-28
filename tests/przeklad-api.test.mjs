@@ -3,10 +3,10 @@
 // Pilnowane: limity (6 USD na przebieg, 80 USD łącznie), brak klucza w logach i artefaktach, format artefaktów, brak zapisu w źródłach, zabezpieczenia workflowów.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { ROOT } from '../src/lib.mjs';
+import { tmpDir } from './pomoc.mjs';
 import * as rdzen from '../scripts/przeklad/rdzen.mjs';
 import * as wydatki from '../scripts/przeklad/wydatki.mjs';
 import * as zrodla from '../scripts/przeklad/zrodla.mjs';
@@ -20,7 +20,7 @@ const czytaj = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
 /** Fixture: projekt z 3 językami do przekładu (fr, de, pt), trzema źródłami (mapa płaska, mapa zagnieżdżona, dokumenty) i słownikiem terminów. */
 function fixture({ nazw = 3, jezykow = 3 } = {}) {
-  const root = mkdtempSync(join(tmpdir(), 'przeklad-')); sprzatanie.push(root);
+  const root = tmpDir('przeklad-');
   const kody = ['fr', 'de', 'pt']; for (let i = 4; i <= jezykow; i++) kody.push(`x${String(i).padStart(2, '0')}`);
   zapisz(root, 'config.json', { jezyki: ['pl', 'en', ...kody] });
   const nazwy = {}; for (let i = 1; i <= nazw; i++) nazwy[`Press ${i}`] = `Wyciskanie ${i}`;

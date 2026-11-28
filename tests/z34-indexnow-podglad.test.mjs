@@ -1,16 +1,15 @@
 // Z-34: IndexNow (scripts/indexnow.mjs — funkcje czyste, bez sieci) i świeżość obrazków podglądu (assets/podglad/ + src/podglad-skroty.json względem danych figur).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
+import { writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import { adresyZMap, zbudujZadania, LIMIT } from '../scripts/indexnow.mjs';
 import { skrotPodgladu } from '../src/podglad.mjs';
 import { build } from '../src/build.mjs';
-import { ROOT, requireData, tmpDist, BEZ_STARTU, read } from './pomoc.mjs';
+import { ROOT, tmpDir, requireData, tmpDist, BEZ_STARTU, read } from './pomoc.mjs';
 
 test('Z-34 (A12) IndexNow: adresy z map witryny (bez map, bez powtórzeń), żądanie z hostem, kluczem i plikiem klucza; porcje po 10 000; adres spoza domeny i zły klucz to błąd', () => {
-  const d = mkdtempSync(join(tmpdir(), 'atlas-inx-')); try {
+  const d = tmpDir('atlas-inx-'); try {
     writeFileSync(join(d, 'sitemap.xml'), '<sitemapindex><sitemap><loc>https://x.example/sitemap-pl.xml</loc></sitemap><sitemap><loc>https://x.example/sitemap-glowna.xml</loc></sitemap></sitemapindex>');
     writeFileSync(join(d, 'sitemap-pl.xml'), '<urlset><url><loc>https://x.example/pl/</loc></url><url><loc>https://x.example/pl/a/?b=1&amp;c=2</loc></url></urlset>');
     writeFileSync(join(d, 'sitemap-glowna.xml'), '<urlset><url><loc>https://x.example/</loc></url><url><loc>https://x.example/pl/</loc></url></urlset>');
