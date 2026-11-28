@@ -61,7 +61,9 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   if (sil.app.commit !== pin.commit) throw new Error('sylwetka.json pochodzi z innego commitu niż PIN.json — uruchom npm run dane');
   /* Z-34 (A10): tytuły i opisy stron ćwiczeń z szablonów Z-22 (pl, en); pozostałe języki — dotychczasowe zachowanie do czasu przekładu szablonów przez API */
   const sz = Object.fromEntries(langs.filter(l => JEZYKI_SZABLONOW.includes(l)).map(l => [l, szablonyCwiczen(data[l], ui[l], l, Object.fromEntries(data[l].exercises.map(e => [e.slug, { nazwaLokalna: nazwy[l]?.[e.id] }])))]));
-  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel, sz };
+  const plakietki = new Set(langs.filter(l => existsSync(join(ROOT, 'assets/plakietka', `${l}.svg`)))); /* grafiki Apple dostarcza właściciel (docs/teksty/plakietka-app-store.md) */
+  if (cfg.appStoreId && plakietki.size < langs.length) warnings.push(`plakietka App Store: brak assets/plakietka/<język>.svg dla ${langs.length - plakietki.size} z ${langs.length} języków (link tekstowy bez grafiki): ${langs.filter(l => !plakietki.has(l)).join(', ')}`);
+  const ctx = { cfg, man, figs, sil, data, ui, collators, bySlug, names, nazwy, prawne, dni, uiEn, langs, engine, familyLabel, sz, plakietki };
   const pages = [chooserPage(ctx), notFoundPage(ctx)];
   const groups = l => ({ muscle: [...new Set(data[l].exercises.map(e => e.group))].map(v => ({ id: GROUP_ID[v], value: v, label: data[l].labels.groups[v] })), equipment: [...new Set(data[l].exercises.map(e => e.equipment))].map(v => ({ id: EQUIPMENT_ID[v], value: v, label: data[l].labels.equipment[v] })), movement: [...new Set(data[l].exercises.map(e => e.family))].map(f => ({ id: familyId(f), value: f, label: familyLabel(l, f) })).filter(x => x.label) });
   const report = { languages: {} };

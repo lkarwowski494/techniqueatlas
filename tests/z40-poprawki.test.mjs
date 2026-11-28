@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { build } from '../src/build.mjs';
 import { buildOnce, requireData, tmpDist, ROOT } from './pomoc.mjs';
 import { readJson } from '../src/lib.mjs';
-import { czytaj, element, elementy, tekst, meta, hrefy } from './strona-html.mjs';
+import { czytaj, element, elementy, tekst, hrefy } from './strona-html.mjs';
 import { launch, serve } from './przegladarka.mjs';
 
 requireData();
@@ -88,9 +88,9 @@ test('Z-40 002: język bez własnego tekstu „wynik” (de) dostaje wersję ang
   const p = element(czytaj(out, 'de/exercises/index.html'), 'p', 'wynik'); assert.ok(p); assert.match(p.otwarcie, /lang="en"/); assert.doesNotMatch(p.wnetrze, /undefined|\{n\}|\{m\}/);
 });
 
-test('Z-40 002 (przeglądarka): wybór filtra zmienia element [aria-live] na liczbę widocznych wierszy; „wyczyść” przywraca pełną liczbę; zero wyników = „0 z M”', async () => {
+test('Z-40 002 (przeglądarka): wybór filtra zmienia element p.wynik[aria-live] na liczbę widocznych wierszy; „wyczyść” przywraca pełną liczbę; zero wyników = „0 z M”', async () => {
   const { p, zamknij } = await otworz('/pl/exercises/'), razem = ctx.data.pl.exercises.length;
-  const live = () => p.evaluate(() => { const e = document.querySelector('[aria-live]'); return e ? e.textContent.replace(/\s+/g, ' ').trim() : null; });
+  const live = () => p.evaluate(() => { const e = document.querySelector('p.wynik[aria-live]'); return e ? e.textContent.replace(/\s+/g, ' ').trim() : null; });
   const widoczne = () => p.evaluate(() => document.querySelectorAll('.wykaz tbody tr:not([hidden])').length);
   await p.selectOption('#f-muscle', 'legs'); const n = await widoczne(); assert.ok(n > 0 && n < razem);
   assert.equal(await live(), PL.wynik.replace('{n}', n).replace('{m}', razem));
@@ -167,11 +167,4 @@ test('Z-40 011: design-spec §10 pkt 9 zawiera dokładnie ten tekst nagłówka k
   assert.doesNotMatch(spec, /„Jak zrobić \{n\}\?”/, 'design-spec: stary wzorzec z nazwą');
 });
 
-/* ---------- 010: Open Graph i opis na stronach indeksowanych ---------- */
-test('Z-40 010: listy, strona główna i strony prawne (pl, en) mają komplet og:title, og:type, og:url, og:image i opis', () => {
-  const zle = [];
-  for (const l of ['pl', 'en']) for (const f of [`${l}/index.html`, `${l}/exercises/index.html`, `${l}/muscles/legs/index.html`, ...ctx.prawne ? [] : []]) {
-    const h = czytaj(out, f); for (const k of ['og:title', 'og:type', 'og:url', 'og:image']) if (!meta(h, k)) zle.push(`${f}: brak ${k}`); if (!meta(h, 'description')) zle.push(`${f}: brak description`);
-  }
-  assert.deepEqual(zle, []);
-});
+/* 010 (NIS, Open Graph i opis na listach, stronach prawnych i 404) — nie wdrożone w BL: wymaga zasobu graficznego (podgląd ogólny) i decyzji właściciela dla 180 ćwiczeń bez figury (Z-34 decyzja 3, design-spec §10 pkt 4) — zgłoszone koordynatorowi. */

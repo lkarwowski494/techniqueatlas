@@ -26,12 +26,12 @@ async function init(root) {
   };
   const show = () => { if (!widoki.hidden) return; widoki.hidden = false; poses.hidden = true; last = -1; draw(1); }; /* animowane widoki zastępują pozycje statyczne */
   const start = () => { if (!raf && !data.static) { t0 = performance.now(); raf = requestAnimationFrame(tick); } };
-  pauseBtn.hidden = !!data.static; pauseBtn.textContent = paused ? L.resume : L.pause; pauseBtn.setAttribute('aria-pressed', String(paused));
-  pauseBtn.onclick = () => { paused = !paused; pauseBtn.textContent = paused ? L.resume : L.pause; pauseBtn.setAttribute('aria-pressed', String(paused)); show(); if (!paused) start(); };
+  pauseBtn.hidden = !!data.static; pauseBtn.textContent = paused ? L.resume : L.pause; /* zwykły przycisk ze zmienną etykietą (bez aria-pressed: etykieta + stan byłyby sprzeczne) */
+  pauseBtn.onclick = () => { paused = !paused; pauseBtn.textContent = paused ? L.resume : L.pause; show(); if (!paused) start(); };
   errBtns.forEach(b => {
     const i = data.errors.findIndex(e => e.id === b.dataset.error); b.hidden = i < 0;
     b.onclick = () => {
-      err = err === i ? -1 : i; errBtns.forEach(x => { const on = data.errors.findIndex(e => e.id === x.dataset.error) === err; x.textContent = `${on ? L.hideError : L.showError}: ${texts.find(t => t.id === x.dataset.error)?.text ?? ''}`; x.setAttribute('aria-pressed', String(on)); });
+      err = err === i ? -1 : i; errBtns.forEach(x => { x.setAttribute('aria-pressed', String(data.errors.findIndex(e => e.id === x.dataset.error) === err)); }); /* etykieta stała (nazwa błędu); stan niesie aria-pressed */
       show(); errText.hidden = err < 0; errText.textContent = err < 0 ? '' : fmt(L.errorLine, texts.find(t => t.id === data.errors[err].id)?.text ?? ''); last = -1; if (paused) draw(1); else start();
     };
   });

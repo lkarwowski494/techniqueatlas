@@ -10,6 +10,7 @@ if (list) {
   const apply = () => {
     const f = Object.fromEntries(sel.map(s => [s.dataset.filtr, s.value])); let n = 0;
     for (const li of items) { const ok = Object.entries(f).every(([k, v]) => !v || li.dataset[k] === v); li.hidden = !ok; if (ok) n++; }
+    const licznik = document.querySelector('[data-wynik] strong'); if (licznik) licznik.textContent = n; /* ogłoszenie zmiany dla czytnika (aria-live na akapicie) */
     empty.hidden = n > 0; table.hidden = n === 0; clear.hidden = !Object.values(f).some(Boolean);
   };
   sel.forEach(s => s.addEventListener('change', apply)); clearAll.forEach(b => b.addEventListener('click', () => { sel.forEach(s => { s.value = ''; }); apply(); })); apply();

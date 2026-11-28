@@ -54,7 +54,7 @@ test('Z-31 nowe teksty interfejsu (§10.9) w 35 językach: pl ma „Menu”, „
   const klucze = o => Object.keys(o).sort().join(','), pliki = readdirSync(join(ROOT, 'src/ui')).filter(f => f.endsWith('.json'));
   assert.equal(pliki.length, 35);
   /* Z-33: klucze czekające na przekład API (docs/teksty/ui-do-przekladu-z33.md): tylko pl i en je mają, pozostałe 33 języków pokazuje wersję angielską z lang="en"; po nałożeniu przekładu lista się kurczy (test pilnuje, że wyjątek nie zostaje, gdy język ma już klucz) */
-  const CZEKA_NA_PRZEKLAD = ['prawne', 'prawneBrak', 'wsparcie', 'ramka'], bez = o => Object.fromEntries(Object.entries(o).filter(([k]) => !CZEKA_NA_PRZEKLAD.includes(k)));
+  const CZEKA_NA_PRZEKLAD = ['prawne', 'prawneBrak', 'wsparcie', 'ramka', 'wynik', 'wszystkieJezyki', 'appleZnaki'], bez = o => Object.fromEntries(Object.entries(o).filter(([k]) => !CZEKA_NA_PRZEKLAD.includes(k)));
   for (const f of pliki) { const u = readJson(`src/ui/${f}`), wlasny = ['pl.json', 'en.json'].includes(f); assert.equal(klucze(bez(u)), klucze(bez(pl)), f); if (wlasny) assert.deepEqual(CZEKA_NA_PRZEKLAD.filter(k => !(k in u)), [], f); assert.deepEqual(brakujacePodklucze(u, pl, CZEKA_NA_PRZEKLAD), [], f); for (const [k, v] of Object.entries(u)) assert.ok(v !== '' && v !== null, `${f}: ${k} pusty`); }
 });
 

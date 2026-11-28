@@ -45,6 +45,9 @@
   "emptyHint": "Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.",
   "changeLanguage": "Język: {nazwa}. Zmień język",
   "howTo": "Jak zrobić to ćwiczenie?",
+  "wynik": "{n} z {m} ćwiczeń",
+  "wszystkieJezyki": "wszystkie języki ({n})",
+  "appleZnaki": "App Store i logo Apple są znakami towarowymi firmy Apple Inc., zarejestrowanymi w USA i innych krajach.",
   "families": {
     "squat": "Przysiady",
     "bench_press": "Wyciskanie leżąc",

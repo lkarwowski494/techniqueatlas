@@ -39,3 +39,11 @@ Uwaga: źródło `ui` obejmuje wszystkie klucze `src/ui/pl.json`; w plikach jęz
 ## Strony prawne
 
 Źródło „prawne” (`docs/teksty/prawne/*.pl.md` + `*.en.md` → `<nazwa>.<kod>.md`) już jest w `zrodla.json`. Build bierze przekład z `docs/teksty/prawne/<dokument>.<kod>.md`, gdy plik istnieje; bez niego strona prawna w danym języku jest angielska (`lang="en"`, `noindex` poza językami z `indeksujJezyki`).
+
+## Dopisane w Z-40 (28.11.2026; tylko pl i en, pozostałe 33 języków czeka na przekład API — do tego czasu wersja angielska z `lang="en"`)
+
+| Klucz | Treść | Zmienne | Uwagi do przekładu |
+|---|---|---|---|
+| `wynik` | licznik wyniku listy i stron filtra: „{n} z {m} ćwiczeń” (czytnik odczytuje całe zdanie przy zmianie filtra) | `{n}`, `{m}` | liczby w pozycji zgodnej z językiem; po `{m}` forma „ćwiczeń” niezależna od liczby (m ≥ 700) |
+| `wszystkieJezyki` | link w stopce: „wszystkie języki ({n})” | `{n}` | |
+| `appleZnaki` | linia znaków towarowych pod stopką, tylko gdy na stronie jest grafika plakietki App Store | — | wymóg licencji Apple: tłumaczy się noty, nie znaki („App Store”, „Apple”, logo) |

@@ -40,6 +40,9 @@
   "emptyHint": "Change or clear the filters to see exercises.",
   "changeLanguage": "Language: {nazwa}. Change language",
   "howTo": "How do you do this exercise?",
+  "wynik": "{n} of {m} exercises",
+  "wszystkieJezyki": "all languages ({n})",
+  "appleZnaki": "App Store and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries.",
   "families": {
     "squat": "Squats",
     "bench_press": "Bench press",

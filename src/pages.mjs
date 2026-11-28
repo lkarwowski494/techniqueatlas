@@ -45,15 +45,19 @@ export function layout(ctx, m, bodyHtml) {
   const nav = m.menu ? `<nav class="menu menu-w" aria-label="${esc(ui.menuMain)}">${menuUl}</nav>\n<div class="glowka-n"><a class="jezyk" href="${u('./')}" aria-label="${esc(fill(ui.changeLanguage, { nazwa: ctx.names[lang] }))}">${esc(hreflang(lang).toUpperCase())}</a><details class="menu-d"><summary>${esc(ui.menu)}</summary><nav class="menu" aria-label="${esc(ui.menuMain)}">${menuUl}</nav></details></div>` : '';
   const header = `<header class="glowka"><div class="glowka-w">\n${homeHref ? `<a class="marka" href="${homeHref}">${marka}</a>` : `<span class="marka">${marka}</span>`}\n${nav}\n</div></header>`;
   const crumbs = m.crumbs?.length ? `<nav class="okruszki" aria-label="${esc(ui.breadcrumbs)}"><ol>${m.crumbs.map((c, i) => `<li>${c.path && i < m.crumbs.length - 1 ? `<a href="${u(urlOf(c.path))}">${esc(c.name)}</a>` : `<span aria-current="page"${c.lang ? ` lang="${c.lang}"` : ''}>${esc(c.name)}</span>`}</li>`).join('')}</ol></nav>` : '';
-  const langs = (m.alternates ?? []).length > 1 && !m.bezWierszaJezykow ? `<p class="jezyki">${esc(ui.language)}: ${m.alternates.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`).join(' · ')}</p>` : '';
+  /* Z-40 006: stopka — język bieżący, angielski i link „wszystkie języki (N)” do wyboru języka (wzorzec z szablonu; pełna lista hreflang jest w <head>). Tekst linku bez przekładu → angielski z lang="en" (przekład API) */
+  const wszystkie = ui.wszystkieJezyki ? { t: ui.wszystkieJezyki, l: '' } : { t: ctx.uiEn.wszystkieJezyki, l: ' lang="en"' };
+  const jezykiStopki = (m.alternates ?? []).filter(a => a.lang === m.lang || a.lang === 'en');
+  const langs = (m.alternates ?? []).length > 1 && !m.bezWierszaJezykow ? `<p class="jezyki">${esc(ui.language)}: ${[...jezykiStopki.map(a => a.lang === m.lang ? `<span aria-current="true">${esc(ctx.names[a.lang])}</span>` : `<a href="${u(a.path)}" hreflang="${esc(hreflang(a.lang))}" lang="${esc(hreflang(a.lang))}">${esc(ctx.names[a.lang])}</a>`), `<a href="${u('./')}"${wszystkie.l}>${esc(fill(wszystkie.t, { n: ctx.langs.length }))}</a>`].join(' · ')}</p>` : '';
   /* stopka (Z-33): akapit o wsparciu, link do sklepu, języki, dokumenty prawne; teksty bez przekładu (jeszcze) = angielskie z lang="en" (przekład API, docs/przeklad) */
   const wsp = komplet(ui.wsparcie, KLUCZE_WSPARCIA) ? { ui: ui.wsparcie, lang: '' } : { ui: ctx.uiEn.wsparcie, lang: ' lang="en"' };
   const wsparcie = `<p class="wsparcie"${wsp.lang}>${esc(['w1', 'w2', 'w3'].map(k => fill(wsp.ui[k], { dni: ctx.dni })).join(' '))}</p>\n`;
   const prawneTekst = k => ui.prawne?.[k] ? { t: ui.prawne[k], lang: '' } : { t: ctx.uiEn.prawne[k], lang: ' lang="en"' };
   const prawneLinki = DOKUMENTY.map(d => { const tt = d.klucz === 'privacy' && !ui.prawne?.privacy ? { t: ui.privacy, lang: '' } : prawneTekst(d.klucz); /* „Prywatność” z tekstów stałych, gdy język nie ma jeszcze pełnej nazwy dokumentu */ return `<a href="${u(urlOf(paths.legal(lang, d.slug)))}"${tt.lang}>${esc(tt.t)}</a>`; }).join(' · ');
   const store = cfg.appStoreId ? `<p><a href="https://apps.apple.com/app/id${esc(cfg.appStoreId)}?ct=techniqueatlas-${esc(m.lang ?? 'x')}">${esc(ui.appStore)}</a></p>` : '';
+  const znaki = ui.appleZnaki ? { t: ui.appleZnaki, l: '' } : { t: ctx.uiEn.appleZnaki, l: ' lang="en"' }; /* wymóg licencji plakietki Apple (KO-138): linia tylko przy plakietce graficznej na stronie */
   const scripts = (m.scripts ?? []).map(s => `<script type="module" src="${u(s)}"></script>`).join('\n');
-  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${wsparcie}${store}${langs}<p class="prawne">${prawneLinki} · ${esc(ui.rights)}</p>\n</div></footer>\n${scripts}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${wsparcie}${store}${langs}<p class="prawne">${prawneLinki} · ${esc(ui.rights)}</p>\n${m.znakiApple ? `<p class="zastrz"${znaki.l}>${esc(znaki.t)}</p>\n` : ''}</div></footer>\n${scripts}\n</body>\n</html>\n`;
 }
 
 const P = lang => langPath(lang);
@@ -138,6 +142,12 @@ function wykaz(ctx, lang, file, exercises, kolumny, caption, filtrowany = false)
   return `<table class="wykaz"><caption class="wizualnie-ukryte">${esc(caption)}</caption><thead><tr><th scope="col">${esc(ui.nameLabel)}</th>${kolumny.map(k => `<th scope="col">${esc(head[k])}</th>`).join('')}</tr></thead><tbody${filtrowany ? ' data-lista' : ''}>${rows}</tbody></table>`;
 }
 
+/** Licznik wyniku (Z-40 002, WCAG 4.1.3): „N z M ćwiczeń”, aria-live=polite i aria-atomic (czytnik odczytuje całe zdanie); liczbę N w <strong> aktualizuje assets/szukaj.js. Język bez własnego tekstu → angielski z lang="en". */
+function wynikHtml(ctx, lang, n, razem) {
+  const o = ctx.ui[lang].wynik ? { t: ctx.ui[lang].wynik, l: '' } : { t: ctx.uiEn.wynik, l: ' lang="en"' };
+  return `<p class="wynik" aria-live="polite" aria-atomic="true" data-wynik${o.l}>${esc(fill(o.t, { n: '\u0001', m: razem })).replace('\u0001', `<strong>${n}</strong>`)}</p>`;
+}
+
 export function listPage(ctx, lang) {
   const d = ctx.data[lang], ui = ctx.ui[lang], file = paths.list(lang), g = groupsOf(ctx, lang), u = to => relUrl(file, to);
   const sorted = [...d.exercises].sort((a, b) => ctx.collators[lang].compare(nazwaStrony(ctx, lang, a), nazwaStrony(ctx, lang, b)));
@@ -147,6 +157,7 @@ export function listPage(ctx, lang) {
 ${searchBlock(ui, lang, u)}
 <div class="filtry" data-filtry hidden>${sel('muscle', ui.filterMuscle, g.muscles)}${sel('equipment', ui.filterEquipment, g.equipment)}${g.movements.length ? sel('movement', ui.filterMovement, g.movements) : ''}<button type="button" class="wyczysc" data-wyczysc hidden>${esc(ui.clearFilters)}</button></div>
 <div class="pusto" data-pusto hidden><h2>${esc(ui.noResults)}</h2><p>${esc(ui.emptyHint)}</p><button type="button" class="wyczysc" data-wyczysc>${esc(ui.clearFilters)}</button></div>
+${wynikHtml(ctx, lang, sorted.length, d.exercises.length)}
 ${wykaz(ctx, lang, file, sorted, kolumny, ui.allExercises, true)}`;
   const crumbs = [...crumbBase(ctx, lang), { name: ui.allExercises, path: file }];
   const sz = ctx.sz[lang] ? szablonyListy(d, ui, lang) : null;
@@ -165,7 +176,7 @@ export function filterPage(ctx, lang, kind, x) {
   const kolumny = ['muscle', 'equipment', ...(g.movements.length ? ['movement'] : [])].filter(k => k !== kind); /* kolumna wymiaru, po którym filtrujemy, nic nie wnosi */
   return { file, lang, kind, indexable: !!ctx.cfg.indeksowanie && ctx.cfg.indeksujJezyki.includes(lang), html: layout(ctx, { file, lang, title: sz?.tytul ?? title, description: sz?.opis ?? title, robots: robotsFor(ctx, lang), canonical: urlOf(file),
     alternates: alternatesFor(ctx, l => paths[kind](l, x.id)), xDefault: defaultOf(ctx, l => paths[kind](l, x.id)), jsonld: [bcJson(ctx, crumbs)], crumbs, menu: true },
-    `<h1>${esc(title)}</h1>\n${wykaz(ctx, lang, file, sorted, kolumny, title)}\n<p><a class="dalej" href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)}</a></p>`) };
+    `<h1>${esc(title)}</h1>\n${wynikHtml(ctx, lang, sorted.length, d.exercises.length)}\n${wykaz(ctx, lang, file, sorted, kolumny, title)}\n<p><a class="dalej" href="${u(urlOf(paths.list(lang)))}">${esc(ui.allExercises)}</a></p>`) };
 }
 
 const poseIds = fig => fig.static ? ['end'] : ['start', 'end'];
@@ -194,7 +205,6 @@ function figureBlock(ctx, lang, ex, fig, file) {
   const lists = [fig.frames, ...fig.errors.filter(e => e.kind === 'pose').map(e => e.frames)];
   const views = fig.views.map(name => ({ name, box: E.boxOf(lists, name) }));
   const label = fill(ui.figureLabel, { opis: nazwaStrony(ctx, lang, ex) });
-  const phases = f.phases.map(p => p.name === ctx.data[lang].labels.phases.Pauza || p.untimed ? p.name : `${p.name} ${Math.round(p.ms / 100) / 10} s`).join(' · '); /* podpis: kolejność faz; bez sekund przy pauzie i fazach untimed (BA, 27.11.2026) */
   const main = views[0], positions = poseIds(fig); /* jak staticPositions aplikacji: figura statyczna ma tylko pozycję skrajną (bez podpisu) */
   const caption = id => id === 'start' ? ui.startPose : ui.endPose;
   const poses = positions.map(id => `<div class="poz"><svg role="img" aria-label="${esc(positions.length > 1 ? `${label}, ${caption(id)}` : label)}" viewBox="${E.viewBox(main.box)}"><use href="${relUrl(file, `assets/poz/${ex.slug}.svg`)}#${id}"/></svg>${positions.length > 1 ? `<p class="podpis">${esc(caption(id))}</p>` : ''}</div>`).join('');
@@ -202,11 +212,11 @@ function figureBlock(ctx, lang, ex, fig, file) {
 <div class="pozycje" data-poses>${poses}</div>
 <div class="widoki" data-views hidden>${views.map(v => `<svg role="img" aria-label="${esc(label)}" viewBox="${E.viewBox(v.box)}" data-view="${v.name}"><g transform="${E.groupTransform(v.box)}" data-g></g></svg>`).join('')}</div>
 ${wymiarHtml(lang, site, f.phases)}
-<div class="fig-ster"><button type="button" class="b-anim" data-pause aria-pressed="false" hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-pressed="false" hidden>${esc(ui.showError)}: ${esc(e.text)}</button>`).join('')}</div>
+<div class="fig-ster"><button type="button" class="b-anim" data-pause hidden>${esc(ui.pause)}</button>${f.errors.length ? `<span class="fig-bledy-t">${esc(site.commonErrors)}</span>` : ''}${f.errors.map(e => `<button type="button" class="b-blad" data-error="${esc(e.id)}" aria-label="${esc(ui.showError)}: ${esc(e.text.replace(/\.\s*$/, ''))}" aria-pressed="false" hidden>${esc(e.text.replace(/\.\s*$/, ''))}</button>`).join('')}</div>
 <p class="podpis" data-error-text hidden aria-live="polite"></p>
-<figcaption class="drobne">${esc(phases)} · ${esc(ui.schematic)}</figcaption>
+<figcaption class="drobne">${esc(ui.schematic)}</figcaption>
 <script type="application/json" data-errors>${jsonForScript(f.errors)}</script>
-<script type="application/json" data-labels>${jsonForScript({ pause: ui.pause, resume: ui.resume, showError: ui.showError, hideError: ui.hideError, errorLine: ui.errorLine })}</script>
+<script type="application/json" data-labels>${jsonForScript({ pause: ui.pause, resume: ui.resume, errorLine: ui.errorLine })}</script>
 </figure>`;
   return { html, views, script: 'assets/figura-strona.js' };
 }
@@ -229,11 +239,14 @@ export function figureModule(ctx, slug, fig) {
 
 /** Ramka „w aplikacji” (Z-33, wariant A z docs/teksty/ramka-w-aplikacji.md; nie tekst z makiet — N-1): 8 zdań, nazwa aplikacji z config.json, plakietka sklepu tylko przy appStoreId.
  * Język bez własnych zdań (przekład API jeszcze nie nałożony) pokazuje zdania angielskie z lang="en" na tytule i liście. */
-function ramkaHtml(ctx, lang) {
+function ramkaHtml(ctx, lang, file) {
   const own = komplet(ctx.ui[lang].ramka, KLUCZE_RAMKI), r = own ? ctx.ui[lang].ramka : ctx.uiEn.ramka, k = own ? '' : ' lang="en"', ui = ctx.ui[lang], id = ctx.cfg.appStoreId;
   const zdania = Array.from({ length: 8 }, (_, i) => `<li>${esc(r[`z${i + 1}`])}</li>`).join('');
-  const plakietka = id ? `<a class="plakietka" href="https://apps.apple.com/app/id${esc(id)}?ct=techniqueatlas-${esc(lang)}">${esc(ui.appStore)}</a>` : '';
-  return `<aside class="ramka" id="aplikacja" aria-labelledby="ramka-t">\n<h2 id="ramka-t"${k}>${esc(fill(r.tytul, { nazwa: ctx.cfg.nazwaAplikacji }))}</h2>\n<ul class="ramka-l"${k}>${zdania}</ul>\n${plakietka}</aside>`;
+  /* Z-40 009 (KO-138): oficjalna grafika Apple (assets/plakietka/<język>.svg, dostarcza właściciel po akceptacji licencji Apple — docs/teksty/plakietka-app-store.md) jako <img alt> w linku, wysokość 44 px (min. 40 px wg wytycznych);
+     bez pliku dla języka — zwykły link tekstowy bez stylów (wariant b). Nazwa „App Store” nie jest tłumaczona; grafiki nie wolno modyfikować (stąd tylko atrybut height). */
+  const href = `https://apps.apple.com/app/id${esc(id)}?ct=techniqueatlas-${esc(lang)}`, grafika = !!id && !!ctx.plakietki?.has(lang);
+  const plakietka = !id ? '' : grafika ? `<p><a href="${href}"><img src="${relUrl(file, `assets/plakietka/${lang}.svg`)}" alt="${esc(ui.appStore)}" height="44"></a></p>` : `<p><a href="${href}">${esc(ui.appStore)}</a></p>`;
+  return { grafika, html: `<aside class="ramka" id="aplikacja" aria-labelledby="ramka-t">\n<h2 id="ramka-t"${k}>${esc(fill(r.tytul, { nazwa: ctx.cfg.nazwaAplikacji }))}</h2>\n<ul class="ramka-l"${k}>${zdania}</ul>\n${plakietka}</aside>` };
 }
 
 export function exercisePage(ctx, lang, ex) {
@@ -266,9 +279,10 @@ export function exercisePage(ctx, lang, ex) {
   const uklad = fig || tekstowa
     ? `<div class="uk uk3${fig ? '' : ' bez-fig'}">${figure ? figure.html : ''}${tekstowa || (needs || alts ? `<div class="uk-p">${needs}${alts}</div>` : '')}${muscles}</div>`
     : `<div class="uk uk-skrot bez-fig">${muscles}${needs ? `<div>${needs}</div>` : ''}${alts ? `<div>${alts}</div>` : ''}</div>`;
+  const ramka = ramkaHtml(ctx, lang, file);
   const body = `<div class="arkusz-g"><h1 class="nazwa"${nazwaAttr(ctx, lang, ex)}>${nazwaLokalna(ctx, lang, ex) ? nazwaHtml(ctx, lang, ex) : esc(ex.name)}</h1>${tabliczka}</div>
 ${odp}${uklad}
-${ramkaHtml(ctx, lang)}
+${ramka.html}
 <p class="zastrz">${esc(ui.disclaimer)}</p>`;
   const group = { name: L.groups[ex.group], path: paths.muscle(lang, GROUP_ID[ex.group]) };
   const crumbs = [...crumbBase(ctx, lang), { name: site.library, path: paths.list(lang) }, group, { name: nazwaStrony(ctx, lang, ex), path: file, lang: nazwaLokalna(ctx, lang, ex) ? '' : 'en' }];
@@ -280,7 +294,7 @@ ${ramkaHtml(ctx, lang)}
   /* podgląd (A9, A11): ten sam rysunek ćwiczenia (obie pozycje) jako PNG 1200×630 z assets/podglad/ — wspólny dla języków; bez rysunku brak obrazka (nie logo, nie ikona) */
   const obraz = fig ? { url: abs(ctx.cfg, `assets/podglad/${ex.slug}.png`), alt: nazwaStrony(ctx, lang, ex) } : null;
   const webPage = obraz ? { '@context': 'https://schema.org', '@type': 'WebPage', url: abs(ctx.cfg, urlOf(file)), name: tytul, inLanguage: hreflang(lang), primaryImageOfPage: { '@type': 'ImageObject', url: obraz.url, width: 1200, height: 630 } } : null;
-  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, obraz: obraz?.url, /* adres PNG podglądu → <image:image> w mapie witryny */ html: layout(ctx, { file, lang, title: tytul, description: opis, robots: robotsFor(ctx, lang, own), canonical: urlOf(file), ogType: 'article', ogImage: obraz,
+  return { file, lang, kind: 'exercise', slug: ex.slug, indexable, obraz: obraz?.url, /* adres PNG podglądu → <image:image> w mapie witryny */ html: layout(ctx, { file, lang, title: tytul, description: opis, robots: robotsFor(ctx, lang, own), canonical: urlOf(file), ogType: 'article', ogImage: obraz, znakiApple: ramka.grafika,
     alternates: alternatesFor(ctx, l => paths.exercise(l, ex.slug)), xDefault: defaultOf(ctx, l => paths.exercise(l, ex.slug)), jsonld: [bcJson(ctx, crumbs), ...(webPage ? [webPage] : [])], scripts: figure ? [figure.script] : [], styles: silhouette ? ['assets/sylwetka.css'] : [], crumbs, menu: true }, body) };
 }
 
