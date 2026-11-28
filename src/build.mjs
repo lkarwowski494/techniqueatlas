@@ -41,7 +41,7 @@ export async function build({ out = join(ROOT, 'dist'), cfg: over = {}, slugi, z
   for (const l of langs) {
     const m = man.languages.find(x => x.lang === l); if (!m) throw new Error(`język ${l} nie został wyeksportowany (manifest)`);
     if (!existsSync(join(ROOT, `src/ui/${l}.json`))) throw new Error(`brak src/ui/${l}.json — język nie ma tekstów stałych strony (bez zastępczego tekstu)`);
-    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); if (!bezNazw.includes(l) && existsSync(join(ROOT, `docs/nazwy/${l}.json`))) nazwy[l] = readJson(`docs/nazwy/${l}.json`); /* Z-32: zrecenzowane nazwy lokalne; język bez pliku pokazuje nazwę angielską */ collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
+    names[l] = m.name; data[l] = readJson(`.cache/dane/${m.file}`); ui[l] = readJson(`src/ui/${l}.json`); if (!ui[l].ramka && existsSync(join(ROOT, `docs/teksty/ramka/${l}.json`))) ui[l].ramka = readJson(`docs/teksty/ramka/${l}.json`); /* KO-141 e): zdania ramki z przekładu API; pl i en mają je w src/ui */ if (!bezNazw.includes(l) && existsSync(join(ROOT, `docs/nazwy/${l}.json`))) nazwy[l] = readJson(`docs/nazwy/${l}.json`); /* Z-32: zrecenzowane nazwy lokalne; język bez pliku pokazuje nazwę angielską */ collators[l] = new Intl.Collator(l); bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e]));
   }
   if (zmianaDanych) { data = zmianaDanych(data); for (const l of langs) bySlug[l] = new Map(data[l].exercises.map(e => [e.slug, e])); }
   /* adresy: nadpisania, zamrożenie i przekierowania (S7); potem guardy startu S3/S4/S8 (S6 — po zbudowaniu stron) */
