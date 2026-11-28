@@ -10,6 +10,9 @@ Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (start bb10f4d; sc
 - scripts/przeklad/zrodla.mjs: angielski odpowiednik pozycji w frazie liczby mnogiej, której en nie ma (pl few/many), to forma `other` en (zapas CLDR); bez tego test z34 „pozycje z angielskim” czerwony po dodaniu form do en.
 - tests/z34-przeklad-ui.test.mjs: w dwóch testach (fixtura de → ja; w teście nadpisz propozycja `countLine.other` zamiast `.few`, bo ja ma po scaleniu PR #8 tylko `other`) „napis zamiast drzewa” fixtura de → ja (de ma już formy; mechanizm i asercje bez zmian).
 
+- CI 46143520547 (7821ef8): 513/515 zielone, 1 czerwony: sprzatanie.test „katalogi tymczasowe przez pomoc.mjs” — tests/przeklad-liczba-mnoga.test.mjs (z PR #8) używał mkdtempSync; przepisany na tmpDir() z pomoc.mjs (asercje bez zmian). Skutek scalenia main z integracją, nie zmiany BQ2.
+- e) (dodatkowe, KO-147/KO-149): gałąź `strona/przeklad-zrodlo-ui` od main dbf4233 (źródło ui zamiast ramka, test tests/zrodlo-ui.test.mjs, workflowy src/ui — zmiana koordynatora 70026b7), raport SHA c26129b. Bez PR i bez scalania.
+
 ## Koszt API (docs/przeklad/wydatki.json): 28,13 z 80 USD (start sesji 27,24; ta sesja 0,89)
 
 ## Decyzje (analogia, do weta)

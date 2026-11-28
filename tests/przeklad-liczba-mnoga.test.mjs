@@ -2,20 +2,18 @@
 // Bez tego sl nie dostaje `two`, lv `zero`, a języki bez rozróżnienia (ja, ko, vi…) dostają zbędne formy. Bez sieci i bez klucza.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { tmpDir } from './pomoc.mjs';
 import { join, dirname } from 'node:path';
 import * as rdzen from '../scripts/przeklad/rdzen.mjs';
 import * as zrodla from '../scripts/przeklad/zrodla.mjs';
 
-const sprzatanie = [];
-process.on('exit', () => { for (const d of sprzatanie) rmSync(d, { recursive: true, force: true }); });
 const zapisz = (root, f, tresc) => { mkdirSync(dirname(join(root, f)), { recursive: true }); writeFileSync(join(root, f), JSON.stringify(tresc, null, 1) + '\n'); };
 const czytaj = p => JSON.parse(readFileSync(p, 'utf8'));
 const KODY = ['sl', 'lv', 'ja', 'cs', 'pl'];
 
 function fixture() {
-  const root = mkdtempSync(join(tmpdir(), 'mnoga-')); sprzatanie.push(root);
+  const root = tmpDir('mnoga-'); /* integracja: sprzątanie.test wymaga tmpDir z pomoc.mjs */
   zapisz(root, 'config.json', { jezyki: ['pl', 'en', 'sl', 'lv', 'ja', 'cs'] });
   zapisz(root, 'src/szablony/pl.json', { sprzet: 'Sprzęt: {lista}.', opis: '{n} {opisow}', opisow: { one: 'opis', few: 'opisy', many: 'opisów', other: 'opisu' } });
   zapisz(root, 'src/szablony/en.json', { sprzet: 'Equipment: {lista}.', opis: '{n} {opisow}', opisow: { one: 'description', other: 'descriptions' } });
