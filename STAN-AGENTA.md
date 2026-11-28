@@ -1,3 +1,21 @@
+# Stan agenta — BQ: liczba mnoga w 4 językach, test nazw, nazwy greckie, ramka (09-lokalizacja, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (od `strona/integracja-start` @ 074e3f8) · polecenie: docs/koordynacja/polecenia/BQ.md (repo trening, gałąź koordynacja)
+
+## Zrobione (test czerwony przed, zielony po)
+- a) `tests/liczba-mnoga.test.mjs`: każdy język z config.json × frazy z formami liczby (szablony + ui): formy wg `Intl.PluralRules`, liczby próbne 0, 1, 2, 3, 5, 11, 21, 22, 25, 101, 102, 708. Czerwony: sl bez `two`, lv bez `zero`. Zielony dla 35 języków po przekładzie API: cs/hr (zamienione many/other), sl, lv. Przekład sl/lv wymagał zmiany rdzenia (PR #8, KO-146: formy wg kategorii języka docelowego).
+- b) `tests/z32-nazwy.test.mjs`: `en` = sama nazwa angielska (h1 lang="en"), gałąź „bez pliku nazw” przez opcję build `bezNazw` (src/build.mjs:44) na fixture (de), de i ja = nazwa lokalna + angielska; 0 skip; czerwony po zepsuciu gałęzi (sprawdzone).
+- c) `docs/nazwy/el.json` 708/708 (batch msgbatch_01KQVj9LbwLRxZAne5oog1zZ), przegląd API (msgbatch_01Rthee1AgDCN64Tfxs9DVBU): 0 krytycznych, 57 poprawek nałożonych (docs/przeklad/przeglad-el-2026-11-28.md).
+- e) ramka „w aplikacji”: źródło `docs/teksty/ramka/{pl,en}.json` (kopia ramki z src/ui), przekład 33 języków (msgbatch_014brBTYuygaYCcBK6dmK484), `build.mjs` czyta ramkę z docs/teksty/ramka dla języków bez niej w src/ui, zdjęte CZEKA('Z-33') z testu de, „Oczekujące: brak”, test `tests/z33-ramka-przeklad.test.mjs`.
+
+## Koszt API (docs/przeklad/wydatki.json): 27,24 z 80 USD (start sesji 25,68; ta sesja 1,57)
+
+## Otwarte
+- Przegląd API ramki (33 języki, ok. 3,8 USD) zlecony workflowem, wynik NIEPRZEJRZANY ani nienałożony; przegląd szablonów po finalnym przekładzie (cs, hr, sl, lv) niezrobiony.
+- `ui.countLine` w 24 językach to napis bez form (np. „{n} exercises”): poprawne tylko dla n=708; przy małych liczbach błędne; test sprawdza tylko frazy z formami.
+- Wybór nazwy w lv: model użył „ieraksts” (wpis) zamiast „vingrinājums”; do przeglądu rodzimego użytkownika. Brak przeglądu człowieka dla żadnego języka (przegląd modelu go nie zastępuje).
+- Przegląd el: „Lower Back Curl” zmieniony przez model na „κάμψη μέσης”; do sprawdzenia przez rodzimego użytkownika.
+
 # Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)
