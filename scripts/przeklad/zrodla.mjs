@@ -43,6 +43,37 @@ function plikiZrodla(root, z) {
   throw new Error(`źródło „${z.id}”: nieznany rodzaj „${z.rodzaj}” (mapa | dokumenty)`);
 }
 
+/* ---------- liczba mnoga: formy według kategorii CLDR języka DOCELOWEGO ---------- */
+const KATEGORIE = ['zero', 'one', 'two', 'few', 'many', 'other'];
+/** Kategorie liczby mnogiej języka (Intl.PluralRules, kolejność CLDR); nieznany język → one, other. */
+export function kategoriePl(kod) { try { const k = new Intl.PluralRules(kod).resolvedOptions().pluralCategories; return KATEGORIE.filter((c) => k.includes(c)); } catch { return ['one', 'other']; } }
+/** Liczby przykładowe kategorii w języku: do 3 pierwszych całkowitych 0…1000, a gdy brak (np. „many” w pl to liczby całkowite, „other” w cs to ułamki) — ułamki 0,5…; */
+export function przykladyKategorii(kod, kategoria) {
+  const pr = new Intl.PluralRules(kod); const w = [];
+  for (let n = 0; n <= 1000 && w.length < 3; n++) if (pr.select(n) === kategoria) w.push(n);
+  for (const n of [0.5, 1.5, 2.5]) if (!w.length && pr.select(n) === kategoria) w.push(n);
+  return w;
+}
+/** Pozycje źródła „mapa” przepisane na język `kod`: każda fraza liczby mnogiej (rodzeństwo liści, których klucze to kategorie CLDR, z „other”) ma tyle pozycji, ile kategorii ma język docelowy
+ *  (sl: one, two, few, other; lv: zero, one, other; ja: other), a nie tyle, ile polskie źródło. Pozycja ma `kategoria` i `przyklady` (liczby, po których stoi forma); `pl` to polska forma dla pierwszej liczby przykładowej. Inne pozycje bez zmian; id zachowane lub nowe. */
+export function pozycjeDlaJezyka(zrodlo, kod) {
+  if (zrodlo.rodzaj !== 'mapa' || zrodlo.pozycje.some((p) => p.kategoria)) return zrodlo.pozycje; /* dokumenty i pozycje już przepisane na język: bez zmian */
+  const rodzic = (p) => p.sciezka.slice(0, -1).join('.'); const grupy = new Map();
+  for (const p of zrodlo.pozycje) if (p.sciezka.length > 1 && KATEGORIE.includes(p.sciezka.at(-1))) { const g = grupy.get(rodzic(p)) ?? []; g.push(p); grupy.set(rodzic(p), g); }
+  for (const [k, g] of [...grupy]) if (!g.some((p) => p.sciezka.at(-1) === 'other')) grupy.delete(k);
+  if (!grupy.size) return zrodlo.pozycje;
+  const plPr = new Intl.PluralRules('pl'); let nastepne = Math.max(0, ...zrodlo.pozycje.map((p) => Number(p.id) || 0)) + 1; const gotowe = new Set(); const wynik = [];
+  for (const p of zrodlo.pozycje) {
+    const r = rodzic(p); if (!grupy.has(r)) { wynik.push(p); continue; }
+    if (gotowe.has(r)) continue; gotowe.add(r); const g = grupy.get(r); const wg = (c) => g.find((x) => x.sciezka.at(-1) === c) ?? g.find((x) => x.sciezka.at(-1) === 'other');
+    for (const kat of kategoriePl(kod)) {
+      const przyklady = przykladyKategorii(kod, kat); const zr = wg(przyklady.length ? plPr.select(przyklady[0]) : 'other');
+      wynik.push({ id: nastepne++, klucz: `${r}.${kat}`, sciezka: [...p.sciezka.slice(0, -1), kat], pl: zr.pl, en: zr.en ?? null, kategoria: kat, przyklady });
+    }
+  }
+  return wynik;
+}
+
 /** Wszystkie źródła z konfiguracji; `tylko` = lista id do wybrania (puste = wszystkie). */
 export function wczytajZrodla(root, tylko = []) {
   const p = join(root, PLIK_ZRODEL);
