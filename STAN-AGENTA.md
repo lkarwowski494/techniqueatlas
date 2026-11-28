@@ -8,6 +8,20 @@ Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od `strona/integr
 - `tests/z40-plakietka.test.mjs` (6 testów): komplet 35 plików, sumy niezmienione, SVG Apple, `<img alt height≥40>` + linia znaków tylko przy pliku, link tekstowy bez pliku, puste `appStoreId` = bez niczego. Czerwony przed (bez plików: padło na odczycie ZRODLA.json), zielony po.
 - Zrzuty i kontrast: `pomiary/plakietka/` (pl, en; jasny, ciemny).
 
+## Weryfikacja (stan na 09:26 UTC)
+- Commit funkcji: d80df79 na `strona/plakietka-apple`. CI Tests run #113 (https://github.com/lkarwowski494/techniqueatlas/actions/runs/46129185148) w toku — wynik NIEZNANY. Lokalny `npm test` też w toku (ciężki, ~25+ min na tej maszynie); wynik niezweryfikowany. Przeszło lokalnie: tests/z40-plakietka.test.mjs 6/6.
+- Źródło plików: https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/<język Apple> (35 plików: pl en cs sk hu ro bg hr sl sr lt lv et uk es es-419 pt pt-BR de fr it nl sv da nb fi tr el id ms vi ru ja ko zh-Hant), odczyt 2026-11-28.
+
+## Następny krok
+1. Sprawdzić wynik CI #113 (zielony = koniec); przy czerwonym: log zadania, ocenić, czy to plakietka, czy stan wyjściowy.
+2. Powtórzyć `npm run dane` + `npm test` lokalnie nie jest konieczne, jeśli CI zielone.
+3. Właściciel: weto do sr/es-419; `appStoreId` przy publikacji.
+
+## Pułapki
+- `npm ci` i `npm run dane` trzeba uruchomić przed testami; zrzuty: `ATLAS_CHROME=/opt/pw-browsers/chromium node pomiary/plakietka/zrzuty.mjs`.
+- Pełny `npm test` buduje stronę wielokrotnie (GB RAM, dziesiątki minut) — nie uruchamiać dwa razy równolegle.
+- Pliki SVG nie wolno przeformatowywać (suma SHA-256 w teście); hr i uk bez <title> to norma Apple.
+
 ## Decyzje (analogia, do weta)
 1. `sr` → plakietka angielska; `es-419` → es-mx; `nb` → no-no; `zh-Hant` → zh-tw.
 2. `appStoreId` zostaje puste (ustawia właściciel przy publikacji).
