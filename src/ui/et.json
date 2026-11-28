@@ -108,11 +108,11 @@
     "tytul": "Rakenduses {nazwa}",
     "z1": "Rakenduses saad selle harjutuse lisada treeningusse või oma malli.",
     "z2": "Treeningu ajal salvestad iga seeria ja näed kõrval eelmise korra tulemust.",
-    "z3": "Kui märgid seeria tehtuks, algab pausi loendus.",
+    "z3": "Kui märgid seeria tehtuks, algab puhkeaja loendus.",
     "z4": "Kui sul pole vajalikku varustust või see on hõivatud, pakub rakendus asendusi, ka sama liigutust teise vahendiga.",
     "z5": "Kui valid treeningkoha, näitab nimekiri harjutusi, mida seal teha saab.",
     "z6": "Harjutuse ekraanil näed oma viimaseid treeninguid selle harjutusega, „Edenemine“ vaates aga graafikut ja rekordeid.",
-    "z7": "Mallidest saad koostada nädalaplaani või lasta mõne valiku põhjal luua mallid ja plaani.",
+    "z7": "Mallidest saad koostada nädalakava või lasta mõne valiku põhjal luua mallid ja kava.",
     "z8": "Ajalugu, edenemine, mallid ja varukoopia on alati saadaval, ka ilma tasulise versioonita."
   }
 }
