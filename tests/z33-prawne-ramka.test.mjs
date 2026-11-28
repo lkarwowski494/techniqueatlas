@@ -10,7 +10,7 @@ requireData();
 const APP = '1234567890'; /* identyfikator testowy — nie prawdziwa aplikacja */
 const { out, ctx } = await buildOnce('z33', { jezyki: ['pl', 'en', 'de'], appStoreId: APP });
 const bez = await buildOnce('z33-bez', { jezyki: ['pl', 'en'] });
-const JEZ = ['pl', 'en'], DOK = ['polityka-prywatnosci', 'regulamin', 'licencja-tresci'];
+const JEZ = ['pl', 'en'], DOK = ['polityka-prywatnosci', 'warunki'] /* BR 28.11.2026: „2: Prywatność + Warunki (Rekomendowane)” — regulamin i licencja połączone w „Warunki” */;
 const ramkaDok = read('docs/teksty/ramka-w-aplikacji.md');
 /* tabela wariantu A: | A1 | pl | en | dowód | — sekcja „Wariant A” do „Wariant B” */
 const wariantA = ramkaDok.slice(ramkaDok.indexOf('### Wariant A'), ramkaDok.indexOf('### Wariant B')).split('\n').map(w => w.split('|').map(x => x.trim())).filter(k => /^A\d$/.test(k[1]));
@@ -26,7 +26,7 @@ test('Z-33 wyrocznie wczytane: 8 zdań ramki (wariant A) i 3 zdania akapitu w pl
   for (const l of JEZ) { assert.equal(ZDANIA[l].length, 8, l); assert.equal(akapit.length, 3); assert.match(WSPARCIE[l], /\b5\b/); }
 });
 
-test('Z-33 strony prawne pl i en: stopka każdej strony ma linki do polityki prywatności, regulaminu i licencji treści strony; każdy prowadzi do istniejącej strony z h1 i sekcjami (h2) z docs/teksty/prawne/<dokument>.<język>.md', () => {
+test('Z-33 strony prawne pl i en: stopka każdej strony ma linki do dwóch stron prawnych: Prywatność i Warunki (BR); każdy prowadzi do istniejącej strony z h1 i sekcjami (h2) z docs/teksty/prawne/<dokument>.<język>.md', () => {
   for (const l of JEZ) {
     const oczek = DOK.map(d => naglowki(l, d)), proba = [`${l}/index.html`, `${l}/exercises/index.html`, cwiczenia(ctx, l)[0]];
     for (const f of proba) {
@@ -40,10 +40,10 @@ test('Z-33 strony prawne pl i en: stopka każdej strony ma linki do polityki pry
   }
 });
 
-test('Z-33 strony prawne w języku podglądu (de, tak samo 33 języki): stopka ma 3 linki prawne do istniejących stron w tym języku (html lang)', () => {
+test('Z-33 strony prawne w języku podglądu (de, tak samo 33 języki): stopka ma 2 linki prawne (BR: Prywatność i Warunki) do istniejących stron w tym języku (html lang)', () => {
   const f = 'de/index.html', cele = hrefy(stopka(czytaj(out, f))).map(a => rozwiaz(f, a.href, ctx.cfg.domena)).filter(p => p && istnieje(out, p) && p.startsWith('de/'));
   const prawne = cele.filter(p => !/^de\/(index\.html|exercises\/)/.test(p));
-  assert.ok(prawne.length >= 3, `linki prawne de: ${prawne}`);
+  assert.equal(prawne.length, 2, `linki prawne de: ${prawne}`);
   for (const p of prawne) assert.match(czytaj(out, p), /<html lang="de">/, p);
 });
 

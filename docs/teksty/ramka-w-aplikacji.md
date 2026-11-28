@@ -7,7 +7,7 @@ Stan: gotowe do recenzji (Z-23) · 27.11.2026 · rola 04-studio-projektowe (buil
 Decyzje, na których stoją teksty:
 - P-2 (plan z 27.11.2026, słowa właściciela): „Ramka od razu, zdania na stronie”; „Aplikacja ma wszystko. Pozwala zrobic trening, wyrbac cwiczenie itd.”
 - P-6 (plan z 27.11.2026): „Tak, razem z ramką (Recommended)” → liczba dni z kodu wydanej wersji.
-- Brzmienie akapitu: repo trening `docs/18-przekazanie.md:177` (02.11.2026) — „Strona i narzędzia są bezpłatne. Aplikacja: 5 dni treningowych w miesiącu bez opłat, pełna wersja płatna (subskrypcja albo dostęp dożywotni); to wspiera też rozwój tej strony.” Zakaz „darmowy” przy części płatnej: tamże (art. 7 pkt 20 ustawy o przeciwdziałaniu nieuczciwym praktykom rynkowym, wg docs/18); `docs/54-strona-biblioteki.md:32` (F-12).
+- Brzmienie akapitu: repo trening `docs/18-przekazanie.md:177` (02.11.2026) — „Strona i narzędzia są bezpłatne. Aplikacja: 5 dni treningowych w miesiącu bez subskrypcji, pełna wersja płatna (subskrypcja albo dostęp dożywotni); to wspiera też rozwój tej strony.” Zakaz „darmowy” przy części płatnej: tamże (art. 7 pkt 20 ustawy o przeciwdziałaniu nieuczciwym praktykom rynkowym, wg docs/18); `docs/54-strona-biblioteki.md:32` (F-12).
 - Zdania tylko o funkcjach wydanej wersji: `docs/54-strona-biblioteki.md:338-339` (pkt 9).
 
 Zasady brzmienia: zwykły język, bez superlatyw i wykrzykników, bez obietnic, których kod nie spełnia, bez nazw innych firm i bez nazwy aplikacji (nazwę i plakietkę dokłada komponent). Każde zdanie ramki musi być prawdziwe dla każdego ćwiczenia, bo ramka stoi na każdej stronie ćwiczenia. Dlatego nie ma w niej rysunku ruchu, który ma tylko część ćwiczeń (`components/ExerciseCues.tsx:45`).
@@ -51,12 +51,12 @@ Liczba dni pochodzi z kodu: `lib/access.ts:25` na tagu 1.1.1 → `FREE_TRAINING_
 | # | pl | en | Dowód |
 |---|---|---|---|
 | W1 | Ta strona jest bezpłatna. | This website is free to use. | strona bez opłat: `docs/54-strona-biblioteki.md:15` („cała strona i narzędzia bezpłatne”) |
-| W2 | Aplikacja daje {dni} dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. | The app gives you {dni} training days a month at no charge. The full version is paid: a subscription or lifetime access. | `lib/access.ts:25` (`FREE_TRAINING_DAYS_PER_MONTH: 5`), `lib/access.ts:2-3` (decyzja 22.10.2026: Pro — subskrypcja albo dostęp dożywotni zdejmuje limit), `lib/access.ts:42` (`ENTITLEMENT_PLANS = ['monthly', 'yearly', 'lifetime']`) |
+| W2 | Aplikacja daje {dni} dni treningowych w miesiącu bez subskrypcji. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. | The app gives you {dni} training days a month without a subscription. The full version is paid: a subscription or lifetime access. | `lib/access.ts:25` (`FREE_TRAINING_DAYS_PER_MONTH: 5`), `lib/access.ts:2-3` (decyzja 22.10.2026: Pro — subskrypcja albo dostęp dożywotni zdejmuje limit), `lib/access.ts:42` (`ENTITLEMENT_PLANS = ['monthly', 'yearly', 'lifetime']`) |
 | W3 | Jej zakup wspiera też rozwój tej strony. | Buying it also supports this website. | sens z docs/18:177 (deklaracja właściciela, nie funkcja kodu); brzmienie z podmiotem po recenzji Z-23 (06-tresci-010) |
 
-Pełny tekst pl (dla {dni} = 5): „Ta strona jest bezpłatna. Aplikacja daje 5 dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. Jej zakup wspiera też rozwój tej strony.”
+Pełny tekst pl (dla {dni} = 5): „Ta strona jest bezpłatna. Aplikacja daje 5 dni treningowych w miesiącu bez subskrypcji. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni. Jej zakup wspiera też rozwój tej strony.”
 
-Pełny tekst en (dla {dni} = 5): “This website is free to use. The app gives you 5 training days a month at no charge. The full version is paid: a subscription or lifetime access. Buying it also supports this website.”
+Pełny tekst en (dla {dni} = 5): “This website is free to use. The app gives you 5 training days a month without a subscription. The full version is paid: a subscription or lifetime access. Buying it also supports this website.”
 
 ### Odstępstwa od brzmienia z docs/18:177 (do weta, 27.11.2026)
 

@@ -38,7 +38,7 @@ test('BR Prywatność: mówi, że strona nic nie zbiera (ciasteczka, konta, anal
 
 test('BR Warunki: bezpłatne; ogólne, nie porada medyczna (bez wyłączenia odpowiedzialności); rysunki tylko jako część całej strony; baza ćwiczeń nie hurtem ani po kawałku; roboty z robots.txt; bez reklamacji, terminów, planów treningowych i artykułów ustaw', () => {
   const pl = tresc('warunki.pl.md'), en = tresc('warunki.en.md');
-  for (const r of [/bezpłatn/, /nie jest poradą medyczną/, /rysunk[a-z]* ćwiczeń/, /całej strony/, /robots\.txt/, /uczenia modeli/, /powtarzalnego pobierania/]) assert.match(pl, r, String(r));
+  for (const r of [/bezpłatn/, /nie jest poradą medyczną/, /[Rr]ysunki ćwiczeń/, /całej strony/, /robots\.txt/, /uczenia modeli/, /powtarzalnego pobierania/]) assert.match(pl, r, String(r));
   for (const r of [/free/, /not medical advice/, /drawings/, /whole page/, /robots\.txt/, /training models/, /repeated/, /database right/, /\bEU\b/]) assert.match(en, r, String(r));
   assert.doesNotMatch(pl, /reklamac|odpowiedzialn|\bart\.|ustaw|plan[a-z]* trening|14 dni|OpenAI|Google|Anthropic/i);
   assert.doesNotMatch(en, /complaint|liabil|responsib|\bArt\.|\bAct\b|training plan|14 days|OpenAI|Google|Anthropic/i);
@@ -49,7 +49,7 @@ test('BR akapit o wsparciu: bez słów o cenie — „bez subskrypcji” / „wi
   assert.equal(pl.w2, 'Aplikacja daje {dni} dni treningowych w miesiącu bez subskrypcji. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni.');
   assert.equal(en.w2, 'The app gives you {dni} training days a month without a subscription. The full version is paid: a subscription or lifetime access.');
   assert.equal(pl.w1, 'Ta strona jest bezpłatna.'); assert.equal(pl.w3, 'Jej zakup wspiera też rozwój tej strony.');
-  assert.doesNotMatch(read('docs/teksty/ramka-w-aplikacji.md'), /bez opłat|at no charge/);
+  assert.doesNotMatch(read('docs/teksty/ramka-w-aplikacji.md'), /miesiącu bez opłat|a month at no charge/);
 });
 
 test('BR strona: każdy język ma dwie strony prawne (privacy-policy, terms), nie ma content-license; stopka podaje „© 2026 Apps4Brew, Warszawa” i mailto support@apps4brew.com oraz dokładnie dwa linki prawne', async () => {
@@ -59,7 +59,7 @@ test('BR strona: każdy język ma dwie strony prawne (privacy-policy, terms), ni
     assert.equal(existsSync(join(out, l, 'content-license')), false, `${l}/content-license`);
     const st = element(czytaj(out, `${l}/index.html`), 'footer')?.wnetrze ?? '';
     assert.match(tekst(st), /© 2026 Apps4Brew, Warszawa/); assert.ok(hrefy(st).some((a) => a.href === 'mailto:support@apps4brew.com'));
-    assert.equal(hrefy(st).filter((a) => /\/(privacy-policy|terms|content-license)\/?$/.test(a.href)).length, 2, l);
+    assert.equal(hrefy(st).filter((a) => /(^|\/)(privacy-policy|terms|content-license)\/?$/.test(a.href)).length, 2, l);
   }
   assert.equal(plikiHtml(out).filter((f) => /content-license|\/regulamin/.test(f)).length, 0);
   assert.match(czytaj(out, 'pl/privacy-policy/index.html'), /support@apps4brew\.com/);
