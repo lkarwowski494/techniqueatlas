@@ -10,7 +10,7 @@ import {
   MODELE, CENY, RABAT_BATCH, DOMYSLNY_MODEL, DOMYSLNY_EFFORT, EFFORTY, LIMIT_PRZEBIEGU_USD, LIMIT_LACZNY_USD, MAX_TOKENS, CZEKAJ_MIN_DOMYSLNIE, INTERWAL_S,
   ZALOZENIA_PRZEKLADU, ZALOZENIA_PRZEGLADU, WSPOLCZYNNIK, CZESC_WY_MAKS, REJESTR, nazwaJezyka, zmienne, typografia, maskuj, przyblizTokeny, tekstZadania, kosztUsd, klient, czekajNaBatch,
 } from './wspolne.mjs';
-import { wczytajZrodla, sciezkaCelu, pobierz, ustaw } from './zrodla.mjs';
+import { wczytajZrodla, sciezkaCelu, pobierz, ustaw, pozycjeDlaJezyka } from './zrodla.mjs';
 import * as slownik from './slownik.mjs';
 import * as wydatki from './wydatki.mjs';
 
@@ -41,12 +41,12 @@ export const SYSTEM_PRZEKLAD = [
   ...WSPOLNE,
   'Dokumenty Markdown: zachowaj strukturę i znaczniki (nagłówki, listy, tabele, wyróżnienia) oraz wstawki {{…}}; komentarze HTML <!-- … --> pomiń; teksty prawne tłumacz wiernie, bez upraszczania i bez dodawania własnych zaleceń.',
   'Spacje na początku i na końcu tekstu źródłowego (np. " albo " jako spójnik między dwiema wstawkami) są częścią tekstu: zachowaj je w tłumaczeniu, żeby sklejone zdanie nie zlewało się w jedno słowo.',
-  'Formy liczby mnogiej oddzielone znakiem | zachowaj w liczbie i kolejności wymaganej przez język. Odpowiedz WYŁĄCZNIE jednym obiektem JSON, bez komentarza i bez bloku kodu: kluczem jest numer pozycji (tekst), wartością tłumaczenie (tekst).',
+  'Formy liczby mnogiej oddzielone znakiem | zachowaj w liczbie i kolejności wymaganej przez język. Pozycja z polem „forma” to jedna forma frazy liczby mnogiej w języku docelowym: przetłumacz frazę w postaci, jakiej ten język wymaga po wskazanych liczbach (pole „pl” to polska forma po pierwszej z nich, nie kategoria polska). Odpowiedz WYŁĄCZNIE jednym obiektem JSON, bez komentarza i bez bloku kodu: kluczem jest numer pozycji (tekst), wartością tłumaczenie (tekst).',
 ].join(' ');
 export const SYSTEM_PRZEGLAD = [
   'Jesteś doświadczonym tłumaczem i redaktorem tekstów strony internetowej z biblioteką ćwiczeń siłowych. Przeglądasz gotowe tłumaczenia z polskiego; angielski jest drugim tekstem odniesienia, jeśli jest podany. Sam niczego nie poprawiasz w plikach: zwracasz listę poprawek.',
   'Dla każdej pozycji oceń: (1) poprawność znaczenia względem polskiego źródła; (2) czy nie złagodzono ani nie wzmocniono twierdzeń medycznych, bezpieczeństwa i prawnych; (3) formę grzecznościową zgodną z podanym rejestrem języka;',
-  '(4) naturalność dla rodzimego użytkownika (jak powiedziałby trener albo kolega na siłowni); (5) zgodność zmiennych {…} i wstawek {{…}} (te same nazwy, bez tłumaczenia ani zmiany); (6) liczbę mnogą; (7) zgodność ze słownikiem terminów języka (terminy „NIE używaj” to osobna uwaga);',
+  '(4) naturalność dla rodzimego użytkownika (jak powiedziałby trener albo kolega na siłowni); (5) zgodność zmiennych {…} i wstawek {{…}} (te same nazwy, bez tłumaczenia ani zmiany); (6) liczbę mnogą (pozycja z polem „forma”: czy tekst ma postać wymaganą po wskazanych liczbach); (7) zgodność ze słownikiem terminów języka (terminy „NIE używaj” to osobna uwaga);',
   '(8) obecność w tłumaczeniu nazw źródeł, autorów, organizacji, firm lub marek, których nie ma w polskim tekście (to uwaga krytyczna).',
   'Spacje na początku i na końcu tekstu źródłowego (np. " albo " między wstawkami) są częścią tekstu: tłumaczenie i poprawka mają je zachować; ich brak to uwaga „średnia”.',
   'Nie zgłaszaj różnic czysto stylistycznych bez powodu. Nie oceniaj merytorycznej prawdziwości zaleceń treningowych ani prawnej poprawności — tylko wierność przekładu.',
@@ -60,7 +60,7 @@ export const SYSTEM_PRZEGLAD = [
 export function budujZadanie(tryb, zrodlo, kod, slowniki) {
   const przeglad = tryb === 'przeglad';
   const lista = zrodlo.pozycje.filter((p) => !przeglad || (typeof p.tlumaczenie === 'string' && p.tlumaczenie.trim())).map((p) => {
-    const o = { id: String(p.id), pl: p.pl }; if (p.en) o.en = p.en; if (przeglad) o.tlumaczenie = p.tlumaczenie; return o;
+    const o = { id: String(p.id), pl: p.pl }; if (p.en) o.en = p.en; if (p.kategoria) o.forma = `kategoria liczby mnogiej „${p.kategoria}” (CLDR) w języku docelowym: forma frazy po liczbach np. ${p.przyklady.join(', ')}`; if (przeglad) o.tlumaczenie = p.tlumaczenie; return o;
   });
   const user = [
     `Język docelowy: ${nazwaJezyka(kod)} (${kod}).`,
@@ -237,7 +237,7 @@ export function zTlumaczeniem(root, zrodlo, kod) {
   let jest = false; let pozycje;
   if (zrodlo.rodzaj === 'mapa') {
     const p = join(root, sciezkaCelu(zrodlo, kod)); const d = existsSync(p) ? czytaj(p) : null; jest = d !== null;
-    pozycje = zrodlo.pozycje.map((x) => ({ ...x, tlumaczenie: d ? pobierz(d, x.sciezka) ?? null : null }));
+    pozycje = pozycjeDlaJezyka(zrodlo, kod).map((x) => ({ ...x, tlumaczenie: d ? pobierz(d, x.sciezka) ?? null : null }));
   } else {
     pozycje = zrodlo.pozycje.map((x) => { const p = join(root, sciezkaCelu(zrodlo, kod, x.klucz)); const e = existsSync(p); jest ||= e; return { ...x, tlumaczenie: e ? readFileSync(p, 'utf8') : null }; });
   }
@@ -249,7 +249,7 @@ export function zastosuj(root, katalog, { nadpisz = false } = {}) {
   const zrodla = wczytajZrodla(root); const kody = jezykiDoPrzekladu(root); const wynik = { zapisanych: 0, plikow: 0, pominietych: [] };
   for (const z of zrodla) for (const kod of kody) {
     const f = join(katalog, z.id, `${kod}.json`); if (!existsSync(f)) continue;
-    const r = czytaj(f); const wg = new Map(z.pozycje.map((x) => [x.klucz, x])); const cel = join(root, sciezkaCelu(z, kod));
+    const r = czytaj(f); const wg = new Map(pozycjeDlaJezyka(z, kod).map((x) => [x.klucz, x])); const cel = join(root, sciezkaCelu(z, kod));
     let d = z.rodzaj === 'mapa' ? (existsSync(cel) ? czytaj(cel) : {}) : null; let zmienione = 0;
     for (const [klucz, tl] of Object.entries(r.propozycje ?? {})) {
       const poz = wg.get(klucz);
@@ -321,8 +321,8 @@ async function przebieg(tryb, o, klucz, { fetchFn, wyp, root, spij }) {
   kody = kody.slice(0, o.limit ?? undefined);
   for (const id of zrodla.pominiete ?? []) wyp(`pominięto źródło „${id}”: oczekuje na pliki (zob. docs/przeklad/zrodla.json, pole oczekuje)`);
   const zadania = []; let pominieteIstniejace = 0;
-  for (const z of zrodla) for (const kod of kody) {
-    let pozycje = z.pozycje;
+  for (const z0 of zrodla) for (const kod of kody) {
+    const z = { ...z0, pozycje: pozycjeDlaJezyka(z0, kod) }; let pozycje = z.pozycje; /* formy liczby mnogiej według kategorii języka docelowego (KO-146) */
     if (tryb === 'przeglad') { const t = zTlumaczeniem(root, z, kod); if (!t.jest) { wyp(`pominięto ${z.id}/${kod}: brak pliku celu (nie ma czego przeglądać)`); continue; } pozycje = t.pozycje; }
     else if (!o.nadpisz) {
       /* istniejące tłumaczenia nie są ponownie płatne: wysyłamy tylko pozycje bez tłumaczenia (`--nadpisz` przywraca wszystkie) */
