@@ -7,7 +7,7 @@ import { ROOT, esc } from './lib.mjs';
 
 /** Dokumenty: id = nazwa pliku w docs/teksty/prawne/, slug = adres strony (angielski we wszystkich językach, jak adresy ćwiczeń), klucz = nazwa linku w stopce (src/ui/<język>.json → prawne). */
 export const DOKUMENTY = [
-  { id: 'polityka-prywatnosci', slug: 'privacy-policy', klucz: 'privacy' },
+  { id: 'prywatnosc', slug: 'privacy-policy', klucz: 'privacy' },
   { id: 'warunki', slug: 'terms', klucz: 'terms' },
 ];
 /** Języki, w których teksty prawne istnieją (po zrecenzowaniu Z-23); pozostałe języki pokazują wersję angielską z oznaczeniem języka do czasu przekładu (Z-26). */

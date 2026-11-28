@@ -4,7 +4,7 @@ Od 28.11.2026 strona ma **dwie** strony prawne, wzorowane na apps4brew.com (stop
 
 | Plik | Co | Długość |
 |---|---|---|
-| `polityka-prywatnosci.<język>.md` | „Prywatność”: strona nic nie zbiera; hosting (GitHub Pages) zapisuje techniczne logi z adresem IP na własnych zasadach; kontakt | ok. 55–65 słów |
+| `prywatnosc.<język>.md` | „Prywatność”: strona nic nie zbiera; hosting (GitHub Pages) zapisuje techniczne logi z adresem IP na własnych zasadach; kontakt | ok. 55–65 słów |
 | `warunki.<język>.md` | „Warunki”: treść bezpłatna i ogólna, nie porada medyczna; rysunki tylko jako część całej strony; baza ćwiczeń nie hurtem ani po kawałku; roboty dozwolone przez robots.txt | ok. 100–120 słów |
 | `dowody.md` | dowody twierdzeń o tym, co robi strona (kod, testy) | |
 | `do-wlasciciela.md` | pytania z Z-23 z odpowiedziami właściciela z 28.11.2026 | |

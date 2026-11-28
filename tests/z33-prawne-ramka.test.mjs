@@ -10,7 +10,7 @@ requireData();
 const APP = '1234567890'; /* identyfikator testowy — nie prawdziwa aplikacja */
 const { out, ctx } = await buildOnce('z33', { jezyki: ['pl', 'en', 'de'], appStoreId: APP });
 const bez = await buildOnce('z33-bez', { jezyki: ['pl', 'en'] });
-const JEZ = ['pl', 'en'], DOK = ['polityka-prywatnosci', 'warunki'] /* BR 28.11.2026: „2: Prywatność + Warunki (Rekomendowane)” — regulamin i licencja połączone w „Warunki” */;
+const JEZ = ['pl', 'en'], DOK = ['prywatnosc', 'warunki'] /* BR 28.11.2026: „2: Prywatność + Warunki (Rekomendowane)” — regulamin i licencja połączone w „Warunki” */;
 const ramkaDok = read('docs/teksty/ramka-w-aplikacji.md');
 /* tabela wariantu A: | A1 | pl | en | dowód | — sekcja „Wariant A” do „Wariant B” */
 const wariantA = ramkaDok.slice(ramkaDok.indexOf('### Wariant A'), ramkaDok.indexOf('### Wariant B')).split('\n').map(w => w.split('|').map(x => x.trim())).filter(k => /^A\d$/.test(k[1]));

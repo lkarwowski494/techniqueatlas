@@ -13,24 +13,24 @@ const DIR = join(ROOT, 'docs/teksty/prawne');
 const tresc = (f) => read(`docs/teksty/prawne/${f}`).replace(/<!--(?:(?!<!--)[\s\S])*?-->/g, '');
 const slowa = (s) => s.replace(/^#.*$/gm, '').replace(/Obowiązuje od.*|Effective.*/g, '').split(/\s+/).filter(Boolean).length;
 
-test('BR dwa dokumenty: w docs/teksty/prawne są pliki polityka-prywatnosci i warunki (pl, en), nie ma regulaminu ani licencji treści w żadnym języku', () => {
+test('BR dwa dokumenty: w docs/teksty/prawne są pliki prywatnosc i warunki (pl, en), nie ma regulaminu ani licencji treści w żadnym języku', () => {
   const pliki = readdirSync(DIR);
-  for (const d of ['polityka-prywatnosci', 'warunki']) for (const l of ['pl', 'en']) assert.ok(pliki.includes(`${d}.${l}.md`), `${d}.${l}.md`);
+  for (const d of ['prywatnosc', 'warunki']) for (const l of ['pl', 'en']) assert.ok(pliki.includes(`${d}.${l}.md`), `${d}.${l}.md`);
   assert.deepEqual(pliki.filter((f) => /^(regulamin|licencja-tresci)\./.test(f)), []);
 });
 
 test('BR długość: Prywatność ≤ 130 słów, Warunki ≤ 210 słów w pl i en (ok. 120 i 200)', () => {
-  for (const l of ['pl', 'en']) { assert.ok(slowa(tresc(`polityka-prywatnosci.${l}.md`)) <= 130, `prywatność ${l}`); assert.ok(slowa(tresc(`warunki.${l}.md`)) <= 210, `warunki ${l}`); }
+  for (const l of ['pl', 'en']) { assert.ok(slowa(tresc(`prywatnosc.${l}.md`)) <= 130, `prywatność ${l}`); assert.ok(slowa(tresc(`warunki.${l}.md`)) <= 210, `warunki ${l}`); }
 });
 
 test('BR prowadzący w tekstach: „Apps4Brew” i support@apps4brew.com wpisane wprost; bez wstawek {{administrator}}/{{kontakt}} i bez zmiennych TA_ADMINISTRATOR/TA_KONTAKT w budowaniu', () => {
-  for (const d of ['polityka-prywatnosci', 'warunki']) for (const l of ['pl', 'en']) { const t = tresc(`${d}.${l}.md`); assert.match(t, /Apps4Brew/); assert.match(t, /support@apps4brew\.com/); assert.doesNotMatch(t, /\{\{(administrator|kontakt|adresStrony|politykaAplikacji)\}\}/); }
+  for (const d of ['prywatnosc', 'warunki']) for (const l of ['pl', 'en']) { const t = tresc(`${d}.${l}.md`); assert.match(t, /Apps4Brew/); assert.match(t, /support@apps4brew\.com/); assert.doesNotMatch(t, /\{\{(administrator|kontakt|adresStrony|politykaAplikacji)\}\}/); }
   assert.match(tresc('warunki.pl.md'), /Warszawa/); assert.match(tresc('warunki.en.md'), /Warsaw/);
   for (const f of repoFiles().filter((f) => /^(src|scripts|\.github)\//.test(f) && /\.(mjs|yml)$/.test(f))) assert.doesNotMatch(read(f), /TA_ADMINISTRATOR|TA_KONTAKT/, f);
 });
 
 test('BR Prywatność: mówi, że strona nic nie zbiera (ciasteczka, konta, analityka, formularze), nazywa hosting GitHub Pages i logi z adresem IP; bez artykułów ustaw i procedury próśb o dane', () => {
-  const pl = tresc('polityka-prywatnosci.pl.md'), en = tresc('polityka-prywatnosci.en.md');
+  const pl = tresc('prywatnosc.pl.md'), en = tresc('prywatnosc.en.md');
   for (const r of [/ciasteczek/, /kont/, /analityk/, /formularz/, /GitHub Pages/, /adres IP/]) assert.match(pl, r, String(r));
   for (const r of [/cookies/, /accounts/, /analytics/, /forms/, /GitHub Pages/, /IP address/]) assert.match(en, r, String(r));
   for (const t of [pl, en]) assert.doesNotMatch(t, /RODO|GDPR|\bart\.|ustaw|UODO|skarg|Twoje prawa|Your rights/i);
