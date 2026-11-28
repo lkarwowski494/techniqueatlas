@@ -1,13 +1,12 @@
 // Z-33: moduły bez budowania strony — render tekstów prawnych (src/prawne.mjs), strażnicy S12 i S13 (src/straznicy.mjs), liczba dni z kodu aplikacji (src/aplikacja.mjs).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { bezKomentarzy, mdDoHtml, wstaw } from '../src/prawne.mjs';
 import { checkPrawne, checkRamka } from '../src/straznicy.mjs';
 import { dniBezOplat, dokumentRamki } from '../src/aplikacja.mjs';
-import { read } from './pomoc.mjs';
+import { read, tmpDir } from './pomoc.mjs';
 
 test('Z-33 prawne: komentarze (także zagnieżdżone, z [DO KONSULTACJI]) znikają, wstawki są podmieniane, brak wartości daje tekst zastępczy, a znaczniki w wartościach są escapowane', () => {
   assert.equal(bezKomentarzy('a <!-- x <!-- D-1 --> y --> b <!-- [DO KONSULTACJI] z -->c'), 'a  b c');
@@ -36,10 +35,10 @@ test('Z-33 S13 zdania ramki: zgodne z dokumentem i wersją → cisza; inna wersj
 
 test('Z-33 liczba dni bez opłat pochodzi z lib/access.ts aplikacji (5 w wersji 1.1.1); brak pliku albo liczby to błąd, nie zgadnięta wartość', () => {
   assert.equal(dniBezOplat(), 5);
-  const d = mkdtempSync(join(tmpdir(), 'atlas-z33-')); try {
+  const d = tmpDir('atlas-z33-'); {
     assert.throws(() => dniBezOplat(d), /npm run dane/);
     mkdirSync(join(d, 'app/lib'), { recursive: true }); writeFileSync(join(d, 'app/lib/access.ts'), 'export const PAYWALL = { ENABLED: true };\n');
     assert.throws(() => dniBezOplat(d), /FREE_TRAINING_DAYS_PER_MONTH/);
     writeFileSync(join(d, 'app/lib/access.ts'), 'export const PAYWALL = {\n  FREE_TRAINING_DAYS_PER_MONTH: 3,\n};\n'); assert.equal(dniBezOplat(d), 3);
-  } finally { rmSync(d, { recursive: true, force: true }); }
+  }
 });

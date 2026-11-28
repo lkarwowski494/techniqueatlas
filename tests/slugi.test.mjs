@@ -90,7 +90,7 @@ test('build: przeniesiony adres zostaje jako przekierowanie (meta refresh 0 s + 
   const r = await build({ out: tmpDist(), cfg: { indeksowanie: true }, slugi, ...BEZ_STARTU }); const dom = readJson('config.json').domena;
   for (const l of ['pl', 'en']) {
     const h = readFileSync(join(r.out, `${l}/exercises/old-squat/index.html`), 'utf8');
-    assert.ok(h.includes(`<meta http-equiv="refresh" content="0;url=${dom}/${l}/exercises/back-squat/">`), 'meta refresh: pełny adres z domeną'); assert.ok(h.includes(`<link rel="canonical" href="${dom}/${l}/exercises/back-squat/">`)); assert.match(h, /<a href="\.\.\/back-squat\/"[^>]*>Back Squat<\/a>/);
+    assert.ok(h.includes(`<meta http-equiv="refresh" content="0;url=${dom}/${l}/exercises/back-squat/">`), 'meta refresh: pełny adres z domeną'); assert.ok(h.includes(`<link rel="canonical" href="${dom}/${l}/exercises/back-squat/">`)); assert.match(h, new RegExp(`<a href="\\.\\./back-squat/"[^>]*>${l === 'pl' ? 'Przysiad ze sztangą na plecach' : 'Back Squat'}</a>`)); /* Z-32: pl pokazuje nazwę polską */
     assert.doesNotMatch(h, /noindex|hreflang=/);
     const g = readFileSync(join(r.out, `${l}/exercises/removed-one/index.html`), 'utf8'); assert.ok(g.includes(`<meta http-equiv="refresh" content="0;url=${dom}/${l}/exercises/">`)); assert.ok(g.includes(`<link rel="canonical" href="${dom}/${l}/exercises/">`));
     assert.ok(!readFileSync(join(r.out, `sitemap-${l}.xml`), 'utf8').includes('old-squat'));

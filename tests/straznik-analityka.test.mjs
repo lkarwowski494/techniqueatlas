@@ -6,7 +6,8 @@ import { readFileSync } from 'node:fs';
 import { extname } from 'node:path';
 import { repoFiles, isText, read, distFiles, buildOnce } from './pomoc.mjs';
 
-const TRACKERS = /google-analytics|googletagmanager|googlesyndication|doubleclick|adsbygoogle|\bgtag\s*\(|\bga\s*\(\s*['"]|analytics\.js|plausible|matomo|piwik|hotjar|mixpanel|segment\.(?:com|io)|amplitude\.com|cdn\.amplitude|amplitude-js|@amplitude|clarity\.ms|fullstory|posthog|umami|fathom|cloudflareinsights|simpleanalytics|goatcounter|sentry|datadoghq|newrelic|facebook\.(?:net|com)\/tr|\bfbq\s*\(|connect\.facebook|snap(?:chat)?\.com\/.*pixel|sc-static\.net|analytics\.tiktok|mc\.yandex|metrika|linkedin\.com\/px|static\.hotjar|bat\.bing/i;
+/* \bumami\b: bez granicy słowa wzorzec trafiał w polskie „z gumami” (nazwy ćwiczeń z Z-32); narzędzie umami nadal wykrywane po nazwie */
+const TRACKERS = /google-analytics|googletagmanager|googlesyndication|doubleclick|adsbygoogle|\bgtag\s*\(|\bga\s*\(\s*['"]|analytics\.js|plausible|matomo|piwik|hotjar|mixpanel|segment\.(?:com|io)|amplitude\.com|cdn\.amplitude|amplitude-js|@amplitude|clarity\.ms|fullstory|posthog|\bumami\b|fathom|cloudflareinsights|simpleanalytics|goatcounter|sentry|datadoghq|newrelic|facebook\.(?:net|com)\/tr|\bfbq\s*\(|connect\.facebook|snap(?:chat)?\.com\/.*pixel|sc-static\.net|analytics\.tiktok|mc\.yandex|metrika|linkedin\.com\/px|static\.hotjar|bat\.bing/i;
 const NETWORK_API = /\bfetch\s*\(|XMLHttpRequest|sendBeacon|\bWebSocket\b|\bEventSource\b|new\s+Image\s*\(|document\.cookie|\blocalStorage\b|\bsessionStorage\b|\bindexedDB\b|importScripts|navigator\.serviceWorker/;
 const EXT = /(?:^|["'\s=])(?:https?:)?\/\/(?!localhost)/;
 /** Znacznik ładujący zasób z innej domeny: script/img/iframe/… z zewnętrznym src/srcset/data/poster albo <link> zasobowy (stylesheet, preload, icon, manifest, preconnect…) z zewnętrznym href. Metadane <link rel="canonical|alternate"> nie ładują zasobów. */
