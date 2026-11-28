@@ -8,7 +8,7 @@ import { wczytajZrodla, pozycjeDlaJezyka } from '../scripts/przeklad/zrodla.mjs'
 import { zastosuj } from '../scripts/przeklad/rdzen.mjs';
 import { ROOT } from './pomoc.mjs';
 
-let licznik = 0; const katalogi = []; process.on('exit', () => { for (const d of katalogi) rmSync(d, { recursive: true, force: true }); }); /* bez mkdtemp: sprzatanie.test.mjs (integracja) wymaga tmpDir z pomoc.mjs, którego main nie ma */
+let licznik = 0; const katalogi = []; process.on('exit', () => { for (const d of katalogi) rmSync(d, { recursive: true, force: true }); }); /* katalog tymczasowy własny: sprzatanie.test.mjs (integracja) wymaga tmpDir z pomoc.mjs, którego main nie ma */
 const zapisz = (root, f, o) => { mkdirSync(join(root, f, '..'), { recursive: true }); writeFileSync(join(root, f), JSON.stringify(o, null, 2) + '\n'); };
 const czytaj = (root, f) => JSON.parse(readFileSync(join(root, f), 'utf8'));
 function fixtura() {
