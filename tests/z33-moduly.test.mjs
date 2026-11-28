@@ -20,12 +20,13 @@ test('Z-33 prawne: komentarze (także zagnieżdżone, z [DO KONSULTACJI]) znikaj
   assert.throws(() => mdDoHtml('bez nagłówka'), /h1/);
 });
 
-test('Z-33 S12 wstawki prawne: puste administrator, kontakt albo data → ostrzeżenie przed startem i błąd przy indeksowaniu; komplet → cisza', () => {
-  const pelne = { administrator: 'A', kontakt: 'k', dataObowiazywania: '2026-12-01' };
+/* BR 28.11.2026 („Jak apps4brew”): administrator i kontakt wpisane wprost, jedyna wstawka to data */
+test('Z-33 S12 wstawka prawna: pusta data → ostrzeżenie przed startem i błąd przy indeksowaniu; wypełniona → cisza', () => {
+  const pelne = { dataObowiazywania: '2026-12-01' };
   assert.deepEqual(checkPrawne({ wartosci: pelne, indexing: true }), { errors: [], warnings: [] });
-  const bez = { ...pelne, kontakt: ' ' };
-  assert.match(checkPrawne({ wartosci: bez, indexing: true }).errors[0], /S12.*\{\{kontakt\}\}/); assert.equal(checkPrawne({ wartosci: bez, indexing: false }).errors.length, 0); assert.equal(checkPrawne({ wartosci: bez, indexing: false }).warnings.length, 1);
-  assert.match(checkPrawne({ wartosci: {}, indexing: true }).errors[0], /administrator.*kontakt.*dataObowiazywania/);
+  const bez = { ...pelne, dataObowiazywania: ' ' };
+  assert.match(checkPrawne({ wartosci: bez, indexing: true }).errors[0], /S12.*\{\{dataObowiazywania\}\}/); assert.equal(checkPrawne({ wartosci: bez, indexing: false }).errors.length, 0); assert.equal(checkPrawne({ wartosci: bez, indexing: false }).warnings.length, 1);
+  assert.match(checkPrawne({ wartosci: {}, indexing: true }).errors[0], /dataObowiazywania/);
 });
 
 test('Z-33 S13 zdania ramki: zgodne z dokumentem i wersją → cisza; inna wersja wydania, zmienione zdanie albo brak klucza → naruszenie', () => {

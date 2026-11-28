@@ -95,18 +95,15 @@
   },
   "prawne": {
     "nav": "Dokumenty prawne",
-    "privacy": "Polityka prywatności",
-    "terms": "Regulamin",
-    "license": "Licencja treści"
+    "privacy": "Prywatność",
+    "terms": "Warunki"
   },
   "prawneBrak": {
-    "administrator": "(dane administratora zostaną uzupełnione przy publikacji)",
-    "kontakt": "(adres kontaktowy zostanie uzupełniony przy publikacji)",
     "dataObowiazywania": "(data publikacji)"
   },
   "wsparcie": {
     "w1": "Ta strona jest bezpłatna.",
-    "w2": "Aplikacja daje {dni} dni treningowych w miesiącu bez opłat. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni.",
+    "w2": "Aplikacja daje {dni} dni treningowych w miesiącu bez subskrypcji. Pełna wersja jest płatna: subskrypcja albo dostęp dożywotni.",
     "w3": "Jej zakup wspiera też rozwój tej strony."
   },
   "ramka": {

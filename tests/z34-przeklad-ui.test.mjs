@@ -16,7 +16,7 @@ test('Z-34 źródło „ui” zastępuje „ramka”: mapa src/ui/{pl,en}.json �
   const k = JSON.parse(read('docs/przeklad/zrodla.json')), ui = k.zrodla.find(z => z.id === 'ui');
   assert.equal(k.zrodla.some(z => z.id === 'ramka'), false); assert.ok(ui); assert.deepEqual([ui.rodzaj, ui.pl, ui.en, ui.cel, ui.oczekuje], ['mapa', 'src/ui/pl.json', 'src/ui/en.json', 'src/ui/{kod}.json', undefined]);
   const [z] = wczytajZrodla(ROOT, ['ui']); assert.equal(z.id, 'ui');
-  for (const klucz of ['ramka.tytul', ...Array.from({ length: 8 }, (_, i) => `ramka.z${i + 1}`), 'wsparcie.w1', 'wsparcie.w2', 'wsparcie.w3', 'prawne.nav', 'prawne.privacy', 'prawneBrak.administrator']) assert.ok(z.pozycje.some(p => p.klucz === klucz), klucz);
+  for (const klucz of ['ramka.tytul', ...Array.from({ length: 8 }, (_, i) => `ramka.z${i + 1}`), 'wsparcie.w1', 'wsparcie.w2', 'wsparcie.w3', 'prawne.nav', 'prawne.privacy', 'prawneBrak.dataObowiazywania']) assert.ok(z.pozycje.some(p => p.klucz === klucz), klucz);
   for (const p of z.pozycje) { assert.equal(typeof p.en, 'string', `${p.klucz}: brak angielskiego (countLine: en ma jeden napis zamiast form liczby mnogiej)`); assert.equal(zm(p.en), zm(p.pl), `${p.klucz}: zmienne pl ≠ en`); }
   assert.ok(z.pozycje.every(p => !p.klucz.startsWith('_')));
 });

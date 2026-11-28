@@ -57,7 +57,7 @@ export function layout(ctx, m, bodyHtml) {
   const store = cfg.appStoreId ? `<p><a href="https://apps.apple.com/app/id${esc(cfg.appStoreId)}?ct=techniqueatlas-${esc(m.lang ?? 'x')}">${esc(ui.appStore)}</a></p>` : '';
   const znaki = ui.appleZnaki ? { t: ui.appleZnaki, l: '' } : { t: ctx.uiEn.appleZnaki, l: ' lang="en"' }; /* wymóg licencji plakietki Apple (KO-138): linia tylko przy plakietce graficznej na stronie */
   const scripts = (m.scripts ?? []).map(s => `<script type="module" src="${u(s)}"></script>`).join('\n');
-  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${wsparcie}${store}${langs}<p class="prawne">${prawneLinki} · ${esc(ui.rights)}</p>\n${m.znakiApple ? `<p class="zastrz"${znaki.l}>${esc(znaki.t)}</p>\n` : ''}</div></footer>\n${scripts}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="${esc(hreflang(lang))}">\n<head>\n${head}\n</head>\n<body>\n<a class="skip" href="#tresc">${esc(ui.skip)}</a>\n${header}\n<main id="tresc" class="tresc"><div class="arkusz">${crumbs}\n${bodyHtml}\n</div></main>\n<footer class="stopka"><div class="stopka-w">\n${wsparcie}${store}${langs}<p class="prawne">${prawneLinki} · © ${esc(String(ctx.cfg.rokStrony))} ${esc(ctx.cfg.prowadzacy)} · <a href="mailto:${esc(ctx.cfg.kontakt)}">${esc(ctx.cfg.kontakt)}</a></p>\n${m.znakiApple ? `<p class="zastrz"${znaki.l}>${esc(znaki.t)}</p>\n` : ''}</div></footer>\n${scripts}\n</body>\n</html>\n`;
 }
 
 const P = lang => langPath(lang);

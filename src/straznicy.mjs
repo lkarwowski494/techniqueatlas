@@ -75,12 +75,12 @@ export function startGuards({ cfg, pin, manifest, data, langs, files = {} }) {
 }
 
 /**
- * S12 wstawki stron prawnych: {{administrator}}, {{kontakt}} (dane z ustawień środowiska, nie z repo publicznego) i {{dataObowiazywania}} muszą być wypełnione przy indeksowaniu;
+ * S12 wstawka stron prawnych: {{dataObowiazywania}} musi być wypełniona przy indeksowaniu (BR, 28.11.2026: administrator i kontakt wpisane wprost, bez wstawek);
  * przed startem to ostrzeżenie (strona pokazuje jawny tekst zastępczy).
  */
 export function checkPrawne({ wartosci, indexing }) {
-  const errors = [], warnings = [], brak = ['administrator', 'kontakt', 'dataObowiazywania'].filter(k => !String(wartosci[k] ?? '').trim());
-  if (brak.length) verdict(indexing, errors, warnings, `S12 strony prawne: brak wartości wstawek ${brak.map(k => `{{${k}}}`).join(', ')} (administrator i kontakt: zmienne środowiska TA_ADMINISTRATOR, TA_KONTAKT; data: config.json → dataObowiazywania)`);
+  const errors = [], warnings = [], brak = ['dataObowiazywania'].filter(k => !String(wartosci[k] ?? '').trim());
+  if (brak.length) verdict(indexing, errors, warnings, `S12 strony prawne: brak wartości wstawek ${brak.map(k => `{{${k}}}`).join(', ')} (config.json → dataObowiazywania)`);
   return { errors, warnings };
 }
 

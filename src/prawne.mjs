@@ -1,15 +1,14 @@
-// Z-33: strony prawne (polityka prywatności, regulamin, licencja treści) z docs/teksty/prawne/<dokument>.<język>.md. Czyste funkcje: markdown (podzbiór: #, ##, listy „- ”, **pogrubienie**, `kod`) → HTML.
-// Dane administratora i kontakt NIE są w repo (publiczne): wstawki {{administrator}} i {{kontakt}} bierze build ze zmiennych środowiska TA_ADMINISTRATOR i TA_KONTAKT (albo z opcji cfg w testach);
-// bez nich strona pokazuje jawny tekst zastępczy (src/ui/<język>.json → prawneBrak), a przy indeksowanie=true strażnik S12 (src/straznicy.mjs) przerywa build.
+// Z-33, uproszczone w BR (28.11.2026): dwie strony prawne (Prywatność, Warunki) z docs/teksty/prawne/<dokument>.<język>.md. Czyste funkcje: markdown (podzbiór: #, ##, listy „- ”, **pogrubienie**, `kod`) → HTML.
+// Prowadzący (Apps4Brew, Warszawa) i kontakt są wpisane wprost w tekstach i w config.json (decyzja właściciela 28.11.2026: „Jak apps4brew”); jedyna wstawka to {{dataObowiazywania}}
+// (bez niej tekst zastępczy z src/ui/<język>.json → prawneBrak, a przy indeksowanie=true strażnik S12 przerywa build).
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROOT, esc } from './lib.mjs';
 
 /** Dokumenty: id = nazwa pliku w docs/teksty/prawne/, slug = adres strony (angielski we wszystkich językach, jak adresy ćwiczeń), klucz = nazwa linku w stopce (src/ui/<język>.json → prawne). */
 export const DOKUMENTY = [
-  { id: 'polityka-prywatnosci', slug: 'privacy-policy', klucz: 'privacy' },
-  { id: 'regulamin', slug: 'terms', klucz: 'terms' },
-  { id: 'licencja-tresci', slug: 'content-license', klucz: 'license' },
+  { id: 'prywatnosc', slug: 'privacy-policy', klucz: 'privacy' },
+  { id: 'warunki', slug: 'terms', klucz: 'terms' },
 ];
 /** Języki, w których teksty prawne istnieją (po zrecenzowaniu Z-23); pozostałe języki pokazują wersję angielską z oznaczeniem języka do czasu przekładu (Z-26). */
 export const JEZYKI_PRAWNE = ['pl', 'en'];
@@ -39,7 +38,7 @@ export function mdDoHtml(md) {
   return { h1, naglowki, html: out.join('\n') };
 }
 
-/** Wczytuje 3 dokumenty (wstawki podmienione) → { <id>: { <język>: { h1, naglowki, html } } } dla pl, en i każdego z `langs`, który ma plik przekładu (docs/teksty/prawne/<id>.<język>.md,
+/** Wczytuje 2 dokumenty (wstawki podmienione) → { <id>: { <język>: { h1, naglowki, html } } } dla pl, en i każdego z `langs`, który ma plik przekładu (docs/teksty/prawne/<id>.<język>.md,
  * z przebiegu przekładu API). Brak pliku pl albo en = błąd (strona prawna nie może być pusta); brak przekładu = język pokaże wersję angielską z oznaczeniem lang="en". */
 export function wczytajPrawne({ langs, wartosci, brak, root = ROOT }) {
   const wynik = {};
