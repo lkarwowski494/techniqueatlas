@@ -16,6 +16,87 @@ Aktualizacja: 2026-11-28 · gałąź `strona/liczba-mnoga-el` (od `strona/integr
 - Wybór nazwy w lv: model użył „ieraksts” (wpis) zamiast „vingrinājums”; do przeglądu rodzimego użytkownika. Brak przeglądu człowieka dla żadnego języka (przegląd modelu go nie zastępuje).
 - Przegląd el: „Lower Back Curl” zmieniony przez model na „κάμψη μέσης”; do sprawdzenia przez rodzimego użytkownika.
 
+---
+## Wcześniej (BN/BP — integracja-start)
+
+# Stan agenta — BP: naprawa 2 czerwonych testów tests.yml #113 (08-programista, fix)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od 59eedd6)
+
+## Zrobione
+- CI113-1: `tests/z40-plakietka.test.mjs` używa `tmpDir()` z `tests/pomoc.mjs` zamiast `mkdtempSync`; asercje bez zmian. Przed: sprzatanie.test 5/6 (czerwony); po: z40-plakietka + sprzatanie 12/12.
+- CI113-2: `src/build.mjs` usuwa `assets/plakietka/ZRODLA.json` z dist po kopiowaniu `assets/` (plik zostaje w repo). Nowy test w z40-plakietka: brak ZRODLA.json w dist, SVG są (czerwony przed poprawką). Po: z40-plakietka + straznik-dane 14/14. Strażnik bez zmian.
+- Pełny `npm test`: NIE uruchomiony lokalnie (ciężki); weryfikacja przez tests.yml na SHA z gałęzi — wynik w raporcie PRZEKAZANIE.
+
+## Decyzje (analogia, do weta)
+1. Wykluczenie ZRODLA.json przez `rmSync` po `cpSync` (wzorzec jak MANIFEST.json silnika w tej samej linii), nie filtr `cpSync` ani przeniesienie pliku — najmniejszy diff, istniejący wzorzec.
+2. Decyzja BN nr 3 (ZRODLA.json w dist) zastąpiona: nie trafia do dist.
+
+---
+## Wcześniej (BN)
+
+# Stan agenta — BN: oficjalne plakietki App Store (08-programista, build)
+
+Aktualizacja: 2026-11-28 · gałąź `strona/plakietka-apple` (od `strona/integracja-start`)
+
+## Zrobione
+- 35 oficjalnych czarnych plakietek SVG z Apple Marketing Tools w `assets/plakietka/<kod>.svg`, bajt w bajt; źródło, data i SHA-256 w `assets/plakietka/ZRODLA.json`; skrypt `scripts/plakietka-pobierz.mjs`. Opis i odwzorowania języków: `docs/teksty/plakietka-app-store.md`.
+- `build()` dostał opcję `plakietkaDir` (test wariantu bez pliku). Generator bez zmian zachowania.
+- `tests/z40-plakietka.test.mjs` (6 testów): komplet 35 plików, sumy niezmienione, SVG Apple, `<img alt height≥40>` + linia znaków tylko przy pliku, link tekstowy bez pliku, puste `appStoreId` = bez niczego. Czerwony przed (bez plików: padło na odczycie ZRODLA.json), zielony po.
+- Zrzuty i kontrast: `pomiary/plakietka/` (pl, en; jasny, ciemny).
+
+## Weryfikacja (stan na 09:26 UTC)
+- Commit funkcji: d80df79 na `strona/plakietka-apple`. CI Tests run #113 (https://github.com/lkarwowski494/techniqueatlas/actions/runs/46129185148) w toku — wynik NIEZNANY. Lokalny `npm test` też w toku (ciężki, ~25+ min na tej maszynie); wynik niezweryfikowany. Przeszło lokalnie: tests/z40-plakietka.test.mjs 6/6.
+- Źródło plików: https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/<język Apple> (35 plików: pl en cs sk hu ro bg hr sl sr lt lv et uk es es-419 pt pt-BR de fr it nl sv da nb fi tr el id ms vi ru ja ko zh-Hant), odczyt 2026-11-28.
+
+## Następny krok
+1. Sprawdzić wynik CI #113 (zielony = koniec); przy czerwonym: log zadania, ocenić, czy to plakietka, czy stan wyjściowy.
+2. Powtórzyć `npm run dane` + `npm test` lokalnie nie jest konieczne, jeśli CI zielone.
+3. Właściciel: weto do sr/es-419; `appStoreId` przy publikacji.
+
+## Pułapki
+- `npm ci` i `npm run dane` trzeba uruchomić przed testami; zrzuty: `ATLAS_CHROME=/opt/pw-browsers/chromium node pomiary/plakietka/zrzuty.mjs`.
+- Pełny `npm test` buduje stronę wielokrotnie (GB RAM, dziesiątki minut) — nie uruchamiać dwa razy równolegle.
+- Pliki SVG nie wolno przeformatowywać (suma SHA-256 w teście); hr i uk bez <title> to norma Apple.
+
+## Decyzje (analogia, do weta)
+1. `sr` → plakietka angielska; `es-419` → es-mx; `nb` → no-no; `zh-Hant` → zh-tw.
+2. `appStoreId` zostaje puste (ustawia właściciel przy publikacji).
+3. `ZRODLA.json` trafia też do dist (cały katalog assets/ jest kopiowany) — nieszkodliwe, do ewentualnego wykluczenia.
+
+---
+
+---
+## Wcześniej (BO i integracja)
+
+# STAN-AGENTA (sesja BO, 28.11.2026, rola 08-programista build)
+Gałąź `strona/przeklad-poprawki`. Koordynator zakończył pracę przed końcem (limit konta); CI nie sprawdzone.
+
+## Zrobione (kod i testy: tests/przeklad-api.test.mjs, 48 testów, wszystkie zielone; nowe 15 były czerwone przed zmianą)
+1. `--jezyki` / wejście `jezyki` w obu workflowach (wzorzec w powłoce i w skrypcie, kody z config.json).
+2. max_tokens: grecki współczynnik 2,6; podział źródła na części > 16 000 tokenów wyjścia (przegląd 30 000), custom_id `pr-<źródło>-p<N>-<język>`, scalanie raportów; granica kosztu dalej z sumy max_tokens, limity 6/80 USD nietknięte.
+3. Spacje: przyczyna = `v.trim()` w parsujOdpowiedz (nie model). `zachowajSpacje` + zdanie w obu promptach + poprawki przeglądu.
+4. Istniejące tłumaczenia pomijane (tylko brakujące pozycje), `--nadpisz` / wejście `nadpisz` (tylko przekład).
+5. Licznik z gałęzi tekstów: `--wydatki-galaz`, scalanie po batch_id, nigdy nie obniża sumy, limit tylko ze stałej.
+Opis: docs/przeklad/README.md (sekcja „Zmiany 28.11.2026”).
+
+## Wynik testów
+- tests/przeklad-api.test.mjs: 48/48 zielone.
+- Cały `npm test` na czystym main (przed zmianami): 118 pass, 3 fail: build.test, jezyki-podglad.test, straznicy-startu.test (niezwiązane z przekładem; przyczyna niezbadana). Pełnego zestawu po zmianach nie dokończono (przerwany).
+
+## Zostało / następny krok
+- Sprawdzić tests.yml na gałęzi po pushu; ustalić, czy 3 testy wyżej padają też w CI na main.
+- Brak pomiaru rzeczywistego zapotrzebowania greki: współczynnik 2,6 i podział to hipoteza [DO USTALENIA po przebiegu el].
+- PR do main otwiera koordynator; płatnych przebiegów nie uruchamiano.
+
+## Pułapki
+- `--wznow` wymaga tego samego stanu plików celów co przy wysłaniu (podział i pomijanie od nich zależą).
+- Przekład domyślnie pomija istniejące: stary `el` ma szablony i prawne, brak `nazwy/el`, więc ponowienie jest tylko dla nazw.
+- Ponowienie nazw el: workflow przekładu z main, `galaz_tekstow`=gałąź z tekstami, `zrodlo`=nazwy, `jezyki`=el, najpierw `tylko_szacuj`=tak (ok. 0,5 USD).
+
+---
+## Wcześniej (integracja-start)
+
 # Stan agenta — BL: poprawki po audycie wyglądu Z-40 (08-programista, build)
 
 Aktualizacja: 2026-11-28 · gałąź `strona/z40-poprawki` (od `strona/z40-audyt-wygladu` @ 6b78851)

@@ -1,0 +1,38 @@
+[
+  {
+    "jezyk": "pl",
+    "motyw": "light",
+    "wysokoscPx": 44,
+    "szerokoscPx": 132,
+    "zaladowany": true,
+    "tlo": "rgb(255, 255, 255)",
+    "kontrastCzerniZTlem": 21
+  },
+  {
+    "jezyk": "pl",
+    "motyw": "dark",
+    "wysokoscPx": 44,
+    "szerokoscPx": 132,
+    "zaladowany": true,
+    "tlo": "rgb(18, 25, 34)",
+    "kontrastCzerniZTlem": 1.19
+  },
+  {
+    "jezyk": "en",
+    "motyw": "light",
+    "wysokoscPx": 44,
+    "szerokoscPx": 132,
+    "zaladowany": true,
+    "tlo": "rgb(255, 255, 255)",
+    "kontrastCzerniZTlem": 21
+  },
+  {
+    "jezyk": "en",
+    "motyw": "dark",
+    "wysokoscPx": 44,
+    "szerokoscPx": 132,
+    "zaladowany": true,
+    "tlo": "rgb(18, 25, 34)",
+    "kontrastCzerniZTlem": 1.19
+  }
+]
