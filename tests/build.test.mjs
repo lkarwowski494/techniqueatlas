@@ -68,7 +68,8 @@ test('S6/ZM-08 (27.11.2026, P-1): reguła sama zdejmuje noindex, gdy ćwiczenie 
 
 test('robots.txt i mapy witryny przy włączonym indeksowaniu: Allow + indeks map; mapa na język tylko ze stronami indeksowanymi, ≤ 50 000 adresów i ≤ 50 MB; strony noindex nie są w mapach', async () => {
   const { out, pages } = await buildOnce('idx', INDEXING, BEZ_STARTU);
-  assert.equal(read(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${readJson('config.json').domena}/sitemap.xml\n`);
+  /* Z-34 (KO-130, wariant B): grupy uczenia modeli i jawny Google-Extended; szczegóły grup pilnuje z34-zasieg.test.mjs */
+  assert.equal(read(out, 'robots.txt'), `User-agent: *\nAllow: /\n\nUser-agent: GPTBot\nUser-agent: ClaudeBot\nUser-agent: CCBot\nUser-agent: Applebot-Extended\nUser-agent: __usage_ai-training\nDisallow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${readJson('config.json').domena}/sitemap.xml\n`);
   const index = read(out, 'sitemap.xml'); for (const l of ['pl', 'en', 'glowna']) assert.match(index, new RegExp(`sitemap-${l}\\.xml`));
   const noindex = new Set(pages.filter(p => !p.indexable).map(p => p.file.replace(/index\.html$/, '')));
   for (const l of ['pl', 'en']) {
@@ -108,7 +109,7 @@ test('strona wyboru języka: linki do wszystkich budowanych języków we własny
 test('strona ćwiczenia: nazwa jak w aplikacji, h1 z lang=en dla języków poza pl, sekcje w kolejności, mięśnie, sprzęt, zamienniki jako działające linki, bez sekcji bez tekstu', async () => {
   const { out } = await buildOnce(); const h = read(out, 'en/exercises/back-squat/index.html'); const e = EN.exercises.find(x => x.slug === 'back-squat');
   assert.match(h, /<h1 class="nazwa" lang="en">Back Squat<\/h1>/); assert.match(read(out, 'pl/exercises/back-squat/index.html'), /<h1 class="nazwa"><span class="nazwa-pl">Przysiad ze sztangą na plecach<\/span> <span class="nazwa-en" lang="en">Back Squat<\/span><\/h1>/); /* Z-32: pl pokazuje nazwę polską i angielską (wcześniej sama angielska) */
-  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>Setup<', '>Movement<', '>Tips<', '>What to avoid<', '>Equipment needed<', '>Substitutes<', '<p>Main muscles', 'medical advice']; let at = -1;
+  const hasFig = !!e.figure, order = ['<h1', ...(hasFig ? ['data-figure'] : []), '>How do you set up?<', '>How do you perform the movement?<', '>What helps your technique?<', '>Which mistakes should you avoid?<', '>What equipment do you need?<', '>What can you do instead?<', /* Z-34 (Z-22 2.4): nagłówki-pytania w en */ '<p>Main muscles', 'medical advice']; let at = -1;
   for (const m of order) { const i = h.indexOf(m); assert.ok(i > at, `kolejność: ${m}`); at = i; }
   for (const s of e.alternatives) assert.match(h, new RegExp(`<a href="\\.\\./${s}/"><span class="nazwa-pl" lang="en">`));
   const none = EN.exercises.find(x => x.cues.scope === 'none'); const hn = read(out, `en/exercises/${none.slug}/index.html`); assert.doesNotMatch(hn, />Setup<|>Tips<|>What to avoid<|General tips/);
@@ -195,12 +196,12 @@ test('strona główna języka: liczba ćwiczeń z danych, wyszukiwarka, linki do
   for (const g of new Set(EN.exercises.map(e => e.group))) assert.ok(h.includes(`href="muscles/${GROUP_ID[g]}/"`));
   assert.match(h, /"@type":"WebSite"/);
 });
-test('JSON-LD: tylko BreadcrumbList i WebSite, poprawny JSON; meta generator z wersją i skrótem aplikacji; CSP bez zasobów zewnętrznych (D4: bez analityki)', async () => {
+test('JSON-LD: tylko BreadcrumbList, WebSite i WebPage (Z-34), poprawny JSON; meta generator z wersją i skrótem aplikacji; CSP bez zasobów zewnętrznych (D4: bez analityki)', async () => {
   const { out } = await buildOnce(); const man = JSON.parse(readFileSync(join(CACHE, 'dane/manifest.json'), 'utf8'));
   for (const f of htmlFiles(out)) {
-    const h = read(out, f); for (const m of h.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)) assert.ok(['BreadcrumbList', 'WebSite'].includes(JSON.parse(m[1])['@type']), f);
+    const h = read(out, f); for (const m of h.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)) assert.ok(['BreadcrumbList', 'WebSite', 'WebPage'].includes(JSON.parse(m[1])['@type']), f);
     assert.match(h, /<meta http-equiv="Content-Security-Policy" content="default-src 'self'/); assert.ok(h.includes(`<meta name="generator" content="techniqueatlas app ${man.app.version} ${man.app.commit.slice(0, 7)}">`), f);
-    assert.match(h, /<link rel="icon" href="data:,">/, f); /* bez żądania /favicon.ico (404 w konsoli przeglądarki) */
+    assert.match(h, /<link rel="icon" type="image\/png" sizes="96x96" href="[^"]*assets\/favicon-96\.png">/, f); assert.doesNotMatch(h, /href="data:,"/, f); /* Z-34 (A7): ikona PNG o stałym adresie zamiast data:, (bez żądania /favicon.ico) */
     assert.doesNotMatch(h, /data-(origin|key|id|source)=/); /* D10 B: bez znaczników pochodzenia */
   }
 });
