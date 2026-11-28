@@ -9,27 +9,29 @@
  "blad": "Pogosta napaka: {zdanie}",
  "albo": " ali ",
  "pytania": {
-  "setup": "Kako se postavite?",
+  "setup": "Kako zavzamete začetni položaj?",
   "move": "Kako izvedete gib?",
-  "miesnie": "Katere mišice delajo?",
+  "miesnie": "Katere mišice delujejo?",
   "tips": "Kaj pomaga pri tehniki?",
-  "mistakes": "Katerim napakam se izogibajte?",
+  "mistakes": "Katerim napakam se izogibati?",
   "sprzet": "Kakšno opremo potrebujete?",
   "zamienniki": "S čim jo lahko nadomestite?"
  },
  "opisGlownej": "{n} {opisow}: risba gibanja pri {f}, nasveti za tehniko pri {c}, nadomestki pri {z}.",
  "opisow": {
   "one": "opis",
-  "few": "opisa",
+  "few": "opisi",
   "many": "opisi",
-  "other": "opisov"
+  "other": "opisov",
+  "two": "opisa"
  },
- "opisListy": "{n} {pozycji} od A do Ž s filtrom po mišični skupini, opremi in vrsti gibanja.",
+ "opisListy": "{n} {pozycji} od A do Ž s filtri po mišični skupini, opremi in vrsti gibanja.",
  "pozycji": {
   "one": "vnos",
-  "few": "vnosa",
+  "few": "vnosi",
   "many": "vnosi",
-  "other": "vnosov"
+  "other": "vnosov",
+  "two": "vnosa"
  },
  "opisKategorii": "{n} {pozycji}, med njimi {lista}.",
  "opisKategoriiJedna": "En vnos: {lista}.",

@@ -22,16 +22,18 @@
   "one": "apraksts",
   "few": "apraksti",
   "many": "apraksti",
-  "other": "apraksti"
+  "other": "apraksti",
+  "zero": "aprakstu"
  },
  "opisListy": "{n} {pozycji} no A līdz Z ar filtru pēc muskuļu grupas, aprīkojuma un kustības veida.",
  "pozycji": {
   "one": "ieraksts",
   "few": "ieraksti",
   "many": "ieraksti",
-  "other": "ieraksti"
+  "other": "ieraksti",
+  "zero": "ierakstu"
  },
  "opisKategorii": "{n} {pozycji}, tostarp {lista}.",
  "opisKategoriiJedna": "Viens ieraksts: {lista}.",
- "opisKategoriiBezPrzykladow": "{n} {pozycji}; kustības zīmējums — {f}, tehnikas norādes — {c}."
+ "opisKategoriiBezPrzykladow": "{n} {pozycji}: kustības zīmējums — {f}, tehnikas norādes — {c}."
 }
