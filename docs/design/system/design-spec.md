@@ -118,7 +118,7 @@ Strony jednego filtra (`/<język>/muscles|equipment|movements/<id>/`) używają 
 6. **Symbol sekundy jako tekst tłumaczenia** (`s`, w cyrylicy `с`): `Intl.NumberFormat` daje formy niespójne (pl „sek.”, en „2.5s”).
 7. **Krótka odpowiedź tylko przy własnych wskazówkach**, bez nowych słów (zgodnie z Z-22).
 8. **Ciemne tło `#0b1016`** to przyciemniona czerń z listy kalibracji: zostaje jako granatowa czerń arkusza w ciemnym motywie (Z-10, przyjęte z kierunkiem).
-9. **Nowe teksty interfejsu** do `src/ui/<język>.json` (35 języków, Z-31): „Menu”, „Menu główne”, „Tempo powtórzenia”, „razem {t} na powtórzenie”, symbol sekundy, etykiety tabliczki (Nazwa, Partia, Sprzęt, Rodzaj ruchu), „Mięśnie”, „Częste błędy:”, „Jak zrobić {n}?”, zdanie stanu pustego („Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.”), etykieta „Język: … Zmień język”.
+9. **Nowe teksty interfejsu** do `src/ui/<język>.json` (35 języków, Z-31): „Menu”, „Menu główne”, „Tempo powtórzenia”, „razem {t} na powtórzenie”, symbol sekundy, etykiety tabliczki (Nazwa, Partia, Sprzęt, Rodzaj ruchu), „Mięśnie”, „Częste błędy:”, „Jak zrobić to ćwiczenie?” (Z-40 011, analogia, do weta: tekst stały zamiast wzorca z nazwą ćwiczenia — formy nazwy ćwiczenia w 35 językach byłyby ryzykowne w przekładzie; szablony w `szablony/*.html` pokazują nazwę jako przykład wzorca, nie obowiązek), zdanie stanu pustego („Zmień albo wyczyść filtry, żeby zobaczyć ćwiczenia.”), etykieta „Język: … Zmień język”.
 
 ## 11. Odtworzenie
 ```

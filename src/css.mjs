@@ -14,8 +14,7 @@ const UZUPELNIENIA = `
 [hidden]{display:none!important}
 .widoki{display:flex;flex-wrap:wrap;gap:var(--o4)}.widoki svg{flex:1 1 12rem;max-height:20rem;min-width:0}
 .drobne{font-size:var(--fs-drobne);color:var(--muted)}
-/* --- Z-33: uzupełnienia spoza systemu (do zgłoszenia roli 04): plakietka sklepu jako odsyłacz (po nadaniu appStoreId linia ciągła zamiast przerywanej) i szerokość tekstu stron prawnych --- */
-a.plakietka{border-style:solid;color:inherit;text-decoration:none}
+/* --- Z-33: uzupełnienie spoza systemu (do zgłoszenia roli 04): szerokość tekstu stron prawnych (Z-40: a.plakietka usunięte — plakietka to grafika Apple albo zwykły link, bez własnego stylu) --- */
 .tekst-prawny{max-width:var(--szer-tekst)}
 /* --- Z-34: akapit krótkiej odpowiedzi ma klasę .odp (wymóg testu), ramka .odp jest na sekcji --- */
 p.odp{margin:0;padding:0;background:none;border:0;max-width:none}.tekst-prawny ul{padding-left:var(--o5)}

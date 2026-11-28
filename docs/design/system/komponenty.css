@@ -26,10 +26,12 @@ button,select,input,summary{font:inherit;min-height:var(--cel)}
 button,summary{cursor:pointer}
 
 /* --- nagłówek: znak + nazwa, menu w linii od 960 px; niżej „Menu” jako <details> (bez JS) --- */
-.glowka{position:relative;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink)}
+.glowka{position:relative;background:var(--sheet);border-bottom:var(--linia-gruba) solid var(--ink);container-type:inline-size;container-name:naglowek}
 .glowka-w,.tresc,.stopka-w{max-width:var(--szer-max);margin:0 auto;padding-left:var(--o4);padding-right:var(--o4)}
 .glowka-w{display:flex;flex-wrap:wrap;align-items:center;gap:var(--o1) var(--o4);padding-top:var(--o1);padding-bottom:var(--o1)}
-.marka-n,.marka-p{white-space:nowrap}
+/* Z-40 001: nazwa i podtytuł marki mogą się zawijać (nie są ucinane); w wąskim nagłówku (< 22rem; rem rośnie z rozmiarem tekstu) podtytuł znika — nazwa strony i tak jest w tytule */
+.marka-t{min-width:0}
+@container naglowek (max-width:22rem){.marka-p{display:none}}
 .marka{display:flex;align-items:center;gap:var(--o2);text-decoration:none;color:inherit;min-height:var(--cel)}
 .znak{width:30px;height:30px;flex:none;color:var(--accent)}
 .marka-t{display:flex;flex-direction:column;line-height:1.15}
@@ -38,7 +40,7 @@ button,summary{cursor:pointer}
 .menu a{display:inline-flex;align-items:center;min-height:var(--cel);text-decoration:none;color:var(--ink)}
 .menu a:hover,.menu a[aria-current]{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.35em}
 .glowka-n{margin-left:auto;display:flex;flex-wrap:wrap;gap:var(--o2);align-items:center}
-.jezyk,.menu-d>summary{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-width:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);text-decoration:none}
+.jezyk,.menu-d>summary{white-space:nowrap;min-height:var(--cel);display:inline-flex;align-items:center;justify-content:center;min-width:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);text-decoration:none}
 .menu-d>summary{list-style:none;font-weight:var(--w-pomocniczy);gap:var(--o2)}.menu-d>summary::-webkit-details-marker{display:none}
 .menu-d>summary::after{content:"";width:.5em;height:.5em;border-right:2px solid;border-bottom:2px solid;transform:translateY(-.15em) rotate(45deg)}
 .menu-d[open]>summary::after{transform:translateY(.1em) rotate(-135deg)}
@@ -53,7 +55,7 @@ button,summary{cursor:pointer}
 
 /* --- arkusz: podwójna ramka (linia gruba tuszem + cienka zewnętrzna), jedyny „kontener” strony --- */
 .tresc{padding-top:var(--o4);padding-bottom:var(--o8)}
-.arkusz{background:var(--sheet);border:var(--linia-gruba) solid var(--ink);outline:var(--linia) solid var(--rule);outline-offset:var(--ramka-odstep);padding:var(--o4) var(--o5) var(--o6);margin:6px}
+.arkusz{container-type:inline-size;container-name:arkusz;background:var(--sheet);border:var(--linia-gruba) solid var(--ink);outline:var(--linia) solid var(--rule);outline-offset:var(--ramka-odstep);padding:var(--o4) var(--o5) var(--o6);margin:6px}
 /* telefon: wcięcia w px, żeby przy dużym tekście nie zjadały szerokości wiersza */
 @media (max-width:759px){.arkusz{margin:3px;padding:12px 12px 20px;outline-offset:3px}.tresc{padding-left:6px;padding-right:6px}.fig{padding:8px}.uk-p ul,.miesnie ul,.ramka-l{padding-left:20px}.ramka{padding:0 10px 10px}.ramka h2{margin:0 -10px var(--o3);padding:var(--o2) 10px}}
 
@@ -124,7 +126,7 @@ button,summary{cursor:pointer}
 @container (max-width:15rem){.wymiar-v,.wymiar-n{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.wymiar-s{min-height:var(--o3)}.wymiar-sek{display:block}}
 
 /* --- przyciski, pola, wybór --- */
-.przycisk,.fig-ster button,.wyczysc{display:inline-flex;align-items:center;min-height:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);font-size:.95rem;text-align:left;text-decoration:none}
+.przycisk,.fig-ster button,.wyczysc{max-width:100%;overflow-wrap:anywhere;display:inline-flex;align-items:center;min-height:var(--cel);padding:0 var(--o3);background:var(--sheet);color:var(--ink);border:var(--linia-gruba) solid var(--ink);border-radius:var(--r-kontrolka);font-size:.95rem;text-align:left;text-decoration:none}
 .fig-ster button[aria-pressed=true]{background:var(--ink);color:var(--sheet)}
 .fig-ster .b-blad{border-color:var(--kontrola);border-style:dashed}
 .fig-ster .b-blad[aria-pressed=true]{background:var(--sheet);color:var(--ink);border-style:solid;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
@@ -145,14 +147,15 @@ a .nazwa-pl{text-decoration:underline}a .nazwa-en,.wiersze .nazwa-en,.wykaz .naz
 .wykaz thead th{font-weight:var(--w-pomocniczy);font-size:var(--fs-etykieta);color:var(--muted);text-align:left;padding:var(--o1) var(--o2) var(--o1) 0;border-bottom:var(--linia) solid var(--rule)}
 .wykaz th[scope=row],.wykaz td{text-align:left;font-weight:400;padding:var(--o2) var(--o3) var(--o2) 0;border-bottom:var(--linia) solid var(--hair);vertical-align:top}
 .wykaz a{text-decoration:none}.wykaz td{color:var(--muted);font-size:.92rem}
-@media (max-width:640px){.wykaz thead{display:none}.wykaz tr{display:block;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}.wykaz th[scope=row],.wykaz td{display:inline;border:0;padding:0}.wykaz th[scope=row]{display:block}.wykaz td+td::before{content:" · "}}
+/* Z-40 007: próg w rem zapytania kontenera (rośnie z rozmiarem tekstu); 35rem ≈ dawne 640 px okna przy 100% tekstu */
+@container arkusz (max-width:35rem){.wykaz,.wykaz tbody{display:block}.wykaz th[scope=row],.wykaz td{overflow-wrap:anywhere}.wykaz thead{display:none}.wykaz tr{display:block;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}.wykaz th[scope=row],.wykaz td{display:inline;border:0;padding:0}.wykaz th[scope=row]{display:block}.wykaz td+td::before{content:" · "}}
 .wstep{border-bottom:var(--linia-gruba) solid var(--ink);padding-bottom:var(--o5)}
 .licznik{color:var(--muted);margin:var(--o1) 0 var(--o4)}
-.grupy{display:grid;gap:0 var(--o12)}@media (min-width:960px){.grupy{grid-template-columns:1fr 1fr}}
+.grupy{display:grid;grid-template-columns:minmax(0,1fr);gap:0 var(--o12)}@media (min-width:960px){.grupy{grid-template-columns:1fr 1fr}}
 .grupa-l{list-style:none;padding:0;margin:0;columns:2 12rem;column-gap:var(--o8)}
 .grupa-l li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair)}
 .grupa-l a{display:flex;justify-content:space-between;gap:var(--o4);padding:var(--o2) 0;text-decoration:none;min-height:var(--cel);align-items:center}
-.grupa-l .n{color:var(--muted);font-size:.9rem}.grupa-l a>span:first-child{min-width:0}
+.grupa-l .n{color:var(--muted);font-size:.9rem}.grupa-l a>span:first-child{min-width:0;overflow-wrap:anywhere}
 #ruch .grupa-l{columns:4 13rem}
 .wiersze{list-style:none;padding:0;margin:0;columns:2 22rem;column-gap:var(--o8)}
 .wiersze li{margin:0;break-inside:avoid;border-bottom:var(--linia) solid var(--hair);padding:var(--o2) 0}
@@ -181,7 +184,7 @@ a .nazwa-pl{text-decoration:underline}a .nazwa-en,.wiersze .nazwa-en,.wykaz .naz
 /* --- stopka --- */
 .stopka{border-top:var(--linia-gruba) solid var(--ink);background:var(--sheet);margin-top:var(--o4)}
 .stopka-w{padding-top:var(--o4);padding-bottom:var(--o6);font-size:.9rem}
-.wsparcie{max-width:var(--szer-tekst)}.jezyki a,.prawne a{display:inline-block;padding:.6rem 0}.prawne{color:var(--muted)}
+.wsparcie{max-width:var(--szer-tekst)}.jezyki a,.prawne a{display:inline-block;padding:.6rem 0;overflow-wrap:anywhere}.prawne{color:var(--muted)}
 
 /* --- katalog komponentów (tylko szablony/komponenty.html) --- */
 .kat h2{border-bottom:var(--linia) solid var(--rule);padding-bottom:var(--o1)}
